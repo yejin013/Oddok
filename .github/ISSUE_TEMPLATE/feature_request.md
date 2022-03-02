@@ -7,14 +7,12 @@ assignees: ''
 
 ---
 
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+## 개요
 
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen.
+## 작업사항
 
-**Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered.
+- [ ] 작업 내용 1
+- [ ] 작업 내용 2
 
-**Additional context**
-Add any other context or screenshots about the feature request here.
+## 변경 로직 (Optional)
+> 변경한 것이 있을 때 작성
