@@ -2,11 +2,13 @@ package com.oddok.server.domain.studyroom.entity;
 
 import com.oddok.server.domain.user.entity.User;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Getter
 @Entity
+@NoArgsConstructor
 public class Bookmark {
     @Id
     @GeneratedValue

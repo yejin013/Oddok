@@ -1,20 +1,21 @@
 package com.oddok.server.domain.studyroom.entity;
 
+import com.oddok.server.domain.user.entity.User;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
 @Entity
+@NoArgsConstructor
 public class TimeRecord {
     @Id
     @GeneratedValue
     Long id;
 
+    @ManyToOne
     @Column(name = "user_id")
     private User user;
 

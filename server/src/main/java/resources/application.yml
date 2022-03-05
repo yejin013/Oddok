@@ -1,7 +1,0 @@
-server:
-  address: localhost
-  port: 8080
-
-openvidu:
-  url: https://localhost:4443/
-  secret: MY_SECRET

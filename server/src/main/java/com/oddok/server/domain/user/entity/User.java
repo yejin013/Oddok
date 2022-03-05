@@ -1,6 +1,7 @@
 package com.oddok.server.domain.user.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -12,12 +13,13 @@ import java.time.LocalDateTime;
 
 @Getter
 @Entity
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue
     private Long id;
 
-    @Column(unique = true, length = 255)
+    @Column(unique = true, nullable = false, length = 255)
     private String email;
 
     @Column(unique = true, length = 8)
@@ -39,4 +41,10 @@ public class User {
     @LastModifiedDate
     @Column(name = "update_at")
     private LocalDateTime updateAt;
+
+    public User(String email) {
+        this.email = email;
+        this.createAt = LocalDateTime.now();
+        this.updateAt = LocalDateTime.now();
+    }
 }

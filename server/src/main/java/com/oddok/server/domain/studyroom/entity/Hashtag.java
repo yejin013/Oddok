@@ -1,19 +1,19 @@
 package com.oddok.server.domain.studyroom.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Getter
 @Entity
+@NoArgsConstructor
 public class Hashtag {
     @Id
     @GeneratedValue
     Long id;
 
+    @ManyToOne
     @Column(name = "study_room_id")
     private StudyRoom studyRoom;
 

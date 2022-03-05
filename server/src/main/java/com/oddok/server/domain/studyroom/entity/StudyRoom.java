@@ -2,6 +2,7 @@ package com.oddok.server.domain.studyroom.entity;
 
 import com.oddok.server.domain.user.entity.User;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
@@ -9,17 +10,20 @@ import java.time.LocalDateTime;
 
 @Getter
 @Entity
+@NoArgsConstructor
 public class StudyRoom {
     @Id
     @GeneratedValue
     Long id;
 
-    @Column(unique = true, length = 255)
+    @Column(unique = true, nullable = false, length = 255)
     private String name;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    private String session;
 
     private String image;
 
@@ -49,4 +53,9 @@ public class StudyRoom {
     @CreatedDate
     @Column(name = "create_at")
     private LocalDateTime createAt;
+
+    public StudyRoom(String name, User user) {
+        this.name = name;
+        this.user = user;
+    }
 }
