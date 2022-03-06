@@ -30,7 +30,7 @@ import io.openvidu.java.client.ConnectionProperties;
 import io.openvidu.java.client.ConnectionType;
 
 @RestController
-@RequestMapping("/v1/study-room")
+@RequestMapping("/api/study-room")
 public class SessionController {
 
     @Autowired
