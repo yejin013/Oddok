@@ -1,0 +1,51 @@
+.bar {
+  display: flex;
+  align-items: center;
+  background-color: #101112;
+  color: #dee2e6;
+  height: 100%;
+  padding: 0.2em 2em;
+}
+
+button {
+  outline: none;
+  border: 0;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.info,
+.goal,
+.list {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.goal {
+  justify-content: center;
+}
+
+.list {
+  justify-content: flex-end;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.video_button,
+.audio_button {
+  padding: 0.8em 1em;
+}
+
+.video_button {
+  border-right: 1px solid #343a40;
+}
+
+.start_button {
+  font-size: 1rem;
+  padding: 0.9em 5em;
+  background-color: #bf7d8a;
+  color: white;
+  border-radius: 4px;
+}
