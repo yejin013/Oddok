@@ -5,11 +5,11 @@ import { ReactComponent as Video } from "../../../assets/icons/video.svg";
 import { ReactComponent as MicOff } from "../../../assets/icons/mic_off.svg";
 import { ReactComponent as GoalOpen } from "../../../assets/icons/down.svg";
 
-function SettingBar({ goToStudyRoom, stopOrStartVideo, stopOrStartAudio, selectSettingBtn }) {
+function SettingBar({ goToStudyRoom, stopOrStartVideo, stopOrStartAudio, clickSettingBtn }) {
   return (
     <footer className={styles.bar}>
       <section className={styles.info}>
-        <button type="button" onClick={selectSettingBtn}>
+        <button type="button" onClick={clickSettingBtn}>
           <Setting />
         </button>
         <span>일반 3호실</span>
@@ -21,7 +21,7 @@ function SettingBar({ goToStudyRoom, stopOrStartVideo, stopOrStartAudio, selectS
           <GoalOpen />
         </button>
       </section>
-      <ul className={styles.list}>
+      <ul className={styles.buttons}>
         <li className={styles.video_button}>
           <button type="button" onClick={stopOrStartVideo}>
             <Video />

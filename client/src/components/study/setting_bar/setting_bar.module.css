@@ -1,3 +1,10 @@
+button {
+  outline: none;
+  border: 0;
+  cursor: pointer;
+  background-color: transparent;
+}
+
 .bar {
   display: flex;
   align-items: center;
@@ -7,16 +14,9 @@
   padding: 0.2em 2em;
 }
 
-button {
-  outline: none;
-  border: 0;
-  cursor: pointer;
-  background-color: transparent;
-}
-
 .info,
 .goal,
-.list {
+.buttons {
   flex: 1;
   display: flex;
   align-items: center;
@@ -26,7 +26,7 @@ button {
   justify-content: center;
 }
 
-.list {
+.buttons {
   justify-content: flex-end;
   list-style: none;
   margin: 0;

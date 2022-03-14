@@ -9,8 +9,8 @@ function SettingRoom(props) {
   const history = useHistory();
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(true); // 음소거
-  const [selectedSettingBtn, setSelectedSettingBtn] = useState(false);
-  const displayType = selectedSettingBtn === true ? styles.hide : styles.show;
+  const [clickedSettingBtn, setClickedSettingBtn] = useState(false);
+  const displayType = clickedSettingBtn === true ? styles.hide : styles.show;
 
   const goToStudyRoom = () => {
     history.push({
@@ -51,15 +51,15 @@ function SettingRoom(props) {
     setIsMuted(!isMuted);
   };
 
-  const selectSettingBtn = () => {
-    setSelectedSettingBtn(!selectedSettingBtn);
+  const clickSettingBtn = () => {
+    setClickedSettingBtn(!clickedSettingBtn);
   };
 
   return (
     <div className={styles.room}>
-      {selectedSettingBtn === true && (
+      {clickedSettingBtn === true && (
         <SettingSection //
-          selectSettingBtn={selectSettingBtn}
+          clickSettingBtn={clickSettingBtn}
         />
       )}
       <section className={`${styles.video_component} ${displayType}`}>
@@ -70,7 +70,7 @@ function SettingRoom(props) {
           goToStudyRoom={goToStudyRoom}
           stopOrStartVideo={stopOrStartVideo}
           stopOrStartAudio={stopOrStartAudio}
-          selectSettingBtn={selectSettingBtn}
+          clickSettingBtn={clickSettingBtn}
         />
       </div>
     </div>

@@ -24,6 +24,5 @@
 .video {
   height: 100%;
   object-fit: contain;
-  box-align: center;
   transform: rotateY(180deg);
 }
