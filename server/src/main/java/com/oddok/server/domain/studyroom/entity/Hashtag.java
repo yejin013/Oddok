@@ -13,8 +13,8 @@ public class Hashtag {
     @GeneratedValue
     Long id;
 
-    @ManyToOne
-    @Column(name = "study_room_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "study_room_id")
     private StudyRoom studyRoom;
 
     @Column(length = 8)

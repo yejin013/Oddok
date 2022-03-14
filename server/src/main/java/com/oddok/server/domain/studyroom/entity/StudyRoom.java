@@ -1,6 +1,8 @@
 package com.oddok.server.domain.studyroom.entity;
 
+import com.oddok.server.domain.studyroom.api.response.CreateStudyRoomResponse;
 import com.oddok.server.domain.user.entity.User;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -19,11 +21,12 @@ public class StudyRoom {
     @Column(unique = true, nullable = false, length = 255)
     private String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    private String session;
+    @Column(name = "session_id")
+    private String sessionId;
 
     private String image;
 
@@ -54,8 +57,16 @@ public class StudyRoom {
     @Column(name = "create_at")
     private LocalDateTime createAt;
 
-    public StudyRoom(String name, User user) {
+    public StudyRoom(String name, User user, String sessionId) {
         this.name = name;
         this.user = user;
+        this.sessionId = sessionId;
+    }
+
+    public CreateStudyRoomResponse toCreateStudyRoomResponse(){
+        return CreateStudyRoomResponse.builder()
+                .studyRoomId(id)
+                .sessionId(sessionId)
+                .build();
     }
 }

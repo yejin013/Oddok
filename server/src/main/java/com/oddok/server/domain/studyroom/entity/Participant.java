@@ -16,11 +16,11 @@ public class Participant {
     Long id;
 
     @OneToOne
-    @Column(name = "study_room_id")
+    @JoinColumn(name = "study_room_id")
     private StudyRoom studyRoom;
 
     @OneToOne
-    @Column(name = "user_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column(name = "join_time")
