@@ -14,7 +14,7 @@ public class SessionService {
     private String SECRET;
     private OpenVidu openVidu;
 
-    public SessionService(StudyRoomRepository studyRoomRepository, @Value("${openvidu.secret}") String OPENVIDU_URL, @Value("${openvidu.url}") String SECRET) {
+    public SessionService(StudyRoomRepository studyRoomRepository, @Value("${openvidu.url}") String OPENVIDU_URL, @Value("${openvidu.secret}") String SECRET) {
         this.studyRoomRepository = studyRoomRepository;
         this.OPENVIDU_URL = OPENVIDU_URL;
         this.SECRET = SECRET;
