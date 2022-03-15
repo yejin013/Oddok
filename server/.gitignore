@@ -36,7 +36,6 @@ out/
 ### VS Code ###
 .vscode/
 
-**/application.properties
 **/main/java/resources/application-yejin.yml
 
 !**/.keep
