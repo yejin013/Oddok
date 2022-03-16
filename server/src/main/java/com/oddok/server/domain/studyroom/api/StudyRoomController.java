@@ -1,9 +1,13 @@
 package com.oddok.server.domain.studyroom.api;
 
 import com.oddok.server.domain.studyroom.api.request.CreateStudyRoomRequest;
+import com.oddok.server.domain.studyroom.api.request.UpdateStudyRoomRequest;
 import com.oddok.server.domain.studyroom.api.response.CreateStudyRoomResponse;
+import com.oddok.server.domain.studyroom.api.response.UpdateStudyRoomResponse;
 import com.oddok.server.domain.studyroom.application.SessionService;
 import com.oddok.server.domain.studyroom.application.StudyRoomService;
+import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
+import com.oddok.server.domain.studyroom.entity.StudyRoom;
 import com.oddok.server.domain.user.application.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -46,6 +50,19 @@ public class StudyRoomController {
         String sessionId = sessionService.createSession(); // 1. OpenVidu 에 새로운 세션을 생성
         CreateStudyRoomResponse createStudyRoomResponse = studyRoomService.createStudyRoom(createSessionRequest,sessionId); // 2. StudyRoom 생성
         return ResponseEntity.ok(createStudyRoomResponse);
+    }
+
+    /**
+     *
+     * @param id
+     * @param user : 이후에 User 형으로 변경
+     * @return
+     */
+    @PatchMapping("/{id}")
+    public ResponseEntity<UpdateStudyRoomResponse> update(@PathVariable String id, @RequestBody String user, @RequestBody @Valid UpdateStudyRoomRequest updateStudyRoomRequest) {
+        StudyRoomDto studyRoomDto = studyRoomService.updateStudyRoom(id, user, updateStudyRoomRequest);
+        UpdateStudyRoomResponse updateStudyRoomResponse = new UpdateStudyRoomResponse();
+        return ResponseEntity.ok(updateStudyRoomResponse);
     }
 
     /**

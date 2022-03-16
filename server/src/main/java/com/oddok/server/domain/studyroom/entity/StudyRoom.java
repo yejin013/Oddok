@@ -1,15 +1,18 @@
 package com.oddok.server.domain.studyroom.entity;
 
 import com.oddok.server.domain.studyroom.api.response.CreateStudyRoomResponse;
+import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import com.oddok.server.domain.user.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @Entity
 @NoArgsConstructor
 public class StudyRoom {

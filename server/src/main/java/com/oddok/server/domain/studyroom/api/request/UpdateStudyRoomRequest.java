@@ -1,23 +1,19 @@
 package com.oddok.server.domain.studyroom.api.request;
 
-import lombok.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateStudyRoomRequest {
-
-    @NotBlank(message = "방 이름이 없습니다.")
+public class UpdateStudyRoomRequest {
     private String name;
 
-    @NotNull(message = "사용자 id 값이 없습니다.")
-    private Long user;
-
-    /*
     private String image;
 
     private Boolean isPublic;
@@ -33,5 +29,4 @@ public class CreateStudyRoomRequest {
     private LocalDateTime startAt;
 
     private LocalDateTime endAt;
-*/
 }
