@@ -1,6 +1,7 @@
 package com.oddok.server.domain.studyroom.entity;
 
-import com.oddok.server.domain.studyroom.api.response.CreateStudyRoomResponse;
+import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
+import com.oddok.server.domain.user.dto.UserDto;
 import com.oddok.server.domain.user.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -82,10 +83,21 @@ public class StudyRoom {
         this.createAt = LocalDateTime.now();
     }
 
-    public CreateStudyRoomResponse toCreateStudyRoomResponse(){
-        return CreateStudyRoomResponse.builder()
-                .studyRoomId(id)
+    public StudyRoomDto toStudyRoomDto(UserDto userDto){
+        return StudyRoomDto.builder()
+                .id(id)
+                .name(name)
+                .user(userDto)
                 .sessionId(sessionId)
+                .image(image)
+                .isPublic(isPublic)
+                .password(password)
+                .targetTime(targetTime)
+                .rule(rule)
+                .currentUsers(currentUsers)
+                .limitUsers(limitUsers)
+                .startAt(startAt)
+                .endAt(endAt)
                 .build();
     }
 }

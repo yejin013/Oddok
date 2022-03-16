@@ -4,7 +4,9 @@ import com.oddok.server.domain.studyroom.api.request.CreateStudyRoomRequest;
 import com.oddok.server.domain.studyroom.api.response.CreateStudyRoomResponse;
 import com.oddok.server.domain.studyroom.application.SessionService;
 import com.oddok.server.domain.studyroom.application.StudyRoomService;
+import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import com.oddok.server.domain.user.application.UserService;
+import com.oddok.server.domain.user.dto.UserDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,7 +46,10 @@ public class StudyRoomController {
     public ResponseEntity<CreateStudyRoomResponse> create(@RequestBody @Valid CreateStudyRoomRequest createSessionRequest) throws OpenViduJavaClientException, OpenViduHttpException {
         System.out.println("💘 방생성 요청 : " + createSessionRequest.getName());
         String sessionId = sessionService.createSession(); // 1. OpenVidu 에 새로운 세션을 생성
-        CreateStudyRoomResponse createStudyRoomResponse = studyRoomService.createStudyRoom(createSessionRequest,sessionId); // 2. StudyRoom 생성
+        UserDto userDto = userService.loadUser(createSessionRequest.getUser());
+        StudyRoomDto requestDto = new StudyRoomDto(createSessionRequest.getName(), userDto, sessionId);
+        StudyRoomDto studyRoomDto = studyRoomService.createStudyRoom(requestDto); // 2. StudyRoom 생성
+        CreateStudyRoomResponse createStudyRoomResponse = new CreateStudyRoomResponse(studyRoomDto.getId(), studyRoomDto.getSessionId());
         return ResponseEntity.ok(createStudyRoomResponse);
     }
 

@@ -35,11 +35,8 @@ dependencies {
 
     // https://mvnrepository.com/artifact/io.openvidu/openvidu-java-client
     implementation 'io.openvidu:openvidu-java-client:2.2.0'
-
 }
 
 tasks.named('test') {
     useJUnitPlatform()
 }
-
-
