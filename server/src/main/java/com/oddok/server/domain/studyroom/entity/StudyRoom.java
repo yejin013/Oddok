@@ -2,7 +2,6 @@ package com.oddok.server.domain.studyroom.entity;
 
 import com.oddok.server.domain.studyroom.api.response.CreateStudyRoomResponse;
 import com.oddok.server.domain.user.entity.User;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -61,6 +60,26 @@ public class StudyRoom {
         this.name = name;
         this.user = user;
         this.sessionId = sessionId;
+        this.createAt = LocalDateTime.now();
+    }
+
+    public StudyRoom(String name, User user, String sessionId,
+                     String image, Boolean isPublic, String password,
+                     Integer targetTime, String rule, Integer limitUsers,
+                     LocalDateTime startAt, LocalDateTime endAt) {
+        this.name = name;
+        this.user = user;
+        this.sessionId = sessionId;
+        this.image = image;
+        this.isPublic = isPublic;
+        this.password = password;
+        this.targetTime = targetTime;
+        this.rule = rule;
+        this.currentUsers = 0;
+        this.limitUsers = limitUsers;
+        this.startAt = startAt;
+        this.endAt = endAt;
+        this.createAt = LocalDateTime.now();
     }
 
     public CreateStudyRoomResponse toCreateStudyRoomResponse(){

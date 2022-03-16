@@ -17,7 +17,6 @@ public class CreateStudyRoomRequest {
     @NotNull(message = "사용자 id 값이 없습니다.")
     private Long user;
 
-    /*
     private String image;
 
     private Boolean isPublic;
@@ -33,6 +32,5 @@ public class CreateStudyRoomRequest {
     private LocalDateTime startAt;
 
     private LocalDateTime endAt;
-     */
 
 }

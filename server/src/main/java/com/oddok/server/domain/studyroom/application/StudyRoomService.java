@@ -25,6 +25,13 @@ public class StudyRoomService {
     public CreateStudyRoomResponse createStudyRoom(CreateStudyRoomRequest createStudyRoomRequest, String sessionId) {
         User user = findUser(createStudyRoomRequest.getUser());
         StudyRoom studyRoom = new StudyRoom(createStudyRoomRequest.getName(), user, sessionId);
+        /*
+        StudyRoom studyRoom = new StudyRoom(createStudyRoomRequest.getName(), user, sessionId,
+                createStudyRoomRequest.getImage(), createStudyRoomRequest.getIsPublic(),
+                createStudyRoomRequest.getPassword(), createStudyRoomRequest.getTargetTime(),
+                createStudyRoomRequest.getRule(), createStudyRoomRequest.getLimitUsers(),
+                createStudyRoomRequest.getStartAt(), createStudyRoomRequest.getEndAt());
+         */
         return studyRoomRepository.save(studyRoom).toCreateStudyRoomResponse();
     }
 

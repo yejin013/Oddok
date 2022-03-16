@@ -27,11 +27,14 @@ public class StudyRoomController {
         this.userService = userService;
     }
 
+    /**
+     * [GET] /study-room/user-create : 회원 생성 이후 삭제할 API
+     * @return
+     */
     @GetMapping(value = "/user-create")
     public String createBasic() {
         return userService.createUser().toString();
     }
-    /* end */
 
     /**
      * [POST] /study-room : 방생성 API (session)
