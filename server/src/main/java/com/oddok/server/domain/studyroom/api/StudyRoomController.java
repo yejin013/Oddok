@@ -47,7 +47,11 @@ public class StudyRoomController {
         System.out.println("💘 방생성 요청 : " + createSessionRequest.getName());
         String sessionId = sessionService.createSession(); // 1. OpenVidu 에 새로운 세션을 생성
         UserDto userDto = userService.loadUser(createSessionRequest.getUser());
-        StudyRoomDto requestDto = new StudyRoomDto(createSessionRequest.getName(), userDto, sessionId);
+        StudyRoomDto requestDto = StudyRoomDto.builder()
+                                    .name(createSessionRequest.getName())
+                                    .user(userDto)
+                                    .sessionId(sessionId)
+                                    .build();
         StudyRoomDto studyRoomDto = studyRoomService.createStudyRoom(requestDto); // 2. StudyRoom 생성
         CreateStudyRoomResponse createStudyRoomResponse = new CreateStudyRoomResponse(studyRoomDto.getId(), studyRoomDto.getSessionId());
         return ResponseEntity.ok(createStudyRoomResponse);
