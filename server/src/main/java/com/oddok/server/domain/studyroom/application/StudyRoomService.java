@@ -11,6 +11,7 @@ import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import com.oddok.server.domain.studyroom.entity.StudyRoom;
 import com.oddok.server.domain.user.dao.UserRepository;
 
+import com.oddok.server.domain.user.dto.UserDto;
 import com.oddok.server.domain.user.entity.User;
 import org.springframework.stereotype.Service;
 
@@ -44,24 +45,38 @@ public class StudyRoomService {
     public StudyRoomDto updateStudyRoom(String id, String user, UpdateStudyRoomRequest updateStudyRoomRequest) {
         StudyRoom studyRoom = studyRoomRepository.findById(Long.parseLong(id)).orElseThrow(() -> new StudyRoomNotFoundException(Long.parseLong(id)));
         if (checkPublisher(studyRoom.getUser(), user)) {
-            if (StringUtils.isNotBlank(studyRoom.getName())) studyRoom.setName(studyRoom.getName());
-            if (StringUtils.isNotBlank(studyRoom.getImage())) studyRoom.setImage(studyRoom.getImage());
-            if (studyRoom.getIsPublic()) studyRoom.setIsPublic(studyRoom.getIsPublic());
-            if (StringUtils.isNotBlank(studyRoom.getPassword())) studyRoom.setPassword(studyRoom.getPassword());
-            if (studyRoom.getTargetTime() != null) studyRoom.setTargetTime(studyRoom.getTargetTime());
-            if (StringUtils.isNotBlank(studyRoom.getRule())) studyRoom.setRule(studyRoom.getRule());
-            if (studyRoom.getLimitUsers() != null) studyRoom.setLimitUsers(studyRoom.getLimitUsers());
-            if (studyRoom.getStartAt() != null) studyRoom.setStartAt(studyRoom.getStartAt());
-            if (studyRoom.getEndAt() != null) studyRoom.setEndAt(studyRoom.getEndAt());
+            studyRoom.update(
+                    updateStudyRoomRequest.getName()
+                    /*
+                    updateStudyRoomRequest.getImage(),
+                    updateStudyRoomRequest.getIsPublic(),
+                    updateStudyRoomRequest.getPassword(),
+                    updateStudyRoomRequest.getTargetTime(),
+                    updateStudyRoomRequest.getRule(),
+                    updateStudyRoomRequest.getLimitUsers(),
+                    updateStudyRoomRequest.getStartAt(),
+                    updateStudyRoomRequest.getEndAt()
+                     */
+            );
         } else {
             throw new RuntimeException();
         }
 
         StudyRoom response = studyRoomRepository.save(studyRoom);
 
-
         return StudyRoomDto.builder()
                 .name(response.getName())
+                .user(response.getUser().toUserDto())
+                /*
+                .image(response.getImage())
+                .isPublic(response.getIsPublic())
+                .password(response.getPassword())
+                .targetTime(response.getTargetTime())
+                .rule(response.getRule())
+                .limitUsers(response.getLimitUsers())
+                .startAt(response.getStartAt())
+                .endAt(response.getEndAt())
+                 */
                 .build();
     }
 

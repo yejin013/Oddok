@@ -1,5 +1,6 @@
 package com.oddok.server.domain.user.entity;
 
+import com.oddok.server.domain.user.dto.UserDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -46,5 +47,12 @@ public class User {
         this.email = email;
         this.createAt = LocalDateTime.now();
         this.updateAt = LocalDateTime.now();
+    }
+
+    public UserDto toUserDto() {
+        return UserDto.builder()
+                .email(this.email)
+                .nickname(this.nickname)
+                .build();
     }
 }

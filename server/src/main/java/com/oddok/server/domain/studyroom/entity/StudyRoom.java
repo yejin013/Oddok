@@ -91,4 +91,31 @@ public class StudyRoom {
                 .sessionId(sessionId)
                 .build();
     }
+
+    /**
+     * 이후에 아래에 있는 update만 사용하고 이 함수는 삭제할 예정
+     * @param name
+     * @return
+     */
+    public StudyRoom update(String name) {
+        this.name = name;
+
+        return this;
+    }
+
+    public StudyRoom update(String name, String image, Boolean isPublic, String password,
+                            Integer targetTime, String rule, Integer limitUsers,
+                            LocalDateTime startAt, LocalDateTime endAt) {
+        this.name = name;
+        this.image = image;
+        this.isPublic = isPublic;
+        this.password = password;
+        this.targetTime = targetTime;
+        this.rule = rule;
+        this.limitUsers = limitUsers;
+        this.startAt = startAt;
+        this.endAt = endAt;
+
+        return this;
+    }
 }

@@ -55,13 +55,28 @@ public class StudyRoomController {
     /**
      *
      * @param id
-     * @param user : 이후에 User 형으로 변경
+     * @param updateStudyRoomRequest
      * @return
      */
-    @PatchMapping("/{id}")
-    public ResponseEntity<UpdateStudyRoomResponse> update(@PathVariable String id, @RequestBody String user, @RequestBody @Valid UpdateStudyRoomRequest updateStudyRoomRequest) {
-        StudyRoomDto studyRoomDto = studyRoomService.updateStudyRoom(id, user, updateStudyRoomRequest);
-        UpdateStudyRoomResponse updateStudyRoomResponse = new UpdateStudyRoomResponse();
+    @PutMapping("/{id}")
+    public ResponseEntity<UpdateStudyRoomResponse> update(@PathVariable String id, @RequestBody @Valid UpdateStudyRoomRequest updateStudyRoomRequest) {
+        StudyRoomDto studyRoomDto = studyRoomService.updateStudyRoom(id, updateStudyRoomRequest.getUser(), updateStudyRoomRequest);
+
+        UpdateStudyRoomResponse updateStudyRoomResponse = UpdateStudyRoomResponse.builder()
+                .name(studyRoomDto.getName())
+                .user(studyRoomDto.getUser())
+                /*
+                .image(studyRoomDto.getImage())
+                .isPublic(studyRoomDto.getIsPublic())
+                .password(studyRoomDto.getPassword())
+                .targetTime(studyRoomDto.getTargetTime())
+                .rule(studyRoomDto.getRule())
+                .limitUsers(studyRoomDto.getLimitUsers())
+                .startAt(studyRoomDto.getStartAt())
+                .endAt(studyRoomDto.getEndAt())
+                 */
+                .build();
+
         return ResponseEntity.ok(updateStudyRoomResponse);
     }
 

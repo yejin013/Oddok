@@ -1,19 +1,12 @@
 package com.oddok.server.domain.studyroom.api.request;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.time.LocalDateTime;
 
 @Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class UpdateStudyRoomRequest {
     private String name;
-
+    private String user; // token 만들면 삭제할 예정
+    /*
     private String image;
 
     private Boolean isPublic;
@@ -29,4 +22,5 @@ public class UpdateStudyRoomRequest {
     private LocalDateTime startAt;
 
     private LocalDateTime endAt;
+     */
 }

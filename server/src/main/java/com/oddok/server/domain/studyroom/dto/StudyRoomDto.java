@@ -1,15 +1,21 @@
 package com.oddok.server.domain.studyroom.dto;
 
+import com.oddok.server.domain.user.dto.UserDto;
 import lombok.Builder;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Builder
+@Getter
 public class StudyRoomDto {
+    private Long id;
 
     private String name;
 
-    private Long user;
+    private UserDto user;
+
+    private String sessionId;
 
     private String image;
 
@@ -20,6 +26,8 @@ public class StudyRoomDto {
     private Integer targetTime;
 
     private String rule;
+
+    private Integer currentUsers;
 
     private Integer limitUsers;
 
