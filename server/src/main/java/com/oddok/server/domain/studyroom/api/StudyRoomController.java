@@ -65,7 +65,6 @@ public class StudyRoomController {
         UpdateStudyRoomResponse updateStudyRoomResponse = UpdateStudyRoomResponse.builder()
                 .name(studyRoomDto.getName())
                 .user(studyRoomDto.getUser())
-                /*
                 .image(studyRoomDto.getImage())
                 .isPublic(studyRoomDto.getIsPublic())
                 .password(studyRoomDto.getPassword())
@@ -74,7 +73,6 @@ public class StudyRoomController {
                 .limitUsers(studyRoomDto.getLimitUsers())
                 .startAt(studyRoomDto.getStartAt())
                 .endAt(studyRoomDto.getEndAt())
-                 */
                 .build();
 
         return ResponseEntity.ok(updateStudyRoomResponse);

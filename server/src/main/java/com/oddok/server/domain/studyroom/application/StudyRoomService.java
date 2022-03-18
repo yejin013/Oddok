@@ -2,7 +2,6 @@ package com.oddok.server.domain.studyroom.application;
 
 import com.oddok.server.common.errors.StudyRoomNotFoundException;
 import com.oddok.server.common.errors.UserNotFoundException;
-import com.oddok.server.common.utils.StringUtils;
 import com.oddok.server.domain.studyroom.api.request.CreateStudyRoomRequest;
 import com.oddok.server.domain.studyroom.api.request.UpdateStudyRoomRequest;
 import com.oddok.server.domain.studyroom.api.response.CreateStudyRoomResponse;
@@ -11,7 +10,6 @@ import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import com.oddok.server.domain.studyroom.entity.StudyRoom;
 import com.oddok.server.domain.user.dao.UserRepository;
 
-import com.oddok.server.domain.user.dto.UserDto;
 import com.oddok.server.domain.user.entity.User;
 import org.springframework.stereotype.Service;
 
@@ -46,8 +44,7 @@ public class StudyRoomService {
         StudyRoom studyRoom = studyRoomRepository.findById(Long.parseLong(id)).orElseThrow(() -> new StudyRoomNotFoundException(Long.parseLong(id)));
         if (checkPublisher(studyRoom.getUser(), user)) {
             studyRoom.update(
-                    updateStudyRoomRequest.getName()
-                    /*
+                    updateStudyRoomRequest.getName(),
                     updateStudyRoomRequest.getImage(),
                     updateStudyRoomRequest.getIsPublic(),
                     updateStudyRoomRequest.getPassword(),
@@ -56,7 +53,6 @@ public class StudyRoomService {
                     updateStudyRoomRequest.getLimitUsers(),
                     updateStudyRoomRequest.getStartAt(),
                     updateStudyRoomRequest.getEndAt()
-                     */
             );
         } else {
             throw new RuntimeException();
@@ -67,7 +63,6 @@ public class StudyRoomService {
         return StudyRoomDto.builder()
                 .name(response.getName())
                 .user(response.getUser().toUserDto())
-                /*
                 .image(response.getImage())
                 .isPublic(response.getIsPublic())
                 .password(response.getPassword())
@@ -76,7 +71,6 @@ public class StudyRoomService {
                 .limitUsers(response.getLimitUsers())
                 .startAt(response.getStartAt())
                 .endAt(response.getEndAt())
-                 */
                 .build();
     }
 
