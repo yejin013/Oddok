@@ -1,8 +1,8 @@
 package com.oddok.server.domain.studyroom.entity;
 
-import com.oddok.server.domain.studyroom.api.response.CreateStudyRoomResponse;
+import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
+import com.oddok.server.domain.user.dto.UserDto;
 import com.oddok.server.domain.user.entity.User;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -61,12 +61,43 @@ public class StudyRoom {
         this.name = name;
         this.user = user;
         this.sessionId = sessionId;
+        this.createAt = LocalDateTime.now();
     }
 
-    public CreateStudyRoomResponse toCreateStudyRoomResponse(){
-        return CreateStudyRoomResponse.builder()
-                .studyRoomId(id)
+    public StudyRoom(String name, User user, String sessionId,
+                     String image, Boolean isPublic, String password,
+                     Integer targetTime, String rule, Integer limitUsers,
+                     LocalDateTime startAt, LocalDateTime endAt) {
+        this.name = name;
+        this.user = user;
+        this.sessionId = sessionId;
+        this.image = image;
+        this.isPublic = isPublic;
+        this.password = password;
+        this.targetTime = targetTime;
+        this.rule = rule;
+        this.currentUsers = 0;
+        this.limitUsers = limitUsers;
+        this.startAt = startAt;
+        this.endAt = endAt;
+        this.createAt = LocalDateTime.now();
+    }
+
+    public StudyRoomDto toStudyRoomDto(UserDto userDto){
+        return StudyRoomDto.builder()
+                .id(id)
+                .name(name)
+                .user(userDto)
                 .sessionId(sessionId)
+                .image(image)
+                .isPublic(isPublic)
+                .password(password)
+                .targetTime(targetTime)
+                .rule(rule)
+                .currentUsers(currentUsers)
+                .limitUsers(limitUsers)
+                .startAt(startAt)
+                .endAt(endAt)
                 .build();
     }
 }

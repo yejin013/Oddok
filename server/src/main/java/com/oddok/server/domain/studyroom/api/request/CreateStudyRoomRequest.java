@@ -33,6 +33,5 @@ public class CreateStudyRoomRequest {
     private LocalDateTime startAt;
 
     private LocalDateTime endAt;
-     */
-
+*/
 }

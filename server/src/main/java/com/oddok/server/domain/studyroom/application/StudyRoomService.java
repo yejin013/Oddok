@@ -4,6 +4,7 @@ import com.oddok.server.common.errors.UserNotFoundException;
 import com.oddok.server.domain.studyroom.api.request.CreateStudyRoomRequest;
 import com.oddok.server.domain.studyroom.api.response.CreateStudyRoomResponse;
 import com.oddok.server.domain.studyroom.dao.StudyRoomRepository;
+import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import com.oddok.server.domain.studyroom.entity.StudyRoom;
 import com.oddok.server.domain.user.dao.UserRepository;
 
@@ -22,10 +23,17 @@ public class StudyRoomService {
         this.studyRoomRepository = studyRoomRepository;
     }
 
-    public CreateStudyRoomResponse createStudyRoom(CreateStudyRoomRequest createStudyRoomRequest, String sessionId) {
-        User user = findUser(createStudyRoomRequest.getUser());
-        StudyRoom studyRoom = new StudyRoom(createStudyRoomRequest.getName(), user, sessionId);
-        return studyRoomRepository.save(studyRoom).toCreateStudyRoomResponse();
+    public StudyRoomDto createStudyRoom(StudyRoomDto studyRoomDto) {
+        User user = findUser(studyRoomDto.getUser().getId());
+        StudyRoom studyRoom = new StudyRoom(studyRoomDto.getName(), user, studyRoomDto.getSessionId());
+        /*
+        StudyRoom studyRoom = new StudyRoom(createStudyRoomRequest.getName(), user, sessionId,
+                createStudyRoomRequest.getImage(), createStudyRoomRequest.getIsPublic(),
+                createStudyRoomRequest.getPassword(), createStudyRoomRequest.getTargetTime(),
+                createStudyRoomRequest.getRule(), createStudyRoomRequest.getLimitUsers(),
+                createStudyRoomRequest.getStartAt(), createStudyRoomRequest.getEndAt());
+         */
+        return studyRoomRepository.save(studyRoom).toStudyRoomDto(studyRoomDto.getUser());
     }
 
     public User findUser(Long userId) {

@@ -1,6 +1,8 @@
 package com.oddok.server.domain.user.application;
 
+import com.oddok.server.common.errors.UserNotFoundException;
 import com.oddok.server.domain.user.dao.UserRepository;
+import com.oddok.server.domain.user.dto.UserDto;
 import com.oddok.server.domain.user.entity.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,10 @@ public class UserService {
         userRepository.save(new User("user2@kakao.com"));
         return savedUser.getId();
 
+    }
+
+    public UserDto loadUser(Long user) {
+        return userRepository.findById(user).orElseThrow(() -> new UserNotFoundException()).toUserDto();
     }
 
 }
