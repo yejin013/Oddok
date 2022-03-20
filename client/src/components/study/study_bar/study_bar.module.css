@@ -1,16 +1,9 @@
-button {
-  outline: none;
-  border: 0;
-  cursor: pointer;
-  background-color: transparent;
-}
-
 .bar {
   display: flex;
   align-items: center;
+  height: 100%;
   background-color: #101112;
   color: #dee2e6;
-  height: 100%;
   padding: 0.2em 1.5em;
 }
 
@@ -34,30 +27,36 @@ button {
 }
 
 .video_button,
-.audio_button {
+.audio_button,
+.chat_button,
+.member_button,
+.door_button {
   padding: 0.8em 1em;
 }
 
-.video_button {
+.video_button,
+.audio_button,
+.chat_button,
+.member_button {
   border-right: 1px solid #343a40;
 }
 
-.start_button {
-  font-size: 1rem;
-  padding: 0.9em 5em;
-  background-color: #bf7d8a;
-  color: white;
-  border-radius: 4px;
+.door_button {
+  padding-right: 0;
 }
 
 .music {
   display: flex;
   align-items: center;
-  margin-left: 0.8em;
+  margin-left: 1em;
   font-size: 0.75rem;
   color: #6c757d;
 }
 
 .music_icon {
   padding: 0.5em;
+}
+
+.play_button {
+  margin-right: 1em;
 }
