@@ -1,18 +1,18 @@
 package com.oddok.server.domain.studyroom.entity;
 
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
-import com.oddok.server.domain.user.dto.UserDto;
 import com.oddok.server.domain.user.entity.User;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
-@Entity
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
+@Entity
 public class StudyRoom {
     @Id
     @GeneratedValue
@@ -42,7 +42,8 @@ public class StudyRoom {
     private String rule;
 
     @Column(name = "current_users")
-    private Integer currentUsers;
+    @Builder.Default
+    private Integer currentUsers = 0;
 
     @Column(name = "limit_users")
     private Integer limitUsers;
@@ -57,6 +58,7 @@ public class StudyRoom {
     @Column(name = "create_at")
     private LocalDateTime createAt;
 
+    /*
     public StudyRoom(String name, User user, String sessionId) {
         this.name = name;
         this.user = user;
@@ -82,12 +84,13 @@ public class StudyRoom {
         this.endAt = endAt;
         this.createAt = LocalDateTime.now();
     }
+     */
 
-    public StudyRoomDto toStudyRoomDto(UserDto userDto){
+    public StudyRoomDto toStudyRoomDto() {
         return StudyRoomDto.builder()
                 .id(id)
                 .name(name)
-                .user(userDto)
+                .user(user.toUserDto())
                 .sessionId(sessionId)
                 .image(image)
                 .isPublic(isPublic)

@@ -1,5 +1,6 @@
 package com.oddok.server.domain.studyroom.application;
 
+import com.oddok.server.common.errors.StudyRoomNotFoundException;
 import com.oddok.server.common.errors.UserNotFoundException;
 import com.oddok.server.domain.studyroom.api.request.CreateStudyRoomRequest;
 import com.oddok.server.domain.studyroom.api.response.CreateStudyRoomResponse;
@@ -25,7 +26,11 @@ public class StudyRoomService {
 
     public StudyRoomDto createStudyRoom(StudyRoomDto studyRoomDto) {
         User user = findUser(studyRoomDto.getUser().getId());
-        StudyRoom studyRoom = new StudyRoom(studyRoomDto.getName(), user, studyRoomDto.getSessionId());
+        StudyRoom studyRoom = StudyRoom.builder()
+                .name(studyRoomDto.getName())
+                .user(user)
+                .sessionId(studyRoomDto.getSessionId())
+                .build();
         /*
         StudyRoom studyRoom = new StudyRoom(createStudyRoomRequest.getName(), user, sessionId,
                 createStudyRoomRequest.getImage(), createStudyRoomRequest.getIsPublic(),
@@ -33,7 +38,13 @@ public class StudyRoomService {
                 createStudyRoomRequest.getRule(), createStudyRoomRequest.getLimitUsers(),
                 createStudyRoomRequest.getStartAt(), createStudyRoomRequest.getEndAt());
          */
-        return studyRoomRepository.save(studyRoom).toStudyRoomDto(studyRoomDto.getUser());
+        return studyRoomRepository.save(studyRoom).toStudyRoomDto();
+    }
+
+    public StudyRoomDto getById(Long id) {
+        StudyRoom studyRoom = studyRoomRepository.findById(id)
+                .orElseThrow(() -> new StudyRoomNotFoundException(id));
+        return studyRoom.toStudyRoomDto();
     }
 
     public User findUser(Long userId) {
