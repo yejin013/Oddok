@@ -9,10 +9,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
+@NoArgsConstructor
 public class StudyRoom {
     @Id
     @GeneratedValue
@@ -20,6 +18,8 @@ public class StudyRoom {
 
     @Column(unique = true, nullable = false, length = 255)
     private String name;
+
+    private String category;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -42,7 +42,6 @@ public class StudyRoom {
     private String rule;
 
     @Column(name = "current_users")
-    @Builder.Default
     private Integer currentUsers = 0;
 
     @Column(name = "limit_users")
@@ -58,7 +57,8 @@ public class StudyRoom {
     @Column(name = "create_at")
     private LocalDateTime createAt;
 
-    /*
+    //TODO: 생성자 인자 수정
+    @Builder
     public StudyRoom(String name, User user, String sessionId) {
         this.name = name;
         this.user = user;
@@ -66,6 +66,7 @@ public class StudyRoom {
         this.createAt = LocalDateTime.now();
     }
 
+    /*
     public StudyRoom(String name, User user, String sessionId,
                      String image, Boolean isPublic, String password,
                      Integer targetTime, String rule, Integer limitUsers,
@@ -103,4 +104,5 @@ public class StudyRoom {
                 .endAt(endAt)
                 .build();
     }
+
 }

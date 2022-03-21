@@ -24,24 +24,17 @@ public class StudyRoomService {
         this.studyRoomRepository = studyRoomRepository;
     }
 
-    public StudyRoomDto createStudyRoom(StudyRoomDto studyRoomDto) {
+    public Long createStudyRoom(StudyRoomDto studyRoomDto) {
         User user = findUser(studyRoomDto.getUser().getId());
         StudyRoom studyRoom = StudyRoom.builder()
                 .name(studyRoomDto.getName())
                 .user(user)
                 .sessionId(studyRoomDto.getSessionId())
                 .build();
-        /*
-        StudyRoom studyRoom = new StudyRoom(createStudyRoomRequest.getName(), user, sessionId,
-                createStudyRoomRequest.getImage(), createStudyRoomRequest.getIsPublic(),
-                createStudyRoomRequest.getPassword(), createStudyRoomRequest.getTargetTime(),
-                createStudyRoomRequest.getRule(), createStudyRoomRequest.getLimitUsers(),
-                createStudyRoomRequest.getStartAt(), createStudyRoomRequest.getEndAt());
-         */
-        return studyRoomRepository.save(studyRoom).toStudyRoomDto();
+        return studyRoomRepository.save(studyRoom).getId();
     }
 
-    public StudyRoomDto getById(Long id) {
+    public StudyRoomDto loadStudyRoom(Long id) {
         StudyRoom studyRoom = studyRoomRepository.findById(id)
                 .orElseThrow(() -> new StudyRoomNotFoundException(id));
         return studyRoom.toStudyRoomDto();
