@@ -5,11 +5,11 @@ import com.oddok.server.domain.studyroom.api.response.CreateStudyRoomResponse;
 import com.oddok.server.domain.studyroom.api.response.TokenResponse;
 import com.oddok.server.domain.studyroom.application.SessionService;
 import com.oddok.server.domain.studyroom.application.StudyRoomService;
+import com.oddok.server.domain.studyroom.dto.IdClassForParticipantDto;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import com.oddok.server.domain.user.application.UserService;
 import com.oddok.server.domain.user.dto.UserDto;
 import io.openvidu.java.client.OpenViduRole;
-import jdk.nashorn.internal.parser.Token;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -73,7 +73,7 @@ public class StudyRoomController {
         // 1. StudyRoom id 로 세션 id 가져오기
         StudyRoomDto studyRoom = studyRoomService.loadStudyRoom(id);
 
-        //2. OpenVidu Connection 생성 및 토큰 가져오기
+        // 2. OpenVidu Connection 생성 및 토큰 가져오기
         OpenViduRole openViduRole;
         if (studyRoom.getUser().getId() == Long.parseLong(userId)) { // 방장
             openViduRole = OpenViduRole.PUBLISHER;
@@ -83,8 +83,13 @@ public class StudyRoomController {
         String token = sessionService.getToken(studyRoom.getSessionId(),openViduRole);
         TokenResponse tokenResponse = TokenResponse.builder().token(token).build();
 
-        //TODO: 3. Participant 정보 저장
-        //studyRoomService.createParticipant(id, user);
+        // 3. Participant 정보 저장
+        IdClassForParticipantDto requestDto = IdClassForParticipantDto.builder()
+                .studyRoomId(id)
+                .userId(userId)
+                .build();
+        studyRoomService.createParticipant(requestDto);
+
         return ResponseEntity.ok(tokenResponse);
     }
 

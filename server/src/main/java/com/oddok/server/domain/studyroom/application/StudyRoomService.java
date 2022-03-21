@@ -2,15 +2,15 @@ package com.oddok.server.domain.studyroom.application;
 
 import com.oddok.server.common.errors.StudyRoomNotFoundException;
 import com.oddok.server.common.errors.UserNotFoundException;
-import com.oddok.server.domain.studyroom.api.request.CreateStudyRoomRequest;
-import com.oddok.server.domain.studyroom.api.response.CreateStudyRoomResponse;
+import com.oddok.server.domain.studyroom.dao.ParticipantRepository;
 import com.oddok.server.domain.studyroom.dao.StudyRoomRepository;
+import com.oddok.server.domain.studyroom.dto.IdClassForParticipantDto;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
+import com.oddok.server.domain.studyroom.entity.Participant;
 import com.oddok.server.domain.studyroom.entity.StudyRoom;
 import com.oddok.server.domain.user.dao.UserRepository;
 
 import com.oddok.server.domain.user.entity.User;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,10 +18,12 @@ public class StudyRoomService {
 
     private UserRepository userRepository;
     private StudyRoomRepository studyRoomRepository;
+    private ParticipantRepository participantRepository;
 
-    public StudyRoomService(UserRepository userRepository, StudyRoomRepository studyRoomRepository) {
+    public StudyRoomService(UserRepository userRepository, StudyRoomRepository studyRoomRepository, ParticipantRepository participantRepository) {
         this.userRepository = userRepository;
         this.studyRoomRepository = studyRoomRepository;
+        this.participantRepository = participantRepository;
     }
 
     public Long createStudyRoom(StudyRoomDto studyRoomDto) {
@@ -42,5 +44,16 @@ public class StudyRoomService {
 
     public User findUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException());
+    }
+
+    public void createParticipant(IdClassForParticipantDto idClassForParticipantDto) {
+        User user = findUser(Long.parseLong(idClassForParticipantDto.getUserId()));
+
+        Participant participant = Participant.builder()
+                .studyRoomId(idClassForParticipantDto.getStudyRoomId())
+                .user(user)
+                .build();
+
+        participantRepository.save(participant);
     }
 }
