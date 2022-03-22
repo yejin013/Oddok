@@ -5,8 +5,8 @@ import lombok.Getter;
 
 @Getter
 public class IdClassForParticipantDto {
-    Long studyRoomId;
-    String userId;
+    private Long studyRoomId;
+    private String userId;
 
     @Builder
     public IdClassForParticipantDto(Long studyRoomId, String userId) {
