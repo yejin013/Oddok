@@ -41,6 +41,12 @@ public class StudyRoom {
 
     private String rule;
 
+    @Column(name = "is_mic_on")
+    private Boolean isMicOn;
+
+    @Column(name = "is_cam_on")
+    private Boolean isCamOn;
+
     @Column(name = "current_users")
     private Integer currentUsers = 0;
 
@@ -66,12 +72,14 @@ public class StudyRoom {
         this.createAt = LocalDateTime.now();
     }
 
-    /*
-    public StudyRoom(String name, User user, String sessionId,
-                     String image, Boolean isPublic, String password,
-                     Integer targetTime, String rule, Integer limitUsers,
+    @Builder
+    public StudyRoom(String name, String category, User user,
+                     String sessionId, String image, Boolean isPublic,
+                     String password, Integer targetTime, String rule,
+                     Boolean isMicOn, Boolean isCamOn, Integer limitUsers,
                      LocalDateTime startAt, LocalDateTime endAt) {
         this.name = name;
+        this.category = category;
         this.user = user;
         this.sessionId = sessionId;
         this.image = image;
@@ -79,19 +87,19 @@ public class StudyRoom {
         this.password = password;
         this.targetTime = targetTime;
         this.rule = rule;
-        this.currentUsers = 0;
+        this.isMicOn = isMicOn;
+        this.isCamOn = isCamOn;
         this.limitUsers = limitUsers;
         this.startAt = startAt;
         this.endAt = endAt;
         this.createAt = LocalDateTime.now();
     }
-     */
 
     public StudyRoomDto toStudyRoomDto() {
         return StudyRoomDto.builder()
                 .id(id)
                 .name(name)
-                .user(user.toUserDto())
+                .userId(user.getId())
                 .sessionId(sessionId)
                 .image(image)
                 .isPublic(isPublic)
