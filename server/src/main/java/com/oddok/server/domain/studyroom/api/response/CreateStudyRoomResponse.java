@@ -1,16 +1,15 @@
 package com.oddok.server.domain.studyroom.api.response;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@Builder
-@AllArgsConstructor
 public class CreateStudyRoomResponse {
 
-    private final Long studyRoomId;
+    private final Long id;
 
-    private final String sessionId;
-
+    @Builder
+    public CreateStudyRoomResponse(Long id) {
+        this.id = id;
+    }
 }
