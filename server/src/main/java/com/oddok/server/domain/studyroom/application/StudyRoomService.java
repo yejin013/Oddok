@@ -27,7 +27,7 @@ public class StudyRoomService {
     }
 
     public Long createStudyRoom(StudyRoomDto studyRoomDto) {
-        User user = findUser(studyRoomDto.getUser().getId());
+        User user = findUser(studyRoomDto.getUserId());
         StudyRoom studyRoom = StudyRoom.builder()
                 .name(studyRoomDto.getName())
                 .user(user)
@@ -48,12 +48,10 @@ public class StudyRoomService {
 
     public void createParticipant(IdClassForParticipantDto idClassForParticipantDto) {
         User user = findUser(Long.parseLong(idClassForParticipantDto.getUserId()));
-
         Participant participant = Participant.builder()
                 .studyRoomId(idClassForParticipantDto.getStudyRoomId())
                 .user(user)
                 .build();
-
         participantRepository.save(participant);
     }
 }

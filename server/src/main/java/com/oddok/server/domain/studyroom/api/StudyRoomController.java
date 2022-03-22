@@ -47,18 +47,16 @@ public class StudyRoomController {
      */
     @PostMapping
     public ResponseEntity<CreateStudyRoomResponse> create(@RequestHeader String userId, @RequestBody @Valid CreateStudyRoomRequest createStudyRoomRequest) throws OpenViduJavaClientException, OpenViduHttpException {
-        System.out.println("💘 방생성 요청 : " + createStudyRoomRequest.getName());
         // 1. OpenVidu 에 새로운 세션을 생성
         String sessionId = sessionService.createSession();
-        UserDto userDto = userService.loadUser(Long.parseLong(userId));
         StudyRoomDto requestDto = StudyRoomDto.builder()
                 .name(createStudyRoomRequest.getName())
-                .user(userDto)
+                .userId(Long.parseLong(userId))
                 .sessionId(sessionId)
                 .build();
         // 2. StudyRoom 생성
-        Long id = studyRoomService.createStudyRoom(requestDto);
-        CreateStudyRoomResponse createStudyRoomResponse = CreateStudyRoomResponse.builder().id(id).build();
+        Long studyRoomId = studyRoomService.createStudyRoom(requestDto);
+        CreateStudyRoomResponse createStudyRoomResponse = CreateStudyRoomResponse.builder().id(studyRoomId).build();
         return ResponseEntity.ok(createStudyRoomResponse);
     }
 
@@ -71,16 +69,16 @@ public class StudyRoomController {
     public ResponseEntity<TokenResponse> join(@PathVariable Long id, @RequestHeader String userId) throws OpenViduJavaClientException, OpenViduHttpException {
         System.out.println("💘 " + userId + "님이 {" + id + "}방에 입장하셨습니다.");
         // 1. StudyRoom id 로 세션 id 가져오기
-        StudyRoomDto studyRoom = studyRoomService.loadStudyRoom(id);
+        StudyRoomDto studyRoomDto = studyRoomService.loadStudyRoom(id);
 
         // 2. OpenVidu Connection 생성 및 토큰 가져오기
         OpenViduRole openViduRole;
-        if (studyRoom.getUser().getId() == Long.parseLong(userId)) { // 방장
+        if (studyRoomDto.getUserId() == Long.parseLong(userId)) { // 방장
             openViduRole = OpenViduRole.PUBLISHER;
         } else { // 참가자
             openViduRole = OpenViduRole.SUBSCRIBER;
         }
-        String token = sessionService.getToken(studyRoom.getSessionId(),openViduRole);
+        String token = sessionService.getToken(studyRoomDto.getSessionId(),openViduRole);
         TokenResponse tokenResponse = TokenResponse.builder().token(token).build();
 
         // 3. Participant 정보 저장

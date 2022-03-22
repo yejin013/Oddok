@@ -1,6 +1,5 @@
 package com.oddok.server.domain.studyroom.dto;
 
-import com.oddok.server.domain.user.dto.UserDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -13,7 +12,7 @@ public class StudyRoomDto {
 
     private String name;
 
-    private UserDto user;
+    private Long userId;
 
     private String sessionId;
 
