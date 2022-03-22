@@ -22,7 +22,7 @@ public class StudyRoomService {
     private StudyRoomRepository studyRoomRepository;
     private ParticipantRepository participantRepository;
 
-    private StudyRoomMapper studyRoomMapper = Mappers.getMapper(StudyRoomMapper.class);;
+    private StudyRoomMapper studyRoomMapper = Mappers.getMapper(StudyRoomMapper.class);
 
     public StudyRoomService(UserRepository userRepository, StudyRoomRepository studyRoomRepository, ParticipantRepository participantRepository) {
         this.userRepository = userRepository;
