@@ -1,6 +1,5 @@
 package com.oddok.server.domain.studyroom.entity;
 
-import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import com.oddok.server.domain.user.entity.User;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -63,15 +62,6 @@ public class StudyRoom {
     @Column(name = "create_at")
     private LocalDateTime createAt;
 
-    //TODO: 생성자 인자 수정
-    @Builder
-    public StudyRoom(String name, User user, String sessionId) {
-        this.name = name;
-        this.user = user;
-        this.sessionId = sessionId;
-        this.createAt = LocalDateTime.now();
-    }
-
     @Builder
     public StudyRoom(String name, String category, User user,
                      String sessionId, String image, Boolean isPublic,
@@ -94,23 +84,4 @@ public class StudyRoom {
         this.endAt = endAt;
         this.createAt = LocalDateTime.now();
     }
-
-    public StudyRoomDto toStudyRoomDto() {
-        return StudyRoomDto.builder()
-                .id(id)
-                .name(name)
-                .userId(user.getId())
-                .sessionId(sessionId)
-                .image(image)
-                .isPublic(isPublic)
-                .password(password)
-                .targetTime(targetTime)
-                .rule(rule)
-                .currentUsers(currentUsers)
-                .limitUsers(limitUsers)
-                .startAt(startAt)
-                .endAt(endAt)
-                .build();
-    }
-
 }

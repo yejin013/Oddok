@@ -5,7 +5,6 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 
-@Builder
 @Getter
 public class StudyRoomDto {
     private Long id;
@@ -33,4 +32,12 @@ public class StudyRoomDto {
     private LocalDateTime startAt;
 
     private LocalDateTime endAt;
+
+    @Builder
+    public StudyRoomDto(Long id, String name, Long userId, String sessionId) {
+        this.id = id;
+        this.name = name;
+        this.userId = userId;
+        this.sessionId = sessionId;
+    }
 }
