@@ -66,19 +66,13 @@ public class StudyRoomController {
      * @return token
      */
     @GetMapping(value = "/join/{id}")
-    public ResponseEntity<TokenResponse> join(@PathVariable Long id, @RequestHeader String userId) throws OpenViduJavaClientException, OpenViduHttpException {
+    public ResponseEntity<TokenResponse> join(@PathVariable Long id, @RequestHeader String userId) {
         System.out.println("💘 " + userId + "님이 {" + id + "}방에 입장하셨습니다.");
         // 1. StudyRoom id 로 세션 id 가져오기
         StudyRoomDto studyRoomDto = studyRoomService.loadStudyRoom(id);
 
         // 2. OpenVidu Connection 생성 및 토큰 가져오기
-        OpenViduRole openViduRole;
-        if (studyRoomDto.getUserId() == Long.parseLong(userId)) { // 방장
-            openViduRole = OpenViduRole.PUBLISHER;
-        } else { // 참가자
-            openViduRole = OpenViduRole.SUBSCRIBER;
-        }
-        String token = sessionService.getToken(studyRoomDto.getSessionId(),openViduRole);
+        String token = sessionService.getToken(studyRoomDto.getSessionId());
         TokenResponse tokenResponse = TokenResponse.builder().token(token).build();
 
         // 3. Participant 정보 저장
