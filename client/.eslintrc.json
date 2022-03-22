@@ -11,23 +11,15 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-<<<<<<< HEAD
   "plugins": ["react", "react-hooks"],
-=======
-  "plugins": ["react"],
->>>>>>> a9e8b5d (feat: openvidu client test)
   "rules": {
     "no-console": "off",
     "no-unused-vars": "off",
     "react/react-in-jsx-scope": "off",
     "react/jsx-one-expression-per-line": 0,
     "react/prop-types": "off",
-<<<<<<< HEAD
     "jsx-a11y/media-has-caption": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn"
-=======
-    "jsx-a11y/media-has-caption": "off"
->>>>>>> a9e8b5d (feat: openvidu client test)
   }
 }
