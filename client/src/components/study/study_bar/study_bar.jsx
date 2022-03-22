@@ -10,7 +10,7 @@ import { ReactComponent as Chat } from "../../../assets/icons/chat.svg";
 import { ReactComponent as Member } from "../../../assets/icons/person.svg";
 import { ReactComponent as Door } from "../../../assets/icons/door.svg";
 
-function StudyBar(props) {
+function StudyBar({ toggleVideo, toggleAudio, leaveRoom }) {
   return (
     <footer className={styles.bar}>
       <section className={styles.info}>
@@ -36,12 +36,12 @@ function StudyBar(props) {
       </section>
       <ul className={styles.buttons}>
         <li className={styles.video_button}>
-          <button type="button">
+          <button type="button" onClick={toggleVideo}>
             <VideoOn />
           </button>
         </li>
         <li className={styles.audio_button}>
-          <button type="button">
+          <button type="button" onClick={toggleAudio}>
             <MicOff />
           </button>
         </li>
@@ -56,7 +56,7 @@ function StudyBar(props) {
           </button>
         </li>
         <li className={styles.door_button}>
-          <button type="button">
+          <button type="button" onClick={leaveRoom}>
             <Door />
           </button>
         </li>

@@ -3,13 +3,12 @@ import styles from "./user_video.module.css";
 
 function UserVideo({ count, streamManager }) {
   const videoRef = useRef();
-  const videoCount = count;
 
-  // useEffect(() => {
-  //   if (videoRef) {
-  //     streamManager.addVideoElement(videoRef.current);
-  //   }
-  // });
+  useEffect(() => {
+    if (videoRef) {
+      streamManager.addVideoElement(videoRef.current);
+    }
+  }, []);
 
   const getCount = (number) => {
     switch (number) {
@@ -21,12 +20,12 @@ function UserVideo({ count, streamManager }) {
       case 4:
         return styles.multi;
       default:
-        throw new Error(`unkown: ${number}`);
+        throw new Error(`unknown: ${number}`);
     }
   };
 
   return (
-    <li className={`${styles.video} ${getCount(videoCount)}`}>
+    <li className={`${styles.video} ${getCount(count)}`}>
       <video className={styles.user_video} ref={videoRef} autoPlay />
     </li>
   );
