@@ -43,8 +43,6 @@ public class StudyRoomService {
     public StudyRoomDto loadStudyRoom(Long id) {
         StudyRoom studyRoom = studyRoomRepository.findById(id)
                 .orElseThrow(() -> new StudyRoomNotFoundException(id));
-        System.out.println(studyRoom.getId());
-        System.out.println(studyRoomMapper.toDto(studyRoom));
         return studyRoomMapper.toDto(studyRoom);
     }
 
