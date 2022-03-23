@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { OpenVidu } from "openvidu-browser";
-import { createSession, createToken } from "../testserver";
-import postStudyRoom from "../../api/postStudyRoom";
-import getStudyRoom from "../../api/getStudyRoom";
+// import { createSession, createToken } from "../testserver";
+import createSession from "../../api/createSession";
+import createToken from "../../api/createToken";
 
 import SettingBar from "../../components/study/setting_bar/setting_bar";
 import SettingSection from "../../components/study/setting_section/setting_section";
@@ -49,8 +49,8 @@ function SettingRoom() {
       setError(null);
       try {
         localStorage.setItem("userId", "user_juhee");
-        const resId = await postStudyRoom(testdata);
-        const resToken = await getStudyRoom(resId.data.id);
+        const resId = await createSession(testdata);
+        const resToken = await createToken(resId.data.id);
         await session.connect(resToken.data.token, { clientData: userId });
         setIsEnter((prev) => !prev);
       } catch (err) {

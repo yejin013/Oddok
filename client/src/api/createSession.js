@@ -1,9 +1,10 @@
 import axiosInstance from "./axios_config";
 
-const getStudyRoom = async (roomId) => {
+const createSession = async (roomData) => {
   const response = await axiosInstance({
-    url: `/study-room/join/${roomId}`,
-    method: "get",
+    url: "/study-room",
+    method: "POST",
+    data: { roomData },
   });
   return response;
 };
@@ -17,4 +18,4 @@ axiosInstance.interceptors.request.use((config) => {
   return config;
 });
 
-export default getStudyRoom;
+export default createSession;

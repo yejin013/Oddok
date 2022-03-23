@@ -1,10 +1,10 @@
 import axiosInstance from "./axios_config";
 
-const postStudyRoom = async (data) => {
+const createToken = async (roomId) => {
   const response = await axiosInstance({
-    url: "/study-room",
-    method: "POST",
-    data,
+    url: `/study-room/join/${roomId}`,
+    method: "post",
+    data: { roomId },
   });
   return response;
 };
@@ -18,4 +18,4 @@ axiosInstance.interceptors.request.use((config) => {
   return config;
 });
 
-export default postStudyRoom;
+export default createToken;
