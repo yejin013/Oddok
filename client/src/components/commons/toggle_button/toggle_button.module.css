@@ -1,0 +1,24 @@
+.toggle_button {
+  cursor: pointer;
+}
+
+.toggle_button input {
+  display: none;
+}
+
+.content {
+  display: inline-block;
+  padding: 16px;
+  background-color: #212529;
+  color: #f8f9fa;
+  border-radius: 99px;
+}
+
+.icon {
+  vertical-align: middle;
+  margin-right: 4px;
+}
+
+.toggle_button input:checked + span {
+  background-color: #bf7d8a;
+}
