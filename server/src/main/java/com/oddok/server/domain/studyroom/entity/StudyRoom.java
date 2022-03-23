@@ -1,6 +1,5 @@
 package com.oddok.server.domain.studyroom.entity;
 
-import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import com.oddok.server.domain.user.entity.User;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -41,6 +40,12 @@ public class StudyRoom {
 
     private String rule;
 
+    @Column(name = "is_mic_on")
+    private Boolean isMicOn;
+
+    @Column(name = "is_cam_on")
+    private Boolean isCamOn;
+
     @Column(name = "current_users")
     private Integer currentUsers = 0;
 
@@ -57,21 +62,14 @@ public class StudyRoom {
     @Column(name = "create_at")
     private LocalDateTime createAt;
 
-    //TODO: 생성자 인자 수정
     @Builder
-    public StudyRoom(String name, User user, String sessionId) {
-        this.name = name;
-        this.user = user;
-        this.sessionId = sessionId;
-        this.createAt = LocalDateTime.now();
-    }
-
-    /*
-    public StudyRoom(String name, User user, String sessionId,
-                     String image, Boolean isPublic, String password,
-                     Integer targetTime, String rule, Integer limitUsers,
+    public StudyRoom(String name, String category, User user,
+                     String sessionId, String image, Boolean isPublic,
+                     String password, Integer targetTime, String rule,
+                     Boolean isMicOn, Boolean isCamOn, Integer limitUsers,
                      LocalDateTime startAt, LocalDateTime endAt) {
         this.name = name;
+        this.category = category;
         this.user = user;
         this.sessionId = sessionId;
         this.image = image;
@@ -79,30 +77,11 @@ public class StudyRoom {
         this.password = password;
         this.targetTime = targetTime;
         this.rule = rule;
-        this.currentUsers = 0;
+        this.isMicOn = isMicOn;
+        this.isCamOn = isCamOn;
         this.limitUsers = limitUsers;
         this.startAt = startAt;
         this.endAt = endAt;
         this.createAt = LocalDateTime.now();
     }
-     */
-
-    public StudyRoomDto toStudyRoomDto() {
-        return StudyRoomDto.builder()
-                .id(id)
-                .name(name)
-                .user(user.toUserDto())
-                .sessionId(sessionId)
-                .image(image)
-                .isPublic(isPublic)
-                .password(password)
-                .targetTime(targetTime)
-                .rule(rule)
-                .currentUsers(currentUsers)
-                .limitUsers(limitUsers)
-                .startAt(startAt)
-                .endAt(endAt)
-                .build();
-    }
-
 }

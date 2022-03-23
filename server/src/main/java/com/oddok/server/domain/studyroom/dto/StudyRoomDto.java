@@ -1,19 +1,17 @@
 package com.oddok.server.domain.studyroom.dto;
 
-import com.oddok.server.domain.user.dto.UserDto;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
-@Builder
 @Getter
 public class StudyRoomDto {
     private Long id;
 
     private String name;
 
-    private UserDto user;
+    private Long userId;
 
     private String sessionId;
 
@@ -34,4 +32,12 @@ public class StudyRoomDto {
     private LocalDateTime startAt;
 
     private LocalDateTime endAt;
+
+    @Builder
+    public StudyRoomDto(Long id, String name, Long userId, String sessionId) {
+        this.id = id;
+        this.name = name;
+        this.userId = userId;
+        this.sessionId = sessionId;
+    }
 }
