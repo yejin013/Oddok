@@ -3,6 +3,9 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { OpenVidu } from "openvidu-browser";
 import { createSession, createToken } from "../testserver";
+import postStudyRoom from "../../api/postStudyRoom";
+import getStudyRoom from "../../api/getStudyRoom";
+
 import SettingBar from "../../components/study/setting_bar/setting_bar";
 import SettingSection from "../../components/study/setting_section/setting_section";
 import styles from "./setting_room.module.css";
@@ -40,41 +43,40 @@ function SettingRoom() {
   const [isEnter, setIsEnter] = useState(false);
 
   // 서버용🤔
-  // const requestCreateRoom = async () => {
-  //   if (isHost) {
-  //     setIsLoading(true);
-  //     setError(null);
-  //     try {
-  //       const resId = await axios.post("/study-room", JSON.stringify(testdata), {
-  //         headers: { "Content-Type": "application/json", userId },
-  //       });
-  //       const resToken = await axios.post(`/study-room/join/${resId.data.id}`, { userId });
-  //       await session.connect(resToken.data.token, { clientData: userId });
-  //       setIsEnter((prev) => !prev);
-  //     } catch (err) {
-  //       console.log(err.code, err.message);
-  //       setError(err.message);
-  //     }
-  //     setIsLoading(false);
-  //   }
-  // };
-
-  // TEST용
   const requestCreateRoom = async () => {
     if (isHost) {
       setIsLoading(true);
       setError(null);
       try {
-        const roomId = await createSession("1");
-        const token = await createToken(roomId);
-        await session.connect(token, { clientData: userId });
+        localStorage.setItem("userId", "user_juhee");
+        const resId = await postStudyRoom(testdata);
+        const resToken = await getStudyRoom(resId.data.id);
+        await session.connect(resToken.data.token, { clientData: userId });
         setIsEnter((prev) => !prev);
       } catch (err) {
         console.log(err.code, err.message);
         setError(err.message);
       }
+      setIsLoading(false);
     }
   };
+
+  // TEST용
+  // const requestCreateRoom = async () => {
+  //   if (isHost) {
+  //     setIsLoading(true);
+  //     setError(null);
+  //     try {
+  //       const roomId = await createSession("1");
+  //       const token = await createToken(roomId);
+  //       await session.connect(token, { clientData: userId });
+  //       setIsEnter((prev) => !prev);
+  //     } catch (err) {
+  //       console.log(err.code, err.message);
+  //       setError(err.message);
+  //     }
+  //   }
+  // };
 
   const goToStudyRoom = () => {
     requestCreateRoom();
