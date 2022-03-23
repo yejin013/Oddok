@@ -15,9 +15,19 @@ function StudyRoom({ session, publisher }) {
   const leaveRoom = () => {
     session.disconnect();
     setSubscribers([]);
+    setCount(1);
     history.push({
       pathname: "/",
     });
+  };
+
+  const deleteSubscriber = (streamManager) => {
+    const index = subscribers.indexOf(streamManager, 0);
+    if (index > -1) {
+      subscribers.splice(index, 1);
+      setSubscribers(subscribers);
+    }
+    setCount((prev) => prev - 1);
   };
 
   const toggleVideo = () => {
@@ -40,12 +50,7 @@ function StudyRoom({ session, publisher }) {
       setCount((prev) => prev + 1);
     });
     session.on("streamDestroyed", (event) => {
-      const index = subscribers.indexOf(event.stream.streamManager, 0);
-      if (index > -1) {
-        subscribers.splice(index, 1);
-        setSubscribers(subscribers);
-        setCount((prev) => prev - 1);
-      }
+      deleteSubscriber(event.stream.streamManager);
     });
     session.on("exception", (exception) => {
       console.warn(exception);

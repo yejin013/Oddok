@@ -139,13 +139,13 @@ function SettingRoom() {
     <>
       {!isEnter && (
         <div className={styles.room}>
-          {clickedSettingBtn === true && (
+          {clickedSettingBtn && (
             <SettingSection //
               clickSettingBtn={clickSettingBtn}
             />
           )}
           <section className={`${styles.video_component} ${displayType}`}>
-            <video className={styles.user_video} ref={videoRef} autoPlay />
+            <video className={styles.video} ref={videoRef} autoPlay />
           </section>
           <div className={`${styles.bar} ${displayType}`}>
             <SettingBar //

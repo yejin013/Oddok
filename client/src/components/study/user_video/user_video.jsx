@@ -8,7 +8,7 @@ function UserVideo({ count, streamManager }) {
     if (videoRef) {
       streamManager.addVideoElement(videoRef.current);
     }
-  }, []);
+  }, [streamManager]);
 
   const getCount = (number) => {
     switch (number) {
