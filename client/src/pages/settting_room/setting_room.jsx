@@ -32,6 +32,9 @@ function SettingRoom() {
   const [clickedSettingBtn, setClickedSettingBtn] = useState(false);
   const displayType = clickedSettingBtn === true ? styles.hide : styles.show;
 
+  // 서버로 보내줄 object
+  const [roomInfo, setRoomInfo] = useState({});
+
   const [session, setSession] = useState(undefined);
   const [publisher, setPublisher] = useState(undefined);
 
@@ -135,6 +138,10 @@ function SettingRoom() {
 
   const clickSettingBtn = () => {
     setClickedSettingBtn((prev) => !prev);
+  };
+
+  const saveHandler = (obj) => {
+    setRoomInfo(obj);
   };
 
   return (
