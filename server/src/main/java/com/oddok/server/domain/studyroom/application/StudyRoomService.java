@@ -2,15 +2,18 @@ package com.oddok.server.domain.studyroom.application;
 
 import com.oddok.server.common.errors.StudyRoomNotFoundException;
 import com.oddok.server.common.errors.UserNotFoundException;
-import com.oddok.server.domain.studyroom.api.request.CreateStudyRoomRequest;
 import com.oddok.server.domain.studyroom.api.request.UpdateStudyRoomRequest;
-import com.oddok.server.domain.studyroom.api.response.CreateStudyRoomResponse;
 import com.oddok.server.domain.studyroom.dao.StudyRoomRepository;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
+import com.oddok.server.domain.studyroom.dao.ParticipantRepository;
+import com.oddok.server.domain.studyroom.dto.IdClassForParticipantDto;
+import com.oddok.server.domain.studyroom.entity.Participant;
 import com.oddok.server.domain.studyroom.entity.StudyRoom;
+import com.oddok.server.domain.studyroom.mapper.StudyRoomMapper;
 import com.oddok.server.domain.user.dao.UserRepository;
 
 import com.oddok.server.domain.user.entity.User;
+import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -21,28 +24,35 @@ public class StudyRoomService {
 
     private UserRepository userRepository;
     private StudyRoomRepository studyRoomRepository;
+    private ParticipantRepository participantRepository;
 
-    public StudyRoomService(UserRepository userRepository, StudyRoomRepository studyRoomRepository) {
+    private StudyRoomMapper studyRoomMapper = Mappers.getMapper(StudyRoomMapper.class);
+
+    public StudyRoomService(UserRepository userRepository, StudyRoomRepository studyRoomRepository, ParticipantRepository participantRepository) {
         this.userRepository = userRepository;
         this.studyRoomRepository = studyRoomRepository;
+        this.participantRepository = participantRepository;
     }
 
-    public CreateStudyRoomResponse createStudyRoom(CreateStudyRoomRequest createStudyRoomRequest, String sessionId) {
-        User user = findUser(createStudyRoomRequest.getUser());
-        StudyRoom studyRoom = new StudyRoom(createStudyRoomRequest.getName(), user, sessionId);
-        /*
-        StudyRoom studyRoom = new StudyRoom(createStudyRoomRequest.getName(), user, sessionId,
-                createStudyRoomRequest.getImage(), createStudyRoomRequest.getIsPublic(),
-                createStudyRoomRequest.getPassword(), createStudyRoomRequest.getTargetTime(),
-                createStudyRoomRequest.getRule(), createStudyRoomRequest.getLimitUsers(),
-                createStudyRoomRequest.getStartAt(), createStudyRoomRequest.getEndAt());
-         */
-        return studyRoomRepository.save(studyRoom).toCreateStudyRoomResponse();
+    public Long createStudyRoom(StudyRoomDto studyRoomDto) {
+        User user = findUser(studyRoomDto.getUserId());
+        StudyRoom studyRoom = StudyRoom.builder()
+                .name(studyRoomDto.getName())
+                .user(user)
+                .sessionId(studyRoomDto.getSessionId())
+                .build();
+        return studyRoomRepository.save(studyRoom).getId();
     }
 
-    public StudyRoomDto updateStudyRoom(String id, String user, UpdateStudyRoomRequest updateStudyRoomRequest) {
+    public StudyRoomDto loadStudyRoom(Long id) {
+        StudyRoom studyRoom = studyRoomRepository.findById(id)
+                .orElseThrow(() -> new StudyRoomNotFoundException(id));
+        return studyRoomMapper.toDto(studyRoom);
+    }
+
+    public StudyRoomDto updateStudyRoom(String id, String userId, UpdateStudyRoomRequest updateStudyRoomRequest) {
         StudyRoom studyRoom = studyRoomRepository.findById(Long.parseLong(id)).orElseThrow(() -> new StudyRoomNotFoundException(Long.parseLong(id)));
-        if (checkPublisher(studyRoom.getUser(), user)) {
+        if (checkPublisher(studyRoom.getUser(), userId)) {
             studyRoom.update(
                     updateStudyRoomRequest.getName(),
                     updateStudyRoomRequest.getImage(),
@@ -58,20 +68,8 @@ public class StudyRoomService {
             throw new RuntimeException();
         }
 
-        StudyRoom response = studyRoomRepository.save(studyRoom);
+        return studyRoomMapper.toDto(studyRoomRepository.save(studyRoom));
 
-        return StudyRoomDto.builder()
-                .name(response.getName())
-                .user(response.getUser().toUserDto())
-                .image(response.getImage())
-                .isPublic(response.getIsPublic())
-                .password(response.getPassword())
-                .targetTime(response.getTargetTime())
-                .rule(response.getRule())
-                .limitUsers(response.getLimitUsers())
-                .startAt(response.getStartAt())
-                .endAt(response.getEndAt())
-                .build();
     }
 
     public Boolean checkPublisher(User publisher, String user) {
@@ -81,5 +79,14 @@ public class StudyRoomService {
 
     public User findUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException());
+    }
+
+    public void createParticipant(IdClassForParticipantDto idClassForParticipantDto) {
+        User user = findUser(Long.parseLong(idClassForParticipantDto.getUserId()));
+        Participant participant = Participant.builder()
+                .studyRoomId(idClassForParticipantDto.getStudyRoomId())
+                .user(user)
+                .build();
+        participantRepository.save(participant);
     }
 }

@@ -1,6 +1,7 @@
 package com.oddok.server.domain.studyroom.entity;
 
 import com.oddok.server.domain.user.entity.User;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,9 +16,8 @@ public class Participant {
     @GeneratedValue
     Long id;
 
-    @OneToOne
-    @JoinColumn(name = "study_room_id")
-    private StudyRoom studyRoom;
+    @Column(name = "study_room_id")
+    private Long studyRoomId;
 
     @OneToOne
     @JoinColumn(name = "user_id")
@@ -25,4 +25,11 @@ public class Participant {
 
     @Column(name = "join_time")
     private LocalDateTime joinTime;
+
+    @Builder
+    public Participant (Long studyRoomId, User user) {
+        this.studyRoomId = studyRoomId;
+        this.user = user;
+        this.joinTime = LocalDateTime.now();
+    }
 }

@@ -1,6 +1,9 @@
 package com.oddok.server.domain.studyroom.application;
 
+import com.oddok.server.common.errors.OpenviduServerException;
+import com.oddok.server.common.errors.SessionNotFoundException;
 import com.oddok.server.domain.studyroom.dao.StudyRoomRepository;
+import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import io.openvidu.java.client.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -23,7 +26,8 @@ public class SessionService {
 
 
     /**
-     * OpenVidu Session 에 새로운 Session 생성 후 SessionId 반환
+     * OpenVidu에 새로운 Session 생성 후 SessionId 반환
+     *
      * @return SessionId
      * @throws OpenViduJavaClientException
      * @throws OpenViduHttpException
@@ -31,42 +35,48 @@ public class SessionService {
     public String createSession() throws OpenViduJavaClientException, OpenViduHttpException {
         SessionProperties properties = new SessionProperties.Builder().build();
         Session session = openVidu.createSession(properties);
-        System.out.println("💘 세션 생성 : "+session);
+        System.out.println("💘 세션 생성 : " + session);
         return session.getSessionId();
     }
 
-
-    /*
-    public String getToken(Session session, String id) throws OpenViduJavaClientException, OpenViduHttpException {
-        // TODO: 방장 여부 확인. 현재는 방장 아닐때만!
-        // TODO: ConnectionProperties 가 사라진것같은데..
+    /**
+     * OpenVidu Session 에 새로운 Connection 생성 후 token 반환
+     *
+     * @param sessionId
+     * @return token
+     */
+    public String getToken(String sessionId) {
+        Session session = getSession(sessionId);
         ConnectionProperties connectionProperties = new ConnectionProperties.Builder()
                 .type(ConnectionType.WEBRTC)
                 .role(OpenViduRole.PUBLISHER)
-                .data("user_data")
                 .build();
-        Connection connection = session.createConnection(connectionProperties);
-        String token = connection.getToken(); // Send this string to the client side
-        OpenViduRole role = OpenViduRole.PUBLISHER;
-        ConnectionProperties connectionProperties = new ConnectionProperties.Builder().type(ConnectionType.WEBRTC).role(OpenViduRole.PUBLISHER).build();
-
+        String token = "";
         try {
-            // 새로운 토큰을 생성
-            String token = session.createConnection(connectionProperties).getToken();
+            token = session.createConnection(connectionProperties).getToken();
         } catch (OpenViduJavaClientException e1) {
-            System.out.println("OpenViduJavaClient 서버 내부 에러");
+            throw new OpenviduServerException(e1.getMessage(), e1.getCause());
         } catch (OpenViduHttpException e2) {
-            if (404 == e2.getStatus()) {
-                // 유효하지 않은 세션 id(예기치못하게 방이 삭제되었을 경우) 방 삭제
-                this.mapStudyRoomNameSession.remove(id); // DB 에서 해당 StudyRoom 삭제
-                this.mapSessionIdTokens.remove(session.getSessionId()); // 해당 StudyRoom에 대한 참여자 목록 삭제
+            if (404 == e2.getStatus()) { // 요청 직전에 방이 삭제 된 경우 세션이 삭제되었음을 알린다.
+                throw new SessionNotFoundException(sessionId);
+            } else {
+                throw new OpenviduServerException(e2.getMessage(), e2.getCause());
             }
         }
-        String token = session.createConnection(connectionProperties).getToken();
         return token;
     }
 
-     */
 
+    /**
+     * SessionId 로 Session 객체를 가져옵니다.
+     *
+     * @param sessionId
+     * @return Session
+     */
+    public Session getSession(String sessionId) {
+        return openVidu.getActiveSessions().stream().filter(session -> session.getSessionId().equals(sessionId))
+                .findFirst()
+                .orElseThrow(() -> new SessionNotFoundException(sessionId));
+    }
 
 }

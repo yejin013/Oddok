@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 @Getter
 public class UpdateStudyRoomRequest {
     private String name;
-    private String user; // token 만들면 삭제할 예정
+    private String userId; // token 만들면 삭제할 예정
 
     private String image;
 

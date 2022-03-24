@@ -13,7 +13,7 @@ public class UpdateStudyRoomResponse {
 
     private String name;
 
-    private UserDto user;
+    private Long userId;
 
     private String sessionId;
 

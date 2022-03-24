@@ -1,14 +1,16 @@
 package com.oddok.server.domain.studyroom.api.response;
 
-import org.springframework.http.HttpStatus;
+import lombok.Builder;
+import lombok.Getter;
 
+@Getter
 public class TokenResponse {
 
-    HttpStatus httpStatus;
-    String token;
+    private final String token;
 
-    public TokenResponse(HttpStatus httpStatus, String token) {
-        this.httpStatus = httpStatus;
+    @Builder
+    public TokenResponse(String token) {
         this.token = token;
     }
+
 }
