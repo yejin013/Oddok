@@ -2,6 +2,7 @@ package com.oddok.server.domain.studyroom.application;
 
 import com.oddok.server.common.errors.StudyRoomNotFoundException;
 import com.oddok.server.common.errors.UserNotFoundException;
+import com.oddok.server.common.errors.UserNotPublisherException;
 import com.oddok.server.domain.studyroom.api.request.UpdateStudyRoomRequest;
 import com.oddok.server.domain.studyroom.dao.StudyRoomRepository;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
@@ -50,31 +51,29 @@ public class StudyRoomService {
         return studyRoomMapper.toDto(studyRoom);
     }
 
-    public StudyRoomDto updateStudyRoom(String id, String userId, UpdateStudyRoomRequest updateStudyRoomRequest) {
+    public StudyRoomDto updateStudyRoom(String id, Long userId, UpdateStudyRoomRequest updateStudyRoomRequest) {
         StudyRoom studyRoom = studyRoomRepository.findById(Long.parseLong(id)).orElseThrow(() -> new StudyRoomNotFoundException(Long.parseLong(id)));
-        if (checkPublisher(studyRoom.getUser(), userId)) {
-            studyRoom.update(
-                    updateStudyRoomRequest.getName(),
-                    updateStudyRoomRequest.getImage(),
-                    updateStudyRoomRequest.getIsPublic(),
-                    updateStudyRoomRequest.getPassword(),
-                    updateStudyRoomRequest.getTargetTime(),
-                    updateStudyRoomRequest.getRule(),
-                    updateStudyRoomRequest.getLimitUsers(),
-                    updateStudyRoomRequest.getStartAt(),
-                    updateStudyRoomRequest.getEndAt()
-            );
-        } else {
-            throw new RuntimeException();
-        }
+
+        if (!checkPublisher(studyRoom.getUser(), userId)) throw new UserNotPublisherException();
+
+        studyRoom.update(
+                updateStudyRoomRequest.getName(),
+                updateStudyRoomRequest.getImage(),
+                updateStudyRoomRequest.getIsPublic(),
+                updateStudyRoomRequest.getPassword(),
+                updateStudyRoomRequest.getTargetTime(),
+                updateStudyRoomRequest.getRule(),
+                updateStudyRoomRequest.getLimitUsers(),
+                updateStudyRoomRequest.getStartAt(),
+                updateStudyRoomRequest.getEndAt()
+        );
 
         return studyRoomMapper.toDto(studyRoomRepository.save(studyRoom));
 
     }
 
-    public Boolean checkPublisher(User publisher, String user) {
-        return publisher.getId() == Long.parseLong(user);
-//        return publisher.equals(user);
+    public Boolean checkPublisher(User publisher, Long userId) {
+        return publisher.getId().equals(userId);
     }
 
     public User findUser(Long userId) {

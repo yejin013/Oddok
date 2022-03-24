@@ -64,8 +64,10 @@ public class StudyRoomController {
      * @return
      */
     @PutMapping("/{id}")
-    public void update(@PathVariable String id, @RequestHeader String userId, @RequestBody @Valid UpdateStudyRoomRequest updateStudyRoomRequest) {
-        studyRoomService.updateStudyRoom(id, userId, updateStudyRoomRequest);
+    public ResponseEntity<?> update(@PathVariable String id, @RequestHeader String userId, @RequestBody @Valid UpdateStudyRoomRequest updateStudyRoomRequest) {
+        studyRoomService.updateStudyRoom(id, Long.parseLong(userId), updateStudyRoomRequest);
+
+        return ResponseEntity.noContent().build();
     }
 
     /**
