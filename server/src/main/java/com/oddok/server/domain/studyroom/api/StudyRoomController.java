@@ -60,9 +60,7 @@ public class StudyRoomController {
     }
 
     /**
-     *
-     * @param id
-     * @param updateStudyRoomRequest
+     * [PUT] /study-room : 방 정보 수정 API
      * @return
      */
     @PutMapping("/{id}")
