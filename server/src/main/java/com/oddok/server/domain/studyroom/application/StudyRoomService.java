@@ -18,16 +18,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class StudyRoomService {
 
-    private UserRepository userRepository;
-    private StudyRoomRepository studyRoomRepository;
-    private ParticipantRepository participantRepository;
+    private final UserRepository userRepository;
+    private final StudyRoomRepository studyRoomRepository;
+    private final ParticipantRepository participantRepository;
 
-    private StudyRoomMapper studyRoomMapper = Mappers.getMapper(StudyRoomMapper.class);
+    private final StudyRoomMapper studyRoomMapper;
 
     public StudyRoomService(UserRepository userRepository, StudyRoomRepository studyRoomRepository, ParticipantRepository participantRepository) {
         this.userRepository = userRepository;
         this.studyRoomRepository = studyRoomRepository;
         this.participantRepository = participantRepository;
+        this.studyRoomMapper = Mappers.getMapper(StudyRoomMapper.class);
     }
 
     public Long createStudyRoom(StudyRoomDto studyRoomDto) {
@@ -47,7 +48,7 @@ public class StudyRoomService {
     }
 
     public User findUser(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException());
+        return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
     }
 
     public void createParticipant(IdClassForParticipantDto idClassForParticipantDto) {

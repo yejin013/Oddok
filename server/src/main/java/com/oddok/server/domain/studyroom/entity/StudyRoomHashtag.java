@@ -15,9 +15,11 @@ public class StudyRoomHashtag {
     Long id;
 
     @ManyToOne
+    @JoinColumn(name = "study_room_id")
     private StudyRoom studyRoom;
 
     @ManyToOne
+    @JoinColumn(name = "hashtag_id")
     private Hashtag hashtag;
 
     @Builder
