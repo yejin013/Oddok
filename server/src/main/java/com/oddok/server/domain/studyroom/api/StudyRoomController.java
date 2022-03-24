@@ -10,6 +10,7 @@ import com.oddok.server.domain.studyroom.application.StudyRoomService;
 import com.oddok.server.domain.studyroom.dto.IdClassForParticipantDto;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import com.oddok.server.domain.user.application.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -67,23 +68,8 @@ public class StudyRoomController {
      * @return
      */
     @PutMapping("/{id}")
-    public ResponseEntity<UpdateStudyRoomResponse> update(@PathVariable String id, @RequestHeader String userId, @RequestBody @Valid UpdateStudyRoomRequest updateStudyRoomRequest) {
-        StudyRoomDto studyRoomDto = studyRoomService.updateStudyRoom(id, userId, updateStudyRoomRequest);
-
-        UpdateStudyRoomResponse updateStudyRoomResponse = UpdateStudyRoomResponse.builder()
-                .name(studyRoomDto.getName())
-                .userId(studyRoomDto.getUserId())
-                .image(studyRoomDto.getImage())
-                .isPublic(studyRoomDto.getIsPublic())
-                .password(studyRoomDto.getPassword())
-                .targetTime(studyRoomDto.getTargetTime())
-                .rule(studyRoomDto.getRule())
-                .limitUsers(studyRoomDto.getLimitUsers())
-                .startAt(studyRoomDto.getStartAt())
-                .endAt(studyRoomDto.getEndAt())
-                .build();
-
-        return ResponseEntity.ok(updateStudyRoomResponse);
+    public void update(@PathVariable String id, @RequestHeader String userId, @RequestBody @Valid UpdateStudyRoomRequest updateStudyRoomRequest) {
+        studyRoomService.updateStudyRoom(id, userId, updateStudyRoomRequest);
     }
 
     /**
