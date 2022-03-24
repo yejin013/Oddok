@@ -1,0 +1,37 @@
+.container {
+  margin: 0.5rem;
+  color: #f8f9fa;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.container p {
+  margin: 0;
+}
+
+.select {
+  display: flex;
+  justify-content: space-between;
+  background-color: #212529;
+  border: 1px solid #ffffff1a;
+  border-radius: 4px;
+  width: 100%;
+  padding: 13px 15px;
+}
+
+.container ul {
+  background-color: #212529;
+  border: 1px solid #ffffff1a;
+  border-radius: 4px;
+  margin: 6px 0;
+  padding-left: 0;
+}
+
+.container ul li {
+  list-style: none;
+  padding: 13px 15px;
+}
+
+.container ul li:hover {
+  background-color: #343a40;
+}
