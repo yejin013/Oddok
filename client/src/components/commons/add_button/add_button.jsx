@@ -2,11 +2,11 @@ import React from "react";
 import { ReactComponent as Plus } from "../../../assets/icons/plus.svg";
 import styles from "./add_button.module.css";
 
-function AddButton() {
+function AddButton({ onClick }) {
   return (
-    <div className={styles.button}>
+    <button type="button" className={styles.button} onClick={onClick}>
       <Plus />
-    </div>
+    </button>
   );
 }
 
