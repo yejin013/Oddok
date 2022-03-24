@@ -1,6 +1,5 @@
 package com.oddok.server.domain.studyroom.api.response;
 
-import com.oddok.server.domain.user.dto.UserDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -9,9 +8,9 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 public class UpdateStudyRoomResponse {
-    private Long id;
-
     private String name;
+
+    private String category;
 
     private Long userId;
 
@@ -26,6 +25,10 @@ public class UpdateStudyRoomResponse {
     private Integer targetTime;
 
     private String rule;
+
+    private Boolean isMicOn;
+
+    private Boolean isCamOn;
 
     private Integer currentUsers;
 

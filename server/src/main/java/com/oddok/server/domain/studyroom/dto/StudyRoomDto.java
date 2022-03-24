@@ -11,6 +11,8 @@ public class StudyRoomDto {
 
     private String name;
 
+    private String category;
+
     private Long userId;
 
     private String sessionId;
@@ -24,6 +26,10 @@ public class StudyRoomDto {
     private Integer targetTime;
 
     private String rule;
+
+    private Boolean isMicOn;
+
+    private Boolean isCamOn;
 
     private Integer currentUsers;
 

@@ -58,6 +58,9 @@ public class StudyRoomService {
 
         studyRoom.update(
                 updateStudyRoomRequest.getName(),
+                updateStudyRoomRequest.getCategory() //.
+                /*
+                updateStudyRoomRequest.getHashtags();
                 updateStudyRoomRequest.getImage(),
                 updateStudyRoomRequest.getIsPublic(),
                 updateStudyRoomRequest.getPassword(),
@@ -66,6 +69,7 @@ public class StudyRoomService {
                 updateStudyRoomRequest.getLimitUsers(),
                 updateStudyRoomRequest.getStartAt(),
                 updateStudyRoomRequest.getEndAt()
+                 */
         );
 
         return studyRoomMapper.toDto(studyRoomRepository.save(studyRoom));

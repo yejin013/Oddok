@@ -4,6 +4,7 @@ import com.oddok.server.domain.studyroom.api.request.CreateStudyRoomRequest;
 import com.oddok.server.domain.studyroom.api.request.UpdateStudyRoomRequest;
 import com.oddok.server.domain.studyroom.api.response.CreateStudyRoomResponse;
 import com.oddok.server.domain.studyroom.api.response.TokenResponse;
+import com.oddok.server.domain.studyroom.api.response.UpdateStudyRoomResponse;
 import com.oddok.server.domain.studyroom.application.SessionService;
 import com.oddok.server.domain.studyroom.application.StudyRoomService;
 import com.oddok.server.domain.studyroom.dto.IdClassForParticipantDto;
@@ -64,10 +65,26 @@ public class StudyRoomController {
      * @return
      */
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable String id, @RequestHeader String userId, @RequestBody @Valid UpdateStudyRoomRequest updateStudyRoomRequest) {
-        studyRoomService.updateStudyRoom(id, Long.parseLong(userId), updateStudyRoomRequest);
+    public ResponseEntity<UpdateStudyRoomResponse> update(@PathVariable String id, @RequestHeader String userId, @RequestBody @Valid UpdateStudyRoomRequest updateStudyRoomRequest) {
+        StudyRoomDto studyRoomDto = studyRoomService.updateStudyRoom(id, Long.parseLong(userId), updateStudyRoomRequest);
 
-        return ResponseEntity.noContent().build();
+        UpdateStudyRoomResponse updateStudyRoomResponse = UpdateStudyRoomResponse.builder()
+                .name(studyRoomDto.getName())
+                .category(studyRoomDto.getCategory())
+                .userId(studyRoomDto.getUserId())
+                .image(studyRoomDto.getImage())
+                .isPublic(studyRoomDto.getIsPublic())
+                .password(studyRoomDto.getPassword())
+                .targetTime(studyRoomDto.getTargetTime())
+                .rule(studyRoomDto.getRule())
+                .isMicOn(studyRoomDto.getIsMicOn())
+                .isCamOn(studyRoomDto.getIsCamOn())
+                .limitUsers(studyRoomDto.getLimitUsers())
+                .startAt(studyRoomDto.getStartAt())
+                .endAt(studyRoomDto.getEndAt())
+                .build();
+
+        return ResponseEntity.ok(updateStudyRoomResponse);
     }
 
     /**

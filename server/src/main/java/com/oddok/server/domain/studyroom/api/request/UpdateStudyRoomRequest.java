@@ -14,10 +14,10 @@ public class UpdateStudyRoomRequest {
     @NotBlank(message = "방 이름이 없습니다.")
     private String name;
 
-    /*
     @NotNull
     private String category;
 
+    /*
     @NotNull
     private String hashtags;
 
