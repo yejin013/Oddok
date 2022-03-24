@@ -13,11 +13,24 @@ import styles from "./setting_section.module.css";
 
 const categories = ["공무원 준비", "수능/내신 준비", "자격증 준비", "취업 준비", "개인 학습", "일반"];
 const hashtags = ["교시제", "여성전용", "아침기상", "컨셉", "목표시간", "자율", "평일", "주말", "예치금", "인증"];
-const targetTimeOptions = [{ name: "10시간" }, { name: "9시간" }, { name: "8시간" }];
-const userLimitOptions = [{ name: "4명" }, { name: "3명" }, { name: "2명" }];
+const targetTimeOptions = [
+  { value: 10, name: "10시간" },
+  { value: 9, name: "9시간" },
+  { value: 8, name: "8시간" },
+];
+const userLimitOptions = [
+  { value: 4, name: "4명" },
+  { value: 3, name: "3명" },
+  { value: 2, name: "2명" },
+];
 
-function SettingSection({ clickSettingBtn }) {
+function SettingSection({ clickSettingBtn, onSave }) {
   const [category, setCategory] = useState();
+  const [hashtag, setCheckedHashtag] = useState(new Set());
+  const [audioRule, setAudioRule] = useState(false);
+  const [videoRule, setVideoRule] = useState(false);
+  const [targetTime, setTargetTime] = useState();
+  const [userLimit, setUserLimit] = useState();
   const passwordInputRef = useRef();
   const bgmlinkInputRef = useRef();
   const ruleInputRef = useRef();
@@ -30,10 +43,57 @@ function SettingSection({ clickSettingBtn }) {
 
   const clickSaveBtn = () => {
     clickSettingBtn();
+    onSave({
+      category,
+      hashtag,
+      audioRule,
+      videoRule,
+      targetTime,
+      userLimit,
+      isPublic: !passwordInputRef.current.value,
+      password: passwordInputRef.current.value,
+      bgmlink: bgmlinkInputRef.current.value,
+      rule: ruleInputRef.current.value,
+    });
   };
 
   const categoryHandler = (e) => {
     setCategory(e.target.value);
+  };
+
+  const hashtagHandler = (e) => {
+    const checkedHashtag = new Set(hashtag);
+    if (e.target.checked && !checkedHashtag.has(e.target.value)) {
+      checkedHashtag.add(e.target.value);
+      setCheckedHashtag(checkedHashtag);
+    } else if (!e.target.checked && checkedHashtag.has(e.target.value)) {
+      checkedHashtag.delete(e.target.value);
+      setCheckedHashtag(checkedHashtag);
+    }
+  };
+
+  const audioRuleHandler = (e) => {
+    if (e.target.checked && !audioRule) {
+      setAudioRule(true);
+    } else if (!e.target.checked && audioRule) {
+      setAudioRule(false);
+    }
+  };
+
+  const videoRuleHandler = (e) => {
+    if (e.target.checked && !videoRule) {
+      setVideoRule(true);
+    } else if (!e.target.checked && videoRule) {
+      setVideoRule(false);
+    }
+  };
+
+  const targetTimeHandler = (value) => {
+    setTargetTime(value);
+  };
+
+  const userLimitHandler = (value) => {
+    setUserLimit(value);
   };
 
   return (
@@ -57,15 +117,15 @@ function SettingSection({ clickSettingBtn }) {
         <div className={styles.roominfo_item}>
           <p className={styles.label}>장치 규칙</p>
           <div className={styles.content}>
-            <ToggleButton icon={<Video />} label="카메라 ON" />
-            <ToggleButton icon={<MicOff />} label="마이크 OFF" />
+            <ToggleButton icon={<Video />} label="카메라 ON" onToggle={videoRuleHandler} />
+            <ToggleButton icon={<MicOff />} label="마이크 OFF" onToggle={audioRuleHandler} />
           </div>
         </div>
         <div className={styles.roominfo_item}>
           <p className={styles.label}>해시태그</p>
           <div className={styles.content}>
             {hashtags.map((item) => (
-              <ToggleButton icon={<Hashtag />} label={item} />
+              <ToggleButton icon={<Hashtag />} label={item} onToggle={hashtagHandler} />
             ))}
             <AddButton />
           </div>
@@ -86,9 +146,9 @@ function SettingSection({ clickSettingBtn }) {
           </div>
           <div>
             <p className={styles.label}>목표시간</p>
-            <Dropdown options={targetTimeOptions} />
+            <Dropdown options={targetTimeOptions} onSelect={targetTimeHandler} />
             <p className={styles.label}>인원 수</p>
-            <Dropdown options={userLimitOptions} />
+            <Dropdown options={userLimitOptions} onSelect={userLimitHandler} />
             <p className={styles.label}>비밀번호</p>
             <Input placeholder="없음" ref={passwordInputRef} />
             <p className={styles.label}>노래</p>
