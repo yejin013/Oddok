@@ -24,15 +24,13 @@ function Dropdown({ options, onSelect }) {
       <div className={styles.select} onClick={toggleMenu}>
         <p className={styles.selected_opt}>{selectedOpt || options[0].name}</p>
       </div>
-      {isActive && (
-        <ul>
-          {options.map((option) => (
-            <li key={option.value} className={styles.opt} onClick={() => clickOptionHandler(option.name)}>
-              {option.name}
-            </li>
-          ))}
-        </ul>
-      )}
+      <ul className={`${isActive ? styles.active : ""}`}>
+        {options.map((option) => (
+          <li key={option.value} className={styles.opt} onClick={() => clickOptionHandler(option.name)}>
+            {option.name}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
