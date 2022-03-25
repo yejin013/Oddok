@@ -106,7 +106,7 @@ public class StudyRoom {
         this.targetTime = targetTime;
         this.rule = rule;
         this.isMicOn = isMicOn;
-        this.isCamOn = isCamOn
+        this.isCamOn = isCamOn;
         this.limitUsers = limitUsers;
         this.startAt = startAt;
         this.endAt = endAt;
