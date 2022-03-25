@@ -4,12 +4,9 @@ import com.oddok.server.common.errors.*;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import javax.persistence.EntityNotFoundException;
 
 @RestControllerAdvice
 public class ControllerErrorAdvice {

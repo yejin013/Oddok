@@ -4,6 +4,7 @@ import lombok.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
@@ -15,7 +16,7 @@ public class CreateStudyRoomRequest {
 
     private String category;
 
-    private String hashtags;
+    private List<String> hashtags;
 
     /*
     private String image;

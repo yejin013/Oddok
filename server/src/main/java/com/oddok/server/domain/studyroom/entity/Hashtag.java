@@ -1,5 +1,6 @@
 package com.oddok.server.domain.studyroom.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,10 +14,11 @@ public class Hashtag {
     @GeneratedValue
     Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "study_room_id")
-    private StudyRoom studyRoom;
-
-    @Column(length = 8)
+    @Column(length = 8, unique = true)
     private String name;
+
+    @Builder
+    public Hashtag(String name) {
+        this.name = name;
+    }
 }

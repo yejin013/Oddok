@@ -6,6 +6,7 @@ import com.oddok.server.domain.studyroom.api.response.CreateStudyRoomResponse;
 import com.oddok.server.domain.studyroom.api.response.TokenResponse;
 import com.oddok.server.domain.studyroom.api.response.UpdateStudyRoomResponse;
 import com.oddok.server.domain.studyroom.application.SessionService;
+import com.oddok.server.domain.studyroom.application.StudyRoomHashtagService;
 import com.oddok.server.domain.studyroom.application.StudyRoomService;
 import com.oddok.server.domain.studyroom.dto.IdClassForParticipantDto;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
@@ -17,24 +18,26 @@ import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/study-room")
 public class StudyRoomController {
 
-    private SessionService sessionService;
-    private StudyRoomService studyRoomService;
-    private UserService userService;
+    private final SessionService sessionService;
+    private final StudyRoomService studyRoomService;
+    private final StudyRoomHashtagService studyRoomHashtagService;
+    private final UserService userService;
 
-    public StudyRoomController(SessionService sessionService, StudyRoomService studyRoomService, UserService userService) {
+    public StudyRoomController(SessionService sessionService, StudyRoomService studyRoomService, StudyRoomHashtagService studyRoomHashtagService, UserService userService) {
         this.sessionService = sessionService;
         this.studyRoomService = studyRoomService;
+        this.studyRoomHashtagService = studyRoomHashtagService;
         this.userService = userService;
     }
 
     /**
      * [GET] /study-room/user-create : 회원 생성 이후 삭제할 API
-     * @return
      */
     @GetMapping(value = "/user-create")
     public String createBasic() {
@@ -43,6 +46,7 @@ public class StudyRoomController {
 
     /**
      * [POST] /study-room : 방생성 API (session)
+     *
      * @return CreateStudyRoomResponse: 생성된 방 정보
      */
     @PostMapping
@@ -54,8 +58,14 @@ public class StudyRoomController {
                 .userId(Long.parseLong(userId))
                 .sessionId(sessionId)
                 .build();
+
         // 2. StudyRoom 생성
         Long studyRoomId = studyRoomService.createStudyRoom(requestDto);
+
+        // 3. hashtag 저장
+        List<String> hashtags = createStudyRoomRequest.getHashtags();
+        studyRoomHashtagService.createStudyRoom(studyRoomId, hashtags);
+
         CreateStudyRoomResponse createStudyRoomResponse = CreateStudyRoomResponse.builder().id(studyRoomId).build();
         return ResponseEntity.ok(createStudyRoomResponse);
     }
@@ -89,7 +99,8 @@ public class StudyRoomController {
 
     /**
      * [Get] /study-room/join/:id : 방참여 API, 토큰 반환
-     * @param id
+     *
+     * @param id Long
      * @return token
      */
     @GetMapping(value = "/join/{id}")
