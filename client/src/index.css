@@ -1,0 +1,9 @@
+* {
+  box-sizing: border-box;
+  font-family: "IBM Plex Sans KR";
+}
+
+body {
+  margin: 0;
+  background-color: #101112;
+}

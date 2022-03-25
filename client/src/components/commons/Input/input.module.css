@@ -1,0 +1,29 @@
+.container {
+  display: flex;
+  margin: 0.5rem;
+}
+
+.container input,
+.container div {
+  display: block;
+}
+
+.container input {
+  border: 1px solid #ffffff1a;
+  border-radius: 4px;
+  background-color: #212529;
+  color: #ffffff;
+  font-size: 0.875rem;
+  padding: 13px 15px;
+  width: 100%;
+}
+
+.container input:hover {
+}
+
+.container input:focus {
+  outline: none;
+}
+
+.container input::placeholder {
+}

@@ -1,0 +1,116 @@
+.container {
+  width: 67.5%;
+  margin: 100px auto;
+  color: #f8f9fa;
+  font-size: 1rem;
+  font-weight: 500;
+}
+.container p {
+  margin: 0;
+  margin-bottom: 8px;
+}
+
+.label {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.lg_label {
+  margin-bottom: 4px;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.sub_label {
+  margin-bottom: 24px;
+  color: #6c757d;
+  font-size: 1.5rem;
+}
+
+.roominfo_item {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 32px;
+}
+
+.category {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 60px;
+  margin-bottom: 28px;
+  border-bottom: 1px solid #212529;
+}
+
+.category_item {
+  flex: 1;
+}
+
+.title {
+  padding: 12px 16px;
+  background-color: #212529;
+  border: 1px solid #ffffff1a;
+  border-radius: 4px;
+}
+
+.box {
+  display: flex;
+}
+
+.box .roominfo_item:nth-child(1) {
+  flex: 1;
+}
+.box .roominfo_item:nth-child(2) {
+  flex: 2;
+}
+
+.content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+}
+
+.detail_button,
+.save_button {
+  display: flex;
+}
+
+.detail_button button {
+  margin: 70px auto;
+  color: #6c757d;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.save_button button {
+  margin: auto;
+  background-color: #bf7d8a;
+  border-radius: 99px;
+  color: #f8f9fa;
+  font-size: 1rem;
+  padding: 10px;
+}
+
+.detail {
+  display: none;
+}
+
+.detail_clicked {
+  display: block;
+}
+
+.detail_box {
+  display: flex;
+  flex-direction: row;
+}
+
+.detail_box > div {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.image_box {
+  flex: 1;
+  padding: 20%;
+}

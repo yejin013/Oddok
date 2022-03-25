@@ -1,0 +1,28 @@
+.room {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  background-color: #101112;
+}
+
+.video_component.show {
+  flex: 1 1 90%;
+  display: flex;
+  justify-content: center;
+}
+
+.bar.show {
+  flex: 1 1 10%;
+}
+
+.video_component.hide,
+.bar.hide {
+  display: none;
+}
+
+.video {
+  height: 100%;
+  object-fit: contain;
+  transform: rotateY(180deg);
+}
