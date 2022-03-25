@@ -2,14 +2,15 @@ import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { OpenVidu } from "openvidu-browser";
-// import { createSession, createToken } from "../testserver";
-import createSession from "../../api/createSession";
-import createToken from "../../api/createToken";
+import { createSession, createToken } from "../testserver"; // testServer
+// import createSession from "../../api/createSession";
+// import createToken from "../../api/createToken";
 
 import SettingBar from "../../components/study/setting_bar/setting_bar";
 import SettingSection from "../../components/study/setting_section/setting_section";
 import styles from "./setting_room.module.css";
 import StudyRoom from "../study_room/study_room";
+import TimeRecord from "../../components/study/time_record/time_record";
 
 const testdata = {
   name: "일반 1호실",
@@ -46,40 +47,40 @@ function SettingRoom() {
   const [isEnter, setIsEnter] = useState(false);
 
   // 서버용🤔
-  const requestCreateRoom = async () => {
-    if (isHost) {
-      setIsLoading(true);
-      setError(null);
-      try {
-        localStorage.setItem("userId", "user_juhee");
-        const resId = await createSession(testdata);
-        const resToken = await createToken(resId.data.id);
-        await session.connect(resToken.data.token, { clientData: userId });
-        setIsEnter((prev) => !prev);
-      } catch (err) {
-        console.log(err.code, err.message);
-        setError(err.message);
-      }
-      setIsLoading(false);
-    }
-  };
-
-  // TEST용
   // const requestCreateRoom = async () => {
   //   if (isHost) {
   //     setIsLoading(true);
   //     setError(null);
   //     try {
-  //       const roomId = await createSession("1");
-  //       const token = await createToken(roomId);
-  //       await session.connect(token, { clientData: userId });
+  //       localStorage.setItem("userId", "user_juhee");
+  //       const resId = await createSession(testdata);
+  //       const resToken = await createToken(resId.data.id);
+  //       await session.connect(resToken.data.token, { clientData: userId });
   //       setIsEnter((prev) => !prev);
   //     } catch (err) {
   //       console.log(err.code, err.message);
   //       setError(err.message);
   //     }
+  //     setIsLoading(false);
   //   }
   // };
+
+  // TEST용
+  const requestCreateRoom = async () => {
+    if (isHost) {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const roomId = await createSession("1");
+        const token = await createToken(roomId);
+        await session.connect(token, { clientData: userId });
+        setIsEnter((prev) => !prev);
+      } catch (err) {
+        console.log(err.code, err.message);
+        setError(err.message);
+      }
+    }
+  };
 
   const goToStudyRoom = () => {
     requestCreateRoom();
@@ -155,6 +156,7 @@ function SettingRoom() {
           )}
           <section className={`${styles.video_component} ${displayType}`}>
             <video className={styles.video} ref={videoRef} autoPlay />
+            <TimeRecord />
           </section>
           <div className={`${styles.bar} ${displayType}`}>
             <SettingBar //

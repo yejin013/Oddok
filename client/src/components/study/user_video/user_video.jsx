@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from "react";
+import TimeRecord from '../time_record/time_record';
 import styles from "./user_video.module.css";
 
 function UserVideo({ count, streamManager }) {
@@ -27,6 +28,7 @@ function UserVideo({ count, streamManager }) {
   return (
     <li className={`${styles.video} ${getCount(count)}`}>
       <video className={styles.user_video} ref={videoRef} autoPlay />
+      <TimeRecord/>
     </li>
   );
 }
