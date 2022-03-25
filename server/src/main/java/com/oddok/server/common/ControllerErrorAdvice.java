@@ -1,9 +1,6 @@
 package com.oddok.server.common;
 
-import com.oddok.server.common.errors.OpenviduServerException;
-import com.oddok.server.common.errors.SessionNotFoundException;
-import com.oddok.server.common.errors.StudyRoomNotFoundException;
-import com.oddok.server.common.errors.UserNotFoundException;
+import com.oddok.server.common.errors.*;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 import org.springframework.http.HttpStatus;
@@ -45,4 +42,9 @@ public class ControllerErrorAdvice {
         return new ErrorResponse("해당 스터디방이 없습니다.");
     }
 
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(UserNotPublisherException.class)
+    public ErrorResponse handleUserNotPublisherException() {
+        return new ErrorResponse("해당 사용자는 스터디방 생성자가 아닙니다.");
+    }
 }

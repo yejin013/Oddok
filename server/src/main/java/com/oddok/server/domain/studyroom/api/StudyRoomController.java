@@ -1,15 +1,15 @@
 package com.oddok.server.domain.studyroom.api;
 
 import com.oddok.server.domain.studyroom.api.request.CreateStudyRoomRequest;
+import com.oddok.server.domain.studyroom.api.request.UpdateStudyRoomRequest;
 import com.oddok.server.domain.studyroom.api.response.CreateStudyRoomResponse;
 import com.oddok.server.domain.studyroom.api.response.TokenResponse;
+import com.oddok.server.domain.studyroom.api.response.UpdateStudyRoomResponse;
 import com.oddok.server.domain.studyroom.application.SessionService;
 import com.oddok.server.domain.studyroom.application.StudyRoomService;
 import com.oddok.server.domain.studyroom.dto.IdClassForParticipantDto;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import com.oddok.server.domain.user.application.UserService;
-import com.oddok.server.domain.user.dto.UserDto;
-import io.openvidu.java.client.OpenViduRole;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,6 +58,33 @@ public class StudyRoomController {
         Long studyRoomId = studyRoomService.createStudyRoom(requestDto);
         CreateStudyRoomResponse createStudyRoomResponse = CreateStudyRoomResponse.builder().id(studyRoomId).build();
         return ResponseEntity.ok(createStudyRoomResponse);
+    }
+
+    /**
+     * [PUT] /study-room : 방 정보 수정 API
+     * @return
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<UpdateStudyRoomResponse> update(@PathVariable String id, @RequestHeader String userId, @RequestBody @Valid UpdateStudyRoomRequest updateStudyRoomRequest) {
+        StudyRoomDto studyRoomDto = studyRoomService.updateStudyRoom(id, Long.parseLong(userId), updateStudyRoomRequest);
+
+        UpdateStudyRoomResponse updateStudyRoomResponse = UpdateStudyRoomResponse.builder()
+                .name(studyRoomDto.getName())
+                .category(studyRoomDto.getCategory())
+                .userId(studyRoomDto.getUserId())
+                .image(studyRoomDto.getImage())
+                .isPublic(studyRoomDto.getIsPublic())
+                .password(studyRoomDto.getPassword())
+                .targetTime(studyRoomDto.getTargetTime())
+                .rule(studyRoomDto.getRule())
+                .isMicOn(studyRoomDto.getIsMicOn())
+                .isCamOn(studyRoomDto.getIsCamOn())
+                .limitUsers(studyRoomDto.getLimitUsers())
+                .startAt(studyRoomDto.getStartAt())
+                .endAt(studyRoomDto.getEndAt())
+                .build();
+
+        return ResponseEntity.ok(updateStudyRoomResponse);
     }
 
     /**

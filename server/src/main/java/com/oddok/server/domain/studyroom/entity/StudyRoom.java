@@ -84,4 +84,33 @@ public class StudyRoom {
         this.endAt = endAt;
         this.createAt = LocalDateTime.now();
     }
+
+    public StudyRoom update(String name, String category) {
+        this.name = name;
+        this.category = category;
+        return this;
+    }
+
+    public StudyRoom update(String name, String category, String image, Boolean isPublic,
+                            String password, Integer targetTime, String rule, Boolean isMicOn,
+                            Boolean isCamOn, Integer limitUsers, LocalDateTime startAt, LocalDateTime endAt) {
+        this.name = name;
+        this.category = category;
+        this.image = image;
+        this.isPublic = isPublic;
+
+        if(!isPublic)
+            this.password = null;
+
+        this.password = password;
+        this.targetTime = targetTime;
+        this.rule = rule;
+        this.isMicOn = isMicOn;
+        this.isCamOn = isCamOn;
+        this.limitUsers = limitUsers;
+        this.startAt = startAt;
+        this.endAt = endAt;
+
+        return this;
+    }
 }

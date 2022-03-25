@@ -1,6 +1,5 @@
 package com.oddok.server.domain.user.entity;
 
-import com.oddok.server.domain.user.dto.UserDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
