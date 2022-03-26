@@ -8,9 +8,11 @@
 
 .video_container {
   height: 90vh;
+  display: flex; /* 사이드바 있을 때 */
 }
 
 .videos {
+  flex: 1 1 70%; /* 사이드바 있을 때 */
   width: 100%;
   height: 100%;
   display: flex;

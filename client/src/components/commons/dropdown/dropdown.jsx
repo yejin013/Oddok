@@ -26,7 +26,7 @@ function Dropdown({ options, onSelect }) {
       </div>
       <ul className={`${isActive ? styles.active : ""}`}>
         {options.map((option) => (
-          <li key={option.value} className={styles.opt} onClick={() => clickOptionHandler(option.name)}>
+          <li key={option.value} className={styles.opt} onClick={() => clickOptionHandler(option.value)}>
             {option.name}
           </li>
         ))}

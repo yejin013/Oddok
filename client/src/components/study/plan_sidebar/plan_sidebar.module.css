@@ -1,0 +1,5 @@
+.plan_bar {
+  background-color: cornflowerblue;
+  color: white;
+  flex: 1 1 30%;
+}

@@ -1,4 +1,6 @@
 import React from "react";
+import { useRecoilState } from "recoil";
+import { selectedPlanState } from "../../../recoil/plan_state";
 import styles from "./study_bar.module.css";
 import { ReactComponent as Setting } from "../../../assets/icons/setting.svg";
 import { ReactComponent as Music } from "../../../assets/icons/music.svg";
@@ -11,6 +13,8 @@ import { ReactComponent as Member } from "../../../assets/icons/person.svg";
 import { ReactComponent as Door } from "../../../assets/icons/door.svg";
 
 function StudyBar({ toggleVideo, toggleAudio, leaveRoom }) {
+  const [selectedPlan, setSelectedplan] = useRecoilState(selectedPlanState);
+
   return (
     <footer className={styles.bar}>
       <section className={styles.info}>
@@ -29,7 +33,7 @@ function StudyBar({ toggleVideo, toggleAudio, leaveRoom }) {
         <button type="button" className={styles.play_button}>
           <Play />
         </button>
-        <span>치위생사 요약집 2장</span>
+        <span>{selectedPlan.name}</span>
         <button type="button">
           <GoalOpen />
         </button>
