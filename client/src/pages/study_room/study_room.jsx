@@ -1,16 +1,18 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
+import { OpenVidu } from "openvidu-browser";
 import StudyBar from "../../components/study/study_bar/study_bar";
 import UserVideo from "../../components/study/user_video/user_video";
 import styles from "./study_room.module.css";
 
-function StudyRoom({ session, publisher }) {
-  const history = useHistory();
-  // const location = useLocation();
-  // const { session, publisher } = location.state;
-  const countRef = useRef();
-  const [count, setCount] = useState(1);
+function StudyRoom() {
+  const OV = new OpenVidu();
+  const [session, setSession] = useState();
+  const [publisher, setPublisher] = useState();
   const [subscribers, setSubscribers] = useState([]);
+  const [count, setCount] = useState(1);
+  const history = useHistory();
+  const location = useLocation();
 
   const leaveRoom = () => {
     session.disconnect();
@@ -31,7 +33,6 @@ function StudyRoom({ session, publisher }) {
   };
 
   const toggleVideo = () => {
-    console.log(publisher.stream.videoActive);
     publisher.publishVideo(!publisher.stream.videoActive);
   };
 
@@ -40,28 +41,47 @@ function StudyRoom({ session, publisher }) {
   };
 
   useEffect(() => {
-    session.publish(publisher);
-  }, [session, publisher]);
+    setSession(OV.initSession());
+  }, []);
 
   useEffect(() => {
-    session.on("streamCreated", (event) => {
-      const participant = session.subscribe(event.stream, undefined);
-      setSubscribers((prev) => [...prev, participant]);
-      setCount((prev) => prev + 1);
-    });
-    session.on("streamDestroyed", (event) => {
-      deleteSubscriber(event.stream.streamManager);
-    });
-    session.on("exception", (exception) => {
-      console.warn(exception);
-    });
+    if (session) {
+      (async () => {
+        console.log("🙂", location.state.token);
+        await session.connect(location.state.token);
+        const devices = await OV.getDevices();
+        const videoDevices = devices.filter((device) => device.kind === "videoinput");
+        const localUser = OV.initPublisher(undefined, {
+          audioSource: undefined,
+          videoSource: videoDevices[0].label ? videoDevices.deviceId : undefined,
+          publishAudio: true,
+          publishVideo: true,
+          frameRate: 30,
+          mirror: false,
+        });
+        await session.publish(localUser);
+        setPublisher(localUser);
+      })();
+
+      session.on("streamCreated", (event) => {
+        const participant = session.subscribe(event.stream, undefined);
+        setSubscribers((prev) => [...prev, participant]);
+        setCount((prev) => prev + 1);
+      });
+      session.on("streamDestroyed", (event) => {
+        deleteSubscriber(event.stream.streamManager);
+      });
+      session.on("exception", (exception) => {
+        console.warn(exception);
+      });
+    }
   }, [session]);
 
   return (
     <div className={styles.room}>
       <div className={styles.video_container}>
-        <ul className={styles.videos} ref={countRef}>
-          <UserVideo count={count} streamManager={publisher} />
+        <ul className={styles.videos}>
+          {publisher && <UserVideo count={count} streamManager={publisher} />}
           {subscribers && subscribers.map((subscriber) => <UserVideo count={count} streamManager={subscriber} />)}
         </ul>
       </div>

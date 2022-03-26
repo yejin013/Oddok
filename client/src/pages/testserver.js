@@ -3,11 +3,11 @@ import axios from "axios";
 const OPENVIDU_SERVER_URL = `https://${window.location.hostname}:4443`;
 const OPENVIDU_SERVER_SECRET = "MY_SECRET";
 
-export const createToken = (sessionId) =>
+export const createToken = (roomId) =>
   new Promise((resolve, reject) => {
     const data = {};
     axios
-      .post(`${OPENVIDU_SERVER_URL}/openvidu/api/sessions/${sessionId}/connection`, data, {
+      .post(`${OPENVIDU_SERVER_URL}/openvidu/api/sessions/${roomId}/connection`, data, {
         headers: {
           // eslint-disable-next-line prefer-template
           Authorization: "Basic " + btoa("OPENVIDUAPP:" + OPENVIDU_SERVER_SECRET),
@@ -15,17 +15,17 @@ export const createToken = (sessionId) =>
         },
       })
       .then((res) => {
-        console.log("get token success! ", res);
-        resolve(res.data.token);
+        console.log("방 토큰 얻기 성공! ", res);
+        resolve(res);
       })
       .catch((error) => {
         reject(error);
       });
   });
 
-export const createSession = (roomName) =>
+export const createSession = (roomInfo) =>
   new Promise((resolve, reject) => {
-    const data = JSON.stringify({ customSessionId: roomName });
+    const data = JSON.stringify();
     axios
       // eslint-disable-next-line prefer-template
       .post(OPENVIDU_SERVER_URL + "/openvidu/api/sessions", data, {
@@ -36,13 +36,15 @@ export const createSession = (roomName) =>
         },
       })
       .then((res) => {
-        console.log("create token success! ", res);
-        resolve(res.data.id);
+        console.log("방 생성 성공!", res);
+        localStorage.setItem("sessionId", res.data.sessionId);
+        resolve(res);
       })
       .catch((response) => {
         const error = { ...response };
         if (error?.response?.status === 409) {
-          resolve(roomName);
+          console.log("방 중복 에러");
+          resolve(response);
         } else {
           console.log(error);
         }
