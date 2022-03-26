@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { OpenVidu } from "openvidu-browser";
-import { createSession, createToken } from "../testserver"; // testServer
-// import createSession from "../../api/createSession";
-// import createToken from "../../api/createToken";
+// import { createSession, createToken } from "../testserver"; // testServer
+import createSession from "../../api/createSession";
+import createToken from "../../api/createToken";
 
 import SettingBar from "../../components/study/setting_bar/setting_bar";
 import SettingSection from "../../components/study/setting_section/setting_section";
@@ -47,24 +47,25 @@ function SettingRoom() {
   const [isEnter, setIsEnter] = useState(false);
 
   // 서버용🤔
-  // const requestCreateRoom = async () => {
-  //   if (isHost) {
-  //     setIsLoading(true);
-  //     setError(null);
-  //     try {
-  //       localStorage.setItem("userId", "user_juhee");
-  //       const resId = await createSession(testdata);
-  //       const resToken = await createToken(resId.data.id);
-  //       await session.connect(resToken.data.token, { clientData: userId });
-  //       setIsEnter((prev) => !prev);
-  //     } catch (err) {
-  //       console.log(err.code, err.message);
-  //       setError(err.message);
-  //     }
-  //     setIsLoading(false);
-  //   }
-  // };
+  const requestCreateRoom = async () => {
+    if (isHost) {
+      setIsLoading(true);
+      setError(null);
+      try {
+        localStorage.setItem("userId", "user_juhee");
+        const resId = await createSession(testdata);
+        const resToken = await createToken(resId.data.id);
+        await session.connect(resToken.data.token, { clientData: userId });
+        setIsEnter((prev) => !prev);
+      } catch (err) {
+        console.log(err.code, err.message);
+        setError(err.message);
+      }
+      setIsLoading(false);
+    }
+  };
 
+  /*
   // TEST용
   const requestCreateRoom = async () => {
     if (isHost) {
@@ -81,7 +82,7 @@ function SettingRoom() {
       }
     }
   };
-
+  */
   const goToStudyRoom = () => {
     requestCreateRoom();
     if (!error) {
