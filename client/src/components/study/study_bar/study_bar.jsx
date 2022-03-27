@@ -5,6 +5,7 @@ import styles from "./study_bar.module.css";
 import { ReactComponent as Setting } from "../../../assets/icons/setting.svg";
 import { ReactComponent as Music } from "../../../assets/icons/music.svg";
 import { ReactComponent as Play } from "../../../assets/icons/play-fill.svg";
+import { ReactComponent as Pause } from "../../../assets/icons/pause-fill.svg";
 import { ReactComponent as GoalOpen } from "../../../assets/icons/down.svg";
 import { ReactComponent as VideoOn } from "../../../assets/icons/video.svg";
 import { ReactComponent as MicOff } from "../../../assets/icons/mic_off.svg";
@@ -12,7 +13,7 @@ import { ReactComponent as Chat } from "../../../assets/icons/chat.svg";
 import { ReactComponent as Member } from "../../../assets/icons/person.svg";
 import { ReactComponent as Door } from "../../../assets/icons/door.svg";
 
-function StudyBar({ toggleVideo, toggleAudio, leaveRoom }) {
+function StudyBar({ toggleVideo, toggleAudio, leaveRoom, isRecorded, getStartTime, getEndTime }) {
   const [selectedPlan, setSelectedplan] = useRecoilState(selectedPlanState);
 
   return (
@@ -30,9 +31,15 @@ function StudyBar({ toggleVideo, toggleAudio, leaveRoom }) {
         </div>
       </section>
       <section className={styles.goal}>
-        <button type="button" className={styles.play_button}>
-          <Play />
-        </button>
+        {isRecorded === false ? (
+          <button type="button" className={styles.play_button} onClick={getStartTime}>
+            <Play />
+          </button>
+        ) : (
+          <button type="button" className={styles.pause_button} onClick={getEndTime}>
+            <Pause />
+          </button>
+        )}
         <span>{selectedPlan.name}</span>
         <button type="button">
           <GoalOpen />

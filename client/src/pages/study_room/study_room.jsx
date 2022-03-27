@@ -15,6 +15,10 @@ function StudyRoom() {
   const history = useHistory();
   const location = useLocation();
 
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
+  const [isRecorded, setIsRecorded] = useState(false);
+
   const leaveRoom = () => {
     session.disconnect();
     setSubscribers([]);
@@ -78,6 +82,22 @@ function StudyRoom() {
     }
   }, [session]);
 
+  const getStartTime = () => {
+    const time = new Date();
+    setStartTime(time);
+    setIsRecorded((prev) => !prev);
+  };
+
+  const getEndTime = () => {
+    const time = new Date();
+    setEndTime(time);
+    setIsRecorded((prev) => !prev);
+
+    /* server에 selectedPlan, startTime, endTime, studyRooomId post */
+  };
+
+  console.log(startTime);
+  console.log(endTime);
   return (
     <div className={styles.room}>
       <div className={styles.video_container}>
@@ -88,7 +108,14 @@ function StudyRoom() {
         <PlanSidebar />
       </div>
       <div className={styles.bar}>
-        <StudyBar toggleVideo={toggleVideo} toggleAudio={toggleAudio} leaveRoom={leaveRoom} />
+        <StudyBar
+          toggleVideo={toggleVideo}
+          toggleAudio={toggleAudio}
+          leaveRoom={leaveRoom}
+          isRecorded={isRecorded}
+          getStartTime={getStartTime}
+          getEndTime={getEndTime}
+        />
       </div>
     </div>
   );

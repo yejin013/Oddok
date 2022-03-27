@@ -57,6 +57,7 @@
   padding: 0.5em;
 }
 
-.play_button {
+.play_button,
+.pause_button {
   margin-right: 1em;
 }
