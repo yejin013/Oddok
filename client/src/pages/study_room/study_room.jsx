@@ -15,6 +15,10 @@ function StudyRoom() {
   const history = useHistory();
   const location = useLocation();
 
+  const [clickedPlanBtn, setClickedPlanBtn] = useState(false);
+  const [isSidebar, setisSidebar] = useState(false);
+  const displayType = isSidebar === false ? styles.hide : styles.show;
+
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
   const [isRecorded, setIsRecorded] = useState(false);
@@ -105,9 +109,7 @@ function StudyRoom() {
     } else {
       clearInterval(timer);
     }
-    return () => {
-      clearInterval(timer);
-    };
+    return () => clearInterval(timer);
   });
 
   const getStartTime = () => {
@@ -123,10 +125,25 @@ function StudyRoom() {
     /* server에 selectedPlan, startTime, endTime, studyRooomId post */
   };
 
+  const clickPlanBtn = () => {
+    setClickedPlanBtn((prev) => !prev);
+    setisSidebar((prev) => !prev);
+  };
+
+  const getStyles = (clicked) => {
+    let style;
+    if (clicked) {
+      style = styles.show;
+    } else {
+      style = styles.hide;
+    }
+    return style;
+  };
+
   return (
     <div className={styles.room}>
       <div className={styles.video_container}>
-        <ul className={styles.videos}>
+        <ul className={`${styles.videos} ${displayType}`}>
           {publisher && (
             <UserVideo count={count} streamManager={publisher} hour={hour} minute={minute} second={second} />
           )}
@@ -135,7 +152,9 @@ function StudyRoom() {
               <UserVideo count={count} streamManager={subscriber} hour={hour} minute={minute} second={second} />
             ))}
         </ul>
-        <PlanSidebar />
+        <div className={`${styles.plan_bar} ${getStyles(clickedPlanBtn)}`}>
+          <PlanSidebar />
+        </div>
       </div>
       <div className={styles.bar}>
         <StudyBar
@@ -145,6 +164,7 @@ function StudyRoom() {
           isRecorded={isRecorded}
           getStartTime={getStartTime}
           getEndTime={getEndTime}
+          onClickplanBtn={clickPlanBtn}
         />
       </div>
     </div>

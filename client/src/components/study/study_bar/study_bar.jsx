@@ -13,7 +13,16 @@ import { ReactComponent as Chat } from "../../../assets/icons/chat.svg";
 import { ReactComponent as Member } from "../../../assets/icons/person.svg";
 import { ReactComponent as Door } from "../../../assets/icons/door.svg";
 
-function StudyBar({ toggleVideo, toggleAudio, leaveRoom, isRecorded, getStartTime, getEndTime }) {
+function StudyBar({
+  //
+  toggleVideo,
+  toggleAudio,
+  leaveRoom,
+  isRecorded,
+  getStartTime,
+  getEndTime,
+  onClickplanBtn,
+}) {
   const [selectedPlan, setSelectedplan] = useRecoilState(selectedPlanState);
 
   return (
@@ -41,7 +50,7 @@ function StudyBar({ toggleVideo, toggleAudio, leaveRoom, isRecorded, getStartTim
           </button>
         )}
         <span>{selectedPlan.name}</span>
-        <button type="button">
+        <button type="button" onClick={onClickplanBtn}>
           <GoalOpen />
         </button>
       </section>
