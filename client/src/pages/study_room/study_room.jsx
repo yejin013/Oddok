@@ -19,6 +19,10 @@ function StudyRoom() {
   const [endTime, setEndTime] = useState(null);
   const [isRecorded, setIsRecorded] = useState(false);
 
+  const [hour, setHour] = useState(0);
+  const [minute, setMinute] = useState(0);
+  const [second, setSecond] = useState(0);
+
   const leaveRoom = () => {
     session.disconnect();
     setSubscribers([]);
@@ -82,6 +86,30 @@ function StudyRoom() {
     }
   }, [session]);
 
+  useEffect(() => {
+    let timer;
+    if (isRecorded) {
+      timer = setInterval(() => {
+        if (minute > 59) {
+          setHour((prev) => prev + 1);
+          setMinute(0);
+        }
+        if (second === 59) {
+          setMinute((prev) => prev + 1);
+          setSecond(0);
+        }
+        if (second < 59) {
+          setSecond((prev) => prev + 1);
+        }
+      }, 1000);
+    } else {
+      clearInterval(timer);
+    }
+    return () => {
+      clearInterval(timer);
+    };
+  });
+
   const getStartTime = () => {
     const time = new Date();
     setStartTime(time);
@@ -92,18 +120,20 @@ function StudyRoom() {
     const time = new Date();
     setEndTime(time);
     setIsRecorded((prev) => !prev);
-
     /* server에 selectedPlan, startTime, endTime, studyRooomId post */
   };
 
-  console.log(startTime);
-  console.log(endTime);
   return (
     <div className={styles.room}>
       <div className={styles.video_container}>
         <ul className={styles.videos}>
-          {publisher && <UserVideo count={count} streamManager={publisher} />}
-          {subscribers && subscribers.map((subscriber) => <UserVideo count={count} streamManager={subscriber} />)}
+          {publisher && (
+            <UserVideo count={count} streamManager={publisher} hour={hour} minute={minute} second={second} />
+          )}
+          {subscribers &&
+            subscribers.map((subscriber) => (
+              <UserVideo count={count} streamManager={subscriber} hour={hour} minute={minute} second={second} />
+            ))}
         </ul>
         <PlanSidebar />
       </div>

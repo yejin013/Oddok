@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { memo, useRef } from "react";
 
 function Plan({ key, plan, onPlanClick }) {
   return (

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import Plan from "../plan/plan";
 
 function Plans({ plans, onPlanClick }) {
