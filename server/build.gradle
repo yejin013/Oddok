@@ -6,7 +6,7 @@ plugins {
 
 group = 'com.oddok'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
+sourceCompatibility = "11"
 
 configurations {
     compileOnly {
@@ -35,6 +35,10 @@ dependencies {
 
     // https://mvnrepository.com/artifact/io.openvidu/openvidu-java-client
     implementation 'io.openvidu:openvidu-java-client:2.21.1'
+
+    // MapStruct
+    implementation 'org.mapstruct:mapstruct:1.4.2.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
 }
 
 tasks.named('test') {
