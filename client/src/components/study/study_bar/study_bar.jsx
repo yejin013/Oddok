@@ -10,12 +10,12 @@ import { ReactComponent as Chat } from "../../../assets/icons/chat.svg";
 import { ReactComponent as Member } from "../../../assets/icons/person.svg";
 import { ReactComponent as Door } from "../../../assets/icons/door.svg";
 
-function StudyBar({ toggleVideo, toggleAudio, leaveRoom }) {
+function StudyBar({ clickSettingBtn, toggleVideo, toggleAudio, leaveRoom }) {
   return (
     <footer className={styles.bar}>
       <section className={styles.info}>
         <button type="button">
-          <Setting />
+          <Setting onClick={clickSettingBtn} />
         </button>
         <span>자격증 3호실</span>
         <div className={styles.music}>

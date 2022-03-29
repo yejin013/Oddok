@@ -24,4 +24,5 @@
 
 .bar {
   height: 10vh;
+  z-index: 1;
 }

@@ -1,18 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { OpenVidu } from "openvidu-browser";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { roomInfoState } from "../../recoil/studyroom_state";
 import StudyBar from "../../components/study/study_bar/study_bar";
 import UserVideo from "../../components/study/user_video/user_video";
+import SideBar from "../../components/study/side_bar/side_bar";
 import styles from "./study_room.module.css";
 
 function StudyRoom() {
+  const history = useHistory();
+  const location = useLocation();
   const OV = new OpenVidu();
   const [session, setSession] = useState();
   const [publisher, setPublisher] = useState();
   const [subscribers, setSubscribers] = useState([]);
   const [count, setCount] = useState(1);
-  const history = useHistory();
-  const location = useLocation();
+
+  const [isOpen, setIsOpen] = useState(false); // 사이드바 토글하기 위한 state
+  const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
 
   const leaveRoom = () => {
     session.disconnect();
@@ -40,10 +46,14 @@ function StudyRoom() {
     publisher.publishAudio(!publisher.stream.audioActive);
   };
 
+  // 1. 유저 세션 생성
   useEffect(() => {
+    console.log("🙂", location.state.roomInfo);
+    setRoomInfo(location.state.roomInfo);
     setSession(OV.initSession());
   }, []);
 
+  // 2. 방 세션과 유저 세션 연결
   useEffect(() => {
     if (session) {
       (async () => {
@@ -63,19 +73,32 @@ function StudyRoom() {
         setPublisher(localUser);
       })();
 
+      // 3. 소켓 이벤트 처리
+      // 1) 스트림 생성
       session.on("streamCreated", (event) => {
         const participant = session.subscribe(event.stream, undefined);
         setSubscribers((prev) => [...prev, participant]);
         setCount((prev) => prev + 1);
       });
+      // 2) 스트림 삭제
       session.on("streamDestroyed", (event) => {
         deleteSubscriber(event.stream.streamManager);
       });
       session.on("exception", (exception) => {
         console.warn(exception);
       });
+      // 3) 방장이 방 정보를 수정했을 때
+      session.on("signal:updated-roominfo", (event) => {
+        console.log("데이터 잘 왔엉🙂👋");
+        const res = JSON.parse(event.data);
+        setRoomInfo(res);
+      });
     }
   }, [session]);
+
+  const clickSettingBtn = () => {
+    setIsOpen((prev) => !prev);
+  };
 
   return (
     <div className={styles.room}>
@@ -86,8 +109,14 @@ function StudyRoom() {
         </ul>
       </div>
       <div className={styles.bar}>
-        <StudyBar toggleVideo={toggleVideo} toggleAudio={toggleAudio} leaveRoom={leaveRoom} />
+        <StudyBar
+          clickSettingBtn={clickSettingBtn}
+          toggleVideo={toggleVideo}
+          toggleAudio={toggleAudio}
+          leaveRoom={leaveRoom}
+        />
       </div>
+      {isOpen && <SideBar roomInfo={roomInfo} session={session} />}
     </div>
   );
 }
