@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useSetRecoilState } from "recoil";
-import { videoState, audioState } from "../../recoil/studyroom_state";
+import { useSetRecoilState, useRecoilValue } from "recoil";
+import { videoState, audioState, roomInfoState } from "../../recoil/studyroom_state";
 import SettingBar from "../../components/study/setting_bar/setting_bar";
 import SettingSection from "../../components/study/setting_section/setting_section";
 import styles from "./setting_room.module.css";
@@ -11,6 +11,8 @@ function SettingRoom({ goToStudyRoom }) {
   const setIsMuted = useSetRecoilState(audioState);
   const [clickedSettingBtn, setClickedSettingBtn] = useState(false);
   const displayType = clickedSettingBtn === true ? styles.hide : styles.show;
+
+  const { name } = useRecoilValue(roomInfoState);
 
   useEffect(() => {
     const getVideoandAudio = async () => {
@@ -56,6 +58,7 @@ function SettingRoom({ goToStudyRoom }) {
       </section>
       <div className={`${styles.bar} ${displayType}`}>
         <SettingBar //
+          roomName={name}
           goToStudyRoom={goToStudyRoom}
           stopOrStartVideo={stopOrStartVideo}
           stopOrStartAudio={stopOrStartAudio}

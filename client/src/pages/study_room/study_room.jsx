@@ -110,6 +110,7 @@ function StudyRoom() {
       </div>
       <div className={styles.bar}>
         <StudyBar
+          roomName={roomInfo.name}
           clickSettingBtn={clickSettingBtn}
           toggleVideo={toggleVideo}
           toggleAudio={toggleAudio}

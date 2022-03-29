@@ -38,6 +38,11 @@ const userLimitOptions = [
  * 6. Fix: 드롭다운 선택시 단위 안보여짐 (시간, 명)
  * 7. textarea 글자수 제한
  */
+/**
+ *
+ * 8. 방정보 입력안했을때 방정보를 수정해주세요 뜨게. 설정하면 xxx n호실 이렇게
+ * 9. 목표 클릭하고 스터디명 input 클릭시 정보 지워지게
+ */
 
 function SettingSection({ clickSettingBtn }) {
   // 수정 권한에 따라 disabled 처리
@@ -52,7 +57,7 @@ function SettingSection({ clickSettingBtn }) {
   const ruleInputRef = useRef();
 
   // for validation
-  const [isNameValid, setIsNameValid] = useState(true);
+  const [isCategoryValid, setIsCategoryValid] = useState(false);
 
   const [isClickedDetail, setIsClickedDetail] = useState(false);
 
@@ -61,15 +66,16 @@ function SettingSection({ clickSettingBtn }) {
   };
 
   const clickSaveBtn = () => {
-    // 필수 항목 입력 안했을 경우 처리
-    // if (!titleRef.current.value) {
-    //   console.log(!titleRef.current);
-    //   setIsNameValid(false);
-    //   return;
-    // }
+    // TODO 필수 항목 입력 안했을 경우 처리
+    let { name } = roomInfo;
+    if (titleRef.current.value) {
+      console.log(titleRef.current.value);
+      name = titleRef.current.value;
+    }
+    console.log(name);
     setRoomInfo({
       ...roomInfo,
-      name: titleRef.current.value,
+      name,
       hashtags: hashtag,
       isPublic: !passwordInputRef.current.value,
       password: passwordInputRef.current.value,
@@ -80,7 +86,8 @@ function SettingSection({ clickSettingBtn }) {
   };
 
   const categoryHandler = (e) => {
-    setRoomInfo({ ...roomInfo, category: e.target.value });
+    setIsCategoryValid(true);
+    setRoomInfo({ ...roomInfo, name: `${e.target.value} n호실`, category: e.target.value });
   };
 
   const hashtagHandler = (e) => {
@@ -132,7 +139,11 @@ function SettingSection({ clickSettingBtn }) {
       </div>
       <div className={styles.roominfo_item}>
         <p className={styles.label}>스터디 명</p>
-        <Input placeholder="제목을 입력하세요" ref={titleRef} disabled={disabled} />
+        <Input
+          placeholder={roomInfo.name || "목표를 설정하거나, 직접 입력해주세요"}
+          ref={titleRef}
+          disabled={disabled}
+        />
       </div>
       <div className={styles.box}>
         <div className={styles.roominfo_item}>
@@ -181,7 +192,7 @@ function SettingSection({ clickSettingBtn }) {
           <Textarea placeholder="스터디 규칙은 여기에 작성해주세요(임시)" ref={ruleInputRef} disabled={disabled} />
         </div>
       </div>
-      {disabled && (
+      {userInfo.updateAllowed && (
         <div className={styles.save_button}>
           <button type="button" onClick={clickSaveBtn}>
             설정완료
