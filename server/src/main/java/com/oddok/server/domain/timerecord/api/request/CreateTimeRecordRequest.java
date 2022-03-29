@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 @Getter
 public class CreateTimeRecordRequest {
-    private LocalDateTime start_time;
-    private LocalDateTime end_time;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
     private String subject;
 }
