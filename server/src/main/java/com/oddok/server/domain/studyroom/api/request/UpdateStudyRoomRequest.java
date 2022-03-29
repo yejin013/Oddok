@@ -6,6 +6,7 @@ import lombok.Getter;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
@@ -17,10 +18,9 @@ public class UpdateStudyRoomRequest {
     @NotNull
     private String category;
 
-    /*
-    @NotNull
-    private String hashtags;
+    private List<String> hashtags;
 
+    /*
     @NotNull
     private String image;
 

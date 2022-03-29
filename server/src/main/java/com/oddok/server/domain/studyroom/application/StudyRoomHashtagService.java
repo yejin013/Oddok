@@ -30,6 +30,21 @@ public class StudyRoomHashtagService {
      */
     public void createStudyRoom(Long studyRoomId, List<String> hashtags) {
         StudyRoom studyRoom = getStudyRoom(studyRoomId);
+        createStudyRoomHashtags(studyRoom, hashtags);
+    }
+
+    /**
+     * 스터디룸의 해시태그를 변경합니다. 기존 해시태그를 삭제하고 새로 등록합니다.
+     * @param studyRoomId
+     * @param hashtags
+     */
+    public void updateStudyRoom(Long studyRoomId, List<String> hashtags){
+        StudyRoom studyRoom = getStudyRoom(studyRoomId);
+        studyRoomHashtagRepository.deleteAllByStudyRoom(studyRoom); // 기존 삭제
+        createStudyRoomHashtags(studyRoom, hashtags);
+    }
+
+    private void createStudyRoomHashtags(StudyRoom studyRoom, List<String> hashtags){
         hashtags.forEach(name -> {
             Hashtag hashtag = hashtagRepository.findByName(name).orElseGet(() -> createHashtag(name));
             mapStudyRoomHashtag(studyRoom, hashtag);

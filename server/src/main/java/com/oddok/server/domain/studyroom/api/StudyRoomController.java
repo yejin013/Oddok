@@ -72,11 +72,17 @@ public class StudyRoomController {
 
     /**
      * [PUT] /study-room : 방 정보 수정 API
+     *
      * @return
      */
     @PutMapping("/{id}")
     public ResponseEntity<UpdateStudyRoomResponse> update(@PathVariable String id, @RequestHeader String userId, @RequestBody @Valid UpdateStudyRoomRequest updateStudyRoomRequest) {
         StudyRoomDto studyRoomDto = studyRoomService.updateStudyRoom(id, Long.parseLong(userId), updateStudyRoomRequest);
+
+        // hashtag 수정
+        if (!updateStudyRoomRequest.getHashtags().isEmpty()) {
+            studyRoomHashtagService.updateStudyRoom(Long.parseLong(id), updateStudyRoomRequest.getHashtags());
+        }
 
         UpdateStudyRoomResponse updateStudyRoomResponse = UpdateStudyRoomResponse.builder()
                 .name(studyRoomDto.getName())
