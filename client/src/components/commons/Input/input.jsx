@@ -1,12 +1,18 @@
 /* eslint-disable arrow-body-style */
-import React, { useRef, forwardRef } from "react";
+import React, { forwardRef, useImperativeHandle } from "react";
 
 import styles from "./input.module.css";
 
-const Input = forwardRef(({ placeholder }, inputRef) => {
+const Input = forwardRef(({ type, placeholder, isInvalid, disabled }, inputRef) => {
+  // useImperativeHandle(inputRef, () => {
+  //   return {
+  //     focus: () => inputRef.current.focus(),
+  //   };
+  // });
+
   return (
-    <div className={styles.container}>
-      <input type="text" ref={inputRef} placeholder={placeholder} />
+    <div className={`${styles.container} ${!isInvalid ? "" : styles.invalid}`}>
+      <input type={type || "text"} ref={inputRef} placeholder={placeholder} disabled={disabled} />
     </div>
   );
 });

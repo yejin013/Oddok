@@ -5,11 +5,12 @@ import React, { useState } from "react";
 
 import styles from "./dropdown.module.css";
 
-function Dropdown({ options, onSelect }) {
+function Dropdown({ options, onSelect, disabled }) {
   const [isActive, setIsActive] = useState(false);
   const [selectedOpt, setSelectedOpt] = useState();
 
   const toggleMenu = (e) => {
+    if (disabled) return;
     setIsActive(!isActive);
   };
 

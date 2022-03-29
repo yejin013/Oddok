@@ -4,11 +4,13 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import CreateRoom from "./pages/create_room";
 import JoinRoom from "./pages/join_room";
 import StudyRoom from "./pages/study_room/study_room";
+import Test from "./pages/test";
 
 function App() {
   return (
     <BrowserRouter>
       <Switch>
+        <Route exact path="/" component={Test} />
         <Route path="/create" component={CreateRoom} />
         <Route exact path="/studyroom" component={JoinRoom} />
         <Route path="/studyroom/:id" component={StudyRoom} />

@@ -1,19 +1,54 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { createSession, createToken } from "./testserver";
+import { useRecoilState } from "recoil";
+import { userState } from "../recoil/user_state";
+import { roomInfoState } from "../recoil/studyroom_state";
+import { createStudyRoom, joinStudyRoom } from "../api/studyroomAPI";
 import SettingRoom from "./settting_room/setting_room";
+
+import { createSession, createToken } from "./testserver";
 
 function CreateRoom() {
   const history = useHistory();
+  const [userInfo, setUserInfo] = useRecoilState(userState);
+  const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
 
+  // 스터디룸을 개설하는 유저에게 방 정보 업데이트 권한을 준다
+  useEffect(() => {
+    setUserInfo({ ...userInfo, updateAllowed: true });
+  }, []);
+
+  /**
+   * 1. 스터디룸 생성 요청 -> id return
+   * 2. id로 참여 요청
+   * 3. 라우팅시 roomInfo 보내주기
+   *  - 페이지 바뀌면 recoil 값 못쓸 수도 있어서 -> 확인 필요
+   *  - roomInfo 보내주고 studyroom에서 다시 저장하는 과정 추가
+   */
+  // const goToStudyRoom = async () => {
+  //   const roomId = await createStudyRoom(roomInfo);
+  //   console.log(roomId);
+  //   setRoomInfo({ ...roomInfo, id: roomId.id });
+  //   const token = await joinStudyRoom(roomId.id);
+  //   history.push({
+  //     pathname: `/studyroom/${roomId.id}`,
+  //     state: {
+  //       token: token.token,
+  //       roomInfo,
+  //     },
+  //   });
+  // };
+
+  // 테스트용
   const goToStudyRoom = async () => {
-    const roomInfo = "RoomS2"; // 나중에 설정 화면에서 저장된 방 정보로 대체
-    const roomId = await createSession(roomInfo);
+    console.log(roomInfo);
+    const roomId = await createSession(roomInfo.name);
     const token = await createToken(roomId.data.sessionId);
     history.push({
       pathname: `/studyroom/${roomId.data.sessionId}`,
       state: {
         token: token.data.token,
+        roomInfo,
       },
     });
   };
