@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+import { hourState, minuteState, secondState } from "../../../recoil/timer_state";
 import styles from "./time_record.module.css";
 
-function TimeRecord({ hour, minute, second }) {
+function TimeRecord(props) {
+  const [hour, setHour] = useRecoilState(hourState);
+  const [minute, setMinute] = useRecoilState(minuteState);
+  const [second, setSecond] = useRecoilState(secondState);
+
   return (
     <div className={styles.time}>
       <section>

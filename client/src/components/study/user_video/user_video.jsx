@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from "react";
 import TimeRecord from "../time_record/time_record";
 import styles from "./user_video.module.css";
 
-function UserVideo({ count, streamManager, hour, minute, second }) {
+function UserVideo({ count, streamManager }) {
   const videoRef = useRef();
 
   useEffect(() => {
@@ -28,7 +28,7 @@ function UserVideo({ count, streamManager, hour, minute, second }) {
   return (
     <li className={`${styles.video} ${getCount(count)}`}>
       <video className={styles.user_video} ref={videoRef} autoPlay />
-      <TimeRecord hour={hour} minute={minute} second={second} />
+      <TimeRecord />
     </li>
   );
 }

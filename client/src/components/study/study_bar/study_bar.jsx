@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { selectedPlanState } from "../../../recoil/plan_state";
+import { hourState, minuteState, secondState } from "../../../recoil/timer_state";
 import styles from "./study_bar.module.css";
 import { ReactComponent as Setting } from "../../../assets/icons/setting.svg";
 import { ReactComponent as Music } from "../../../assets/icons/music.svg";
@@ -13,17 +14,51 @@ import { ReactComponent as Chat } from "../../../assets/icons/chat.svg";
 import { ReactComponent as Member } from "../../../assets/icons/person.svg";
 import { ReactComponent as Door } from "../../../assets/icons/door.svg";
 
-function StudyBar({
-  //
-  toggleVideo,
-  toggleAudio,
-  leaveRoom,
-  isRecorded,
-  getStartTime,
-  getEndTime,
-  onClickplanBtn,
-}) {
+function StudyBar({ toggleVideo, toggleAudio, leaveRoom, onClickplanBtn }) {
   const [selectedPlan, setSelectedplan] = useRecoilState(selectedPlanState);
+
+  const [isRecorded, setIsRecorded] = useState(false);
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
+
+  const [hour, setHour] = useRecoilState(hourState);
+  const [minute, setMinute] = useRecoilState(minuteState);
+  const [second, setSecond] = useRecoilState(secondState);
+
+  useEffect(() => {
+    let timer;
+    if (isRecorded) {
+      timer = setInterval(() => {
+        if (minute > 59) {
+          setHour((prev) => prev + 1);
+          setMinute(0);
+        }
+        if (second === 59) {
+          setMinute((prev) => prev + 1);
+          setSecond(0);
+        }
+        if (second < 59) {
+          setSecond((prev) => prev + 1);
+        }
+      }, 1000);
+    } else {
+      clearInterval(timer);
+    }
+    return () => clearInterval(timer);
+  });
+
+  const getStartTime = () => {
+    const time = new Date();
+    setStartTime(time);
+    setIsRecorded((prev) => !prev);
+  };
+
+  const getEndTime = () => {
+    const time = new Date();
+    setEndTime(time);
+    setIsRecorded((prev) => !prev);
+    /* server에 selectedPlan, startTime, endTime, studyRooomId post */
+  };
 
   return (
     <footer className={styles.bar}>
@@ -49,10 +84,19 @@ function StudyBar({
             <Pause />
           </button>
         )}
-        <span>{selectedPlan.name}</span>
-        <button type="button" onClick={onClickplanBtn}>
-          <GoalOpen />
-        </button>
+        <div className={styles.plan}>
+          <div>
+            <span>{selectedPlan.name}</span>
+            <button type="button" onClick={onClickplanBtn}>
+              <GoalOpen />
+            </button>
+          </div>
+          <div>
+            <span>{hour < 10 ? `0${hour}` : hour}</span>&nbsp;:&nbsp;
+            <span>{minute < 10 ? `0${minute}` : minute}</span>&nbsp;:&nbsp;
+            <span>{second < 10 ? `0${second}` : second}</span>
+          </div>
+        </div>
       </section>
       <ul className={styles.buttons}>
         <li className={styles.video_button}>

@@ -19,6 +19,13 @@
   justify-content: center;
 }
 
+.plan {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0 1em;
+}
+
 .buttons {
   justify-content: flex-end;
   list-style: none;
@@ -55,9 +62,4 @@
 
 .music_icon {
   padding: 0.5em;
-}
-
-.play_button,
-.pause_button {
-  margin-right: 1em;
 }
