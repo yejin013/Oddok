@@ -30,10 +30,10 @@ public class StudyRoomHashtagService {
      */
     public void createStudyRoom(Long studyRoomId, List<String> hashtags) {
         StudyRoom studyRoom = getStudyRoom(studyRoomId);
-        for (String name : hashtags) {
+        hashtags.forEach(name -> {
             Hashtag hashtag = hashtagRepository.findByName(name).orElseGet(() -> createHashtag(name));
             mapStudyRoomHashtag(studyRoom, hashtag);
-        }
+        });
     }
 
     private StudyRoom getStudyRoom(Long id) {
