@@ -44,4 +44,10 @@ public class ControllerErrorAdvice {
     public ErrorResponse handleUserNotPublisherException() {
         return new ErrorResponse("해당 사용자는 스터디방 생성자가 아닙니다.");
     }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(PasswordsNotMatchException.class)
+    public ErrorResponse handlerPasswordsNotMatchException() {
+        return new ErrorResponse("스터디방과의 비밀번호가 일치하지 않습니다.");
+    }
 }
