@@ -1,4 +1,4 @@
-package com.oddok.server.domain.studyroom.entity;
+package com.oddok.server.domain.timerecord.entity;
 
 import com.oddok.server.domain.user.entity.User;
 import lombok.Getter;
