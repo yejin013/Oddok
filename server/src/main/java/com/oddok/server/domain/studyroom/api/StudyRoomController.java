@@ -115,23 +115,20 @@ public class StudyRoomController {
         return ResponseEntity.ok(tokenResponse);
     }
 
+    /**
+     * [GET] /study-room/:id : 방 상세 조회 API
+     * @param id
+     * @return GetStudyRoomResponse : 방 정보
+     */
     @GetMapping(value = "/{id}")
     public ResponseEntity<GetStudyRoomResponse> get(@PathVariable Long id) {
         StudyRoomDto studyRoomDto = studyRoomService.loadStudyRoom(id);
 
-        GetStudyRoomResponse getStudyRoomResponse;
+        List<String> studyRoomHashtags = studyRoomHashtagService.loadStudyRoomHashtag(studyRoomDto.getId());
 
-        if(!studyRoomDto.getIsPublic()) {
-            getStudyRoomResponse = GetStudyRoomResponse.builder()
-                    .isPublic(studyRoomDto.getIsPublic())
-                    .build();
-        } else {
-            List<String> studyRoomHashtags = studyRoomHashtagService.loadStudyRoomHashtag(studyRoomDto.getId());
-
-            GetStudyRoomResponseMapper responseMapper = Mappers.getMapper(GetStudyRoomResponseMapper.class);
-            getStudyRoomResponse = responseMapper.toResponse(studyRoomDto);
-            getStudyRoomResponse.setHashtags(studyRoomHashtags);
-        }
+        GetStudyRoomResponseMapper responseMapper = Mappers.getMapper(GetStudyRoomResponseMapper.class);
+        GetStudyRoomResponse getStudyRoomResponse = responseMapper.toResponse(studyRoomDto);
+        getStudyRoomResponse.setHashtags(studyRoomHashtags);
 
         return ResponseEntity.ok(getStudyRoomResponse);
     }
