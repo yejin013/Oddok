@@ -1,5 +1,6 @@
 package com.oddok.server.domain.studyroom.api;
 
+import com.oddok.server.domain.studyroom.api.request.CheckPasswordRequest;
 import com.oddok.server.domain.studyroom.api.request.CreateStudyRoomRequest;
 import com.oddok.server.domain.studyroom.api.request.UpdateStudyRoomRequest;
 import com.oddok.server.domain.studyroom.api.response.CreateStudyRoomResponse;
@@ -8,6 +9,7 @@ import com.oddok.server.domain.studyroom.api.response.UpdateStudyRoomResponse;
 import com.oddok.server.domain.studyroom.application.SessionService;
 import com.oddok.server.domain.studyroom.application.StudyRoomHashtagService;
 import com.oddok.server.domain.studyroom.application.StudyRoomService;
+import com.oddok.server.domain.studyroom.dto.CheckPasswordDto;
 import com.oddok.server.domain.studyroom.dto.IdClassForParticipantDto;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import com.oddok.server.domain.user.application.UserService;
@@ -57,6 +59,8 @@ public class StudyRoomController {
                 .name(createStudyRoomRequest.getName())
                 .userId(Long.parseLong(userId))
                 .sessionId(sessionId)
+                .isPublic(createStudyRoomRequest.getIsPublic())
+                .password(createStudyRoomRequest.getPassword())
                 .build();
 
         // 2. StudyRoom 생성
@@ -123,4 +127,18 @@ public class StudyRoomController {
         return ResponseEntity.ok(tokenResponse);
     }
 
+    /**
+     * [POST] /check/{study-room-id} : 스터디방 입장 비밀번호 확인
+     * @param id
+     * @param checkPasswordRequest : 비밀번
+     */
+    @PostMapping("/check/{id}")
+    public void checkPassword(@PathVariable Long id, @RequestBody @Valid CheckPasswordRequest checkPasswordRequest) {
+        CheckPasswordDto requestDto = CheckPasswordDto.builder()
+                .studyRoomId(id)
+                .password(checkPasswordRequest.getPassword())
+                .build();
+
+        studyRoomService.checkPassword(requestDto);
+    }
 }
