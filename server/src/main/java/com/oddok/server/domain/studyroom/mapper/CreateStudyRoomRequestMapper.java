@@ -7,4 +7,5 @@ import org.mapstruct.Mapper;
 
 @Mapper
 public interface CreateStudyRoomRequestMapper extends GenericRequestMapper<CreateStudyRoomRequest, StudyRoomDto> {
+    StudyRoomDto toDto(CreateStudyRoomRequest request);
 }
