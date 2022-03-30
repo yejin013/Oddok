@@ -128,11 +128,11 @@ public class StudyRoomController {
     }
 
     /**
-     * [POST] /join/{study-room-id}/check : 스터디방 입장 비밀번호 확인
+     * [POST] /check/{study-room-id} : 스터디방 입장 비밀번호 확인
      * @param id
-     * @param checkPasswordRequest
+     * @param checkPasswordRequest : 비밀번
      */
-    @PostMapping("/join/{id}/check")
+    @PostMapping("/check/{id}")
     public void checkPassword(@PathVariable Long id, @RequestBody @Valid CheckPasswordRequest checkPasswordRequest) {
         CheckPasswordDto requestDto = CheckPasswordDto.builder()
                 .studyRoomId(id)
