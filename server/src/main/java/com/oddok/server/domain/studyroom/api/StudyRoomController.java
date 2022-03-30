@@ -138,7 +138,8 @@ public class StudyRoomController {
                     .isPublic(studyRoomDto.getIsPublic())
                     .build();
         } else {
-            List<StudyRoomHashtagDto> studyRoomHashtagDtoList = studyRoomHashtagService.loadStudyRoomHashtag(studyRoomDto.getId());
+            List<String> studyRoomHashtagDtoList = studyRoomHashtagService.loadStudyRoomHashtag(studyRoomDto.getId());
+
             getStudyRoomResponse = GetStudyRoomResponse.builder()
                     .name(studyRoomDto.getName())
                     .hashtags(studyRoomHashtagDtoList)

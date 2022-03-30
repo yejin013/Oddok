@@ -13,13 +13,11 @@ public class GetStudyRoomResponse {
 
     private String category;
 
-    private List<StudyRoomHashtagDto> hashtags;
+    private List<String> hashtags;
 
     private String image;
 
     private Boolean isPublic;
-
-    private String password;
 
     private Integer targetTime;
 
@@ -39,7 +37,7 @@ public class GetStudyRoomResponse {
 
 
     @Builder
-    public GetStudyRoomResponse(String name, List<StudyRoomHashtagDto> hashtags, Boolean isPublic) {
+    public GetStudyRoomResponse(String name, List<String> hashtags, Boolean isPublic) {
         this.name = name;
         this.hashtags = hashtags;
         this.isPublic = isPublic;
