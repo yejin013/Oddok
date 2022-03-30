@@ -53,13 +53,9 @@ public class StudyRoomService {
         return studyRoomMapper.toDto(studyRoom);
     }
 
-    public StudyRoom getStudyRoom(Long id) {
-        return studyRoomRepository.findById(id)
-                .orElseThrow(() -> new StudyRoomNotFoundException(id));
-    }
 
-    public StudyRoomDto updateStudyRoom(String id, Long userId, UpdateStudyRoomRequest updateStudyRoomRequest) {
-        StudyRoom studyRoom = studyRoomRepository.findById(Long.parseLong(id)).orElseThrow(() -> new StudyRoomNotFoundException(Long.parseLong(id)));
+    public StudyRoomDto updateStudyRoom(Long id, Long userId, UpdateStudyRoomRequest updateStudyRoomRequest) {
+        StudyRoom studyRoom = studyRoomRepository.findById(id).orElseThrow(() -> new StudyRoomNotFoundException(id));
 
         if (!checkPublisher(studyRoom.getUser(), userId)) throw new UserNotPublisherException();
 
@@ -80,7 +76,11 @@ public class StudyRoomService {
         );
 
         return studyRoomMapper.toDto(studyRoomRepository.save(studyRoom));
+    }
 
+    public StudyRoom findStudyRoom(Long id) {
+        return studyRoomRepository.findById(id)
+                .orElseThrow(() -> new StudyRoomNotFoundException(id));
     }
 
     public Boolean checkPublisher(User publisher, Long userId) {
@@ -101,9 +101,9 @@ public class StudyRoomService {
     }
 
     public void checkPassword(CheckPasswordDto checkPasswordDto) {
-        StudyRoom studyRoom = getStudyRoom(checkPasswordDto.getStudyRoomId());
+        StudyRoom studyRoom = findStudyRoom(checkPasswordDto.getStudyRoomId());
 
-        if(!studyRoom.getIsPublic())
+        if(studyRoom.getIsPublic())
             throw new WrongApproachException();
         if(!studyRoom.getPassword().equals(checkPasswordDto.getPassword()))
             throw new PasswordsNotMatchException();

@@ -48,4 +48,12 @@ public class StudyRoomDto {
         this.isPublic = isPublic;
         this.password = password;
     }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
+    }
 }

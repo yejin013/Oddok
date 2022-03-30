@@ -25,6 +25,7 @@ public class CreateStudyRoomRequest {
 
     private Integer limitUsers;
     */
+
     private Boolean isPublic;
 
     private String password;
