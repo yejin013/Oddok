@@ -1,9 +1,6 @@
 package com.oddok.server.domain.studyroom.application;
 
-import com.oddok.server.common.errors.PasswordsNotMatchException;
-import com.oddok.server.common.errors.StudyRoomNotFoundException;
-import com.oddok.server.common.errors.UserNotFoundException;
-import com.oddok.server.common.errors.UserNotPublisherException;
+import com.oddok.server.common.errors.*;
 import com.oddok.server.domain.studyroom.api.request.UpdateStudyRoomRequest;
 import com.oddok.server.domain.studyroom.dao.StudyRoomRepository;
 import com.oddok.server.domain.studyroom.dto.CheckPasswordDto;
@@ -106,7 +103,9 @@ public class StudyRoomService {
     public void checkPassword(CheckPasswordDto checkPasswordDto) {
         StudyRoom studyRoom = getStudyRoom(checkPasswordDto.getStudyRoomId());
 
-        if(!studyRoom.getIsPublic() || !studyRoom.getPassword().equals(checkPasswordDto.getPassword()))
+        if(!studyRoom.getIsPublic())
+            throw new WrongApproachException();
+        if(!studyRoom.getPassword().equals(checkPasswordDto.getPassword()))
             throw new PasswordsNotMatchException();
     }
 }
