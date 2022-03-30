@@ -8,10 +8,12 @@ import com.oddok.server.domain.studyroom.entity.Hashtag;
 import com.oddok.server.domain.studyroom.entity.StudyRoom;
 import com.oddok.server.domain.studyroom.entity.StudyRoomHashtag;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class StudyRoomHashtagService {
 
     private final StudyRoomHashtagRepository studyRoomHashtagRepository;
@@ -28,6 +30,7 @@ public class StudyRoomHashtagService {
      * 스터디룸을 생성하면 해시태그와 스터디룸을 매핑하여 저장합니다.
      * 새로운 이름의 해시태그라면 생성해주어야합니다.
      */
+    @Transactional
     public void createStudyRoom(Long studyRoomId, List<String> hashtags) {
         StudyRoom studyRoom = getStudyRoom(studyRoomId);
         createStudyRoomHashtags(studyRoom, hashtags);
@@ -41,7 +44,7 @@ public class StudyRoomHashtagService {
     public void updateStudyRoom(Long studyRoomId, List<String> hashtags){
         StudyRoom studyRoom = getStudyRoom(studyRoomId);
         studyRoomHashtagRepository.deleteAllByStudyRoom(studyRoom); // 기존 삭제
-        createStudyRoomHashtags(studyRoom, hashtags);
+        createStudyRoomHashtags(studyRoom, hashtags); // 새로 생성
     }
 
     private void createStudyRoomHashtags(StudyRoom studyRoom, List<String> hashtags){

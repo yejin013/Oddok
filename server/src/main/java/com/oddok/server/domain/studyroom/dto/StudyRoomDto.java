@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 public class StudyRoomDto {
@@ -16,6 +17,8 @@ public class StudyRoomDto {
     private Long userId;
 
     private String sessionId;
+
+    private List<String> hashtags;
 
     private String image;
 

@@ -26,13 +26,15 @@ public class StudyRoomService {
     private final UserRepository userRepository;
     private final StudyRoomRepository studyRoomRepository;
     private final ParticipantRepository participantRepository;
+    private final StudyRoomHashtagService studyRoomHashtagService;
 
     private final StudyRoomMapper studyRoomMapper;
 
-    public StudyRoomService(UserRepository userRepository, StudyRoomRepository studyRoomRepository, ParticipantRepository participantRepository) {
+    public StudyRoomService(UserRepository userRepository, StudyRoomRepository studyRoomRepository, ParticipantRepository participantRepository, StudyRoomHashtagService studyRoomHashtagService) {
         this.userRepository = userRepository;
         this.studyRoomRepository = studyRoomRepository;
         this.participantRepository = participantRepository;
+        this.studyRoomHashtagService = studyRoomHashtagService;
         this.studyRoomMapper = Mappers.getMapper(StudyRoomMapper.class);
     }
 

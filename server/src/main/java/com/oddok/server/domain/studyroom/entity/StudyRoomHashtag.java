@@ -22,6 +22,10 @@ public class StudyRoomHashtag {
     @JoinColumn(name = "hashtag_id")
     private Hashtag hashtag;
 
+    public void setStudyRoom(StudyRoom studyRoom) {
+        this.studyRoom = studyRoom;
+    }
+
     @Builder
     public StudyRoomHashtag(StudyRoom studyRoom, Hashtag hashtag) {
         this.studyRoom = studyRoom;

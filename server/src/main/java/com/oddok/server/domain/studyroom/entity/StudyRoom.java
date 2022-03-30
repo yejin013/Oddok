@@ -6,6 +6,8 @@ import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -62,11 +64,15 @@ public class StudyRoom {
     @Column(name = "create_at")
     private LocalDateTime createAt;
 
+    @OneToMany(mappedBy = "studyRoom", fetch = FetchType.LAZY)
+    private List<StudyRoomHashtag> hashtags;
+
     @Builder
     public StudyRoom(String name, String category, User user,
                      String sessionId, String image, Boolean isPublic,
                      String password, Integer targetTime, String rule,
                      Boolean isMicOn, Boolean isCamOn, Integer limitUsers,
+                     List<StudyRoomHashtag> hashtags,
                      LocalDateTime startAt, LocalDateTime endAt) {
         this.name = name;
         this.category = category;
@@ -80,6 +86,7 @@ public class StudyRoom {
         this.isMicOn = isMicOn;
         this.isCamOn = isCamOn;
         this.limitUsers = limitUsers;
+        this.hashtags = hashtags;
         this.startAt = startAt;
         this.endAt = endAt;
         this.createAt = LocalDateTime.now();
