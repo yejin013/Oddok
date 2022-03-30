@@ -13,22 +13,15 @@ import org.springframework.stereotype.Service;
 public class TimeRecordService {
 
     private final TimeRecordRepository timeRecordRepository;
-    private final UserRepository userRepository;
 
     private final TimeRecordMapper timeRecordMapper;
 
-    public TimeRecordService(TimeRecordRepository timeRecordRepository, UserRepository userRepository) {
+    public TimeRecordService(TimeRecordRepository timeRecordRepository) {
         this.timeRecordRepository = timeRecordRepository;
-        this.userRepository = userRepository;
         this.timeRecordMapper = Mappers.getMapper(TimeRecordMapper.class);
     }
 
     public void createTimeRecord(TimeRecordDto timeRecordDto) {
-        getUser(timeRecordDto.getUserId());
         timeRecordMapper.toDto(timeRecordRepository.save(timeRecordMapper.toEntity(timeRecordDto)));
-    }
-
-    public User getUser(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
     }
 }
