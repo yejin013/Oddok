@@ -3,6 +3,7 @@ package com.oddok.server.domain.studyroom.api;
 import com.oddok.server.domain.studyroom.api.request.CreateStudyRoomRequest;
 import com.oddok.server.domain.studyroom.api.request.UpdateStudyRoomRequest;
 import com.oddok.server.domain.studyroom.api.response.CreateStudyRoomResponse;
+import com.oddok.server.domain.studyroom.api.response.GetStudyRoomResponse;
 import com.oddok.server.domain.studyroom.api.response.TokenResponse;
 import com.oddok.server.domain.studyroom.api.response.UpdateStudyRoomResponse;
 import com.oddok.server.domain.studyroom.application.SessionService;
@@ -10,7 +11,11 @@ import com.oddok.server.domain.studyroom.application.StudyRoomHashtagService;
 import com.oddok.server.domain.studyroom.application.StudyRoomService;
 import com.oddok.server.domain.studyroom.dto.IdClassForParticipantDto;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
+import com.oddok.server.domain.studyroom.mapper.StudyRoomDtoMapper;
+import com.oddok.server.domain.studyroom.mapper.StudyRoomMapper;
 import com.oddok.server.domain.user.application.UserService;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,11 +34,15 @@ public class StudyRoomController {
     private final StudyRoomHashtagService studyRoomHashtagService;
     private final UserService userService;
 
+    private final StudyRoomDtoMapper studyRoomDtoMapper;
+
     public StudyRoomController(SessionService sessionService, StudyRoomService studyRoomService, StudyRoomHashtagService studyRoomHashtagService, UserService userService) {
         this.sessionService = sessionService;
         this.studyRoomService = studyRoomService;
         this.studyRoomHashtagService = studyRoomHashtagService;
         this.userService = userService;
+
+        studyRoomDtoMapper = Mappers.getMapper(StudyRoomDtoMapper.class);
     }
 
     /**
@@ -57,6 +66,8 @@ public class StudyRoomController {
                 .name(createStudyRoomRequest.getName())
                 .userId(Long.parseLong(userId))
                 .sessionId(sessionId)
+                .isPublic(createStudyRoomRequest.getIsPublic())
+                .password(createStudyRoomRequest.getPassword())
                 .build();
 
         // 2. StudyRoom 생성
@@ -75,7 +86,7 @@ public class StudyRoomController {
      * @return
      */
     @PutMapping("/{id}")
-    public ResponseEntity<UpdateStudyRoomResponse> update(@PathVariable String id, @RequestHeader String userId, @RequestBody @Valid UpdateStudyRoomRequest updateStudyRoomRequest) {
+    public ResponseEntity<UpdateStudyRoomResponse> update(@PathVariable Long id, @RequestHeader String userId, @RequestBody @Valid UpdateStudyRoomRequest updateStudyRoomRequest) {
         StudyRoomDto studyRoomDto = studyRoomService.updateStudyRoom(id, Long.parseLong(userId), updateStudyRoomRequest);
 
         UpdateStudyRoomResponse updateStudyRoomResponse = UpdateStudyRoomResponse.builder()
@@ -123,4 +134,20 @@ public class StudyRoomController {
         return ResponseEntity.ok(tokenResponse);
     }
 
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<GetStudyRoomResponse> get(@PathVariable Long id) {
+        StudyRoomDto studyRoomDto = studyRoomService.loadStudyRoom(id);
+
+        GetStudyRoomResponse getStudyRoomResponse;
+
+        if(!studyRoomDto.getIsPublic()) {
+            getStudyRoomResponse = GetStudyRoomResponse.builder()
+                    .isPublic(studyRoomDto.getIsPublic())
+                    .build();
+        } else {
+            getStudyRoomResponse = studyRoomDtoMapper.toResponse(studyRoomDto);
+        }
+
+        return ResponseEntity.ok(getStudyRoomResponse);
+    }
 }

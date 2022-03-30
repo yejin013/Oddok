@@ -1,4 +1,4 @@
-package com.oddok.server.domain.studyroom.dto;
+package com.oddok.server.domain.studyroom.api.response;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -6,16 +6,10 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Getter
-public class StudyRoomDto {
-    private Long id;
-
+public class GetStudyRoomResponse {
     private String name;
 
     private String category;
-
-    private Long userId;
-
-    private String sessionId;
 
     private String image;
 
@@ -39,13 +33,15 @@ public class StudyRoomDto {
 
     private LocalDateTime endAt;
 
+
     @Builder
-    public StudyRoomDto(Long id, String name, Long userId, String sessionId, Boolean isPublic, String password) {
-        this.id = id;
+    public GetStudyRoomResponse(String name, Boolean isPublic) {
         this.name = name;
-        this.userId = userId;
-        this.sessionId = sessionId;
         this.isPublic = isPublic;
-        this.password = password;
+    }
+
+    @Builder
+    public GetStudyRoomResponse(Boolean isPublic) {
+        this.isPublic = isPublic;
     }
 }
