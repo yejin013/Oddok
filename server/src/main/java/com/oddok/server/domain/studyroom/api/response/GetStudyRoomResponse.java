@@ -37,14 +37,17 @@ public class GetStudyRoomResponse {
 
 
     @Builder
-    public GetStudyRoomResponse(String name, List<String> hashtags, Boolean isPublic) {
+    public GetStudyRoomResponse(String name, Boolean isPublic) {
         this.name = name;
-        this.hashtags = hashtags;
         this.isPublic = isPublic;
     }
 
     @Builder
     public GetStudyRoomResponse(Boolean isPublic) {
         this.isPublic = isPublic;
+    }
+
+    public void setHashtags(List<String> hashtags) {
+        this.hashtags = hashtags;
     }
 }

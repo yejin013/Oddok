@@ -9,10 +9,13 @@ import com.oddok.server.domain.studyroom.api.response.UpdateStudyRoomResponse;
 import com.oddok.server.domain.studyroom.application.SessionService;
 import com.oddok.server.domain.studyroom.application.StudyRoomHashtagService;
 import com.oddok.server.domain.studyroom.application.StudyRoomService;
-import com.oddok.server.domain.studyroom.dto.StudyRoomHashtagDto;
 import com.oddok.server.domain.studyroom.dto.IdClassForParticipantDto;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
+import com.oddok.server.domain.studyroom.mapper.CreateStudyRoomRequestMapper;
+import com.oddok.server.domain.studyroom.mapper.GetStudyRoomResponseMapper;
+import com.oddok.server.domain.studyroom.mapper.UpdateStudyRoomResponseMapper;
 import com.oddok.server.domain.user.application.UserService;
+import org.mapstruct.factory.Mappers;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,13 +58,11 @@ public class StudyRoomController {
     public ResponseEntity<CreateStudyRoomResponse> create(@RequestHeader String userId, @RequestBody @Valid CreateStudyRoomRequest createStudyRoomRequest) throws OpenViduJavaClientException, OpenViduHttpException {
         // 1. OpenVidu 에 새로운 세션을 생성
         String sessionId = sessionService.createSession();
-        StudyRoomDto requestDto = StudyRoomDto.builder()
-                .name(createStudyRoomRequest.getName())
-                .userId(Long.parseLong(userId))
-                .sessionId(sessionId)
-                .isPublic(createStudyRoomRequest.getIsPublic())
-                .password(createStudyRoomRequest.getPassword())
-                .build();
+
+        CreateStudyRoomRequestMapper requestMapper = Mappers.getMapper(CreateStudyRoomRequestMapper.class);
+        StudyRoomDto requestDto = requestMapper.toDto(createStudyRoomRequest);
+        requestDto.setUserId(Long.parseLong(userId));
+        requestDto.setSessionId(sessionId);
 
         // 2. StudyRoom 생성
         Long studyRoomId = studyRoomService.createStudyRoom(requestDto);
@@ -82,21 +83,8 @@ public class StudyRoomController {
     public ResponseEntity<UpdateStudyRoomResponse> update(@PathVariable Long id, @RequestHeader String userId, @RequestBody @Valid UpdateStudyRoomRequest updateStudyRoomRequest) {
         StudyRoomDto studyRoomDto = studyRoomService.updateStudyRoom(id, Long.parseLong(userId), updateStudyRoomRequest);
 
-        UpdateStudyRoomResponse updateStudyRoomResponse = UpdateStudyRoomResponse.builder()
-                .name(studyRoomDto.getName())
-                .category(studyRoomDto.getCategory())
-                .userId(studyRoomDto.getUserId())
-                .image(studyRoomDto.getImage())
-                .isPublic(studyRoomDto.getIsPublic())
-                .password(studyRoomDto.getPassword())
-                .targetTime(studyRoomDto.getTargetTime())
-                .rule(studyRoomDto.getRule())
-                .isMicOn(studyRoomDto.getIsMicOn())
-                .isCamOn(studyRoomDto.getIsCamOn())
-                .limitUsers(studyRoomDto.getLimitUsers())
-                .startAt(studyRoomDto.getStartAt())
-                .endAt(studyRoomDto.getEndAt())
-                .build();
+        UpdateStudyRoomResponseMapper responseMapper = Mappers.getMapper(UpdateStudyRoomResponseMapper.class);
+        UpdateStudyRoomResponse updateStudyRoomResponse = responseMapper.toResponse(studyRoomDto);
 
         return ResponseEntity.ok(updateStudyRoomResponse);
     }
@@ -138,13 +126,11 @@ public class StudyRoomController {
                     .isPublic(studyRoomDto.getIsPublic())
                     .build();
         } else {
-            List<String> studyRoomHashtagDtoList = studyRoomHashtagService.loadStudyRoomHashtag(studyRoomDto.getId());
+            List<String> studyRoomHashtags = studyRoomHashtagService.loadStudyRoomHashtag(studyRoomDto.getId());
 
-            getStudyRoomResponse = GetStudyRoomResponse.builder()
-                    .name(studyRoomDto.getName())
-                    .hashtags(studyRoomHashtagDtoList)
-                    .isPublic(studyRoomDto.getIsPublic())
-                    .build();
+            GetStudyRoomResponseMapper responseMapper = Mappers.getMapper(GetStudyRoomResponseMapper.class);
+            getStudyRoomResponse = responseMapper.toResponse(studyRoomDto);
+            getStudyRoomResponse.setHashtags(studyRoomHashtags);
         }
 
         return ResponseEntity.ok(getStudyRoomResponse);
