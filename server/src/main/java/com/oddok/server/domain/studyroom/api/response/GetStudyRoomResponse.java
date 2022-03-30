@@ -1,15 +1,19 @@
 package com.oddok.server.domain.studyroom.api.response;
 
+import com.oddok.server.domain.studyroom.dto.StudyRoomHashtagDto;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 public class GetStudyRoomResponse {
     private String name;
 
     private String category;
+
+    private List<StudyRoomHashtagDto> hashtags;
 
     private String image;
 
@@ -35,8 +39,9 @@ public class GetStudyRoomResponse {
 
 
     @Builder
-    public GetStudyRoomResponse(String name, Boolean isPublic) {
+    public GetStudyRoomResponse(String name, List<StudyRoomHashtagDto> hashtags, Boolean isPublic) {
         this.name = name;
+        this.hashtags = hashtags;
         this.isPublic = isPublic;
     }
 

@@ -4,12 +4,16 @@ import com.oddok.server.common.errors.StudyRoomNotFoundException;
 import com.oddok.server.domain.studyroom.dao.HashtagRepository;
 import com.oddok.server.domain.studyroom.dao.StudyRoomHashtagRepository;
 import com.oddok.server.domain.studyroom.dao.StudyRoomRepository;
+import com.oddok.server.domain.studyroom.dto.StudyRoomHashtagDto;
 import com.oddok.server.domain.studyroom.entity.Hashtag;
 import com.oddok.server.domain.studyroom.entity.StudyRoom;
 import com.oddok.server.domain.studyroom.entity.StudyRoomHashtag;
+import com.oddok.server.domain.studyroom.mapper.StudyRoomHashtagMapper;
+import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StudyRoomHashtagService {
@@ -18,10 +22,14 @@ public class StudyRoomHashtagService {
     private final HashtagRepository hashtagRepository;
     private final StudyRoomRepository studyRoomRepository;
 
+    private final StudyRoomHashtagMapper studyRoomHashtagMapper;
+
     public StudyRoomHashtagService(StudyRoomHashtagRepository studyRoomHashtagRepository, HashtagRepository hashtagRepository, StudyRoomRepository studyRoomRepository) {
         this.studyRoomHashtagRepository = studyRoomHashtagRepository;
         this.hashtagRepository = hashtagRepository;
         this.studyRoomRepository = studyRoomRepository;
+
+        studyRoomHashtagMapper = Mappers.getMapper(StudyRoomHashtagMapper.class);
     }
 
     /**
@@ -29,14 +37,14 @@ public class StudyRoomHashtagService {
      * 새로운 이름의 해시태그라면 생성해주어야합니다.
      */
     public void createStudyRoom(Long studyRoomId, List<String> hashtags) {
-        StudyRoom studyRoom = getStudyRoom(studyRoomId);
+        StudyRoom studyRoom = findStudyRoom(studyRoomId);
         for (String name : hashtags) {
             Hashtag hashtag = hashtagRepository.findByName(name).orElseGet(() -> createHashtag(name));
             mapStudyRoomHashtag(studyRoom, hashtag);
         }
     }
 
-    private StudyRoom getStudyRoom(Long id) {
+    private StudyRoom findStudyRoom(Long id) {
         return studyRoomRepository.findById(id)
                 .orElseThrow(() -> new StudyRoomNotFoundException(id));
     }
@@ -52,5 +60,14 @@ public class StudyRoomHashtagService {
     private Hashtag createHashtag(String name) {
         Hashtag hashtag = Hashtag.builder().name(name).build();
         return hashtagRepository.save(hashtag);
+    }
+
+    public List<StudyRoomHashtagDto> loadStudyRoomHashtag(Long id) {
+        List<StudyRoomHashtag> studyRoomHashtags = studyRoomHashtagRepository.findAllByStudyRoom(findStudyRoom(id));
+        return studyRoomHashtags.stream().map(this::toDto).collect(Collectors.toList());
+    }
+
+    private StudyRoomHashtagDto toDto(StudyRoomHashtag studyRoomHashtag) {
+        return studyRoomHashtagMapper.toDto(studyRoomHashtag);
     }
 }

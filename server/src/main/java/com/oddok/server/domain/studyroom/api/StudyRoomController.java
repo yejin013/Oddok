@@ -9,13 +9,10 @@ import com.oddok.server.domain.studyroom.api.response.UpdateStudyRoomResponse;
 import com.oddok.server.domain.studyroom.application.SessionService;
 import com.oddok.server.domain.studyroom.application.StudyRoomHashtagService;
 import com.oddok.server.domain.studyroom.application.StudyRoomService;
+import com.oddok.server.domain.studyroom.dto.StudyRoomHashtagDto;
 import com.oddok.server.domain.studyroom.dto.IdClassForParticipantDto;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
-import com.oddok.server.domain.studyroom.mapper.StudyRoomDtoMapper;
-import com.oddok.server.domain.studyroom.mapper.StudyRoomMapper;
 import com.oddok.server.domain.user.application.UserService;
-import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,15 +31,11 @@ public class StudyRoomController {
     private final StudyRoomHashtagService studyRoomHashtagService;
     private final UserService userService;
 
-    private final StudyRoomDtoMapper studyRoomDtoMapper;
-
     public StudyRoomController(SessionService sessionService, StudyRoomService studyRoomService, StudyRoomHashtagService studyRoomHashtagService, UserService userService) {
         this.sessionService = sessionService;
         this.studyRoomService = studyRoomService;
         this.studyRoomHashtagService = studyRoomHashtagService;
         this.userService = userService;
-
-        studyRoomDtoMapper = Mappers.getMapper(StudyRoomDtoMapper.class);
     }
 
     /**
@@ -145,7 +138,12 @@ public class StudyRoomController {
                     .isPublic(studyRoomDto.getIsPublic())
                     .build();
         } else {
-            getStudyRoomResponse = studyRoomDtoMapper.toResponse(studyRoomDto);
+            List<StudyRoomHashtagDto> studyRoomHashtagDtoList = studyRoomHashtagService.loadStudyRoomHashtag(studyRoomDto.getId());
+            getStudyRoomResponse = GetStudyRoomResponse.builder()
+                    .name(studyRoomDto.getName())
+                    .hashtags(studyRoomHashtagDtoList)
+                    .isPublic(studyRoomDto.getIsPublic())
+                    .build();
         }
 
         return ResponseEntity.ok(getStudyRoomResponse);
