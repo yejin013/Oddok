@@ -1,6 +1,6 @@
 import React, { memo, useRef } from "react";
 
-function Plan({ key, plan, onPlanClick }) {
+function Plan({ plan, onPlanClick }) {
   return (
     <li>
       <button type="button" onClick={() => onPlanClick(plan)}>

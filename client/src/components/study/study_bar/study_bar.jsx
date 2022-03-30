@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { selectedPlanState } from "../../../recoil/plan_state";
-import { hourState, minuteState, secondState } from "../../../recoil/timer_state";
+import {
+  hourState,
+  minuteState,
+  secondState,
+  totalHourState,
+  totalMinuteState,
+  totalSecondState,
+} from "../../../recoil/timer_state";
 import styles from "./study_bar.module.css";
 import { ReactComponent as Setting } from "../../../assets/icons/setting.svg";
 import { ReactComponent as Music } from "../../../assets/icons/music.svg";
@@ -15,7 +22,7 @@ import { ReactComponent as Member } from "../../../assets/icons/person.svg";
 import { ReactComponent as Door } from "../../../assets/icons/door.svg";
 
 function StudyBar({ toggleVideo, toggleAudio, leaveRoom, onClickplanBtn }) {
-  const [selectedPlan, setSelectedplan] = useRecoilState(selectedPlanState);
+  const selectedPlan = useRecoilValue(selectedPlanState);
 
   const [isRecorded, setIsRecorded] = useState(false);
   const [startTime, setStartTime] = useState(null);
@@ -24,6 +31,10 @@ function StudyBar({ toggleVideo, toggleAudio, leaveRoom, onClickplanBtn }) {
   const [hour, setHour] = useRecoilState(hourState);
   const [minute, setMinute] = useRecoilState(minuteState);
   const [second, setSecond] = useRecoilState(secondState);
+
+  const [totalHour, setTotalHour] = useRecoilState(totalHourState);
+  const [totalMinute, setTotalMinute] = useRecoilState(totalMinuteState);
+  const [totalSecond, setTotalSecond] = useRecoilState(totalSecondState);
 
   useEffect(() => {
     let timer;
@@ -39,6 +50,18 @@ function StudyBar({ toggleVideo, toggleAudio, leaveRoom, onClickplanBtn }) {
         }
         if (second < 59) {
           setSecond((prev) => prev + 1);
+        }
+
+        if (totalMinute > 59) {
+          setTotalHour((prev) => prev + 1);
+          setTotalMinute(0);
+        }
+        if (totalSecond === 59) {
+          setTotalMinute((prev) => prev + 1);
+          setTotalSecond(0);
+        }
+        if (totalSecond < 59) {
+          setTotalSecond((prev) => prev + 1);
         }
       }, 1000);
     } else {
