@@ -40,10 +40,20 @@ public class StudyRoomDto {
     private LocalDateTime endAt;
 
     @Builder
-    public StudyRoomDto(Long id, String name, Long userId, String sessionId) {
+    public StudyRoomDto(Long id, String name, Long userId, String sessionId, Boolean isPublic, String password) {
         this.id = id;
         this.name = name;
         this.userId = userId;
+        this.sessionId = sessionId;
+        this.isPublic = isPublic;
+        this.password = password;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
     }
 }

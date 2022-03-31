@@ -1,10 +1,9 @@
 package com.oddok.server.domain.studyroom.application;
 
-import com.oddok.server.common.errors.StudyRoomNotFoundException;
-import com.oddok.server.common.errors.UserNotFoundException;
-import com.oddok.server.common.errors.UserNotPublisherException;
+import com.oddok.server.common.errors.*;
 import com.oddok.server.domain.studyroom.api.request.UpdateStudyRoomRequest;
 import com.oddok.server.domain.studyroom.dao.StudyRoomRepository;
+import com.oddok.server.domain.studyroom.dto.CheckPasswordDto;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import com.oddok.server.domain.studyroom.dao.ParticipantRepository;
 import com.oddok.server.domain.studyroom.dto.IdClassForParticipantDto;
@@ -42,6 +41,8 @@ public class StudyRoomService {
                 .name(studyRoomDto.getName())
                 .user(user)
                 .sessionId(studyRoomDto.getSessionId())
+                .isPublic(studyRoomDto.getIsPublic())
+                .password(studyRoomDto.getPassword())
                 .build();
         return studyRoomRepository.save(studyRoom).getId();
     }
@@ -52,8 +53,9 @@ public class StudyRoomService {
         return studyRoomMapper.toDto(studyRoom);
     }
 
-    public StudyRoomDto updateStudyRoom(String id, Long userId, UpdateStudyRoomRequest updateStudyRoomRequest) {
-        StudyRoom studyRoom = studyRoomRepository.findById(Long.parseLong(id)).orElseThrow(() -> new StudyRoomNotFoundException(Long.parseLong(id)));
+
+    public StudyRoomDto updateStudyRoom(Long id, Long userId, UpdateStudyRoomRequest updateStudyRoomRequest) {
+        StudyRoom studyRoom = studyRoomRepository.findById(id).orElseThrow(() -> new StudyRoomNotFoundException(id));
 
         if (!checkPublisher(studyRoom.getUser(), userId)) throw new UserNotPublisherException();
 
@@ -74,7 +76,11 @@ public class StudyRoomService {
         );
 
         return studyRoomMapper.toDto(studyRoomRepository.save(studyRoom));
+    }
 
+    public StudyRoom findStudyRoom(Long id) {
+        return studyRoomRepository.findById(id)
+                .orElseThrow(() -> new StudyRoomNotFoundException(id));
     }
 
     public Boolean checkPublisher(User publisher, Long userId) {
@@ -92,5 +98,14 @@ public class StudyRoomService {
                 .user(user)
                 .build();
         participantRepository.save(participant);
+    }
+
+    public void checkPassword(CheckPasswordDto checkPasswordDto) {
+        StudyRoom studyRoom = findStudyRoom(checkPasswordDto.getStudyRoomId());
+
+        if(studyRoom.getIsPublic())
+            throw new WrongApproachException();
+        if(!studyRoom.getPassword().equals(checkPasswordDto.getPassword()))
+            throw new PasswordsNotMatchException();
     }
 }
