@@ -1,5 +1,7 @@
 package com.oddok.server.domain.studyroom.entity;
 
+import com.oddok.server.domain.studyroom.api.request.UpdateStudyRoomRequest;
+import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import com.oddok.server.domain.user.entity.User;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -85,31 +87,23 @@ public class StudyRoom {
         this.createAt = LocalDateTime.now();
     }
 
-    public StudyRoom update(String name, String category) {
-        this.name = name;
-        this.category = category;
-        return this;
-    }
+    public StudyRoom update(StudyRoomDto studyRoomDto) {
+        this.name = studyRoomDto.getName();
+        this.category = studyRoomDto.getCategory();
+        this.image = studyRoomDto.getImage();
+        this.isPublic = studyRoomDto.getIsPublic();
 
-    public StudyRoom update(String name, String category, String image, Boolean isPublic,
-                            String password, Integer targetTime, String rule, Boolean isMicOn,
-                            Boolean isCamOn, Integer limitUsers, LocalDateTime startAt, LocalDateTime endAt) {
-        this.name = name;
-        this.category = category;
-        this.image = image;
-        this.isPublic = isPublic;
-
-        if(!isPublic)
+        if(studyRoomDto.getIsPublic())
             this.password = null;
 
-        this.password = password;
-        this.targetTime = targetTime;
-        this.rule = rule;
-        this.isMicOn = isMicOn;
-        this.isCamOn = isCamOn;
-        this.limitUsers = limitUsers;
-        this.startAt = startAt;
-        this.endAt = endAt;
+        this.password = studyRoomDto.getPassword();
+        this.targetTime = studyRoomDto.getTargetTime();
+        this.rule = studyRoomDto.getRule();
+        this.isMicOn = studyRoomDto.getIsMicOn();
+        this.isCamOn = studyRoomDto.getIsCamOn();
+        this.limitUsers = studyRoomDto.getLimitUsers();
+        this.startAt = studyRoomDto.getStartAt();
+        this.endAt = studyRoomDto.getEndAt();
 
         return this;
     }

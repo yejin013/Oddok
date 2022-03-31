@@ -54,25 +54,13 @@ public class StudyRoomService {
     }
 
 
-    public StudyRoomDto updateStudyRoom(Long id, Long userId, UpdateStudyRoomRequest updateStudyRoomRequest) {
+    public StudyRoomDto updateStudyRoom(Long id, StudyRoomDto studyRoomDto) {
         StudyRoom studyRoom = studyRoomRepository.findById(id).orElseThrow(() -> new StudyRoomNotFoundException(id));
 
-        if (!checkPublisher(studyRoom.getUser(), userId)) throw new UserNotPublisherException();
+        if (!checkPublisher(studyRoom.getUser(), studyRoomDto.getUserId())) throw new UserNotPublisherException();
 
         studyRoom.update(
-                updateStudyRoomRequest.getName(),
-                updateStudyRoomRequest.getCategory() //.
-                /*
-                updateStudyRoomRequest.getHashtags();
-                updateStudyRoomRequest.getImage(),
-                updateStudyRoomRequest.getIsPublic(),
-                updateStudyRoomRequest.getPassword(),
-                updateStudyRoomRequest.getTargetTime(),
-                updateStudyRoomRequest.getRule(),
-                updateStudyRoomRequest.getLimitUsers(),
-                updateStudyRoomRequest.getStartAt(),
-                updateStudyRoomRequest.getEndAt()
-                 */
+                studyRoomDto
         );
 
         return studyRoomMapper.toDto(studyRoomRepository.save(studyRoom));

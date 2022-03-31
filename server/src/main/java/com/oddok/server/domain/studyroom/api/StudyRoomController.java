@@ -15,6 +15,7 @@ import com.oddok.server.domain.studyroom.dto.IdClassForParticipantDto;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import com.oddok.server.domain.studyroom.mapper.CreateStudyRoomRequestMapper;
 import com.oddok.server.domain.studyroom.mapper.GetStudyRoomResponseMapper;
+import com.oddok.server.domain.studyroom.mapper.UpdateStudyRoomRequestMapper;
 import com.oddok.server.domain.studyroom.mapper.UpdateStudyRoomResponseMapper;
 import com.oddok.server.domain.user.application.UserService;
 import org.mapstruct.factory.Mappers;
@@ -83,7 +84,12 @@ public class StudyRoomController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<UpdateStudyRoomResponse> update(@PathVariable Long id, @RequestHeader String userId, @RequestBody @Valid UpdateStudyRoomRequest updateStudyRoomRequest) {
-        StudyRoomDto studyRoomDto = studyRoomService.updateStudyRoom(id, Long.parseLong(userId), updateStudyRoomRequest);
+
+        UpdateStudyRoomRequestMapper requestMapper = Mappers.getMapper(UpdateStudyRoomRequestMapper.class);
+        StudyRoomDto requestDto = requestMapper.toDto(updateStudyRoomRequest);
+        requestDto.setUserId(Long.parseLong(userId));
+
+        StudyRoomDto studyRoomDto = studyRoomService.updateStudyRoom(id, requestDto);
 
         UpdateStudyRoomResponseMapper responseMapper = Mappers.getMapper(UpdateStudyRoomResponseMapper.class);
         UpdateStudyRoomResponse updateStudyRoomResponse = responseMapper.toResponse(studyRoomDto);
