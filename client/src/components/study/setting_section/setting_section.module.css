@@ -91,6 +91,10 @@
   padding: 10px;
 }
 
+.save_button button:disabled {
+  background-color: #212529;
+}
+
 .detail {
   display: none;
 }

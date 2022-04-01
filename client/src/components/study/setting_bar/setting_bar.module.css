@@ -50,6 +50,10 @@ button {
   border-radius: 4px;
 }
 
+.start_button:disabled {
+  background-color: #343a40;
+}
+
 .music {
   display: flex;
   align-items: center;

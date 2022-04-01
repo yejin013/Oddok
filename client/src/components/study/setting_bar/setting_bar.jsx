@@ -39,7 +39,7 @@ function SettingBar({ roomName, goToStudyRoom, stopOrStartVideo, stopOrStartAudi
           </button>
         </li>
         <li>
-          <button type="button" className={styles.start_button} onClick={goToStudyRoom}>
+          <button type="button" className={styles.start_button} onClick={goToStudyRoom} disabled={!roomName}>
             스터디 시작하기
           </button>
         </li>

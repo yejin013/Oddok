@@ -12,7 +12,7 @@ function SettingRoom({ goToStudyRoom }) {
   const [clickedSettingBtn, setClickedSettingBtn] = useState(false);
   const displayType = clickedSettingBtn === true ? styles.hide : styles.show;
 
-  const { name } = useRecoilValue(roomInfoState);
+  const [roomName, setRoomName] = useState("");
 
   useEffect(() => {
     const getVideoandAudio = async () => {
@@ -51,6 +51,8 @@ function SettingRoom({ goToStudyRoom }) {
       {clickedSettingBtn && (
         <SettingSection //
           clickSettingBtn={clickSettingBtn}
+          roomName={roomName}
+          setRoomName={setRoomName}
         />
       )}
       <section className={`${styles.video_component} ${displayType}`}>
@@ -58,7 +60,7 @@ function SettingRoom({ goToStudyRoom }) {
       </section>
       <div className={`${styles.bar} ${displayType}`}>
         <SettingBar //
-          roomName={name}
+          roomName={roomName}
           goToStudyRoom={goToStudyRoom}
           stopOrStartVideo={stopOrStartVideo}
           stopOrStartAudio={stopOrStartAudio}

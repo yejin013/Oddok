@@ -38,13 +38,8 @@ const userLimitOptions = [
  * 6. Fix: 드롭다운 선택시 단위 안보여짐 (시간, 명)
  * 7. textarea 글자수 제한
  */
-/**
- *
- * 8. 방정보 입력안했을때 방정보를 수정해주세요 뜨게. 설정하면 xxx n호실 이렇게
- * 9. 목표 클릭하고 스터디명 input 클릭시 정보 지워지게
- */
 
-function SettingSection({ clickSettingBtn }) {
+function SettingSection({ clickSettingBtn, roomName, setRoomName }) {
   // 수정 권한에 따라 disabled 처리
   const userInfo = useRecoilValue(userState);
   const [disabled, setDisabled] = useState(!userInfo.updateAllowed);
@@ -56,8 +51,9 @@ function SettingSection({ clickSettingBtn }) {
   const bgmlinkInputRef = useRef();
   const ruleInputRef = useRef();
 
-  // for validation
-  const [isCategoryValid, setIsCategoryValid] = useState(false);
+  // 필수 항목 입력 확인
+  const [isCategorySelected, setIsCategorySelected] = useState(false);
+  const [isUserLimitSelected, setIsUserLimitSelected] = useState(false);
 
   const [isClickedDetail, setIsClickedDetail] = useState(false);
 
@@ -66,17 +62,15 @@ function SettingSection({ clickSettingBtn }) {
   };
 
   const clickSaveBtn = () => {
-    // TODO 필수 항목 입력 안했을 경우 처리
-    let { name } = roomInfo;
+    let name = "";
     if (titleRef.current.value) {
-      console.log(titleRef.current.value);
       name = titleRef.current.value;
+      setRoomName(name);
     }
-    console.log(name);
     setRoomInfo({
       ...roomInfo,
       name,
-      hashtags: hashtag,
+      hashtags: Array.from(hashtag).join(""), // hashtag set to array
       isPublic: !passwordInputRef.current.value,
       password: passwordInputRef.current.value,
       bgmlink: bgmlinkInputRef.current.value,
@@ -86,8 +80,9 @@ function SettingSection({ clickSettingBtn }) {
   };
 
   const categoryHandler = (e) => {
-    setIsCategoryValid(true);
-    setRoomInfo({ ...roomInfo, name: `${e.target.value} n호실`, category: e.target.value });
+    setIsCategorySelected(true);
+    setRoomInfo({ ...roomInfo, category: e.target.value });
+    setRoomName(`${e.target.value} n호실`);
   };
 
   const hashtagHandler = (e) => {
@@ -121,6 +116,7 @@ function SettingSection({ clickSettingBtn }) {
   };
 
   const userLimitHandler = (value) => {
+    setIsUserLimitSelected(true);
     setRoomInfo({ ...roomInfo, userLimit: value });
   };
 
@@ -139,11 +135,7 @@ function SettingSection({ clickSettingBtn }) {
       </div>
       <div className={styles.roominfo_item}>
         <p className={styles.label}>스터디 명</p>
-        <Input
-          placeholder={roomInfo.name || "목표를 설정하거나, 직접 입력해주세요"}
-          ref={titleRef}
-          disabled={disabled}
-        />
+        <Input placeholder={roomName || "목표를 설정하거나, 직접 입력해주세요"} ref={titleRef} disabled={disabled} />
       </div>
       <div className={styles.box}>
         <div className={styles.roominfo_item}>
@@ -194,7 +186,7 @@ function SettingSection({ clickSettingBtn }) {
       </div>
       {userInfo.updateAllowed && (
         <div className={styles.save_button}>
-          <button type="button" onClick={clickSaveBtn}>
+          <button type="button" onClick={clickSaveBtn} disabled={!(isCategorySelected && isUserLimitSelected)}>
             설정완료
           </button>
         </div>
