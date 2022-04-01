@@ -8,7 +8,10 @@ import {
   totalHourState,
   totalMinuteState,
   totalSecondState,
+  startTimeState,
+  endTimeState,
 } from "../../../recoil/timer_state";
+import { saveTime } from "../../../api/studyRoomAPI";
 import styles from "./study_bar.module.css";
 import { ReactComponent as Setting } from "../../../assets/icons/setting.svg";
 import { ReactComponent as Music } from "../../../assets/icons/music.svg";
@@ -22,11 +25,11 @@ import { ReactComponent as Member } from "../../../assets/icons/person.svg";
 import { ReactComponent as Door } from "../../../assets/icons/door.svg";
 
 function StudyBar({ toggleVideo, toggleAudio, leaveRoom, onClickplanBtn }) {
-  const selectedPlan = useRecoilValue(selectedPlanState);
-
   const [isRecorded, setIsRecorded] = useState(false);
-  const [startTime, setStartTime] = useState(null);
-  const [endTime, setEndTime] = useState(null);
+
+  const selectedPlan = useRecoilValue(selectedPlanState);
+  const [startTime, setStartTime] = useRecoilState(startTimeState);
+  const [endTime, setEndTime] = useRecoilState(endTimeState);
 
   const [hour, setHour] = useRecoilState(hourState);
   const [minute, setMinute] = useRecoilState(minuteState);
@@ -36,10 +39,18 @@ function StudyBar({ toggleVideo, toggleAudio, leaveRoom, onClickplanBtn }) {
   const [totalMinute, setTotalMinute] = useRecoilState(totalMinuteState);
   const [totalSecond, setTotalSecond] = useRecoilState(totalSecondState);
 
+  const timeInfo = {
+    userId: 1, // 나중에 userId로 바꾸기
+    subject: selectedPlan.name,
+    startTime,
+    endTime,
+  };
+
   useEffect(() => {
     let timer;
     if (isRecorded) {
       timer = setInterval(() => {
+        /* *목표별 공부시간* */
         if (minute > 59) {
           setHour((prev) => prev + 1);
           setMinute(0);
@@ -51,7 +62,7 @@ function StudyBar({ toggleVideo, toggleAudio, leaveRoom, onClickplanBtn }) {
         if (second < 59) {
           setSecond((prev) => prev + 1);
         }
-
+        /* *전체 공부시간* */
         if (totalMinute > 59) {
           setTotalHour((prev) => prev + 1);
           setTotalMinute(0);
@@ -80,7 +91,10 @@ function StudyBar({ toggleVideo, toggleAudio, leaveRoom, onClickplanBtn }) {
     const time = new Date();
     setEndTime(time);
     setIsRecorded((prev) => !prev);
-    /* server에 selectedPlan, startTime, endTime, studyRooomId post */
+    /* server에 timeInfo post */
+    saveTime(timeInfo)
+      .then((res) => console.log("시간저장 완료⏱️"))
+      .catch((error) => console.log(`post time-record error!: ${error}`));
   };
 
   return (

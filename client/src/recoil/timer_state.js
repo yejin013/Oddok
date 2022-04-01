@@ -29,3 +29,13 @@ export const totalSecondState = atom({
   key: "totalSecondState",
   default: 0,
 });
+
+export const startTimeState = atom({
+  key: "startTimeState",
+  default: null,
+});
+
+export const endTimeState = atom({
+  key: "endTimeState",
+  default: null,
+});
