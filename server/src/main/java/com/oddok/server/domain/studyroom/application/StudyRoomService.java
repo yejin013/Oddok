@@ -81,8 +81,10 @@ public class StudyRoomService {
 
     public void createParticipant(Long id, Long userId) {
         User user = findUser(userId);
+        StudyRoom studyRoom = findStudyRoom(id);
+
         Participant participant = Participant.builder()
-                .studyRoomId(id)
+                .studyRoom(studyRoom)
                 .user(user)
                 .build();
         participantRepository.save(participant);

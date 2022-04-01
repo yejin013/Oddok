@@ -13,10 +13,13 @@ public class TimeRecordDto {
     private String subject;
 
     @Builder
-    public TimeRecordDto(Long userId, LocalDateTime startTime, LocalDateTime endTime, String subject) {
-        this.userId = userId;
+    public TimeRecordDto(LocalDateTime startTime, LocalDateTime endTime, String subject) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.subject = subject;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }
