@@ -114,11 +114,7 @@ public class StudyRoomController {
         TokenResponse tokenResponse = TokenResponse.builder().token(token).build();
 
         // 3. Participant 정보 저장
-        IdClassForParticipantDto requestDto = IdClassForParticipantDto.builder()
-                .studyRoomId(id)
-                .userId(userId)
-                .build();
-        studyRoomService.createParticipant(requestDto);
+        studyRoomService.createParticipant(id, Long.parseLong(userId));
 
         return ResponseEntity.ok(tokenResponse);
     }
@@ -147,11 +143,6 @@ public class StudyRoomController {
      */
     @PostMapping("/check/{id}")
     public void checkPassword(@PathVariable Long id, @RequestBody @Valid CheckPasswordRequest checkPasswordRequest) {
-        CheckPasswordDto requestDto = CheckPasswordDto.builder()
-                .studyRoomId(id)
-                .password(checkPasswordRequest.getPassword())
-                .build();
-
-        studyRoomService.checkPassword(requestDto);
+        studyRoomService.checkPassword(id, checkPasswordRequest.getPassword());
     }
 }
