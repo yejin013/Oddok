@@ -13,10 +13,7 @@ import com.oddok.server.domain.studyroom.application.StudyRoomService;
 import com.oddok.server.domain.studyroom.dto.CheckPasswordDto;
 import com.oddok.server.domain.studyroom.dto.IdClassForParticipantDto;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
-import com.oddok.server.domain.studyroom.mapper.CreateStudyRoomRequestMapper;
-import com.oddok.server.domain.studyroom.mapper.GetStudyRoomResponseMapper;
-import com.oddok.server.domain.studyroom.mapper.UpdateStudyRoomRequestMapper;
-import com.oddok.server.domain.studyroom.mapper.UpdateStudyRoomResponseMapper;
+import com.oddok.server.domain.studyroom.mapper.*;
 import com.oddok.server.domain.user.application.UserService;
 import org.mapstruct.factory.Mappers;
 import org.springframework.http.ResponseEntity;
@@ -37,11 +34,17 @@ public class StudyRoomController {
     private final StudyRoomHashtagService studyRoomHashtagService;
     private final UserService userService;
 
+    private final StudyRoomRequestMapper requestMapper;
+    private final StudyRoomResponseMapper responseMapper;
+
     public StudyRoomController(SessionService sessionService, StudyRoomService studyRoomService, StudyRoomHashtagService studyRoomHashtagService, UserService userService) {
         this.sessionService = sessionService;
         this.studyRoomService = studyRoomService;
         this.studyRoomHashtagService = studyRoomHashtagService;
         this.userService = userService;
+
+        requestMapper = Mappers.getMapper(StudyRoomRequestMapper.class);
+        responseMapper = Mappers.getMapper(StudyRoomResponseMapper.class);
     }
 
     /**
@@ -62,7 +65,6 @@ public class StudyRoomController {
         // 1. OpenVidu 에 새로운 세션을 생성
         String sessionId = sessionService.createSession();
 
-        CreateStudyRoomRequestMapper requestMapper = Mappers.getMapper(CreateStudyRoomRequestMapper.class);
         StudyRoomDto requestDto = requestMapper.toDto(createStudyRoomRequest);
         requestDto.setUserId(Long.parseLong(userId));
         requestDto.setSessionId(sessionId);
@@ -85,14 +87,12 @@ public class StudyRoomController {
     @PutMapping("/{id}")
     public ResponseEntity<UpdateStudyRoomResponse> update(@PathVariable Long id, @RequestHeader String userId, @RequestBody @Valid UpdateStudyRoomRequest updateStudyRoomRequest) {
 
-        UpdateStudyRoomRequestMapper requestMapper = Mappers.getMapper(UpdateStudyRoomRequestMapper.class);
         StudyRoomDto requestDto = requestMapper.toDto(updateStudyRoomRequest);
         requestDto.setUserId(Long.parseLong(userId));
 
         StudyRoomDto studyRoomDto = studyRoomService.updateStudyRoom(id, requestDto);
 
-        UpdateStudyRoomResponseMapper responseMapper = Mappers.getMapper(UpdateStudyRoomResponseMapper.class);
-        UpdateStudyRoomResponse updateStudyRoomResponse = responseMapper.toResponse(studyRoomDto);
+        UpdateStudyRoomResponse updateStudyRoomResponse = responseMapper.toUpdateStudyRoomResponse(studyRoomDto);
 
         return ResponseEntity.ok(updateStudyRoomResponse);
     }
@@ -134,8 +134,7 @@ public class StudyRoomController {
 
         List<String> studyRoomHashtags = studyRoomHashtagService.loadStudyRoomHashtag(studyRoomDto.getId());
 
-        GetStudyRoomResponseMapper responseMapper = Mappers.getMapper(GetStudyRoomResponseMapper.class);
-        GetStudyRoomResponse getStudyRoomResponse = responseMapper.toResponse(studyRoomDto);
+        GetStudyRoomResponse getStudyRoomResponse = responseMapper.toGetStudyRoomResponse(studyRoomDto);
         getStudyRoomResponse.setHashtags(studyRoomHashtags);
 
         return ResponseEntity.ok(getStudyRoomResponse);
