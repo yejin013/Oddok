@@ -14,8 +14,6 @@ public class UpdateStudyRoomResponse {
 
     private Long userId;
 
-    private String sessionId;
-
     private String image;
 
     private Boolean isPublic;

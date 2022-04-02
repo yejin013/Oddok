@@ -54,25 +54,13 @@ public class StudyRoomService {
     }
 
 
-    public StudyRoomDto updateStudyRoom(Long id, Long userId, UpdateStudyRoomRequest updateStudyRoomRequest) {
+    public StudyRoomDto updateStudyRoom(Long id, StudyRoomDto studyRoomDto) {
         StudyRoom studyRoom = studyRoomRepository.findById(id).orElseThrow(() -> new StudyRoomNotFoundException(id));
 
-        if (!checkPublisher(studyRoom.getUser(), userId)) throw new UserNotPublisherException();
+        if (!checkPublisher(studyRoom.getUser(), studyRoomDto.getUserId())) throw new UserNotPublisherException();
 
         studyRoom.update(
-                updateStudyRoomRequest.getName(),
-                updateStudyRoomRequest.getCategory() //.
-                /*
-                updateStudyRoomRequest.getHashtags();
-                updateStudyRoomRequest.getImage(),
-                updateStudyRoomRequest.getIsPublic(),
-                updateStudyRoomRequest.getPassword(),
-                updateStudyRoomRequest.getTargetTime(),
-                updateStudyRoomRequest.getRule(),
-                updateStudyRoomRequest.getLimitUsers(),
-                updateStudyRoomRequest.getStartAt(),
-                updateStudyRoomRequest.getEndAt()
-                 */
+                studyRoomDto
         );
 
         return studyRoomMapper.toDto(studyRoomRepository.save(studyRoom));
@@ -91,21 +79,23 @@ public class StudyRoomService {
         return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
     }
 
-    public void createParticipant(IdClassForParticipantDto idClassForParticipantDto) {
-        User user = findUser(Long.parseLong(idClassForParticipantDto.getUserId()));
+    public void createParticipant(Long id, Long userId) {
+        User user = findUser(userId);
+        StudyRoom studyRoom = findStudyRoom(id);
+
         Participant participant = Participant.builder()
-                .studyRoomId(idClassForParticipantDto.getStudyRoomId())
+                .studyRoom(studyRoom)
                 .user(user)
                 .build();
         participantRepository.save(participant);
     }
 
-    public void checkPassword(CheckPasswordDto checkPasswordDto) {
-        StudyRoom studyRoom = findStudyRoom(checkPasswordDto.getStudyRoomId());
+    public void checkPassword(Long id, String password) {
+        StudyRoom studyRoom = findStudyRoom(id);
 
         if(studyRoom.getIsPublic())
             throw new WrongApproachException();
-        if(!studyRoom.getPassword().equals(checkPasswordDto.getPassword()))
+        if(!studyRoom.getPassword().equals(password))
             throw new PasswordsNotMatchException();
     }
 }

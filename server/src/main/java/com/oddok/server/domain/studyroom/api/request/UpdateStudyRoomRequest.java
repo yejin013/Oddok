@@ -21,35 +21,26 @@ public class UpdateStudyRoomRequest {
     @NotNull
     private String hashtags;
 
-    @NotNull
     private String image;
-
+*/
     @NotNull
     private Boolean isPublic;
 
-    @NotNull
     private String password;
 
-    @NotNull
+    /*
     private Integer targetTime;
 
-    @NotNull
     private String rule;
 
-    @NotNull
     private Boolean isMicOn;
 
-    @NotNull
     private Boolean isCamOn;
 
-    @NotNull
     private Integer limitUsers;
 
-    @NotNull
     private LocalDateTime startAt;
 
-    @NotNull
     private LocalDateTime endAt;
-
      */
 }

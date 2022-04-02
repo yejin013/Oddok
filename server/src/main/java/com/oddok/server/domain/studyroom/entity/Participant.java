@@ -16,10 +16,11 @@ public class Participant {
     @GeneratedValue
     Long id;
 
-    @Column(name = "study_room_id")
-    private Long studyRoomId;
+    @ManyToOne
+    @JoinColumn(name = "study_room_id")
+    private StudyRoom studyRoom;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
@@ -27,8 +28,8 @@ public class Participant {
     private LocalDateTime joinTime;
 
     @Builder
-    public Participant (Long studyRoomId, User user) {
-        this.studyRoomId = studyRoomId;
+    public Participant (StudyRoom studyRoom, User user) {
+        this.studyRoom = studyRoom;
         this.user = user;
         this.joinTime = LocalDateTime.now();
     }

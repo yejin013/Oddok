@@ -1,5 +1,6 @@
 package com.oddok.server.domain.timerecord.entity;
 
+import com.oddok.server.domain.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,9 @@ public class TimeRecord {
     @GeneratedValue
     Long id;
 
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(name = "start_time")
     private LocalDateTime startTime;
@@ -27,10 +30,14 @@ public class TimeRecord {
     private String subject;
 
     @Builder
-    public TimeRecord(Long userId, LocalDateTime startTime, LocalDateTime endTime, String subject) {
-        this.userId = userId;
+    public TimeRecord(User user, LocalDateTime startTime, LocalDateTime endTime, String subject) {
+        this.user = user;
         this.startTime = startTime;
         this.endTime = endTime;
         this.subject = subject;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
