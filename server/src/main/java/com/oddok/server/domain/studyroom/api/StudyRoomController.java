@@ -10,8 +10,6 @@ import com.oddok.server.domain.studyroom.api.response.UpdateStudyRoomResponse;
 import com.oddok.server.domain.studyroom.application.SessionService;
 import com.oddok.server.domain.studyroom.application.StudyRoomHashtagService;
 import com.oddok.server.domain.studyroom.application.StudyRoomService;
-import com.oddok.server.domain.studyroom.dto.CheckPasswordDto;
-import com.oddok.server.domain.studyroom.dto.IdClassForParticipantDto;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import com.oddok.server.domain.studyroom.mapper.*;
 import com.oddok.server.domain.user.application.UserService;
@@ -34,8 +32,7 @@ public class StudyRoomController {
     private final StudyRoomHashtagService studyRoomHashtagService;
     private final UserService userService;
 
-    private final StudyRoomRequestMapper requestMapper;
-    private final StudyRoomResponseMapper responseMapper;
+    private final StudyRoomDtoMapper dtoMapper;
 
     public StudyRoomController(SessionService sessionService, StudyRoomService studyRoomService, StudyRoomHashtagService studyRoomHashtagService, UserService userService) {
         this.sessionService = sessionService;
@@ -43,8 +40,7 @@ public class StudyRoomController {
         this.studyRoomHashtagService = studyRoomHashtagService;
         this.userService = userService;
 
-        requestMapper = Mappers.getMapper(StudyRoomRequestMapper.class);
-        responseMapper = Mappers.getMapper(StudyRoomResponseMapper.class);
+        dtoMapper = Mappers.getMapper(StudyRoomDtoMapper.class);
     }
 
     /**
@@ -65,7 +61,7 @@ public class StudyRoomController {
         // 1. OpenVidu 에 새로운 세션을 생성
         String sessionId = sessionService.createSession();
 
-        StudyRoomDto requestDto = requestMapper.toDto(createStudyRoomRequest);
+        StudyRoomDto requestDto = dtoMapper.fromCreateRequest(createStudyRoomRequest);
         requestDto.setUserId(Long.parseLong(userId));
         requestDto.setSessionId(sessionId);
 
@@ -82,17 +78,18 @@ public class StudyRoomController {
 
     /**
      * [PUT] /study-room : 방 정보 수정 API
-     * @return
+     *
+     * @return 수정된 방 정보
      */
     @PutMapping("/{id}")
     public ResponseEntity<UpdateStudyRoomResponse> update(@PathVariable Long id, @RequestHeader String userId, @RequestBody @Valid UpdateStudyRoomRequest updateStudyRoomRequest) {
 
-        StudyRoomDto requestDto = requestMapper.toDto(updateStudyRoomRequest);
+        StudyRoomDto requestDto = dtoMapper.fromUpdateRequest(updateStudyRoomRequest);
         requestDto.setUserId(Long.parseLong(userId));
 
         StudyRoomDto studyRoomDto = studyRoomService.updateStudyRoom(id, requestDto);
 
-        UpdateStudyRoomResponse updateStudyRoomResponse = responseMapper.toUpdateStudyRoomResponse(studyRoomDto);
+        UpdateStudyRoomResponse updateStudyRoomResponse = dtoMapper.toUpdateResponse(studyRoomDto);
 
         return ResponseEntity.ok(updateStudyRoomResponse);
     }
@@ -121,7 +118,8 @@ public class StudyRoomController {
 
     /**
      * [GET] /study-room/:id : 방 상세 조회 API
-     * @param id
+     *
+     * @param id : 방 식별자
      * @return GetStudyRoomResponse : 방 정보
      */
     @GetMapping(value = "/{id}")
@@ -130,16 +128,17 @@ public class StudyRoomController {
 
         List<String> studyRoomHashtags = studyRoomHashtagService.loadStudyRoomHashtag(studyRoomDto.getId());
 
-        GetStudyRoomResponse getStudyRoomResponse = responseMapper.toGetStudyRoomResponse(studyRoomDto);
+        GetStudyRoomResponse getStudyRoomResponse = dtoMapper.toGetResponse(studyRoomDto);
         getStudyRoomResponse.setHashtags(studyRoomHashtags);
 
         return ResponseEntity.ok(getStudyRoomResponse);
     }
 
-     /**
+    /**
      * [POST] /check/{study-room-id} : 스터디방 입장 비밀번호 확인
-     * @param id
-     * @param checkPasswordRequest : 비밀번
+     *
+     * @param id                   : 방 식별자
+     * @param checkPasswordRequest : 비밀번호
      */
     @PostMapping("/check/{id}")
     public void checkPassword(@PathVariable Long id, @RequestBody @Valid CheckPasswordRequest checkPasswordRequest) {
