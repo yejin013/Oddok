@@ -7,13 +7,14 @@ import com.oddok.server.domain.studyroom.dao.StudyRoomRepository;
 import com.oddok.server.domain.studyroom.entity.Hashtag;
 import com.oddok.server.domain.studyroom.entity.StudyRoom;
 import com.oddok.server.domain.studyroom.entity.StudyRoomHashtag;
-import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class StudyRoomHashtagService {
 
     private final StudyRoomHashtagRepository studyRoomHashtagRepository;
@@ -30,6 +31,7 @@ public class StudyRoomHashtagService {
      * 스터디룸을 생성하면 해시태그와 스터디룸을 매핑하여 저장합니다.
      * 새로운 이름의 해시태그라면 생성해주어야합니다.
      */
+    @Transactional
     public void createStudyRoom(Long studyRoomId, List<String> hashtags) {
         StudyRoom studyRoom = findStudyRoom(studyRoomId);
         for (String name : hashtags) {
