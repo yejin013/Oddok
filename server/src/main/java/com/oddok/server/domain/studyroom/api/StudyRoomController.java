@@ -60,7 +60,6 @@ public class StudyRoomController {
     public ResponseEntity<CreateStudyRoomResponse> create(@RequestHeader String userId, @RequestBody @Valid CreateStudyRoomRequest createStudyRoomRequest) throws OpenViduJavaClientException, OpenViduHttpException {
         // 1. OpenVidu 에 새로운 세션을 생성
         String sessionId = sessionService.createSession();
-
         StudyRoomDto requestDto = dtoMapper.fromCreateRequest(createStudyRoomRequest, userId, sessionId);
 
         // 2. StudyRoom 생성
@@ -69,9 +68,7 @@ public class StudyRoomController {
         // 3. hashtag 저장
         List<String> hashtags = createStudyRoomRequest.getHashtags();
         studyRoomHashtagService.createStudyRoom(studyRoomId, hashtags);
-
-        CreateStudyRoomResponse createStudyRoomResponse = CreateStudyRoomResponse.builder().id(studyRoomId).build();
-        return ResponseEntity.ok(createStudyRoomResponse);
+        return ResponseEntity.ok(new CreateStudyRoomResponse(studyRoomId));
     }
 
     /**
@@ -81,13 +78,9 @@ public class StudyRoomController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<UpdateStudyRoomResponse> update(@PathVariable Long id, @RequestHeader String userId, @RequestBody @Valid UpdateStudyRoomRequest updateStudyRoomRequest) {
-
         StudyRoomDto requestDto = dtoMapper.fromUpdateRequest(updateStudyRoomRequest);
         StudyRoomDto studyRoomDto = studyRoomService.updateStudyRoom(id, requestDto);
-
-        UpdateStudyRoomResponse updateStudyRoomResponse = dtoMapper.toUpdateResponse(studyRoomDto);
-
-        return ResponseEntity.ok(updateStudyRoomResponse);
+        return ResponseEntity.ok(dtoMapper.toUpdateResponse(studyRoomDto));
     }
 
     /**
@@ -104,7 +97,7 @@ public class StudyRoomController {
 
         // 2. OpenVidu Connection 생성 및 토큰 가져오기
         String token = sessionService.getToken(studyRoomDto.getSessionId());
-        TokenResponse tokenResponse = TokenResponse.builder().token(token).build();
+        TokenResponse tokenResponse = new TokenResponse(token);
 
         // 3. Participant 정보 저장
         studyRoomService.createParticipant(id, Long.parseLong(userId));
@@ -121,8 +114,7 @@ public class StudyRoomController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<GetStudyRoomResponse> get(@PathVariable Long id) {
         StudyRoomDto studyRoomDto = studyRoomService.loadStudyRoom(id);
-        GetStudyRoomResponse getStudyRoomResponse = dtoMapper.toGetResponse(studyRoomDto);
-        return ResponseEntity.ok(getStudyRoomResponse);
+        return ResponseEntity.ok(dtoMapper.toGetResponse(studyRoomDto));
     }
 
     /**
