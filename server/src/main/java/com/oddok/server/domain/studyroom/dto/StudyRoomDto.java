@@ -1,9 +1,9 @@
 package com.oddok.server.domain.studyroom.dto;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 public class StudyRoomDto {
@@ -39,21 +39,46 @@ public class StudyRoomDto {
 
     private LocalDateTime endAt;
 
+    private List<String> hashtags;
+
     @Builder
-    public StudyRoomDto(Long id, String name, Long userId, String sessionId, Boolean isPublic, String password) {
+    public StudyRoomDto(Long id, String name, String category, Long userId, String sessionId, String image, Boolean isPublic, String password, Integer targetTime, String rule, Boolean isMicOn, Boolean isCamOn, Integer currentUsers, Integer limitUsers, LocalDateTime startAt, LocalDateTime endAt, List<String> hashtags) {
         this.id = id;
         this.name = name;
+        this.category = category;
         this.userId = userId;
         this.sessionId = sessionId;
+        this.image = image;
         this.isPublic = isPublic;
         this.password = password;
+        this.targetTime = targetTime;
+        this.rule = rule;
+        this.isMicOn = isMicOn;
+        this.isCamOn = isCamOn;
+        this.currentUsers = currentUsers;
+        this.limitUsers = limitUsers;
+        this.startAt = startAt;
+        this.endAt = endAt;
+        this.hashtags = hashtags;
     }
 
-    public void setUserId(Long userId) {
+    @Builder
+    public StudyRoomDto(String name, String category, Long userId, String sessionId, String image, Boolean isPublic, String password, Integer targetTime, String rule, Boolean isMicOn, Boolean isCamOn, Integer currentUsers, Integer limitUsers, LocalDateTime startAt, LocalDateTime endAt, List<String> hashtags) {
+        this.name = name;
+        this.category = category;
         this.userId = userId;
-    }
-
-    public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
+        this.image = image;
+        this.isPublic = isPublic;
+        this.password = password;
+        this.targetTime = targetTime;
+        this.rule = rule;
+        this.isMicOn = isMicOn;
+        this.isCamOn = isCamOn;
+        this.currentUsers = currentUsers;
+        this.limitUsers = limitUsers;
+        this.startAt = startAt;
+        this.endAt = endAt;
+        this.hashtags = hashtags;
     }
 }

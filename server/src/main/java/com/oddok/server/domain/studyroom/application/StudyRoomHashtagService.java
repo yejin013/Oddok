@@ -35,27 +35,14 @@ public class StudyRoomHashtagService {
     public void createStudyRoom(Long studyRoomId, List<String> hashtags) {
         StudyRoom studyRoom = findStudyRoom(studyRoomId);
         for (String name : hashtags) {
-            Hashtag hashtag = hashtagRepository.findByName(name).orElseGet(() -> createHashtag(name));
-            mapStudyRoomHashtag(studyRoom, hashtag);
+            Hashtag hashtag = hashtagRepository.findByName(name).orElseGet(() -> hashtagRepository.save(new Hashtag(name)));
+            studyRoom.addHastag(hashtag);
         }
     }
 
     private StudyRoom findStudyRoom(Long id) {
         return studyRoomRepository.findById(id)
                 .orElseThrow(() -> new StudyRoomNotFoundException(id));
-    }
-
-    private void mapStudyRoomHashtag(StudyRoom studyRoom, Hashtag hashtag) {
-        StudyRoomHashtag studyRoomHashtag = StudyRoomHashtag.builder()
-                .studyRoom(studyRoom)
-                .hashtag(hashtag)
-                .build();
-        studyRoomHashtagRepository.save(studyRoomHashtag);
-    }
-
-    private Hashtag createHashtag(String name) {
-        Hashtag hashtag = Hashtag.builder().name(name).build();
-        return hashtagRepository.save(hashtag);
     }
 
     public List<String> loadStudyRoomHashtag(Long id) {

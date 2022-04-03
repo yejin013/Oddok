@@ -61,9 +61,7 @@ public class StudyRoomController {
         // 1. OpenVidu 에 새로운 세션을 생성
         String sessionId = sessionService.createSession();
 
-        StudyRoomDto requestDto = dtoMapper.fromCreateRequest(createStudyRoomRequest);
-        requestDto.setUserId(Long.parseLong(userId));
-        requestDto.setSessionId(sessionId);
+        StudyRoomDto requestDto = dtoMapper.fromCreateRequest(createStudyRoomRequest, userId, sessionId);
 
         // 2. StudyRoom 생성
         Long studyRoomId = studyRoomService.createStudyRoom(requestDto);
@@ -85,8 +83,6 @@ public class StudyRoomController {
     public ResponseEntity<UpdateStudyRoomResponse> update(@PathVariable Long id, @RequestHeader String userId, @RequestBody @Valid UpdateStudyRoomRequest updateStudyRoomRequest) {
 
         StudyRoomDto requestDto = dtoMapper.fromUpdateRequest(updateStudyRoomRequest);
-        requestDto.setUserId(Long.parseLong(userId));
-
         StudyRoomDto studyRoomDto = studyRoomService.updateStudyRoom(id, requestDto);
 
         UpdateStudyRoomResponse updateStudyRoomResponse = dtoMapper.toUpdateResponse(studyRoomDto);
@@ -125,12 +121,7 @@ public class StudyRoomController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<GetStudyRoomResponse> get(@PathVariable Long id) {
         StudyRoomDto studyRoomDto = studyRoomService.loadStudyRoom(id);
-
-        List<String> studyRoomHashtags = studyRoomHashtagService.loadStudyRoomHashtag(studyRoomDto.getId());
-
         GetStudyRoomResponse getStudyRoomResponse = dtoMapper.toGetResponse(studyRoomDto);
-        getStudyRoomResponse.setHashtags(studyRoomHashtags);
-
         return ResponseEntity.ok(getStudyRoomResponse);
     }
 
