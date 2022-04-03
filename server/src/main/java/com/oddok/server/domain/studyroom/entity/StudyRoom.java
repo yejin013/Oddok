@@ -110,7 +110,6 @@ public class StudyRoom {
         this.limitUsers = studyRoomDto.getLimitUsers();
         this.startAt = studyRoomDto.getStartAt();
         this.endAt = studyRoomDto.getEndAt();
-
         return this;
     }
 

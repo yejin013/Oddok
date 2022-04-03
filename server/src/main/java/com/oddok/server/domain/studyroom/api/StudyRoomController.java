@@ -8,11 +8,11 @@ import com.oddok.server.domain.studyroom.api.response.GetStudyRoomResponse;
 import com.oddok.server.domain.studyroom.api.response.TokenResponse;
 import com.oddok.server.domain.studyroom.api.response.UpdateStudyRoomResponse;
 import com.oddok.server.domain.studyroom.application.SessionService;
-import com.oddok.server.domain.studyroom.application.StudyRoomHashtagService;
 import com.oddok.server.domain.studyroom.application.StudyRoomService;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import com.oddok.server.domain.studyroom.mapper.*;
 import com.oddok.server.domain.user.application.UserService;
+import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,27 +21,18 @@ import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/study-room")
+@RequiredArgsConstructor
 public class StudyRoomController {
 
     private final SessionService sessionService;
     private final StudyRoomService studyRoomService;
-    private final StudyRoomHashtagService studyRoomHashtagService;
     private final UserService userService;
 
-    private final StudyRoomDtoMapper dtoMapper;
+    private final StudyRoomDtoMapper dtoMapper = Mappers.getMapper(StudyRoomDtoMapper.class);
 
-    public StudyRoomController(SessionService sessionService, StudyRoomService studyRoomService, StudyRoomHashtagService studyRoomHashtagService, UserService userService) {
-        this.sessionService = sessionService;
-        this.studyRoomService = studyRoomService;
-        this.studyRoomHashtagService = studyRoomHashtagService;
-        this.userService = userService;
-
-        dtoMapper = Mappers.getMapper(StudyRoomDtoMapper.class);
-    }
 
     /**
      * [GET] /study-room/user-create : 회원 생성 이후 삭제할 API
@@ -64,10 +55,6 @@ public class StudyRoomController {
 
         // 2. StudyRoom 생성
         Long studyRoomId = studyRoomService.createStudyRoom(requestDto);
-
-        // 3. hashtag 저장
-        List<String> hashtags = createStudyRoomRequest.getHashtags();
-        studyRoomHashtagService.createStudyRoom(studyRoomId, hashtags);
         return ResponseEntity.ok(new CreateStudyRoomResponse(studyRoomId));
     }
 
@@ -78,7 +65,7 @@ public class StudyRoomController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<UpdateStudyRoomResponse> update(@PathVariable Long id, @RequestHeader String userId, @RequestBody @Valid UpdateStudyRoomRequest updateStudyRoomRequest) {
-        StudyRoomDto requestDto = dtoMapper.fromUpdateRequest(updateStudyRoomRequest);
+        StudyRoomDto requestDto = dtoMapper.fromUpdateRequest(updateStudyRoomRequest,Long.parseLong(userId));
         StudyRoomDto studyRoomDto = studyRoomService.updateStudyRoom(id, requestDto);
         return ResponseEntity.ok(dtoMapper.toUpdateResponse(studyRoomDto));
     }
