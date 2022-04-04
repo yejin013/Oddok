@@ -110,6 +110,6 @@ public class StudyRoomService {
     public void deleteStudyRoom(Long id, Long userId) {
         StudyRoom studyRoom = findStudyRoom(id);
         checkPublisher(studyRoom.getUser(), userId);
-        studyRoomRepository.deleteById(id);
+        studyRoomRepository.delete(studyRoom);
     }
 }
