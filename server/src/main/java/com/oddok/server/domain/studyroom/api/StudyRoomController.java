@@ -114,4 +114,10 @@ public class StudyRoomController {
     public void checkPassword(@PathVariable Long id, @RequestBody @Valid CheckPasswordRequest checkPasswordRequest) {
         studyRoomService.checkPassword(id, checkPasswordRequest.getPassword());
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable Long id, @RequestHeader String userId) {
+        studyRoomService.deleteStudyRoom(id, Long.parseLong(userId));
+        return ResponseEntity.noContent().build();
+    }
 }

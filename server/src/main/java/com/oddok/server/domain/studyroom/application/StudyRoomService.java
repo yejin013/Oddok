@@ -42,13 +42,11 @@ public class StudyRoomService {
         return studyRoom.getId();
     }
 
-
     public StudyRoomDto loadStudyRoom(Long id) {
         StudyRoom studyRoom = studyRoomRepository.findById(id)
                 .orElseThrow(() -> new StudyRoomNotFoundException(id));
         return studyRoomMapper.toDto(studyRoom);
     }
-
 
     /**
      * 스터디룸을 수정합니다.
@@ -64,7 +62,6 @@ public class StudyRoomService {
         mapStudyRoomAndHashtags(studyRoom, studyRoomDto.getHashtags());
         return studyRoomMapper.toDto(studyRoom.update(studyRoomDto));
     }
-
 
     public void createParticipant(Long id, Long userId) {
         User user = findUser(userId);
@@ -107,5 +104,12 @@ public class StudyRoomService {
 
     private User findUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+    }
+
+    @Transactional
+    public void deleteStudyRoom(Long id, Long userId) {
+        StudyRoom studyRoom = findStudyRoom(id);
+        checkPublisher(studyRoom.getUser(), userId);
+        studyRoomRepository.deleteById(id);
     }
 }
