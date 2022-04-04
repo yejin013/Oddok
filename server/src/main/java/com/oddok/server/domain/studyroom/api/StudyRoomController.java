@@ -114,4 +114,17 @@ public class StudyRoomController {
     public void checkPassword(@PathVariable Long id, @RequestBody @Valid CheckPasswordRequest checkPasswordRequest) {
         studyRoomService.checkPassword(id, checkPasswordRequest.getPassword());
     }
+
+    /**
+     * [DELETE] /study-room/{study-room-id} : 스터디방 삭제
+     *
+     * @param id        : 방 식별자
+     * @param userId    : 유저
+     * @return
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable Long id, @RequestHeader String userId) {
+        studyRoomService.deleteStudyRoom(id, Long.parseLong(userId));
+        return ResponseEntity.noContent().build();
+    }
 }

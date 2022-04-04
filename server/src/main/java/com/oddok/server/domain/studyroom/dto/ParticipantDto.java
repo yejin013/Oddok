@@ -1,8 +1,6 @@
 package com.oddok.server.domain.studyroom.dto;
 
-import com.oddok.server.domain.studyroom.entity.StudyRoom;
 import com.oddok.server.domain.user.dto.UserDto;
-import com.oddok.server.domain.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 
