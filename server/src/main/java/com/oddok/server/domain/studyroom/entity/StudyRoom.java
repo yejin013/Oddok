@@ -1,6 +1,5 @@
 package com.oddok.server.domain.studyroom.entity;
 
-import com.oddok.server.domain.studyroom.api.request.UpdateStudyRoomRequest;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import com.oddok.server.domain.user.entity.User;
 import lombok.*;
@@ -8,10 +7,12 @@ import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StudyRoom {
     @Id
     @GeneratedValue
@@ -64,6 +65,11 @@ public class StudyRoom {
     @Column(name = "create_at")
     private LocalDateTime createAt;
 
+    @OneToMany(mappedBy = "studyRoom",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<StudyRoomHashtag> hashtags = new ArrayList<>();
+
     @Builder
     public StudyRoom(String name, String category, User user,
                      String sessionId, String image, Boolean isPublic,
@@ -93,7 +99,7 @@ public class StudyRoom {
         this.image = studyRoomDto.getImage();
         this.isPublic = studyRoomDto.getIsPublic();
 
-        if(studyRoomDto.getIsPublic())
+        if (studyRoomDto.getIsPublic())
             this.password = null;
 
         this.password = studyRoomDto.getPassword();
@@ -104,7 +110,12 @@ public class StudyRoom {
         this.limitUsers = studyRoomDto.getLimitUsers();
         this.startAt = studyRoomDto.getStartAt();
         this.endAt = studyRoomDto.getEndAt();
-
         return this;
     }
+
+    public void addHastag(Hashtag hashtag) {
+        StudyRoomHashtag studyRoomHashtag = StudyRoomHashtag.builder().studyRoom(this).hashtag(hashtag).build();
+        this.hashtags.add(studyRoomHashtag);
+    }
+
 }

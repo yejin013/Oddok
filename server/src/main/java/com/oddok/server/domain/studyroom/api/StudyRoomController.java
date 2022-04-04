@@ -8,13 +8,11 @@ import com.oddok.server.domain.studyroom.api.response.GetStudyRoomResponse;
 import com.oddok.server.domain.studyroom.api.response.TokenResponse;
 import com.oddok.server.domain.studyroom.api.response.UpdateStudyRoomResponse;
 import com.oddok.server.domain.studyroom.application.SessionService;
-import com.oddok.server.domain.studyroom.application.StudyRoomHashtagService;
 import com.oddok.server.domain.studyroom.application.StudyRoomService;
-import com.oddok.server.domain.studyroom.dto.CheckPasswordDto;
-import com.oddok.server.domain.studyroom.dto.IdClassForParticipantDto;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import com.oddok.server.domain.studyroom.mapper.*;
 import com.oddok.server.domain.user.application.UserService;
+import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,29 +21,18 @@ import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/study-room")
+@RequiredArgsConstructor
 public class StudyRoomController {
 
     private final SessionService sessionService;
     private final StudyRoomService studyRoomService;
-    private final StudyRoomHashtagService studyRoomHashtagService;
     private final UserService userService;
 
-    private final StudyRoomRequestMapper requestMapper;
-    private final StudyRoomResponseMapper responseMapper;
+    private final StudyRoomDtoMapper dtoMapper = Mappers.getMapper(StudyRoomDtoMapper.class);
 
-    public StudyRoomController(SessionService sessionService, StudyRoomService studyRoomService, StudyRoomHashtagService studyRoomHashtagService, UserService userService) {
-        this.sessionService = sessionService;
-        this.studyRoomService = studyRoomService;
-        this.studyRoomHashtagService = studyRoomHashtagService;
-        this.userService = userService;
-
-        requestMapper = Mappers.getMapper(StudyRoomRequestMapper.class);
-        responseMapper = Mappers.getMapper(StudyRoomResponseMapper.class);
-    }
 
     /**
      * [GET] /study-room/user-create : 회원 생성 이후 삭제할 API
@@ -64,37 +51,23 @@ public class StudyRoomController {
     public ResponseEntity<CreateStudyRoomResponse> create(@RequestHeader String userId, @RequestBody @Valid CreateStudyRoomRequest createStudyRoomRequest) throws OpenViduJavaClientException, OpenViduHttpException {
         // 1. OpenVidu 에 새로운 세션을 생성
         String sessionId = sessionService.createSession();
-
-        StudyRoomDto requestDto = requestMapper.toDto(createStudyRoomRequest);
-        requestDto.setUserId(Long.parseLong(userId));
-        requestDto.setSessionId(sessionId);
+        StudyRoomDto requestDto = dtoMapper.fromCreateRequest(createStudyRoomRequest, userId, sessionId);
 
         // 2. StudyRoom 생성
         Long studyRoomId = studyRoomService.createStudyRoom(requestDto);
-
-        // 3. hashtag 저장
-        List<String> hashtags = createStudyRoomRequest.getHashtags();
-        studyRoomHashtagService.createStudyRoom(studyRoomId, hashtags);
-
-        CreateStudyRoomResponse createStudyRoomResponse = CreateStudyRoomResponse.builder().id(studyRoomId).build();
-        return ResponseEntity.ok(createStudyRoomResponse);
+        return ResponseEntity.ok(new CreateStudyRoomResponse(studyRoomId));
     }
 
     /**
      * [PUT] /study-room : 방 정보 수정 API
-     * @return
+     *
+     * @return 수정된 방 정보
      */
     @PutMapping("/{id}")
     public ResponseEntity<UpdateStudyRoomResponse> update(@PathVariable Long id, @RequestHeader String userId, @RequestBody @Valid UpdateStudyRoomRequest updateStudyRoomRequest) {
-
-        StudyRoomDto requestDto = requestMapper.toDto(updateStudyRoomRequest);
-        requestDto.setUserId(Long.parseLong(userId));
-
+        StudyRoomDto requestDto = dtoMapper.fromUpdateRequest(updateStudyRoomRequest,Long.parseLong(userId));
         StudyRoomDto studyRoomDto = studyRoomService.updateStudyRoom(id, requestDto);
-
-        UpdateStudyRoomResponse updateStudyRoomResponse = responseMapper.toUpdateStudyRoomResponse(studyRoomDto);
-
-        return ResponseEntity.ok(updateStudyRoomResponse);
+        return ResponseEntity.ok(dtoMapper.toUpdateResponse(studyRoomDto));
     }
 
     /**
@@ -111,7 +84,7 @@ public class StudyRoomController {
 
         // 2. OpenVidu Connection 생성 및 토큰 가져오기
         String token = sessionService.getToken(studyRoomDto.getSessionId());
-        TokenResponse tokenResponse = TokenResponse.builder().token(token).build();
+        TokenResponse tokenResponse = new TokenResponse(token);
 
         // 3. Participant 정보 저장
         studyRoomService.createParticipant(id, Long.parseLong(userId));
@@ -121,25 +94,21 @@ public class StudyRoomController {
 
     /**
      * [GET] /study-room/:id : 방 상세 조회 API
-     * @param id
+     *
+     * @param id : 방 식별자
      * @return GetStudyRoomResponse : 방 정보
      */
     @GetMapping(value = "/{id}")
     public ResponseEntity<GetStudyRoomResponse> get(@PathVariable Long id) {
         StudyRoomDto studyRoomDto = studyRoomService.loadStudyRoom(id);
-
-        List<String> studyRoomHashtags = studyRoomHashtagService.loadStudyRoomHashtag(studyRoomDto.getId());
-
-        GetStudyRoomResponse getStudyRoomResponse = responseMapper.toGetStudyRoomResponse(studyRoomDto);
-        getStudyRoomResponse.setHashtags(studyRoomHashtags);
-
-        return ResponseEntity.ok(getStudyRoomResponse);
+        return ResponseEntity.ok(dtoMapper.toGetResponse(studyRoomDto));
     }
 
-     /**
+    /**
      * [POST] /check/{study-room-id} : 스터디방 입장 비밀번호 확인
-     * @param id
-     * @param checkPasswordRequest : 비밀번
+     *
+     * @param id                   : 방 식별자
+     * @param checkPasswordRequest : 비밀번호
      */
     @PostMapping("/check/{id}")
     public void checkPassword(@PathVariable Long id, @RequestBody @Valid CheckPasswordRequest checkPasswordRequest) {
