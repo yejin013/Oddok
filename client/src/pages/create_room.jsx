@@ -21,20 +21,15 @@ function CreateRoom() {
   /**
    * 1. 스터디룸 생성 요청 -> id return
    * 2. id로 참여 요청
-   * 3. 라우팅시 roomInfo 보내주기
-   *  - 페이지 바뀌면 recoil 값 못쓸 수도 있어서 -> 확인 필요
-   *  - roomInfo 보내주고 studyroom에서 다시 저장하는 과정 추가
    */
   // const goToStudyRoom = async () => {
   //   const roomId = await createStudyRoom(roomInfo);
-  //   console.log(roomId);
   //   setRoomInfo({ ...roomInfo, id: roomId.id });
   //   const token = await joinStudyRoom(roomId.id);
   //   history.push({
   //     pathname: `/studyroom/${roomId.id}`,
   //     state: {
   //       token: token.token,
-  //       roomInfo,
   //     },
   //   });
   // };

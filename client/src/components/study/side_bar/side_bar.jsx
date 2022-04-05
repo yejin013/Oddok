@@ -7,6 +7,7 @@ import { updateStudyRoom } from "../../../api/studyroomAPI";
 
 import styles from "./side_bar.module.css";
 
+// TODO textarea warning
 function SideBar({ session, roomInfo }) {
   const { updateAllowed } = useRecoilValue(userState);
   const setRoomInfo = useSetRecoilState(roomInfoState);
@@ -15,12 +16,12 @@ function SideBar({ session, roomInfo }) {
   const submitHandler = async (e) => {
     e.preventDefault();
     // api 요청
-    // 🤔 roomInfo 저장할때 뭘 저장하는게 좋지? 유저가 입력한거 or response data
-    // const res = await updateStudyRoom(roomInfo.id, { ...roomInfo, rule: textRef.current.value });
-    // setRoomInfo(res.data);
+    const res = await updateStudyRoom(roomInfo.id, { ...roomInfo, rule: textRef.current.value });
+    console.log(res.data);
+    setRoomInfo(res.data);
 
     // 테스트용
-    setRoomInfo({ ...roomInfo, rule: textRef.current.value });
+    // setRoomInfo({ ...roomInfo, rule: textRef.current.value });
 
     // 수정된 정보 브로드캐스트하기
     session

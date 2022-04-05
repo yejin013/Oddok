@@ -19,6 +19,7 @@ function JoinRoom() {
     setUserInfo({ ...userInfo, updateAllowed: false });
   }, []);
 
+  // TODO 나중에 방 리스트에서 받아온 방 정보로 대체하기 (아톰에 저장하는 과정도 필요)
   // const goToStudyRoom = async () => {
   //   const token = await joinStudyRoom(roomInfo.id);
   //   history.push({
@@ -31,7 +32,6 @@ function JoinRoom() {
   // };
 
   const goToStudyRoom = async () => {
-    // TODO 나중에 방 리스트에서 받아온 방 정보로 대체하기 (아톰에 저장하는 과정도 필요)
     const sessionId = localStorage.getItem("sessionId");
 
     const token = await createToken(sessionId);

@@ -6,6 +6,7 @@ import { roomInfoState } from "../../recoil/studyroom_state";
 import StudyBar from "../../components/study/study_bar/study_bar";
 import UserVideo from "../../components/study/user_video/user_video";
 import SideBar from "../../components/study/side_bar/side_bar";
+import ChatBar from "../../components/study/chat_bar/chat_bar";
 import styles from "./study_room.module.css";
 
 function StudyRoom() {
@@ -17,7 +18,8 @@ function StudyRoom() {
   const [subscribers, setSubscribers] = useState([]);
   const [count, setCount] = useState(1);
 
-  const [isOpen, setIsOpen] = useState(false); // 사이드바 토글하기 위한 state
+  const [isSettingOpen, setIsSettingOpen] = useState(false); // 사이드바 토글하기 위한 state
+  const [isChatOpen, setIsChatOpen] = useState(false);
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
 
   const leaveRoom = () => {
@@ -48,8 +50,7 @@ function StudyRoom() {
 
   // 1. 유저 세션 생성
   useEffect(() => {
-    console.log("🙂", location.state.roomInfo);
-    setRoomInfo(location.state.roomInfo);
+    console.log("roominfo🙂", roomInfo);
     setSession(OV.initSession());
   }, []);
 
@@ -97,7 +98,11 @@ function StudyRoom() {
   }, [session]);
 
   const clickSettingBtn = () => {
-    setIsOpen((prev) => !prev);
+    setIsSettingOpen((prev) => !prev);
+  };
+
+  const clickChatBtn = () => {
+    setIsChatOpen((prev) => !prev);
   };
 
   return (
@@ -114,10 +119,12 @@ function StudyRoom() {
           clickSettingBtn={clickSettingBtn}
           toggleVideo={toggleVideo}
           toggleAudio={toggleAudio}
+          clickChatBtn={clickChatBtn}
           leaveRoom={leaveRoom}
         />
       </div>
-      {isOpen && <SideBar roomInfo={roomInfo} session={session} />}
+      {isSettingOpen && <SideBar roomInfo={roomInfo} session={session} />}
+      <ChatBar session={session} isChatOpen={isChatOpen} />
     </div>
   );
 }

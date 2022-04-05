@@ -10,7 +10,7 @@ import { ReactComponent as Chat } from "../../../assets/icons/chat.svg";
 import { ReactComponent as Member } from "../../../assets/icons/person.svg";
 import { ReactComponent as Door } from "../../../assets/icons/door.svg";
 
-function StudyBar({ roomName, clickSettingBtn, toggleVideo, toggleAudio, leaveRoom }) {
+function StudyBar({ roomName, clickSettingBtn, toggleVideo, toggleAudio, clickChatBtn, leaveRoom }) {
   return (
     <footer className={styles.bar}>
       <section className={styles.info}>
@@ -46,7 +46,7 @@ function StudyBar({ roomName, clickSettingBtn, toggleVideo, toggleAudio, leaveRo
           </button>
         </li>
         <li className={styles.chat_button}>
-          <button type="button">
+          <button type="button" onClick={clickChatBtn}>
             <Chat />
           </button>
         </li>

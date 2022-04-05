@@ -12,7 +12,7 @@ function SettingRoom({ goToStudyRoom }) {
   const [clickedSettingBtn, setClickedSettingBtn] = useState(false);
   const displayType = clickedSettingBtn === true ? styles.hide : styles.show;
 
-  const [roomName, setRoomName] = useState("");
+  const [roomName, setRoomName] = useState("나중에 지우기");
 
   useEffect(() => {
     const getVideoandAudio = async () => {

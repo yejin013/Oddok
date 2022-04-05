@@ -11,23 +11,42 @@ import styles from "./chat_bar.module.css";
  * 3. infinite scroll
  */
 
-function ChatBar({ session }) {
+function ChatBar({ session, isChatOpen }) {
   // 내 채팅인지 다른 유저의 채팅인지 구분하기 위한 임시 변수
   const [myName, setMyName] = useState(`도비${Math.floor(Math.random() * 100000000)}`);
 
   const inputRef = useRef();
-  const [bubbles, setBubbles] = useState([{ content: "하잉", time: "00:00", userName: myName }]);
+  const [bubbles, setBubbles] = useState([]);
 
-  // TODO 시간 받아와서 형태 바꾸기
+  useEffect(() => {
+    if (session) {
+      session.on("signal:chat", (e) => {
+        const chatData = JSON.parse(e.data);
+        setBubbles((prev) => [...prev, chatData]);
+      });
+    }
+  }, [session]);
+
   const submitChatHandler = (e) => {
     e.preventDefault();
-    const chatInput = inputRef.current.value;
-    setBubbles((prev) => [...prev, { content: chatInput, time: "00:00", userName: myName }]);
+    const content = inputRef.current.value;
+    const time = new Date().toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" });
+    session
+      .signal({
+        data: JSON.stringify({
+          content,
+          time,
+          userName: myName,
+        }),
+        type: "chat",
+      })
+      .then(() => console.log("📨채팅 전송 성공"))
+      .catch((error) => console.log("📨채팅 전송 실패", error));
     inputRef.current.value = "";
   };
 
   return (
-    <aside className={styles.side_box}>
+    <aside className={`${styles.side_box} ${isChatOpen ? "" : styles.hide}`}>
       <div className={styles.chat_box}>
         {bubbles.map((bubble) => (
           <ChatBubble
