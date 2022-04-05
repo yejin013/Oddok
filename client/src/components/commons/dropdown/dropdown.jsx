@@ -14,8 +14,8 @@ function Dropdown({ options, onSelect, disabled }) {
     setIsActive(!isActive);
   };
 
-  const clickOptionHandler = (value) => {
-    setSelectedOpt(value);
+  const clickOptionHandler = (name, value) => {
+    setSelectedOpt(name);
     onSelect(value);
     setIsActive(false);
   };
@@ -27,7 +27,7 @@ function Dropdown({ options, onSelect, disabled }) {
       </div>
       <ul className={`${isActive ? styles.active : ""}`}>
         {options.map((option) => (
-          <li key={option.value} className={styles.opt} onClick={() => clickOptionHandler(option.value)}>
+          <li key={option.value} className={styles.opt} onClick={() => clickOptionHandler(option.name, option.value)}>
             {option.name}
           </li>
         ))}

@@ -26,5 +26,7 @@ export const roomInfoState = atom({
     isMicOn: false,
     isCamOn: false,
     bgmlink: "",
+    startAt: "",
+    endAt: "",
   },
 });
