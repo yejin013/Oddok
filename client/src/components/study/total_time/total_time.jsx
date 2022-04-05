@@ -1,22 +1,12 @@
 import React from "react";
 import { useRecoilValue } from "recoil";
 import { totalHourState, totalMinuteState, totalSecondState } from "../../../recoil/timer_state";
-import styles from "./time_record.module.css";
+import styles from "./total_time.module.css";
 
-function TimeRecord(props) {
+function TotalTime(props) {
   const totalHour = useRecoilValue(totalHourState);
   const totalMinute = useRecoilValue(totalMinuteState);
   const totalSecond = useRecoilValue(totalSecondState);
-
-  /* *signal 전송되면 확인* */
-  // useEffect(() => {
-  //   if (session) {
-  //     session.on("signal:totalTime", (event) => {
-  //       console.log(event.data);
-  //       console.log("시간받음!");
-  //     });
-  //   }
-  // });
 
   return (
     <div className={styles.time}>
@@ -29,4 +19,4 @@ function TimeRecord(props) {
   );
 }
 
-export default TimeRecord;
+export default TotalTime;

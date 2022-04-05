@@ -8,22 +8,15 @@
 }
 
 .info,
-.goal,
+.time,
 .buttons {
   flex: 1;
+}
+
+.info,
+.buttons {
   display: flex;
   align-items: center;
-}
-
-.goal {
-  justify-content: center;
-}
-
-.plan {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 0 1em;
 }
 
 .buttons {

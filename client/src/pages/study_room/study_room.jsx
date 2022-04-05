@@ -101,8 +101,8 @@ function StudyRoom() {
     <div className={styles.room}>
       <div className={styles.video_container}>
         <ul className={`${styles.videos} ${displayType}`}>
-          {publisher && <UserVideo count={count} streamManager={publisher} />}
-          {subscribers && subscribers.map((subscriber) => <UserVideo count={count} streamManager={subscriber} />)}
+          {publisher && <UserVideo count={count} publisher={publisher} />}
+          {subscribers && subscribers.map((subscriber) => <UserVideo count={count} subscriber={subscriber} />)}
         </ul>
         <div className={`${styles.plan_bar} ${getStyles(clickedPlanBtn)}`}>
           <PlanSidebar />
@@ -110,7 +110,6 @@ function StudyRoom() {
       </div>
       <div className={styles.bar}>
         <StudyBar
-          session={session}
           toggleVideo={toggleVideo}
           toggleAudio={toggleAudio}
           leaveRoom={leaveRoom}

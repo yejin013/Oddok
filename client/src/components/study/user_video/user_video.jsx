@@ -1,15 +1,19 @@
 import React, { useRef, useEffect } from "react";
-import TimeRecord from "../time_record/time_record";
+import TotalTime from "../total_time/total_time";
 import styles from "./user_video.module.css";
 
-function UserVideo({ count, streamManager }) {
+function UserVideo({ count, publisher, subscriber }) {
   const videoRef = useRef();
 
   useEffect(() => {
     if (videoRef) {
-      streamManager.addVideoElement(videoRef.current);
+      if (publisher) {
+        publisher.addVideoElement(videoRef.current);
+      } else if (subscriber) {
+        subscriber.addVideoElement(videoRef.current);
+      }
     }
-  }, [streamManager]);
+  }, [publisher, subscriber]);
 
   const getCount = (number) => {
     switch (number) {
@@ -28,7 +32,7 @@ function UserVideo({ count, streamManager }) {
   return (
     <li className={`${styles.video} ${getCount(count)}`}>
       <video className={styles.user_video} ref={videoRef} autoPlay />
-      <TimeRecord />
+      {publisher ? <TotalTime /> : null}
     </li>
   );
 }
