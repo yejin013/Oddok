@@ -2,6 +2,8 @@ package com.oddok.server.domain.studyroom.entity;
 
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import com.oddok.server.domain.user.entity.User;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -68,7 +70,7 @@ public class StudyRoom {
     @OneToMany(mappedBy = "studyRoom",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
-    private List<StudyRoomHashtag> hashtags = new ArrayList<>();
+    private Set<StudyRoomHashtag> hashtags = new HashSet<>();
 
     @Builder
     public StudyRoom(String name, String category, User user,
@@ -117,5 +119,6 @@ public class StudyRoom {
         StudyRoomHashtag studyRoomHashtag = StudyRoomHashtag.builder().studyRoom(this).hashtag(hashtag).build();
         this.hashtags.add(studyRoomHashtag);
     }
+
 
 }

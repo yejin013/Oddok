@@ -13,6 +13,7 @@ import com.oddok.server.domain.studyroom.mapper.StudyRoomMapper;
 import com.oddok.server.domain.user.dao.UserRepository;
 
 import com.oddok.server.domain.user.entity.User;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
@@ -57,8 +58,6 @@ public class StudyRoomService {
         StudyRoom studyRoom = studyRoomRepository.findById(id).orElseThrow(() -> new StudyRoomNotFoundException(id));
         checkPublisher(studyRoom.getUser(), studyRoomDto.getUserId());
         studyRoom = studyRoom.update(studyRoomDto);
-        // 기존 해시태그를 모두 삭제하고 새로 매핑합니다.
-        studyRoom.getHashtags().clear();
         mapStudyRoomAndHashtags(studyRoom, studyRoomDto.getHashtags());
         return studyRoomMapper.toDto(studyRoom.update(studyRoomDto));
     }
@@ -86,7 +85,12 @@ public class StudyRoomService {
     /**
      * DB에 해당 해시태그 이름이 없으면 생성하고, 있으면 있는 해시태그와 스터디룸을 매핑해줍니다.
      */
-    public void mapStudyRoomAndHashtags(StudyRoom studyRoom, List<String> hashtags) {
+    public void mapStudyRoomAndHashtags(StudyRoom studyRoom, Set<String> hashtags) {
+        // 처음부터 있던 해시태그 삭제
+        for (StudyRoomHashtag studyRoomHashtag : studyRoom.getHashtags()){
+            hashtags.remove(studyRoomHashtag.getHashtag().getName());
+        }
+        // 없던 해시태그 추가
         for (String name : hashtags) {
             Hashtag hashtag = hashtagRepository.findByName(name).orElseGet(() -> hashtagRepository.save(new Hashtag(name)));
             studyRoom.addHastag(hashtag);
