@@ -6,9 +6,8 @@ import styles from "./chat_bar.module.css";
 
 /**
  * TODO
- * 1. scroll to bottom
- * 2. scroll bar css
- * 3. infinite scroll
+ * 1. scroll bar css
+ * 2. infinite scroll
  */
 
 function ChatBar({ session, isChatOpen }) {
@@ -16,7 +15,18 @@ function ChatBar({ session, isChatOpen }) {
   const [myName, setMyName] = useState(`도비${Math.floor(Math.random() * 100000000)}`);
 
   const inputRef = useRef();
+  const chatBoxRef = useRef();
   const [bubbles, setBubbles] = useState([]);
+
+  const scrollToBottom = () => {
+    if (chatBoxRef.current) {
+      chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [bubbles]);
 
   useEffect(() => {
     if (session) {
@@ -29,6 +39,7 @@ function ChatBar({ session, isChatOpen }) {
 
   const submitChatHandler = (e) => {
     e.preventDefault();
+    if (inputRef.current.value === "") return;
     const content = inputRef.current.value;
     const time = new Date().toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" });
     session
@@ -47,7 +58,7 @@ function ChatBar({ session, isChatOpen }) {
 
   return (
     <aside className={`${styles.side_box} ${isChatOpen ? "" : styles.hide}`}>
-      <div className={styles.chat_box}>
+      <div ref={chatBoxRef} className={styles.chat_box}>
         {bubbles.map((bubble) => (
           <ChatBubble
             content={bubble.content}
