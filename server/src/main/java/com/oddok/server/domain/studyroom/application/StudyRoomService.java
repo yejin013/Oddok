@@ -15,9 +15,13 @@ import com.oddok.server.domain.user.dao.UserRepository;
 import com.oddok.server.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -104,6 +108,13 @@ public class StudyRoomService {
 
     private User findUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+    }
+
+    public Page<StudyRoomDto> getStudyRooms(Pageable pageable, Boolean isPublic) {
+        if(isPublic != null && isPublic) {
+            return studyRoomRepository.findAllByStartAtBeforeAndEndAtAfterAndIsPublicTrue(LocalDateTime.now(), LocalDateTime.now(),pageable).map(studyRoomMapper::toDto);
+        }
+        return studyRoomRepository.findAllByStartAtBeforeAndEndAtAfter(LocalDateTime.now(), LocalDateTime.now(),pageable).map(studyRoomMapper::toDto);
     }
 
     @Transactional

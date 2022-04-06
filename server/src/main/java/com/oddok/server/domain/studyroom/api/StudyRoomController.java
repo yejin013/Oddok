@@ -3,10 +3,7 @@ package com.oddok.server.domain.studyroom.api;
 import com.oddok.server.domain.studyroom.api.request.CheckPasswordRequest;
 import com.oddok.server.domain.studyroom.api.request.CreateStudyRoomRequest;
 import com.oddok.server.domain.studyroom.api.request.UpdateStudyRoomRequest;
-import com.oddok.server.domain.studyroom.api.response.CreateStudyRoomResponse;
-import com.oddok.server.domain.studyroom.api.response.GetStudyRoomResponse;
-import com.oddok.server.domain.studyroom.api.response.TokenResponse;
-import com.oddok.server.domain.studyroom.api.response.UpdateStudyRoomResponse;
+import com.oddok.server.domain.studyroom.api.response.*;
 import com.oddok.server.domain.studyroom.application.SessionService;
 import com.oddok.server.domain.studyroom.application.StudyRoomService;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
@@ -14,6 +11,11 @@ import com.oddok.server.domain.studyroom.mapper.*;
 import com.oddok.server.domain.user.application.UserService;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -90,6 +92,18 @@ public class StudyRoomController {
         studyRoomService.createParticipant(id, Long.parseLong(userId));
 
         return ResponseEntity.ok(tokenResponse);
+    }
+
+    /**
+     * [GET] /study-room
+     * @param pageable
+     * @return
+     */
+    @GetMapping
+    public ResponseEntity<Page<GetStudyRoomListEntityResponse>> get(@PageableDefault(size = 16) Pageable pageable,
+                                                                    @RequestParam(required = false) Boolean isPublic) {
+        Page<GetStudyRoomListEntityResponse> studyRoomDtos = studyRoomService.getStudyRooms(pageable, isPublic).map(dtoMapper::toGetResponseList);
+        return ResponseEntity.ok(studyRoomDtos);
     }
 
     /**
