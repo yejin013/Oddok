@@ -102,8 +102,9 @@ public class StudyRoomController {
      */
     @GetMapping
     public ResponseEntity<Page<GetStudyRoomListEntityResponse>> get(@PageableDefault(size = 16) Pageable pageable,
+                                                                    @RequestParam(required = false) String category,
                                                                     @RequestParam(required = false) Boolean isPublic) {
-        Page<GetStudyRoomListEntityResponse> studyRoomDtos = studyRoomService.getStudyRooms(pageable, isPublic).map(dtoMapper::toGetResponseList);
+        Page<GetStudyRoomListEntityResponse> studyRoomDtos = studyRoomService.getStudyRooms(pageable, category, isPublic).map(dtoMapper::toGetResponseList);
         return ResponseEntity.ok(studyRoomDtos);
     }
 

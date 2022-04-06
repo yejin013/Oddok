@@ -5,6 +5,7 @@ import com.oddok.server.domain.studyroom.dao.HashtagRepository;
 import com.oddok.server.domain.studyroom.dao.StudyRoomRepository;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import com.oddok.server.domain.studyroom.dao.ParticipantRepository;
+import com.oddok.server.domain.studyroom.entity.Category;
 import com.oddok.server.domain.studyroom.entity.Hashtag;
 import com.oddok.server.domain.studyroom.entity.Participant;
 import com.oddok.server.domain.studyroom.entity.StudyRoom;
@@ -113,11 +114,16 @@ public class StudyRoomService {
         return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
     }
 
-    public Page<StudyRoomDto> getStudyRooms(Pageable pageable, Boolean isPublic) {
+    public Page<StudyRoomDto> getStudyRooms(Pageable pageable, String category, Boolean isPublic) {
         if(isPublic != null && isPublic) {
-            return studyRoomRepository.findAllByStartAtBeforeAndEndAtAfterAndIsPublicTrue(LocalDateTime.now(), LocalDateTime.now(),pageable).map(studyRoomMapper::toDto);
+            if(category != null)
+                return studyRoomRepository.findAllByStartAtBeforeAndEndAtAfterAndCategoryAndIsPublicTrue(LocalDateTime.now(), LocalDateTime.now(), Category.valueOf(category), pageable).map(studyRoomMapper::toDto);
+            return studyRoomRepository.findAllByStartAtBeforeAndEndAtAfterAndIsPublicTrue(LocalDateTime.now(), LocalDateTime.now(), pageable).map(studyRoomMapper::toDto);
+        } else {
+            if(category != null)
+                return studyRoomRepository.findAllByStartAtBeforeAndEndAtAfterAndCategory(LocalDateTime.now(), LocalDateTime.now(), Category.valueOf(category), pageable).map(studyRoomMapper::toDto);
+            return studyRoomRepository.findAllByStartAtBeforeAndEndAtAfter(LocalDateTime.now(), LocalDateTime.now(),pageable).map(studyRoomMapper::toDto);
         }
-        return studyRoomRepository.findAllByStartAtBeforeAndEndAtAfter(LocalDateTime.now(), LocalDateTime.now(),pageable).map(studyRoomMapper::toDto);
     }
 
     @Transactional
