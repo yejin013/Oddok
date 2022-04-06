@@ -96,6 +96,7 @@ public class StudyRoomController {
 
     /**
      * [GET] /study-room
+     *
      * @param pageable
      * @return
      */

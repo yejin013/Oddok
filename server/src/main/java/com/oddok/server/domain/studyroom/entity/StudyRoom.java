@@ -21,7 +21,7 @@ public class StudyRoom {
     @Column(unique = true, nullable = false, length = 255)
     private String name;
 
-    private String category;
+    private Category category;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -77,7 +77,7 @@ public class StudyRoom {
                      Boolean isMicOn, Boolean isCamOn, Integer limitUsers,
                      LocalDateTime startAt, LocalDateTime endAt) {
         this.name = name;
-        this.category = category;
+        this.category = Category.valueOf(category);
         this.user = user;
         this.sessionId = sessionId;
         this.image = image;
@@ -95,7 +95,7 @@ public class StudyRoom {
 
     public StudyRoom update(StudyRoomDto studyRoomDto) {
         this.name = studyRoomDto.getName();
-        this.category = studyRoomDto.getCategory();
+        this.category = Category.valueOf(studyRoomDto.getCategory());
         this.image = studyRoomDto.getImage();
         this.isPublic = studyRoomDto.getIsPublic();
 
