@@ -67,7 +67,7 @@ public class StudyRoomService {
         StudyRoom studyRoom = findStudyRoom(id);
 
         // 현재 사용자 수 증가
-        studyRoom.increase();
+        studyRoom.increaseCurrentUsers();
 
         // 참가자 정보 저장
         Participant participant = Participant.builder()

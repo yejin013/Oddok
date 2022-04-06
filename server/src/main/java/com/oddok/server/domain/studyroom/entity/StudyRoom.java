@@ -118,11 +118,11 @@ public class StudyRoom {
         this.hashtags.add(studyRoomHashtag);
     }
 
-    public void increase() {
+    public void increaseCurrentUsers() {
         this.currentUsers++;
     }
 
-    public void decrease() {
+    public void decreaseCurrentUsers() {
         this.currentUsers--;
     }
 }
