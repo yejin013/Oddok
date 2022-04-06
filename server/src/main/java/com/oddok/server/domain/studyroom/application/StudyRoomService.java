@@ -8,7 +8,6 @@ import com.oddok.server.domain.studyroom.dao.ParticipantRepository;
 import com.oddok.server.domain.studyroom.entity.Hashtag;
 import com.oddok.server.domain.studyroom.entity.Participant;
 import com.oddok.server.domain.studyroom.entity.StudyRoom;
-import com.oddok.server.domain.studyroom.entity.StudyRoomHashtag;
 import com.oddok.server.domain.studyroom.mapper.StudyRoomMapper;
 import com.oddok.server.domain.user.dao.UserRepository;
 
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -63,10 +61,15 @@ public class StudyRoomService {
         return studyRoomMapper.toDto(studyRoom.update(studyRoomDto));
     }
 
+    @Transactional
     public void createParticipant(Long id, Long userId) {
         User user = findUser(userId);
         StudyRoom studyRoom = findStudyRoom(id);
 
+        // 현재 사용자 수 증가
+        studyRoom.increaseCurrentUsers();
+
+        // 참가자 정보 저장
         Participant participant = Participant.builder()
                 .studyRoom(studyRoom)
                 .user(user)
