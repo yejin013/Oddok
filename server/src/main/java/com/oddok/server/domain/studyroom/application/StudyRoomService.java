@@ -59,7 +59,7 @@ public class StudyRoomService {
         checkPublisher(studyRoom.getUser(), studyRoomDto.getUserId());
         studyRoom = studyRoom.update(studyRoomDto);
         mapStudyRoomAndHashtags(studyRoom, studyRoomDto.getHashtags());
-        return studyRoomMapper.toDto(studyRoom.update(studyRoomDto));
+        return studyRoomMapper.toDto(studyRoom);
     }
 
     public void createParticipant(Long id, Long userId) {
@@ -88,12 +88,16 @@ public class StudyRoomService {
     public void mapStudyRoomAndHashtags(StudyRoom studyRoom, Set<String> hashtags) {
         // 처음부터 있던 해시태그 삭제
         for (StudyRoomHashtag studyRoomHashtag : studyRoom.getHashtags()){
-            hashtags.remove(studyRoomHashtag.getHashtag().getName());
+            String hashtagName = studyRoomHashtag.getHashtag().getName();
+            if(!hashtags.remove(hashtagName)){
+                studyRoom.deleteHashtag(hashtagName);
+            };
         }
+
         // 없던 해시태그 추가
         for (String name : hashtags) {
             Hashtag hashtag = hashtagRepository.findByName(name).orElseGet(() -> hashtagRepository.save(new Hashtag(name)));
-            studyRoom.addHastag(hashtag);
+            studyRoom.addHashtag(hashtag);
         }
     }
 

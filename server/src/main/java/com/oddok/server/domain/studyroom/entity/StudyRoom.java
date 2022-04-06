@@ -16,109 +16,117 @@ import java.util.List;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StudyRoom {
-    @Id
-    @GeneratedValue
-    Long id;
 
-    @Column(unique = true, nullable = false, length = 255)
-    private String name;
+  @Id
+  @GeneratedValue
+  Long id;
 
-    private String category;
+  @Column(unique = true, nullable = false, length = 255)
+  private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+  private String category;
 
-    @Column(name = "session_id")
-    private String sessionId;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id")
+  private User user;
 
-    private String image;
+  @Column(name = "session_id")
+  private String sessionId;
 
-    @Column(name = "is_publlic")
-    private Boolean isPublic;
+  private String image;
 
-    @Column(length = 255)
-    private String password;
+  @Column(name = "is_publlic")
+  private Boolean isPublic;
 
-    @Column(name = "target_time")
-    private Integer targetTime;
+  @Column(length = 255)
+  private String password;
 
-    private String rule;
+  @Column(name = "target_time")
+  private Integer targetTime;
 
-    @Column(name = "is_mic_on")
-    private Boolean isMicOn;
+  private String rule;
 
-    @Column(name = "is_cam_on")
-    private Boolean isCamOn;
+  @Column(name = "is_mic_on")
+  private Boolean isMicOn;
 
-    @Column(name = "current_users")
-    private Integer currentUsers = 0;
+  @Column(name = "is_cam_on")
+  private Boolean isCamOn;
 
-    @Column(name = "limit_users")
-    private Integer limitUsers;
+  @Column(name = "current_users")
+  private Integer currentUsers = 0;
 
-    @Column(name = "start_at")
-    private LocalDateTime startAt;
+  @Column(name = "limit_users")
+  private Integer limitUsers;
 
-    @Column(name = "end_at")
-    private LocalDateTime endAt;
+  @Column(name = "start_at")
+  private LocalDateTime startAt;
 
-    @CreatedDate
-    @Column(name = "create_at")
-    private LocalDateTime createAt;
+  @Column(name = "end_at")
+  private LocalDateTime endAt;
 
-    @OneToMany(mappedBy = "studyRoom",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
-    private Set<StudyRoomHashtag> hashtags = new HashSet<>();
+  @CreatedDate
+  @Column(name = "create_at")
+  private LocalDateTime createAt;
 
-    @Builder
-    public StudyRoom(String name, String category, User user,
-                     String sessionId, String image, Boolean isPublic,
-                     String password, Integer targetTime, String rule,
-                     Boolean isMicOn, Boolean isCamOn, Integer limitUsers,
-                     LocalDateTime startAt, LocalDateTime endAt) {
-        this.name = name;
-        this.category = category;
-        this.user = user;
-        this.sessionId = sessionId;
-        this.image = image;
-        this.isPublic = isPublic;
-        this.password = password;
-        this.targetTime = targetTime;
-        this.rule = rule;
-        this.isMicOn = isMicOn;
-        this.isCamOn = isCamOn;
-        this.limitUsers = limitUsers;
-        this.startAt = startAt;
-        this.endAt = endAt;
-        this.createAt = LocalDateTime.now();
+  @OneToMany(mappedBy = "studyRoom",
+      cascade = CascadeType.ALL,
+      orphanRemoval = true)
+  private Set<StudyRoomHashtag> hashtags = new HashSet<>();
+
+  @Builder
+  public StudyRoom(String name, String category, User user,
+      String sessionId, String image, Boolean isPublic,
+      String password, Integer targetTime, String rule,
+      Boolean isMicOn, Boolean isCamOn, Integer limitUsers,
+      LocalDateTime startAt, LocalDateTime endAt) {
+    this.name = name;
+    this.category = category;
+    this.user = user;
+    this.sessionId = sessionId;
+    this.image = image;
+    this.isPublic = isPublic;
+    this.password = password;
+    this.targetTime = targetTime;
+    this.rule = rule;
+    this.isMicOn = isMicOn;
+    this.isCamOn = isCamOn;
+    this.limitUsers = limitUsers;
+    this.startAt = startAt;
+    this.endAt = endAt;
+    this.createAt = LocalDateTime.now();
+  }
+
+  public StudyRoom update(StudyRoomDto studyRoomDto) {
+    this.name = studyRoomDto.getName();
+    this.category = studyRoomDto.getCategory();
+    this.image = studyRoomDto.getImage();
+    this.isPublic = studyRoomDto.getIsPublic();
+
+    if (studyRoomDto.getIsPublic()) {
+      this.password = null;
     }
 
-    public StudyRoom update(StudyRoomDto studyRoomDto) {
-        this.name = studyRoomDto.getName();
-        this.category = studyRoomDto.getCategory();
-        this.image = studyRoomDto.getImage();
-        this.isPublic = studyRoomDto.getIsPublic();
+    this.password = studyRoomDto.getPassword();
+    this.targetTime = studyRoomDto.getTargetTime();
+    this.rule = studyRoomDto.getRule();
+    this.isMicOn = studyRoomDto.getIsMicOn();
+    this.isCamOn = studyRoomDto.getIsCamOn();
+    this.limitUsers = studyRoomDto.getLimitUsers();
+    this.startAt = studyRoomDto.getStartAt();
+    this.endAt = studyRoomDto.getEndAt();
+    return this;
+  }
 
-        if (studyRoomDto.getIsPublic())
-            this.password = null;
+  public void addHashtag(Hashtag hashtag) {
+    StudyRoomHashtag studyRoomHashtag = StudyRoomHashtag.builder().studyRoom(this).hashtag(hashtag)
+        .build();
+    this.hashtags.add(studyRoomHashtag);
+  }
 
-        this.password = studyRoomDto.getPassword();
-        this.targetTime = studyRoomDto.getTargetTime();
-        this.rule = studyRoomDto.getRule();
-        this.isMicOn = studyRoomDto.getIsMicOn();
-        this.isCamOn = studyRoomDto.getIsCamOn();
-        this.limitUsers = studyRoomDto.getLimitUsers();
-        this.startAt = studyRoomDto.getStartAt();
-        this.endAt = studyRoomDto.getEndAt();
-        return this;
-    }
-
-    public void addHastag(Hashtag hashtag) {
-        StudyRoomHashtag studyRoomHashtag = StudyRoomHashtag.builder().studyRoom(this).hashtag(hashtag).build();
-        this.hashtags.add(studyRoomHashtag);
-    }
+  public void deleteHashtag(String hashtag) {
+    this.hashtags.removeIf(
+        studyRoomHashtag -> studyRoomHashtag.getHashtag().getName().equals(hashtag));
+  }
 
 
 }
