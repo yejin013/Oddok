@@ -115,7 +115,9 @@ public class StudyRoomService {
     }
 
     public Page<StudyRoomDto> getStudyRooms(Pageable pageable, String category, Boolean isPublic) {
+        // 공개방이라는 조건이 들어왔을 때
         if(isPublic != null && isPublic) {
+            // 카테고리가 있을 때
             if(category != null)
                 return studyRoomRepository.findAllByStartAtBeforeAndEndAtAfterAndCategoryAndIsPublicTrue(LocalDateTime.now(), LocalDateTime.now(), Category.valueOf(category), pageable).map(studyRoomMapper::toDto);
             return studyRoomRepository.findAllByStartAtBeforeAndEndAtAfterAndIsPublicTrue(LocalDateTime.now(), LocalDateTime.now(), pageable).map(studyRoomMapper::toDto);
