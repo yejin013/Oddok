@@ -4,7 +4,6 @@ import java.util.Set;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 public class StudyRoomDto {
