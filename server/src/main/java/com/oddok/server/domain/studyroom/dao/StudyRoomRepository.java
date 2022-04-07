@@ -16,4 +16,6 @@ public interface StudyRoomRepository extends JpaRepository<StudyRoom, Long> {
     Page<StudyRoom> findAllByStartAtBeforeAndEndAtAfterAndCategory(LocalDateTime startAt, LocalDateTime endAt, Category category, Pageable pageable);
     Page<StudyRoom> findAllByStartAtBeforeAndEndAtAfterAndIsPublicTrue(LocalDateTime startAt, LocalDateTime endAt, Pageable pageable);
     Page<StudyRoom> findAllByStartAtBeforeAndEndAtAfterAndCategoryAndIsPublicTrue(LocalDateTime startAt, LocalDateTime endAt, Category category, Pageable pageable);
+    Page<StudyRoom> findAllByStartAtBeforeAndEndAtAfterAndNameContaining(LocalDateTime startAt, LocalDateTime endAt, String name, Pageable pageable);
+    Page<StudyRoom> findAllByStartAtBeforeAndEndAtAfterAndNameContainingAndIsPublicTrue(LocalDateTime startAt, LocalDateTime endAt, String name, Pageable pageable);
 }

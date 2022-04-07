@@ -128,6 +128,20 @@ public class StudyRoomService {
         }
     }
 
+    public Page<StudyRoomDto> getStudyRooms(Pageable pageable, Boolean isPublic, String name) {
+        // 공개방이라는 조건이 들어왔을 때
+        if(isPublic != null && isPublic) {
+            // 제목이 있을
+            if(name != null)
+                return studyRoomRepository.findAllByStartAtBeforeAndEndAtAfterAndNameContainingAndIsPublicTrue(LocalDateTime.now(), LocalDateTime.now(), name, pageable).map(studyRoomMapper::toDto);
+            return studyRoomRepository.findAllByStartAtBeforeAndEndAtAfterAndIsPublicTrue(LocalDateTime.now(), LocalDateTime.now(), pageable).map(studyRoomMapper::toDto);
+        } else {
+            if(name != null)
+                return studyRoomRepository.findAllByStartAtBeforeAndEndAtAfterAndNameContaining(LocalDateTime.now(), LocalDateTime.now(), name, pageable).map(studyRoomMapper::toDto);
+            return studyRoomRepository.findAllByStartAtBeforeAndEndAtAfter(LocalDateTime.now(), LocalDateTime.now(),pageable).map(studyRoomMapper::toDto);
+        }
+    }
+
     @Transactional
     public void deleteStudyRoom(Long id, Long userId) {
         StudyRoom studyRoom = findStudyRoom(id);
