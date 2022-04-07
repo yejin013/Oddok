@@ -122,6 +122,7 @@ public class StudyRoom {
         this.hashtags.add(studyRoomHashtag);
     }
 
+
     private void updateHashtag(Set<String> newHashtags) {
         Set<StudyRoomHashtag> toBeDeletedHashtags = new HashSet<>();
         for (StudyRoomHashtag studyRoomHashtag : hashtags) {
@@ -134,5 +135,14 @@ public class StudyRoom {
         hashtags.removeIf(toBeDeletedHashtags::contains);
     }
 
+
+    public void increaseCurrentUsers() {
+        this.currentUsers++;
+    }
+  
+
+    public void decreaseCurrentUsers() {
+        this.currentUsers--;
+    }
 
 }

@@ -18,7 +18,6 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -69,6 +68,10 @@ public class StudyRoomService {
         User user = findUser(userId);
         StudyRoom studyRoom = findStudyRoom(id);
 
+        // 현재 사용자 수 증가
+        studyRoom.increaseCurrentUsers();
+
+        // 참가자 정보 저장
         Participant participant = Participant.builder()
                 .studyRoom(studyRoom)
                 .user(user)

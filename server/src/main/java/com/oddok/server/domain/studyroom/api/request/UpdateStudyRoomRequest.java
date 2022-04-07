@@ -32,8 +32,6 @@ public class UpdateStudyRoomRequest {
 
     private Boolean isCamOn;
 
-    private Integer currentUsers;
-
     private Integer limitUsers;
 
     private LocalDateTime startAt;
