@@ -95,7 +95,7 @@ public class StudyRoom {
         this.createAt = LocalDateTime.now();
     }
 
-    public StudyRoom update(StudyRoomDto studyRoomDto) {
+    public void update(StudyRoomDto studyRoomDto) {
         this.name = studyRoomDto.getName();
         this.category = studyRoomDto.getCategory();
         this.image = studyRoomDto.getImage();
@@ -114,7 +114,6 @@ public class StudyRoom {
         this.startAt = studyRoomDto.getStartAt();
         this.endAt = studyRoomDto.getEndAt();
         updateHashtag(studyRoomDto.getHashtags());
-        return this;
     }
 
     public void addHashtag(Hashtag hashtag) {
