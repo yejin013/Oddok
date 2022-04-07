@@ -30,7 +30,7 @@ public class Bookmark {
         this.studyRoom = studyRoom;
     }
 
-    public void setStudyRoom(StudyRoom studyRoom) {
+    public void changeStudyRoom(StudyRoom studyRoom) {
         this.studyRoom = studyRoom;
     }
 }

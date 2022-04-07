@@ -33,7 +33,7 @@ public class BookmarkService {
 
         Optional<Bookmark> bookmark = bookmarkRepository.findByUser(user);
         if(bookmark.isPresent()) {
-           bookmark.get().setStudyRoom(studyRoom);
+           bookmark.get().changeStudyRoom(studyRoom);
         } else {
             bookmarkRepository.save(Bookmark.builder()
                     .user(user)
