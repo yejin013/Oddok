@@ -1,6 +1,7 @@
 package com.oddok.server.domain.studyroom.application;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.will;
 import static org.mockito.BDDMockito.willReturn;
@@ -52,6 +53,9 @@ class StudyRoomServiceTest {
 
   private final Long userId = 1L;
   private final Long studyRoomId = 1L;
+  private final String newHashtag = "새로운 해시태그";
+  private final String oldHashtag = "기존의 해시태그";
+  private final String removedHashtag = "삭제될 해시태그";
 
   @BeforeEach
   void setUp() {
@@ -59,45 +63,56 @@ class StudyRoomServiceTest {
 
 
   @Test
-  void 해시태그_수정시_없는해시태그삭제_새로운해시태그등록() {
+  void 스터디룸_생성_성공() {
     //given
-    String newHashtag = "새로운 해시태그";
-    String oldHashtag = "기존의 해시태그";
-    String removedHastag = "삭제될 해시태그";
+    StudyRoom studyRoom = createStudyRoom();
+    StudyRoomDto studyRoomDto = studyRoomMapper.toDto(studyRoom);
 
-    StudyRoom studyRoom = studyRoomMapper.toEntity(createStudyRoomDto(), createUser());
-    studyRoom.addHashtag(new Hashtag(removedHastag));
-    studyRoom.addHashtag(new Hashtag(oldHashtag));
+    //when
+    given(studyRoomRepository.save(any(StudyRoom.class))).willReturn(studyRoom);
+    given(userRepository.findById(any())).willReturn(Optional.ofNullable(studyRoom.getUser()));
+    StudyRoomDto newStudyRoomDto = studyRoomService.createStudyRoom(studyRoomDto);
+
+    //then
+    for(String name : newStudyRoomDto.getHashtags()){
+      assertTrue(studyRoomDto.getHashtags().contains(name));
+    }
+  }
+
+  @Test
+  void 스터디룸_수정_성공_없는해시태그삭제_새로운해시태그등록() {
+    //given
+    StudyRoom studyRoom = createStudyRoom();
 
     Set<String> newHastags = new HashSet<>();
     newHastags.add(newHashtag);
     newHastags.add(oldHashtag);
 
+    given(hashtagRepository.findByName(oldHashtag)).willReturn(
+        Optional.of(new Hashtag(oldHashtag)));
     given(hashtagRepository.findByName(newHashtag)).willReturn(
         Optional.of(new Hashtag(newHashtag)));
+    given(studyRoomRepository.findById(studyRoomId)).willReturn(Optional.of(studyRoom));
 
     //when
-    studyRoomService.mapStudyRoomAndHashtags(studyRoom, newHastags);
+    StudyRoomDto updateDto = createStudyRoomDto(newHastags);
+    StudyRoomDto updatedStudyRoomDto = studyRoomService.updateStudyRoom(updateDto);
 
     //then
-    Set<String> findNames = new HashSet<>();
-    for (StudyRoomHashtag studyRoomHashtag : studyRoom.getHashtags()) {
-      findNames.add(studyRoomHashtag.getHashtag().getName());
-    }
-    assertTrue(findNames.contains(newHashtag));
-    assertTrue(findNames.contains(oldHashtag));
-    assertFalse(findNames.contains(removedHastag));
-    assertEquals(studyRoom.getHashtags().size(), 2);
+    assertTrue(updatedStudyRoomDto.getHashtags().contains(newHashtag));
+    assertTrue(updatedStudyRoomDto.getHashtags().contains(oldHashtag));
+    assertFalse(updatedStudyRoomDto.getHashtags().contains(removedHashtag));
+    assertEquals(updatedStudyRoomDto.getHashtags().size(), 2);
   }
 
   Set<String> createHastagNames() {
     Set<String> hashtags = new HashSet<>();
-    hashtags.add("주말");
-    hashtags.add("교시제");
+    hashtags.add(oldHashtag);
+    hashtags.add(removedHashtag);
     return hashtags;
   }
 
-  StudyRoomDto createStudyRoomDto() {
+  StudyRoomDto createStudyRoomDto(Set<String> hashtags) {
     return StudyRoomDto.builder()
         .id(studyRoomId)
         .name("방 제목")
@@ -115,7 +130,7 @@ class StudyRoomServiceTest {
         .limitUsers(6)
         .startAt(LocalDateTime.now())
         .endAt(LocalDateTime.now().plusDays(5))
-        .hashtags(Set.of("교시제", "주말"))
+        .hashtags(hashtags)
         .build();
   }
 
@@ -123,6 +138,13 @@ class StudyRoomServiceTest {
     return User.builder()
         .email("parkjh4400@gmail.com")
         .build();
+  }
+
+  StudyRoom createStudyRoom(){
+    StudyRoomDto studyRoomDto = createStudyRoomDto(createHastagNames());
+    User user = createUser();
+    StudyRoom studyRoom = studyRoomMapper.toEntity(studyRoomDto, user);
+    return studyRoom;
   }
 
 }
