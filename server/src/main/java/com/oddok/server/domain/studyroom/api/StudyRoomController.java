@@ -106,7 +106,11 @@ public class StudyRoomController {
     public ResponseEntity<Page<GetStudyRoomListEntityResponse>> get(@PageableDefault(size = 16) Pageable pageable,
                                                                     @RequestParam(required = false) String category,
                                                                     @RequestParam(required = false) Boolean isPublic) {
-        Page<GetStudyRoomListEntityResponse> studyRoomResponse = studyRoomService.getStudyRooms(pageable, category, isPublic).map(dtoMapper::toGetResponseList);
+        Page<GetStudyRoomListEntityResponse> studyRoomResponse;
+        if(category == null)
+            studyRoomResponse = studyRoomService.getStudyRooms(pageable, isPublic).map(dtoMapper::toGetResponseList);
+        else
+            studyRoomResponse = studyRoomService.getStudyRoomsByCategory(pageable, isPublic, category).map(dtoMapper::toGetResponseList);
         return ResponseEntity.ok(studyRoomResponse);
     }
 
@@ -121,8 +125,13 @@ public class StudyRoomController {
     @GetMapping("/search")
     public ResponseEntity<Page<GetStudyRoomListEntityResponse>> get(@PageableDefault(size = 16) Pageable pageable,
                                                                     @RequestParam(required = false) Boolean isPublic,
-                                                                    @RequestParam(required = false) String name) {
-        Page<GetStudyRoomListEntityResponse> studyRoomResponse = studyRoomService.getStudyRooms(pageable, isPublic, name).map(dtoMapper::toGetResponseList);
+                                                                    @RequestParam(required = false) String name,
+                                                                    @RequestParam(required = false) String hashtag) {
+        Page<GetStudyRoomListEntityResponse> studyRoomResponse;
+        if(name == null)
+            studyRoomResponse = studyRoomService.getStudyRooms(pageable, isPublic).map(dtoMapper::toGetResponseList);
+        else
+            studyRoomResponse = studyRoomService.getStudyRoomsByName(pageable, isPublic, name).map(dtoMapper::toGetResponseList);
         return ResponseEntity.ok(studyRoomResponse);
     }
 
