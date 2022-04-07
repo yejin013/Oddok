@@ -123,19 +123,16 @@ public class StudyRoom {
         this.hashtags.add(studyRoomHashtag);
     }
 
-    private List<StudyRoomHashtag> updateHashtag(Set<String> newHashtags) {
-        List<StudyRoomHashtag> toBeDeletedHashtags = new ArrayList<>();
-        for (Iterator<StudyRoomHashtag> itr = hashtags.iterator(); itr.hasNext(); ) {
-            StudyRoomHashtag studyRoomHashtag = itr.next();
-            if (!newHashtags.remove(studyRoomHashtag.getHashtag().getName())) { // 새로운 해시태그 중에 기존에 있던 해시태그가 있으면 삭제
-                itr.remove();
+    private void updateHashtag(Set<String> newHashtags) {
+        Set<StudyRoomHashtag> toBeDeletedHashtags = new HashSet<>();
+        for (StudyRoomHashtag studyRoomHashtag : hashtags) {
+            // 새로운 해시태그 중에 스터디룸의 기존 해시태그가 있으면 등록할 필요 없으므로 삭제
+            if (!newHashtags.remove(studyRoomHashtag.getHashtag().getName())) {
+                // 스터디룸의 기존해시태그가 새로운 해시태그에 없는 경우 삭제할 리스트에 추가
                 toBeDeletedHashtags.add(studyRoomHashtag);
             }
         }
-        for (StudyRoomHashtag studyRoomHashtag : toBeDeletedHashtags) {
-            hashtags.remove(studyRoomHashtag);
-        }
-        return toBeDeletedHashtags;
+        hashtags.removeIf(toBeDeletedHashtags::contains);
     }
 
 
