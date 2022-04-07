@@ -12,7 +12,8 @@ import org.mapstruct.Mapping;
 public interface StudyRoomDtoMapper {
 
     @Mapping(source = "userId", target = "userId")
-    StudyRoomDto fromUpdateRequest(UpdateStudyRoomRequest request, Long userId);
+    @Mapping(source = "studyRoomId", target = "id")
+    StudyRoomDto fromUpdateRequest(UpdateStudyRoomRequest request, Long userId, Long studyRoomId);
 
     @Mapping(source = "userId", target="userId")
     @Mapping(source = "sessionId", target="sessionId")

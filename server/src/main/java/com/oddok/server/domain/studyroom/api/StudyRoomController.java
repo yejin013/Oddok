@@ -54,7 +54,7 @@ public class StudyRoomController {
         StudyRoomDto requestDto = dtoMapper.fromCreateRequest(createStudyRoomRequest, userId, sessionId);
 
         // 2. StudyRoom 생성
-        Long studyRoomId = studyRoomService.createStudyRoom(requestDto);
+        Long studyRoomId = studyRoomService.createStudyRoom(requestDto).getId();
         return ResponseEntity.ok(new CreateStudyRoomResponse(studyRoomId));
     }
 
@@ -65,8 +65,9 @@ public class StudyRoomController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<UpdateStudyRoomResponse> update(@PathVariable Long id, @RequestHeader String userId, @RequestBody @Valid UpdateStudyRoomRequest updateStudyRoomRequest) {
-        StudyRoomDto requestDto = dtoMapper.fromUpdateRequest(updateStudyRoomRequest,Long.parseLong(userId));
-        StudyRoomDto studyRoomDto = studyRoomService.updateStudyRoom(id, requestDto);
+        studyRoomService.checkPublisher(id, Long.parseLong(userId));
+        StudyRoomDto requestDto = dtoMapper.fromUpdateRequest(updateStudyRoomRequest,Long.parseLong(userId),id);
+        StudyRoomDto studyRoomDto = studyRoomService.updateStudyRoom(requestDto);
         return ResponseEntity.ok(dtoMapper.toUpdateResponse(studyRoomDto));
     }
 
@@ -124,7 +125,8 @@ public class StudyRoomController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable Long id, @RequestHeader String userId) {
-        studyRoomService.deleteStudyRoom(id, Long.parseLong(userId));
+        studyRoomService.checkPublisher(id, Long.parseLong(userId));
+        studyRoomService.deleteStudyRoom(id);
         return ResponseEntity.noContent().build();
     }
 }

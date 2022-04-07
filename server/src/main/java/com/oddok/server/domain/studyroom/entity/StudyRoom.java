@@ -2,18 +2,20 @@ package com.oddok.server.domain.studyroom.entity;
 
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import com.oddok.server.domain.user.entity.User;
+
+import java.util.*;
+
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StudyRoom {
+
     @Id
     @GeneratedValue
     Long id;
@@ -68,7 +70,7 @@ public class StudyRoom {
     @OneToMany(mappedBy = "studyRoom",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
-    private List<StudyRoomHashtag> hashtags = new ArrayList<>();
+    private Set<StudyRoomHashtag> hashtags = new HashSet<>();
 
     @Builder
     public StudyRoom(String name, String category, User user,
@@ -93,14 +95,15 @@ public class StudyRoom {
         this.createAt = LocalDateTime.now();
     }
 
-    public StudyRoom update(StudyRoomDto studyRoomDto) {
+    public void update(StudyRoomDto studyRoomDto) {
         this.name = studyRoomDto.getName();
         this.category = studyRoomDto.getCategory();
         this.image = studyRoomDto.getImage();
         this.isPublic = studyRoomDto.getIsPublic();
 
-        if (studyRoomDto.getIsPublic())
+        if (studyRoomDto.getIsPublic()) {
             this.password = null;
+        }
 
         this.password = studyRoomDto.getPassword();
         this.targetTime = studyRoomDto.getTargetTime();
@@ -110,19 +113,36 @@ public class StudyRoom {
         this.limitUsers = studyRoomDto.getLimitUsers();
         this.startAt = studyRoomDto.getStartAt();
         this.endAt = studyRoomDto.getEndAt();
-        return this;
+        updateHashtag(studyRoomDto.getHashtags());
     }
 
-    public void addHastag(Hashtag hashtag) {
-        StudyRoomHashtag studyRoomHashtag = StudyRoomHashtag.builder().studyRoom(this).hashtag(hashtag).build();
+    public void addHashtag(Hashtag hashtag) {
+        StudyRoomHashtag studyRoomHashtag = StudyRoomHashtag.builder().studyRoom(this).hashtag(hashtag)
+                .build();
         this.hashtags.add(studyRoomHashtag);
     }
+
+
+    private void updateHashtag(Set<String> newHashtags) {
+        Set<StudyRoomHashtag> toBeDeletedHashtags = new HashSet<>();
+        for (StudyRoomHashtag studyRoomHashtag : hashtags) {
+            // 새로운 해시태그 중에 스터디룸의 기존 해시태그가 있으면 등록할 필요 없으므로 삭제
+            if (!newHashtags.remove(studyRoomHashtag.getHashtag().getName())) {
+                // 스터디룸의 기존해시태그가 새로운 해시태그에 없는 경우 삭제할 리스트에 추가
+                toBeDeletedHashtags.add(studyRoomHashtag);
+            }
+        }
+        hashtags.removeIf(toBeDeletedHashtags::contains);
+    }
+
 
     public void increaseCurrentUsers() {
         this.currentUsers++;
     }
+  
 
     public void decreaseCurrentUsers() {
         this.currentUsers--;
     }
+
 }

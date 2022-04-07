@@ -1,5 +1,6 @@
 package com.oddok.server.domain.studyroom.api.request;
 
+import java.util.Set;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -39,6 +40,6 @@ public class CreateStudyRoomRequest {
 
     private LocalDateTime endAt;
 
-    private List<String> hashtags;
+    private Set<String> hashtags;
 
 }

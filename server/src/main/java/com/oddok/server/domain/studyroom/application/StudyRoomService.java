@@ -12,12 +12,11 @@ import com.oddok.server.domain.studyroom.mapper.StudyRoomMapper;
 import com.oddok.server.domain.user.dao.UserRepository;
 
 import com.oddok.server.domain.user.entity.User;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -32,12 +31,12 @@ public class StudyRoomService {
     private final StudyRoomMapper studyRoomMapper = Mappers.getMapper(StudyRoomMapper.class);
 
     @Transactional
-    public Long createStudyRoom(StudyRoomDto studyRoomDto) {
+    public StudyRoomDto createStudyRoom(StudyRoomDto studyRoomDto) {
         User user = findUser(studyRoomDto.getUserId());
         StudyRoom studyRoom = studyRoomMapper.toEntity(studyRoomDto, user);
         studyRoom = studyRoomRepository.save(studyRoom);
         mapStudyRoomAndHashtags(studyRoom, studyRoomDto.getHashtags());
-        return studyRoom.getId();
+        return studyRoomMapper.toDto(studyRoom);
     }
 
     public StudyRoomDto loadStudyRoom(Long id) {
@@ -51,14 +50,17 @@ public class StudyRoomService {
      * 방장이 아닐 경우 수정할 수 없으므로 예외를 발생시킵니다.
      */
     @Transactional
-    public StudyRoomDto updateStudyRoom(Long id, StudyRoomDto studyRoomDto) {
-        StudyRoom studyRoom = studyRoomRepository.findById(id).orElseThrow(() -> new StudyRoomNotFoundException(id));
-        checkPublisher(studyRoom.getUser(), studyRoomDto.getUserId());
-        studyRoom = studyRoom.update(studyRoomDto);
-        // 기존 해시태그를 모두 삭제하고 새로 매핑합니다.
-        studyRoom.getHashtags().clear();
-        mapStudyRoomAndHashtags(studyRoom, studyRoomDto.getHashtags());
-        return studyRoomMapper.toDto(studyRoom.update(studyRoomDto));
+    public StudyRoomDto updateStudyRoom(StudyRoomDto requestDto) {
+        StudyRoom studyRoom = findStudyRoom(requestDto.getId());
+        studyRoom.update(requestDto);
+        mapStudyRoomAndHashtags(studyRoom, requestDto.getHashtags());
+        return studyRoomMapper.toDto(studyRoom);
+    }
+
+    @Transactional
+    public void deleteStudyRoom(Long id) {
+        StudyRoom studyRoom = findStudyRoom(id);
+        studyRoomRepository.delete(studyRoom);
     }
 
     @Transactional
@@ -86,13 +88,18 @@ public class StudyRoomService {
             throw new PasswordsNotMatchException();
     }
 
+    public void checkPublisher(Long studyRoomId, Long userId) {
+        Long publisherId = findStudyRoom(studyRoomId).getUser().getId();
+        if (!publisherId.equals(userId)) throw new UserNotPublisherException(userId);
+    }
+
     /**
      * DB에 해당 해시태그 이름이 없으면 생성하고, 있으면 있는 해시태그와 스터디룸을 매핑해줍니다.
      */
-    public void mapStudyRoomAndHashtags(StudyRoom studyRoom, List<String> hashtags) {
-        for (String name : hashtags) {
+    private void mapStudyRoomAndHashtags(StudyRoom studyRoom, Set<String> newHashtags) {
+        for (String name : newHashtags) {
             Hashtag hashtag = hashtagRepository.findByName(name).orElseGet(() -> hashtagRepository.save(new Hashtag(name)));
-            studyRoom.addHastag(hashtag);
+            studyRoom.addHashtag(hashtag);
         }
     }
 
@@ -101,18 +108,9 @@ public class StudyRoomService {
                 .orElseThrow(() -> new StudyRoomNotFoundException(id));
     }
 
-    private void checkPublisher(User publisher, Long userId) {
-        if (!publisher.getId().equals(userId)) throw new UserNotPublisherException(userId);
-    }
 
     private User findUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
     }
 
-    @Transactional
-    public void deleteStudyRoom(Long id, Long userId) {
-        StudyRoom studyRoom = findStudyRoom(id);
-        checkPublisher(studyRoom.getUser(), userId);
-        studyRoomRepository.delete(studyRoom);
-    }
 }
