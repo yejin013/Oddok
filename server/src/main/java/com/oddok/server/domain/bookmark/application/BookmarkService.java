@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -29,8 +31,9 @@ public class BookmarkService {
         User user = findUser(userId);
         StudyRoom studyRoom = findStudyRoom(studyRoomId);
 
-        if(bookmarkRepository.findByUser(user).isPresent()) {
-           bookmarkRepository.findByUser(user).get().setStudyRoom(studyRoom);
+        Optional<Bookmark> bookmark = bookmarkRepository.findByUser(user);
+        if(bookmark.isPresent()) {
+           bookmark.get().setStudyRoom(studyRoom);
         } else {
             bookmarkRepository.save(Bookmark.builder()
                     .user(user)
