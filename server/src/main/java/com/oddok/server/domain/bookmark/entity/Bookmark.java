@@ -1,6 +1,8 @@
-package com.oddok.server.domain.studyroom.entity;
+package com.oddok.server.domain.bookmark.entity;
 
+import com.oddok.server.domain.studyroom.entity.StudyRoom;
 import com.oddok.server.domain.user.entity.User;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,4 +23,14 @@ public class Bookmark {
     @OneToOne
     @JoinColumn(name = "study_room_id")
     private StudyRoom studyRoom;
+
+    @Builder
+    public Bookmark(User user, StudyRoom studyRoom) {
+        this.user = user;
+        this.studyRoom = studyRoom;
+    }
+
+    public void setStudyRoom(StudyRoom studyRoom) {
+        this.studyRoom = studyRoom;
+    }
 }
