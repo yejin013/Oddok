@@ -13,9 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +32,6 @@ public class StudyRoomController {
     private final UserService userService;
 
     private final StudyRoomDtoMapper dtoMapper = Mappers.getMapper(StudyRoomDtoMapper.class);
-
 
     /**
      * [GET] /study-room/user-create : 회원 생성 이후 삭제할 API
@@ -56,7 +53,7 @@ public class StudyRoomController {
         StudyRoomDto requestDto = dtoMapper.fromCreateRequest(createStudyRoomRequest, userId, sessionId);
 
         // 2. StudyRoom 생성
-        Long studyRoomId = studyRoomService.createStudyRoom(requestDto);
+        Long studyRoomId = studyRoomService.createStudyRoom(requestDto).getId();
         return ResponseEntity.ok(new CreateStudyRoomResponse(studyRoomId));
     }
 
@@ -67,8 +64,9 @@ public class StudyRoomController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<UpdateStudyRoomResponse> update(@PathVariable Long id, @RequestHeader String userId, @RequestBody @Valid UpdateStudyRoomRequest updateStudyRoomRequest) {
-        StudyRoomDto requestDto = dtoMapper.fromUpdateRequest(updateStudyRoomRequest,Long.parseLong(userId));
-        StudyRoomDto studyRoomDto = studyRoomService.updateStudyRoom(id, requestDto);
+        studyRoomService.checkPublisher(id, Long.parseLong(userId));
+        StudyRoomDto requestDto = dtoMapper.fromUpdateRequest(updateStudyRoomRequest,Long.parseLong(userId),id);
+        StudyRoomDto studyRoomDto = studyRoomService.updateStudyRoom(requestDto);
         return ResponseEntity.ok(dtoMapper.toUpdateResponse(studyRoomDto));
     }
 
@@ -106,6 +104,7 @@ public class StudyRoomController {
     public ResponseEntity<Page<GetStudyRoomListEntityResponse>> get(@PageableDefault(size = 16) Pageable pageable,
                                                                     @RequestParam(required = false) String category,
                                                                     @RequestParam(required = false) Boolean isPublic) {
+        if(isPublic == null) isPublic = false;
         Page<GetStudyRoomListEntityResponse> studyRoomResponse;
         if(category == null)
             studyRoomResponse = studyRoomService.getStudyRooms(pageable, isPublic).map(dtoMapper::toGetResponseList);
@@ -127,6 +126,7 @@ public class StudyRoomController {
                                                                     @RequestParam(required = false) Boolean isPublic,
                                                                     @RequestParam(required = false) String name,
                                                                     @RequestParam(required = false) String hashtag) {
+        if(isPublic == null) isPublic = false;
         Page<GetStudyRoomListEntityResponse> studyRoomResponse;
         if(name == null)
             studyRoomResponse = studyRoomService.getStudyRooms(pageable, isPublic).map(dtoMapper::toGetResponseList);
@@ -167,7 +167,8 @@ public class StudyRoomController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity delete(@PathVariable Long id, @RequestHeader String userId) {
-        studyRoomService.deleteStudyRoom(id, Long.parseLong(userId));
+        studyRoomService.checkPublisher(id, Long.parseLong(userId));
+        studyRoomService.deleteStudyRoom(id);
         return ResponseEntity.noContent().build();
     }
 }

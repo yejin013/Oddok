@@ -4,6 +4,7 @@ import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import com.oddok.server.domain.studyroom.entity.StudyRoom;
 import com.oddok.server.domain.studyroom.entity.StudyRoomHashtag;
 import com.oddok.server.domain.user.entity.User;
+import java.util.Set;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -21,7 +22,7 @@ public interface StudyRoomMapper {
     @Mapping(source = "user", target = "user")
     StudyRoom toEntity(StudyRoomDto studyRoomDto, User user);
 
-    default List<String> hashtagToString(List<StudyRoomHashtag> hashtags) {
-        return hashtags.stream().map((hashtag) -> hashtag.getHashtag().getName()).collect(Collectors.toList());
+    default Set<String> hashtagToString(Set<StudyRoomHashtag> hashtags) {
+        return hashtags.stream().map((hashtag) -> hashtag.getHashtag().getName()).collect(Collectors.toSet());
     }
 }

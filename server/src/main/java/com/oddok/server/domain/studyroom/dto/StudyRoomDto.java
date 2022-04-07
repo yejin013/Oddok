@@ -1,9 +1,9 @@
 package com.oddok.server.domain.studyroom.dto;
 
+import java.util.Set;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 public class StudyRoomDto {
@@ -39,10 +39,10 @@ public class StudyRoomDto {
 
     private LocalDateTime endAt;
 
-    private List<String> hashtags;
+    private Set<String> hashtags;
 
     @Builder
-    public StudyRoomDto(Long id, String name, String category, Long userId, String sessionId, String image, Boolean isPublic, String password, Integer targetTime, String rule, Boolean isMicOn, Boolean isCamOn, Integer currentUsers, Integer limitUsers, LocalDateTime startAt, LocalDateTime endAt, List<String> hashtags) {
+    public StudyRoomDto(Long id, String name, String category, Long userId, String sessionId, String image, Boolean isPublic, String password, Integer targetTime, String rule, Boolean isMicOn, Boolean isCamOn, Integer currentUsers, Integer limitUsers, LocalDateTime startAt, LocalDateTime endAt, Set<String> hashtags) {
         this.id = id;
         this.name = name;
         this.category = category;
@@ -63,7 +63,7 @@ public class StudyRoomDto {
     }
 
     @Builder
-    public StudyRoomDto(String name, String category, Long userId, String sessionId, String image, Boolean isPublic, String password, Integer targetTime, String rule, Boolean isMicOn, Boolean isCamOn, Integer currentUsers, Integer limitUsers, LocalDateTime startAt, LocalDateTime endAt, List<String> hashtags) {
+    public StudyRoomDto(String name, String category, Long userId, String sessionId, String image, Boolean isPublic, String password, Integer targetTime, String rule, Boolean isMicOn, Boolean isCamOn, Integer currentUsers, Integer limitUsers, LocalDateTime startAt, LocalDateTime endAt, Set<String> hashtags) {
         this.name = name;
         this.category = category;
         this.userId = userId;
