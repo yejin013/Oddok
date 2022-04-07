@@ -2,6 +2,7 @@ package com.oddok.server.domain.studyroom.application;
 
 import com.oddok.server.common.errors.*;
 import com.oddok.server.domain.studyroom.dao.HashtagRepository;
+import com.oddok.server.domain.studyroom.dao.StudyRoomHashtagRepository;
 import com.oddok.server.domain.studyroom.dao.StudyRoomRepository;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import com.oddok.server.domain.studyroom.dao.ParticipantRepository;
@@ -31,6 +32,7 @@ public class StudyRoomService {
     private final StudyRoomRepository studyRoomRepository;
     private final ParticipantRepository participantRepository;
     private final HashtagRepository hashtagRepository;
+    private final StudyRoomHashtagRepository studyRoomHashtagRepository;
 
     private final StudyRoomMapper studyRoomMapper = Mappers.getMapper(StudyRoomMapper.class);
 
@@ -85,17 +87,9 @@ public class StudyRoomService {
     /**
      * DB에 해당 해시태그 이름이 없으면 생성하고, 있으면 있는 해시태그와 스터디룸을 매핑해줍니다.
      */
-    public void mapStudyRoomAndHashtags(StudyRoom studyRoom, Set<String> hashtags) {
-        // 처음부터 있던 해시태그 삭제
-        for (StudyRoomHashtag studyRoomHashtag : studyRoom.getHashtags()){
-            String hashtagName = studyRoomHashtag.getHashtag().getName();
-            if(!hashtags.remove(hashtagName)){
-                studyRoom.deleteHashtag(hashtagName);
-            };
-        }
-
+    public void mapStudyRoomAndHashtags(StudyRoom studyRoom, Set<String> newHashtags) {
         // 없던 해시태그 추가
-        for (String name : hashtags) {
+        for (String name : newHashtags) {
             Hashtag hashtag = hashtagRepository.findByName(name).orElseGet(() -> hashtagRepository.save(new Hashtag(name)));
             studyRoom.addHashtag(hashtag);
         }

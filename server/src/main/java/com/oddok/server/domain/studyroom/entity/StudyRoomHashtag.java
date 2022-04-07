@@ -28,7 +28,4 @@ public class StudyRoomHashtag {
         this.hashtag = hashtag;
     }
 
-    public void setStudyRoom(StudyRoom studyRoom) {
-        this.studyRoom = studyRoom;
-    }
 }
