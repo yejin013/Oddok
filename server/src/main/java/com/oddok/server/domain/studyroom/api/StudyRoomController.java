@@ -144,6 +144,18 @@ public class StudyRoomController {
     }
 
     /**
+     * 스터디룸 나가기 요청
+     * @param id
+     * @param userId
+     * @return
+     */
+    @GetMapping("/leave/{id}")
+    public ResponseEntity leave(@PathVariable Long id, @RequestHeader String userId) {
+        studyRoomService.userLeaveStudyRoom(Long.parseLong(userId), id);
+        return ResponseEntity.noContent().build();
+    }
+
+    /**
      * [DELETE] /study-room/{study-room-id} : 스터디방 삭제
      *
      * @param id        : 방 식별자

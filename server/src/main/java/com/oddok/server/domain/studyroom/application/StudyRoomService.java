@@ -12,8 +12,6 @@ import com.oddok.server.domain.studyroom.mapper.StudyRoomMapper;
 import com.oddok.server.domain.user.dao.UserRepository;
 
 import com.oddok.server.domain.user.entity.User;
-import io.openvidu.java.client.OpenViduHttpException;
-import io.openvidu.java.client.OpenViduJavaClientException;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
@@ -91,7 +89,18 @@ public class StudyRoomService {
     @Transactional
     public void deleteStudyRoom(Long id) {
         StudyRoom studyRoom = findStudyRoom(id);
+        //TODO: Openvidu 세션이 있으면 커넥션 모두 끊고 세션 닫기
         studyRoomRepository.delete(studyRoom);
+    }
+
+    @Transactional
+    public void userLeaveStudyRoom(Long userId, Long studyRoomId){
+        User user = findUser(userId);
+        StudyRoom studyRoom = findStudyRoom(studyRoomId);
+        Participant participant = participantRepository.findByUser(user).orElseThrow(() -> new UserNotParticipatingException(userId, studyRoomId));
+        if (!participant.getStudyRoom().equals(studyRoom)) throw new UserNotParticipatingException(userId, studyRoomId);
+        participantRepository.delete(participant);
+        studyRoom.decreaseCurrentUsers();
     }
 
 

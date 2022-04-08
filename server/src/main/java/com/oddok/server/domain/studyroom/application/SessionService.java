@@ -3,6 +3,7 @@ package com.oddok.server.domain.studyroom.application;
 import com.oddok.server.common.errors.OpenviduServerException;
 import com.oddok.server.common.errors.SessionNotFoundException;
 import io.openvidu.java.client.*;
+import java.util.List;
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ public class SessionService {
             System.out.println("💘 세션 생성 : " + session);
         } catch (OpenViduJavaClientException | OpenViduHttpException e) {
             e.printStackTrace();
+            throw new OpenviduServerException(e.getMessage(), e.getCause());
         }
         return Objects.requireNonNull(session).getSessionId();
     }
@@ -71,9 +73,10 @@ public class SessionService {
      * @return Session
      */
     public Session getSession(String sessionId) {
-        return openVidu.getActiveSessions().stream().filter(session -> session.getSessionId().equals(sessionId))
-                .findFirst()
-                .orElseThrow(() -> new SessionNotFoundException(sessionId));
+        for (Session session : openVidu.getActiveSessions()) {
+            if (session.getSessionId().equals(sessionId))
+                return session;
+        }
+        throw new SessionNotFoundException(sessionId);
     }
-
 }

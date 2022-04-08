@@ -58,4 +58,11 @@ public class ControllerErrorAdvice {
     public ErrorResponse handlerWrongApproach() {
         return new ErrorResponse("잘못된 접근입니다.");
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(UserNotParticipatingException.class)
+    public ErrorResponse handlerUserNotParticipatingException() {
+        return new ErrorResponse("해당 유저가 스터디룸에 참여하고 있지 않습니다.");
+    }
+
 }
