@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import styles from "./header.module.css";
 import { ReactComponent as Search } from "../../../assets/icons/search.svg";
@@ -6,6 +6,7 @@ import { ReactComponent as Profile } from "../../../assets/icons/person-circle.s
 
 function Header(props) {
   const history = useHistory();
+  const [isDropdown, setIsDropdown] = useState(false);
 
   const goToSearch = () => {
     history.push({
@@ -19,27 +20,53 @@ function Header(props) {
     });
   };
 
+  const clickProfileBtn = () => {
+    setIsDropdown((prev) => !prev);
+  };
+
   return (
     <header className={styles.header}>
       <a href="/" className={styles.logo}>
         ODDOK
       </a>
-      <section className={styles.page_buttons}>
-        <button type="button" className={styles.room_button}>
-          스터디룸
-        </button>
-        <button type="button" className={styles.mypage_button}>
-          마이페이지
-        </button>
-      </section>
-      <section className={styles.icons}>
+      <ul className={styles.pages}>
+        <li>
+          <button type="button" className={styles.study_room}>
+            스터디룸
+          </button>
+        </li>
+        <li>
+          <button type="button" className={styles.mypage}>
+            마이페이지
+          </button>
+        </li>
+      </ul>
+      <section className={styles.buttons}>
         <button type="button" className={styles.search} onClick={goToSearch}>
           <Search />
         </button>
-        <button type="button" className={styles.my_info}>
-          <Profile />
-          <span className={styles.nickname}>뿌링뿌링</span>
-        </button>
+        <ul className={styles.my_info}>
+          <li>
+            <button type="button" className={styles.profile} onClick={clickProfileBtn}>
+              <Profile />
+              <span className={styles.nickname}>뿌링뿌링</span>
+            </button>
+          </li>
+          {isDropdown && (
+            <ul className={styles.info_buttons}>
+              <li>
+                <button type="button" className={styles.button}>
+                  정보 수정
+                </button>
+              </li>
+              <li>
+                <button type="button" className={styles.button}>
+                  로그아웃
+                </button>
+              </li>
+            </ul>
+          )}
+        </ul>
         <button type="button" className={styles.study_button} onClick={goToCreateRoom}>
           + 새 스터디 만들기
         </button>
