@@ -27,8 +27,7 @@ public class TimeRecordService {
 
     public void createTimeRecord(TimeRecordDto timeRecordDto) {
         User user = findUser(timeRecordDto.getUserId());
-        TimeRecord timeRecord = timeRecordRepository.save(timeRecordMapper.toEntity(timeRecordDto));
-        timeRecord.setUser(user);
+        TimeRecord timeRecord = timeRecordRepository.save(timeRecordMapper.toEntity(timeRecordDto, user));
         timeRecordMapper.toDto(timeRecord);
     }
 
