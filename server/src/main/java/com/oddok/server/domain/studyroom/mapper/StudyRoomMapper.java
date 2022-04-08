@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 public interface StudyRoomMapper {
     @Mapping(source = "user.id", target = "userId")
     @Mapping(target = "hashtags", expression = "java(hashtagToString(studyRoom.getHashtags()))")
-    @Mapping(source = "category.value", target = "category")
     StudyRoomDto toDto(StudyRoom studyRoom);
 
     @Mapping(source = "studyRoomDto.targetTime", target = "targetTime")
