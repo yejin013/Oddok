@@ -63,6 +63,15 @@ public class BookmarkService {
     }
 
     /**
+     * 북마크 삭제
+     */
+    @Transactional
+    public void delete(Long userId) {
+        User user = findUser(userId);
+        bookmarkRepository.deleteByUser(user);
+    }
+
+    /**
      * 유저 정보 검색
      */
     private User findUser(Long userId) {

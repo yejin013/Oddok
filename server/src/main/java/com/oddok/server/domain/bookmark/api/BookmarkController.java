@@ -40,4 +40,10 @@ public class BookmarkController {
         GetBookmarkResponse bookmarkResponse = bookmarkDtoMapper.toGetResponse(bookmarkDto);
         return ResponseEntity.ok(bookmarkResponse);
     }
+
+    @DeleteMapping
+    public ResponseEntity<?> delete(@RequestHeader String userId) {
+        bookmarkService.delete(Long.parseLong(userId));
+        return ResponseEntity.noContent().build();
+    }
 }
