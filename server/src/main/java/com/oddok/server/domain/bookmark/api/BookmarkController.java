@@ -16,12 +16,23 @@ public class BookmarkController {
 
     private final BookmarkService bookmarkService;
 
+    /**
+     * 북마크 생성 및 변경
+     * @param userId : 사용자 정보
+     * @param id : 스터디룸 정보
+     * @return
+     */
     @PostMapping("/{id}")
     public ResponseEntity<?> create(@RequestHeader String userId, @PathVariable Long id) {
         bookmarkService.create(Long.parseLong(userId), id);
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * 북마크 정보 가져오기
+     * @param userId : 사용자 정보
+     * @return
+     */
     @GetMapping
     public ResponseEntity<GetBookmarkResponse> get(@RequestHeader String userId) {
         BookmarkDto bookmarkDto = bookmarkService.get(Long.parseLong(userId));

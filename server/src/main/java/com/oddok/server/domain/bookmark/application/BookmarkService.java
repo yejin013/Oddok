@@ -50,6 +50,9 @@ public class BookmarkService {
         }
     }
 
+    /**
+     * 북마크 조회
+     */
     public BookmarkDto get(Long userId) {
         User user = findUser(userId);
         Bookmark bookmark = bookmarkRepository.findByUser(user).orElseThrow(() -> new BookmarkNotFoundException());
