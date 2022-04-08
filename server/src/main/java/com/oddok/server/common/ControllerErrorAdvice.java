@@ -58,4 +58,10 @@ public class ControllerErrorAdvice {
     public ErrorResponse handlerWrongApproach() {
         return new ErrorResponse("잘못된 접근입니다.");
     }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(BookmarkNotFoundException.class)
+    public ErrorResponse handlerBookmarkNotFoundException() {
+        return new ErrorResponse("북마크가 존재하지 않습니다.");
+    }
 }
