@@ -5,6 +5,7 @@ import com.oddok.server.domain.studyroom.api.request.CreateStudyRoomRequest;
 import com.oddok.server.domain.studyroom.api.request.UpdateStudyRoomRequest;
 import com.oddok.server.domain.studyroom.api.response.*;
 import com.oddok.server.domain.studyroom.application.SessionService;
+import com.oddok.server.domain.studyroom.application.StudyRoomSearchService;
 import com.oddok.server.domain.studyroom.application.StudyRoomService;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import com.oddok.server.domain.studyroom.mapper.*;
@@ -30,6 +31,7 @@ public class StudyRoomController {
     private final SessionService sessionService;
     private final StudyRoomService studyRoomService;
     private final UserService userService;
+    private final StudyRoomSearchService studyRoomSearchService;
 
     private final StudyRoomDtoMapper dtoMapper = Mappers.getMapper(StudyRoomDtoMapper.class);
 
@@ -107,9 +109,9 @@ public class StudyRoomController {
         if(isPublic == null) isPublic = false;
         Page<GetStudyRoomListEntityResponse> studyRoomResponse;
         if(category == null)
-            studyRoomResponse = studyRoomService.getStudyRooms(pageable, isPublic).map(dtoMapper::toGetResponseList);
+            studyRoomResponse = studyRoomSearchService.getStudyRooms(pageable, isPublic).map(dtoMapper::toGetResponseList);
         else
-            studyRoomResponse = studyRoomService.getStudyRoomsByCategory(pageable, isPublic, category).map(dtoMapper::toGetResponseList);
+            studyRoomResponse = studyRoomSearchService.getStudyRoomsByCategory(pageable, isPublic, category).map(dtoMapper::toGetResponseList);
         return ResponseEntity.ok(studyRoomResponse);
     }
 
@@ -129,9 +131,9 @@ public class StudyRoomController {
         if(isPublic == null) isPublic = false;
         Page<GetStudyRoomListEntityResponse> studyRoomResponse;
         if(name == null)
-            studyRoomResponse = studyRoomService.getStudyRooms(pageable, isPublic).map(dtoMapper::toGetResponseList);
+            studyRoomResponse = studyRoomSearchService.getStudyRooms(pageable, isPublic).map(dtoMapper::toGetResponseList);
         else
-            studyRoomResponse = studyRoomService.getStudyRoomsByName(pageable, isPublic, name).map(dtoMapper::toGetResponseList);
+            studyRoomResponse = studyRoomSearchService.getStudyRoomsByName(pageable, isPublic, name).map(dtoMapper::toGetResponseList);
         return ResponseEntity.ok(studyRoomResponse);
     }
 
