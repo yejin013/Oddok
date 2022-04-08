@@ -12,6 +12,8 @@ import com.oddok.server.domain.studyroom.mapper.StudyRoomMapper;
 import com.oddok.server.domain.user.dao.UserRepository;
 
 import com.oddok.server.domain.user.entity.User;
+import io.openvidu.java.client.OpenViduHttpException;
+import io.openvidu.java.client.OpenViduJavaClientException;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
@@ -23,6 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class StudyRoomService {
+
+    private final SessionService sessionService;
 
     private final UserRepository userRepository;
     private final StudyRoomRepository studyRoomRepository;
@@ -47,6 +51,32 @@ public class StudyRoomService {
     }
 
     /**
+     * userId의 사용자가 id 방에 참여합니다.
+     * 스터디룸 세션에 커넥션을 생성하고 토큰을 반환합니다.
+     * 스터디룸에 참여합니다.
+     * @return token
+     */
+    @Transactional
+    public String userJoinStudyRoom(Long userId, Long id){
+        User user = findUser(userId);
+        StudyRoom studyRoom = findStudyRoom(id);
+        String sessionId = getSession(studyRoom);
+        String token = sessionService.getToken(sessionId);
+        createParticipant(studyRoom, user);
+        return token;
+    }
+
+    /**
+     * 해당 스터디룸의 sessionId 가 없으면 Openvidu 세션을 생성/등록 후 반환하고, 있으면 해당 세션아이디를 반환합니다.
+     */
+    private String getSession(StudyRoom studyRoom) {
+        if (studyRoom.getSessionId().isEmpty()){
+            studyRoom.createSession(sessionService.createSession());
+        }
+        return studyRoom.getSessionId();
+    }
+
+    /**
      * 스터디룸을 수정합니다.
      * 방장이 아닐 경우 수정할 수 없으므로 예외를 발생시킵니다.
      */
@@ -64,21 +94,6 @@ public class StudyRoomService {
         studyRoomRepository.delete(studyRoom);
     }
 
-    @Transactional
-    public void createParticipant(Long id, Long userId) {
-        User user = findUser(userId);
-        StudyRoom studyRoom = findStudyRoom(id);
-
-        // 현재 사용자 수 증가
-        studyRoom.increaseCurrentUsers();
-
-        // 참가자 정보 저장
-        Participant participant = Participant.builder()
-                .studyRoom(studyRoom)
-                .user(user)
-                .build();
-        participantRepository.save(participant);
-    }
 
     public void checkPassword(Long id, String password) {
         StudyRoom studyRoom = findStudyRoom(id);
@@ -92,6 +107,17 @@ public class StudyRoomService {
     public void checkPublisher(Long studyRoomId, Long userId) {
         Long publisherId = findStudyRoom(studyRoomId).getUser().getId();
         if (!publisherId.equals(userId)) throw new UserNotPublisherException(userId);
+    }
+
+    private void createParticipant(StudyRoom studyRoom, User user) {
+        // 참가자 정보 저장
+        Participant participant = Participant.builder()
+            .studyRoom(studyRoom)
+            .user(user)
+            .build();
+        // 현재 사용자 수 증가
+        studyRoom.increaseCurrentUsers();
+        participantRepository.save(participant);
     }
 
     /**

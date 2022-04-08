@@ -12,6 +12,7 @@ import com.oddok.server.domain.studyroom.dao.ParticipantRepository;
 import com.oddok.server.domain.studyroom.dao.StudyRoomHashtagRepository;
 import com.oddok.server.domain.studyroom.dao.StudyRoomRepository;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
+import com.oddok.server.domain.studyroom.entity.Category;
 import com.oddok.server.domain.studyroom.entity.Hashtag;
 import com.oddok.server.domain.studyroom.entity.StudyRoom;
 import com.oddok.server.domain.studyroom.entity.StudyRoomHashtag;
@@ -116,7 +117,7 @@ class StudyRoomServiceTest {
     return StudyRoomDto.builder()
         .id(studyRoomId)
         .name("방 제목")
-        .category("공무원 시험")
+        .category(Category.SCHOOL)
         .userId(userId)
         .sessionId("ws://session@rewrewfr")
         .image("imageUrl")
