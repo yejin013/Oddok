@@ -10,8 +10,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
-@Setter
-@NoArgsConstructor
 public class GetBookmarkResponse {
     private String name;
 

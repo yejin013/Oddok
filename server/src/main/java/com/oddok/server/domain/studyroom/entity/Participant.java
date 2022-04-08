@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 
 @Getter
 @Entity
-@NoArgsConstructor
 public class Participant {
     @Id
     @GeneratedValue
