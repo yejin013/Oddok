@@ -1,10 +1,8 @@
 package com.oddok.server.domain.bookmark.api.response;
 
-import com.oddok.server.domain.studyroom.dto.ParticipantDto;
+import com.oddok.server.domain.bookmark.dto.ParticipantDto;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
