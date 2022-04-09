@@ -1,0 +1,51 @@
+.footer {
+  margin-top: 1em;
+  background-color: #000000;
+  color: #dee2e6;
+}
+
+.info {
+  display: flex;
+  justify-content: space-evenly;
+  padding: 1.5em 0;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  padding: 0 1em;
+}
+
+.detail {
+  display: flex;
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-right: 0.4em;
+}
+
+.name {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.contact,
+.team {
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
+  margin: 0 2em;
+}
+
+.contents {
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+
+.copyright {
+  padding-top: 2em;
+  padding-bottom: 3.5em;
+  text-align: center;
+}
