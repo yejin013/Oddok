@@ -10,4 +10,5 @@ import java.util.Optional;
 @Repository
 public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
     Optional<Bookmark> findByUser(User user);
+    void deleteByUser(User user);
 }

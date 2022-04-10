@@ -64,4 +64,10 @@ public class ControllerErrorAdvice {
         return new ErrorResponse("해당 유저가 스터디룸에 참여하고 있지 않습니다.");
     }
 
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(BookmarkNotFoundException.class)
+    public ErrorResponse handlerBookmarkNotFoundException() {
+        return new ErrorResponse("북마크가 존재하지 않습니다.");
+    }
+
 }

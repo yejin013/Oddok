@@ -4,7 +4,7 @@ import com.oddok.server.common.errors.*;
 import com.oddok.server.domain.studyroom.dao.HashtagRepository;
 import com.oddok.server.domain.studyroom.dao.StudyRoomRepository;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
-import com.oddok.server.domain.studyroom.dao.ParticipantRepository;
+import com.oddok.server.domain.bookmark.dao.ParticipantRepository;
 import com.oddok.server.domain.studyroom.entity.Hashtag;
 import com.oddok.server.domain.studyroom.entity.Participant;
 import com.oddok.server.domain.studyroom.entity.StudyRoom;

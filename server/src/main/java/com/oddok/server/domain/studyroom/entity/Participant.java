@@ -1,6 +1,7 @@
 package com.oddok.server.domain.studyroom.entity;
 
 import com.oddok.server.domain.user.entity.User;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Participant {
     @Id
     @GeneratedValue

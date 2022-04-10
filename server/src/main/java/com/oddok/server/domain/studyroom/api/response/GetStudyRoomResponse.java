@@ -1,17 +1,12 @@
 package com.oddok.server.domain.studyroom.api.response;
 
-import com.oddok.server.domain.studyroom.dto.StudyRoomHashtagDto;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
-@Setter
-@NoArgsConstructor
 public class GetStudyRoomResponse {
     private String name;
 
@@ -38,5 +33,25 @@ public class GetStudyRoomResponse {
     private LocalDateTime startAt;
 
     private LocalDateTime endAt;
+
+    @Builder
+    public GetStudyRoomResponse(String name, String category, List<String> hashtags, String image,
+                                Boolean isPublic, Integer targetTime, String rule, Boolean isMicOn,
+                                Boolean isCamOn, Integer currentUsers, Integer limitUsers,
+                                LocalDateTime startAt, LocalDateTime endAt) {
+        this.name = name;
+        this.category = category;
+        this.hashtags = hashtags;
+        this.image = image;
+        this.isPublic = isPublic;
+        this.targetTime = targetTime;
+        this.rule = rule;
+        this.isMicOn = isMicOn;
+        this.isCamOn = isCamOn;
+        this.currentUsers = currentUsers;
+        this.limitUsers = limitUsers;
+        this.startAt = startAt;
+        this.endAt = endAt;
+    }
 
 }
