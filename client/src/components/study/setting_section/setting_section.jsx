@@ -15,7 +15,14 @@ import { ReactComponent as Hashtag } from "../../../assets/icons/hashtag.svg";
 
 import styles from "./setting_section.module.css";
 
-const categories = ["공무원 준비", "수능/내신 준비", "자격증 준비", "취업 준비", "개인 학습", "일반"];
+const categories = [
+  { value: "OFFICIAL", name: "공무원 준비" },
+  { value: "SCHOOL", name: "수능/내신 준비" },
+  { value: "CERTIFICATE", name: "자격증 준비" },
+  { value: "EMPLOYEE", name: "취업 준비" },
+  { value: "PRIVATE", name: "개인 학습" },
+  { value: "ETC", name: "일반" },
+];
 const hashtags = ["교시제", "여성전용", "아침기상", "컨셉", "목표시간", "자율", "평일", "주말", "예치금", "인증"];
 const userLimitOptions = [
   { value: 4, name: "4명" },
@@ -27,7 +34,7 @@ const targetTimeOptions = [
   { value: 9, name: "9시간" },
   { value: 8, name: "8시간" },
 ];
-const periodOptions = [{ value: new Date(2022, 11, 31).toLocaleString(), name: "2022.12.31" }];
+const periodOptions = [{ value: new Date(2022, 11, 31).toISOString(), name: "2022.12.31" }];
 
 /**
  * TODO
@@ -62,6 +69,7 @@ function SettingSection({ clickSettingBtn, roomName, setRoomName }) {
   };
 
   const clickSaveBtn = () => {
+    console.log(roomInfo.category);
     // 방 이름 입력 설정 or 자동 설정(null값)
     let name = "";
     if (titleRef.current.value) {
@@ -71,19 +79,27 @@ function SettingSection({ clickSettingBtn, roomName, setRoomName }) {
     setRoomInfo({
       ...roomInfo,
       name,
-      hashtags: Array.from(hashtag).join(","), // hashtag set to array
+      hashtags: Array.from(hashtag), // hashtag set to array
       isPublic: !passwordInputRef.current.value,
       password: passwordInputRef.current.value,
       bgmlink: bgmlinkInputRef.current.value,
       rule: ruleInputRef.current.value,
-      startAt: new Date().toLocaleDateString(),
+      startAt: new Date().toISOString(),
     });
     clickSettingBtn();
   };
 
   const categoryHandler = (e) => {
+    // 지정된 카테고리가 아닌 value가 들어올 경우 처리
+    // 이게 맞나
+    const selected = categories.findIndex((category) => category.name === e.target.value);
+    if (selected === -1) {
+      alert("유효하지 않은 카테고리입니다");
+      setIsCategorySelected(false);
+      return;
+    }
     setIsCategorySelected(true);
-    setRoomInfo({ ...roomInfo, category: e.target.value });
+    setRoomInfo({ ...roomInfo, category: categories[selected].value });
     setRoomName(`${e.target.value} n호실`);
   };
 
@@ -145,8 +161,8 @@ function SettingSection({ clickSettingBtn, roomName, setRoomName }) {
           <p className={styles.sub_heading}>목표를 설정하면 방을 빠르고 쉽게 설정할 수 있어요.</p>
           <div className={styles.category}>
             {categories.map((c) => (
-              <div className={styles.category_item}>
-                <RadioButton label={c} group="category" onChange={categoryHandler} disabled={disabled} />
+              <div key={c.value} className={styles.category_item}>
+                <RadioButton label={c.name} group="category" onChange={categoryHandler} disabled={disabled} />
               </div>
             ))}
           </div>
