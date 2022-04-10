@@ -12,7 +12,9 @@ import com.oddok.server.domain.studyroom.mapper.StudyRoomMapper;
 import com.oddok.server.domain.user.dao.UserRepository;
 
 import com.oddok.server.domain.user.entity.User;
+
 import java.util.Set;
+
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
@@ -52,10 +54,11 @@ public class StudyRoomService {
      * userId의 사용자가 id 방에 참여합니다.
      * 스터디룸 세션에 커넥션을 생성하고 토큰을 반환합니다.
      * 스터디룸에 참여합니다.
+     *
      * @return token
      */
     @Transactional
-    public String userJoinStudyRoom(Long userId, Long id){
+    public String userJoinStudyRoom(Long userId, Long id) {
         User user = findUser(userId);
         StudyRoom studyRoom = findStudyRoom(id);
         String sessionId = getSession(studyRoom);
@@ -68,9 +71,7 @@ public class StudyRoomService {
      * 해당 스터디룸의 sessionId 가 없으면 Openvidu 세션을 생성/등록 후 반환하고, 있으면 해당 세션아이디를 반환합니다.
      */
     private String getSession(StudyRoom studyRoom) {
-        if (studyRoom.getSessionId().isEmpty()){
-            studyRoom.createSession(sessionService.createSession());
-        }
+        if (studyRoom.getSessionId() == null) studyRoom.createSession(sessionService.createSession());
         return studyRoom.getSessionId();
     }
 
@@ -89,18 +90,29 @@ public class StudyRoomService {
     @Transactional
     public void deleteStudyRoom(Long id) {
         StudyRoom studyRoom = findStudyRoom(id);
-        //TODO: Openvidu 세션이 있으면 커넥션 모두 끊고 세션 닫기
+        if (studyRoom.getSessionId() == null) {
+            sessionService.deleteSession(studyRoom.getSessionId());
+        }
         studyRoomRepository.delete(studyRoom);
     }
 
+    /**
+     * 사용자가 스터디룸을 나가는 과정
+     * 1. 참여자 테이블에서 삭제
+     * 2. 스터디룸의 참여자 수 1 감소
+     * 3. 참여자수가 0일 경우 세션 삭제
+     */
     @Transactional
-    public void userLeaveStudyRoom(Long userId, Long studyRoomId){
+    public void userLeaveStudyRoom(Long userId, Long studyRoomId) {
         User user = findUser(userId);
         StudyRoom studyRoom = findStudyRoom(studyRoomId);
         Participant participant = participantRepository.findByUser(user).orElseThrow(() -> new UserNotParticipatingException(userId, studyRoomId));
         if (!participant.getStudyRoom().equals(studyRoom)) throw new UserNotParticipatingException(userId, studyRoomId);
         participantRepository.delete(participant);
-        studyRoom.decreaseCurrentUsers();
+        if (studyRoom.decreaseCurrentUsers() == 0) { // 모두 나갔으면 세션삭제
+            sessionService.deleteSession(studyRoom.getSessionId());
+        }
+        studyRoom.deleteSession();
     }
 
 
@@ -121,9 +133,9 @@ public class StudyRoomService {
     private void createParticipant(StudyRoom studyRoom, User user) {
         // 참가자 정보 저장
         Participant participant = Participant.builder()
-            .studyRoom(studyRoom)
-            .user(user)
-            .build();
+                .studyRoom(studyRoom)
+                .user(user)
+                .build();
         // 현재 사용자 수 증가
         studyRoom.increaseCurrentUsers();
         participantRepository.save(participant);

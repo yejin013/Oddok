@@ -3,8 +3,9 @@ package com.oddok.server.domain.studyroom.application;
 import com.oddok.server.common.errors.OpenviduServerException;
 import com.oddok.server.common.errors.SessionNotFoundException;
 import io.openvidu.java.client.*;
-import java.util.List;
+
 import java.util.Objects;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -27,15 +28,14 @@ public class SessionService {
      */
     public String createSession() {
         SessionProperties properties = new SessionProperties.Builder().build();
-        Session session = null;
         try {
-            session = openVidu.createSession(properties);
+            Session session = openVidu.createSession(properties);
             System.out.println("💘 세션 생성 : " + session);
+            return session.getSessionId();
         } catch (OpenViduJavaClientException | OpenViduHttpException e) {
             e.printStackTrace();
             throw new OpenviduServerException(e.getMessage(), e.getCause());
         }
-        return Objects.requireNonNull(session).getSessionId();
     }
 
     /**
@@ -50,9 +50,9 @@ public class SessionService {
                 .type(ConnectionType.WEBRTC)
                 .role(OpenViduRole.PUBLISHER)
                 .build();
-        String token = "";
         try {
-            token = session.createConnection(connectionProperties).getToken();
+            String token = session.createConnection(connectionProperties).getToken();
+            return token;
         } catch (OpenViduJavaClientException e1) {
             throw new OpenviduServerException(e1.getMessage(), e1.getCause());
         } catch (OpenViduHttpException e2) {
@@ -62,7 +62,6 @@ public class SessionService {
                 throw new OpenviduServerException(e2.getMessage(), e2.getCause());
             }
         }
-        return token;
     }
 
 
@@ -79,4 +78,20 @@ public class SessionService {
         }
         throw new SessionNotFoundException(sessionId);
     }
+
+    /**
+     * SessionId 로 Session 을 삭제합니다.
+     *
+     * @param sessionId String
+     * @return Session
+     */
+    public void deleteSession(String sessionId) {
+        Session session = getSession(sessionId);
+        try {
+            session.close();
+        } catch (OpenViduJavaClientException | OpenViduHttpException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

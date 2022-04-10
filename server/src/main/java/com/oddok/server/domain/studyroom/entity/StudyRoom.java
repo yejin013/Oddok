@@ -144,13 +144,13 @@ public class StudyRoom {
     }
 
 
-    public void increaseCurrentUsers() {
-        this.currentUsers++;
+    public int increaseCurrentUsers() {
+        return ++this.currentUsers;
     }
   
 
-    public void decreaseCurrentUsers() {
-        this.currentUsers--;
+    public int decreaseCurrentUsers() {
+        return --this.currentUsers;
     }
 
 }

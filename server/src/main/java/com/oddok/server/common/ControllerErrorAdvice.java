@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ControllerErrorAdvice {
 
-    /*
+
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler({
             OpenviduServerException.class,
@@ -21,7 +21,6 @@ public class ControllerErrorAdvice {
     public ErrorResponse handleOpenViduException() {
         return new ErrorResponse("Openvidu 서버 에러");
     }
-     */
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(UserNotFoundException.class)

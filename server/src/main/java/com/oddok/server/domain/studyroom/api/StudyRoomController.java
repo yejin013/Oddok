@@ -152,7 +152,7 @@ public class StudyRoomController {
     @GetMapping("/leave/{id}")
     public ResponseEntity leave(@PathVariable Long id, @RequestHeader String userId) {
         studyRoomService.userLeaveStudyRoom(Long.parseLong(userId), id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(userId+"님이 "+id+"번 방에서 나갔습니다.");
     }
 
     /**
@@ -166,6 +166,6 @@ public class StudyRoomController {
     public ResponseEntity delete(@PathVariable Long id, @RequestHeader String userId) {
         studyRoomService.checkPublisher(id, Long.parseLong(userId));
         studyRoomService.deleteStudyRoom(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("삭제되었습니다.");
     }
 }
