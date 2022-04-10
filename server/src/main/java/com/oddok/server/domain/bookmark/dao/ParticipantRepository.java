@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface ParticipantRepository extends JpaRepository<Participant, Long> {
-    List<Participant> findAllByStudyRoom(StudyRoom studyRoom);
+    List<Participant> findTop5ByStudyRoomOrderByJoinTimeAsc(StudyRoom studyRoom);
 }
