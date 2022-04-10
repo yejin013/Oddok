@@ -7,6 +7,7 @@ import java.util.List;
 
 @Getter
 public class GetStudyRoomListEntityResponse {
+    private Long id;
     private String name;
     private String image;
     private List<String> hashtags;
@@ -15,8 +16,9 @@ public class GetStudyRoomListEntityResponse {
     private Integer limitUsers;
 
     @Builder
-    public GetStudyRoomListEntityResponse(String name, String image, List<String> hashtags,
+    public GetStudyRoomListEntityResponse(Long id, String name, String image, List<String> hashtags,
                                 Boolean isPublic, Integer currentUsers, Integer limitUsers) {
+        this.id = id;
         this.name = name;
         this.image = image;
         this.hashtags = hashtags;
