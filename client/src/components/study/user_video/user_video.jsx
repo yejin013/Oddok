@@ -25,14 +25,14 @@ function UserVideo({ count, publisher, subscriber }) {
       case 4:
         return styles.multi;
       default:
-        throw new Error(`unknown: ${number}`);
+        return styles.multi;
     }
   };
 
   return (
     <li className={`${styles.video} ${getCount(count)}`}>
       <video className={styles.user_video} ref={videoRef} autoPlay />
-      {publisher ? <TotalTime /> : null}
+      {publisher && <TotalTime />}
     </li>
   );
 }

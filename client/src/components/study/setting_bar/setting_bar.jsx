@@ -8,8 +8,8 @@ import { ReactComponent as GoalOpen } from "../../../assets/icons/down.svg";
 
 function SettingBar({ goToStudyRoom, stopOrStartVideo, stopOrStartAudio, clickSettingBtn }) {
   return (
-    <footer className={styles.bar}>
-      <section className={styles.info}>
+    <section className={styles.bar}>
+      <div className={styles.info}>
         <button type="button" onClick={clickSettingBtn}>
           <Setting />
         </button>
@@ -20,13 +20,13 @@ function SettingBar({ goToStudyRoom, stopOrStartVideo, stopOrStartAudio, clickSe
           </i>
           <span>없음</span>
         </div>
-      </section>
-      <section className={styles.goal}>
+      </div>
+      <div className={styles.goal}>
         <span>목표를 입력해주세요</span>
         <button type="button">
           <GoalOpen />
         </button>
-      </section>
+      </div>
       <ul className={styles.buttons}>
         <li className={styles.video_button}>
           <button type="button" onClick={stopOrStartVideo}>
@@ -44,7 +44,7 @@ function SettingBar({ goToStudyRoom, stopOrStartVideo, stopOrStartAudio, clickSe
           </button>
         </li>
       </ul>
-    </footer>
+    </section>
   );
 }
 

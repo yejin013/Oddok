@@ -11,8 +11,8 @@ import SubjectTime from "../subject_time/subject_time";
 
 function StudyBar({ toggleVideo, toggleAudio, leaveRoom, onClickplanBtn }) {
   return (
-    <footer className={styles.bar}>
-      <section className={styles.info}>
+    <section className={styles.bar}>
+      <div className={styles.info}>
         <button type="button">
           <Setting />
         </button>
@@ -23,7 +23,7 @@ function StudyBar({ toggleVideo, toggleAudio, leaveRoom, onClickplanBtn }) {
           </i>
           <span>소녀시대 - 힘내!</span>
         </div>
-      </section>
+      </div>
       <div className={styles.time}>
         <SubjectTime onClickplanBtn={onClickplanBtn} />
       </div>
@@ -54,7 +54,7 @@ function StudyBar({ toggleVideo, toggleAudio, leaveRoom, onClickplanBtn }) {
           </button>
         </li>
       </ul>
-    </footer>
+    </section>
   );
 }
 

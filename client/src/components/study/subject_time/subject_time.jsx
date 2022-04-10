@@ -30,7 +30,7 @@ function SubjectTime({ onClickplanBtn }) {
   const [totalSecond, setTotalSecond] = useRecoilState(totalSecondState);
 
   const timeInfo = {
-    userId: 1, // 나중에 userId로 바꾸기
+    // userId: 1, 나중에 지우기
     subject: selectedPlan.name,
     startTime,
     endTime,
@@ -83,7 +83,7 @@ function SubjectTime({ onClickplanBtn }) {
     setIsRecorded((prev) => !prev);
     /* server에 timeInfo post */
     saveTime(timeInfo)
-      .then((res) => console.log("시간저장 완료⏱️"))
+      .then(() => console.log("시간저장 완료⏱️"))
       .catch((error) => console.log(`post time-record error!: ${error}`));
   };
 

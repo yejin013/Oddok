@@ -31,10 +31,6 @@
   height: 10vh;
 }
 
-.plan_bar.show {
+.plan_bar {
   flex: 1 1 30%;
-}
-
-.plan_bar.hide {
-  display: none;
 }

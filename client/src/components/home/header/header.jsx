@@ -41,7 +41,7 @@ function Header(props) {
           </button>
         </li>
       </ul>
-      <section className={styles.buttons}>
+      <div className={styles.buttons}>
         <button type="button" className={styles.search} onClick={goToSearch}>
           <Search />
         </button>
@@ -70,7 +70,7 @@ function Header(props) {
         <button type="button" className={styles.study_button} onClick={goToCreateRoom}>
           + 새 스터디 만들기
         </button>
-      </section>
+      </div>
     </header>
   );
 }

@@ -15,7 +15,7 @@ function StudyRoom() {
   const history = useHistory();
   const location = useLocation();
 
-  const [clickedPlanBtn, setClickedPlanBtn] = useState(false);
+  const [isPlanOpen, setisPlanOpen] = useState(false);
   const [isSidebar, setisSidebar] = useState(false);
   const displayType = isSidebar === false ? styles.hide : styles.show;
 
@@ -83,18 +83,8 @@ function StudyRoom() {
   }, [session]);
 
   const clickPlanBtn = () => {
-    setClickedPlanBtn((prev) => !prev);
+    setisPlanOpen((prev) => !prev);
     setisSidebar((prev) => !prev);
-  };
-
-  const getStyles = (clicked) => {
-    let style;
-    if (clicked) {
-      style = styles.show;
-    } else {
-      style = styles.hide;
-    }
-    return style;
   };
 
   return (
@@ -104,9 +94,11 @@ function StudyRoom() {
           {publisher && <UserVideo count={count} publisher={publisher} />}
           {subscribers && subscribers.map((subscriber) => <UserVideo count={count} subscriber={subscriber} />)}
         </ul>
-        <div className={`${styles.plan_bar} ${getStyles(clickedPlanBtn)}`}>
-          <PlanSidebar />
-        </div>
+        {isPlanOpen && (
+          <div className={styles.plan_bar}>
+            <PlanSidebar />
+          </div>
+        )}
       </div>
       <div className={styles.bar}>
         <StudyBar

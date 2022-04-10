@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const OPENVIDU_SERVER_URL = `https://192.168.99.100:4443`; // ${window.location.hostname}
+const OPENVIDU_SERVER_URL = `https://${window.location.hostname}`; // 192.168.99.100:4443
 const OPENVIDU_SERVER_SECRET = "MY_SECRET";
 
 export const createToken = (roomId) =>

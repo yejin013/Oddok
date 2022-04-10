@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-// import SettingRoom from "./components/study/settting_room/setting_room";
 import CreateRoom from "./pages/create_room";
 import JoinRoom from "./pages/join_room";
 import MainHome from "./pages/main_home/main_home";

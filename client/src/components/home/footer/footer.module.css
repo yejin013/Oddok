@@ -33,10 +33,13 @@
 
 .contact,
 .team {
-  display: flex;
-  flex-direction: column;
   padding: 1em;
   margin: 0 2em;
+}
+
+.contents,
+.content {
+  margin: 0;
 }
 
 .contents {
