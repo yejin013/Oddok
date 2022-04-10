@@ -13,15 +13,11 @@ function SideBar({ session, roomInfo }) {
   const setRoomInfo = useSetRecoilState(roomInfoState);
   const textRef = useRef();
 
+  // TODO 사이드바 디자인 완성되면 다른 항목도 추가하기
   const submitHandler = async (e) => {
     e.preventDefault();
     // api 요청
     const res = await updateStudyRoom(roomInfo.id, { ...roomInfo, rule: textRef.current.value });
-    console.log(res.data);
-    setRoomInfo(res.data);
-
-    // 테스트용
-    // setRoomInfo({ ...roomInfo, rule: textRef.current.value });
 
     // 수정된 정보 브로드캐스트하기
     session
@@ -36,7 +32,7 @@ function SideBar({ session, roomInfo }) {
 
   return (
     <aside className={styles.side_box}>
-      <h1>일반 3호실</h1>
+      <h1>{roomInfo.name}</h1>
       <div className={styles.text_field}>
         <p>스터디 규칙</p>
         <div>

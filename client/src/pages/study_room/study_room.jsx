@@ -91,8 +91,8 @@ function StudyRoom() {
       // 3) 방장이 방 정보를 수정했을 때
       session.on("signal:updated-roominfo", (event) => {
         console.log("데이터 잘 왔엉🙂👋");
-        const res = JSON.parse(event.data);
-        setRoomInfo(res);
+        const data = JSON.parse(event.data);
+        setRoomInfo(data);
       });
     }
   }, [session]);
@@ -115,7 +115,7 @@ function StudyRoom() {
       </div>
       <div className={styles.bar}>
         <StudyBar
-          roomName={roomInfo.name}
+          roomName={roomInfo && roomInfo.name}
           clickSettingBtn={clickSettingBtn}
           toggleVideo={toggleVideo}
           toggleAudio={toggleAudio}
