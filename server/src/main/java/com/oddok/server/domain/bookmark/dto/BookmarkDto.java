@@ -9,6 +9,8 @@ import java.util.Set;
 
 @Getter
 public class BookmarkDto {
+    private Long id;
+
     private String name;
 
     private Set<String> hashtags;
@@ -26,9 +28,10 @@ public class BookmarkDto {
     private List<ParticipantDto> participant;
 
     @Builder
-    public BookmarkDto(String name, Set<String> hashtags, String image,
+    public BookmarkDto(Long id, String name, Set<String> hashtags, String image,
                                String rule, Integer currentUsers, Integer limitUsers,
                                LocalDateTime endAt, List<ParticipantDto> participant) {
+        this.id = id;
         this.name = name;
         this.hashtags = hashtags;
         this.image = image;
