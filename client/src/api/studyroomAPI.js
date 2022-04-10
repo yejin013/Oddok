@@ -10,6 +10,13 @@ export const createStudyRoom = async (roomInfo) => {
   return response;
 };
 
+export const getStudyRoom = async (roomId) => {
+  const response = await axiosInstance({
+    url: `/study-room/${roomId}`,
+  });
+  return response;
+};
+
 export const joinStudyRoom = async (roomId) => {
   const response = await axiosInstance({
     url: `/study-room/join/${roomId}`,

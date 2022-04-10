@@ -22,31 +22,32 @@ function CreateRoom() {
    * 1. 스터디룸 생성 요청 -> id return
    * 2. id로 참여 요청
    */
-  // const goToStudyRoom = async () => {
-  //   const roomId = await createStudyRoom(roomInfo);
-  //   setRoomInfo({ ...roomInfo, id: roomId.id });
-  //   const token = await joinStudyRoom(roomId.id);
-  //   history.push({
-  //     pathname: `/studyroom/${roomId.id}`,
-  //     state: {
-  //       token: token.token,
-  //     },
-  //   });
-  // };
-
-  // 테스트용
   const goToStudyRoom = async () => {
-    console.log(roomInfo);
-    const roomId = await createSession(roomInfo.name);
-    const token = await createToken(roomId.data.sessionId);
+    const data = await createStudyRoom(roomInfo);
+    localStorage.setItem("roomID", data.id); // TODO 추후 삭제 (방 참여시 사용하기 위함)
+    setRoomInfo({ ...roomInfo, id: data.id });
+    const token = await joinStudyRoom(data.id);
     history.push({
-      pathname: `/studyroom/${roomId.data.sessionId}`,
+      pathname: `/studyroom/${data.id}`,
       state: {
-        token: token.data.token,
-        roomInfo,
+        token: token.token,
       },
     });
   };
+
+  // 테스트용
+  // const goToStudyRoom = async () => {
+  //   console.log(roomInfo);
+  //   const roomId = await createSession(roomInfo.name);
+  //   const token = await createToken(roomId.data.sessionId);
+  //   history.push({
+  //     pathname: `/studyroom/${roomId.data.sessionId}`,
+  //     state: {
+  //       token: token.data.token,
+  //       roomInfo,
+  //     },
+  //   });
+  // };
 
   return <SettingRoom goToStudyRoom={goToStudyRoom} />;
 }
