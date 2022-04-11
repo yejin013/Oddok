@@ -144,8 +144,8 @@ public class StudyRoom {
     }
 
 
-    public int increaseCurrentUsers() {
-        return ++this.currentUsers;
+    public void increaseCurrentUsers() {
+        this.currentUsers++;
     }
   
 

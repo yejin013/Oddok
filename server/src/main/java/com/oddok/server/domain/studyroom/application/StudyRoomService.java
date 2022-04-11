@@ -13,6 +13,7 @@ import com.oddok.server.domain.user.dao.UserRepository;
 
 import com.oddok.server.domain.user.entity.User;
 
+import java.util.Objects;
 import java.util.Set;
 
 import lombok.RequiredArgsConstructor;
@@ -61,6 +62,7 @@ public class StudyRoomService {
     public String userJoinStudyRoom(Long userId, Long id) {
         User user = findUser(userId);
         StudyRoom studyRoom = findStudyRoom(id);
+        if (studyRoom.getCurrentUsers() >= studyRoom.getLimitUsers()) throw new StudyRoomIsFullException(id);
         String sessionId = getSession(studyRoom);
         String token = sessionService.getToken(sessionId);
         createParticipant(studyRoom, user);
