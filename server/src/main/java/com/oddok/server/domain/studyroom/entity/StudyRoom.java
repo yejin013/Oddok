@@ -18,7 +18,7 @@ public class StudyRoom {
 
     @Id
     @GeneratedValue
-    Long id;
+    private Long id;
 
     @Column(unique = true, nullable = false, length = 255)
     private String name;
@@ -52,7 +52,7 @@ public class StudyRoom {
     private Boolean isCamOn;
 
     @Column(name = "current_users")
-    private Integer currentUsers = 0;
+    private Integer currentUsers;
 
     @Column(name = "limit_users")
     private Integer limitUsers;
@@ -70,7 +70,7 @@ public class StudyRoom {
     @OneToMany(mappedBy = "studyRoom",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
-    private Set<StudyRoomHashtag> hashtags = new HashSet<>();
+    private Set<StudyRoomHashtag> hashtags;
 
     public void createSession(String sessionId) {
         this.sessionId = sessionId;
@@ -101,6 +101,8 @@ public class StudyRoom {
         this.startAt = startAt;
         this.endAt = endAt;
         this.createAt = LocalDateTime.now();
+        this.hashtags = new HashSet<>();
+        this.currentUsers = 0;
     }
 
     public void update(StudyRoomDto studyRoomDto) {
