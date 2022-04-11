@@ -72,6 +72,14 @@ public class StudyRoom {
             orphanRemoval = true)
     private Set<StudyRoomHashtag> hashtags = new HashSet<>();
 
+    public void createSession(String sessionId) {
+        this.sessionId = sessionId;
+    }
+
+    public void deleteSession(){
+        this.sessionId = null;
+    }
+
     @Builder
     public StudyRoom(String name, String category, User user,
                      String sessionId, String image, Boolean isPublic,
@@ -97,7 +105,7 @@ public class StudyRoom {
 
     public void update(StudyRoomDto studyRoomDto) {
         this.name = studyRoomDto.getName();
-        this.category = Category.valueOf(studyRoomDto.getCategory());
+        this.category = studyRoomDto.getCategory();
         this.image = studyRoomDto.getImage();
         this.isPublic = studyRoomDto.getIsPublic();
 
@@ -141,8 +149,8 @@ public class StudyRoom {
     }
   
 
-    public void decreaseCurrentUsers() {
-        this.currentUsers--;
+    public int decreaseCurrentUsers() {
+        return --this.currentUsers;
     }
 
 }

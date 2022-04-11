@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class ControllerErrorAdvice {
 
-    /*
+
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler({
             OpenviduServerException.class,
@@ -21,7 +21,6 @@ public class ControllerErrorAdvice {
     public ErrorResponse handleOpenViduException() {
         return new ErrorResponse("Openvidu 서버 에러");
     }
-     */
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(UserNotFoundException.class)
@@ -49,19 +48,32 @@ public class ControllerErrorAdvice {
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(PasswordsNotMatchException.class)
-    public ErrorResponse handlerPasswordsNotMatchException() {
+    public ErrorResponse handlePasswordsNotMatchException() {
         return new ErrorResponse("스터디방과의 비밀번호가 일치하지 않습니다.");
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(WrongApproachException.class)
-    public ErrorResponse handlerWrongApproach() {
+    public ErrorResponse handleWrongApproach() {
         return new ErrorResponse("잘못된 접근입니다.");
     }
 
-    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(UserNotParticipatingException.class)
+    public ErrorResponse handleUserNotParticipatingException() {
+        return new ErrorResponse("해당 유저가 스터디룸에 참여하고 있지 않습니다.");
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BookmarkNotFoundException.class)
-    public ErrorResponse handlerBookmarkNotFoundException() {
+    public ErrorResponse handleBookmarkNotFoundException() {
         return new ErrorResponse("북마크가 존재하지 않습니다.");
     }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(StudyRoomIsFullException.class)
+    public ErrorResponse handleStudyRoomIsFullException() {
+        return new ErrorResponse("스터디룸 정원이 꽉 찼습니다.");
+    }
+
 }

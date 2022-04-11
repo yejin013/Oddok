@@ -4,7 +4,7 @@ import com.oddok.server.domain.studyroom.api.request.CheckPasswordRequest;
 import com.oddok.server.domain.studyroom.api.request.CreateStudyRoomRequest;
 import com.oddok.server.domain.studyroom.api.request.UpdateStudyRoomRequest;
 import com.oddok.server.domain.studyroom.api.response.*;
-import com.oddok.server.domain.studyroom.application.SessionService;
+import com.oddok.server.domain.studyroom.application.StudyRoomSearchService;
 import com.oddok.server.domain.studyroom.application.StudyRoomService;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import com.oddok.server.domain.studyroom.mapper.*;
@@ -17,9 +17,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import io.openvidu.java.client.OpenViduHttpException;
-import io.openvidu.java.client.OpenViduJavaClientException;
-
 import javax.validation.Valid;
 
 @RestController
@@ -27,9 +24,9 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class StudyRoomController {
 
-    private final SessionService sessionService;
     private final StudyRoomService studyRoomService;
     private final UserService userService;
+    private final StudyRoomSearchService studyRoomSearchService;
 
     private final StudyRoomDtoMapper dtoMapper = Mappers.getMapper(StudyRoomDtoMapper.class);
 
@@ -47,12 +44,8 @@ public class StudyRoomController {
      * @return CreateStudyRoomResponse: 생성된 방 정보
      */
     @PostMapping
-    public ResponseEntity<CreateStudyRoomResponse> create(@RequestHeader String userId, @RequestBody @Valid CreateStudyRoomRequest createStudyRoomRequest) throws OpenViduJavaClientException, OpenViduHttpException {
-        // 1. OpenVidu 에 새로운 세션을 생성
-        String sessionId = sessionService.createSession();
-        StudyRoomDto requestDto = dtoMapper.fromCreateRequest(createStudyRoomRequest, userId, sessionId);
-
-        // 2. StudyRoom 생성
+    public ResponseEntity<CreateStudyRoomResponse> create(@RequestHeader String userId, @RequestBody @Valid CreateStudyRoomRequest createStudyRoomRequest) {
+        StudyRoomDto requestDto = dtoMapper.fromCreateRequest(createStudyRoomRequest, userId);
         Long studyRoomId = studyRoomService.createStudyRoom(requestDto).getId();
         return ResponseEntity.ok(new CreateStudyRoomResponse(studyRoomId));
     }
@@ -79,16 +72,8 @@ public class StudyRoomController {
     @GetMapping(value = "/join/{id}")
     public ResponseEntity<TokenResponse> join(@PathVariable Long id, @RequestHeader String userId) {
         System.out.println("💘 " + userId + "님이 {" + id + "}방에 입장하셨습니다.");
-        // 1. StudyRoom id 로 세션 id 가져오기
-        StudyRoomDto studyRoomDto = studyRoomService.loadStudyRoom(id);
-
-        // 2. OpenVidu Connection 생성 및 토큰 가져오기
-        String token = sessionService.getToken(studyRoomDto.getSessionId());
+        String token = studyRoomService.userJoinStudyRoom(Long.parseLong(userId), id);
         TokenResponse tokenResponse = new TokenResponse(token);
-
-        // 3. Participant 정보 저장
-        studyRoomService.createParticipant(id, Long.parseLong(userId));
-
         return ResponseEntity.ok(tokenResponse);
     }
 
@@ -107,9 +92,9 @@ public class StudyRoomController {
         if(isPublic == null) isPublic = false;
         Page<GetStudyRoomListEntityResponse> studyRoomResponse;
         if(category == null)
-            studyRoomResponse = studyRoomService.getStudyRooms(pageable, isPublic).map(dtoMapper::toGetResponseList);
+            studyRoomResponse = studyRoomSearchService.getStudyRooms(pageable, isPublic).map(dtoMapper::toGetResponseList);
         else
-            studyRoomResponse = studyRoomService.getStudyRoomsByCategory(pageable, isPublic, category).map(dtoMapper::toGetResponseList);
+            studyRoomResponse = studyRoomSearchService.getStudyRoomsByCategory(pageable, isPublic, category).map(dtoMapper::toGetResponseList);
         return ResponseEntity.ok(studyRoomResponse);
     }
 
@@ -129,9 +114,9 @@ public class StudyRoomController {
         if(isPublic == null) isPublic = false;
         Page<GetStudyRoomListEntityResponse> studyRoomResponse;
         if(name == null)
-            studyRoomResponse = studyRoomService.getStudyRooms(pageable, isPublic).map(dtoMapper::toGetResponseList);
+            studyRoomResponse = studyRoomSearchService.getStudyRooms(pageable, isPublic).map(dtoMapper::toGetResponseList);
         else
-            studyRoomResponse = studyRoomService.getStudyRoomsByName(pageable, isPublic, name).map(dtoMapper::toGetResponseList);
+            studyRoomResponse = studyRoomSearchService.getStudyRoomsByName(pageable, isPublic, name).map(dtoMapper::toGetResponseList);
         return ResponseEntity.ok(studyRoomResponse);
     }
 
@@ -159,6 +144,18 @@ public class StudyRoomController {
     }
 
     /**
+     * 스터디룸 나가기 요청
+     * @param id
+     * @param userId
+     * @return
+     */
+    @GetMapping("/leave/{id}")
+    public ResponseEntity leave(@PathVariable Long id, @RequestHeader String userId) {
+        studyRoomService.userLeaveStudyRoom(Long.parseLong(userId), id);
+        return ResponseEntity.ok(userId+"님이 "+id+"번 방에서 나갔습니다.");
+    }
+
+    /**
      * [DELETE] /study-room/{study-room-id} : 스터디방 삭제
      *
      * @param id        : 방 식별자
@@ -169,6 +166,6 @@ public class StudyRoomController {
     public ResponseEntity delete(@PathVariable Long id, @RequestHeader String userId) {
         studyRoomService.checkPublisher(id, Long.parseLong(userId));
         studyRoomService.deleteStudyRoom(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("삭제되었습니다.");
     }
 }

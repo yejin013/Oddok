@@ -39,3 +39,5 @@ out/
 **/main/java/resources/application-yejin.yml
 
 !**/.keep
+
+src/main/generated/

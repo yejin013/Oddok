@@ -5,7 +5,6 @@ import com.oddok.server.domain.studyroom.dao.HashtagRepository;
 import com.oddok.server.domain.studyroom.dao.StudyRoomRepository;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import com.oddok.server.domain.bookmark.dao.ParticipantRepository;
-import com.oddok.server.domain.studyroom.entity.Category;
 import com.oddok.server.domain.studyroom.entity.Hashtag;
 import com.oddok.server.domain.studyroom.entity.Participant;
 import com.oddok.server.domain.studyroom.entity.StudyRoom;
@@ -13,20 +12,22 @@ import com.oddok.server.domain.studyroom.mapper.StudyRoomMapper;
 import com.oddok.server.domain.user.dao.UserRepository;
 
 import com.oddok.server.domain.user.entity.User;
+
+import java.util.Objects;
 import java.util.Set;
+
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class StudyRoomService {
+
+    private final SessionService sessionService;
 
     private final UserRepository userRepository;
     private final StudyRoomRepository studyRoomRepository;
@@ -51,6 +52,32 @@ public class StudyRoomService {
     }
 
     /**
+     * userId의 사용자가 id 방에 참여합니다.
+     * 스터디룸 세션에 커넥션을 생성하고 토큰을 반환합니다.
+     * 스터디룸에 참여합니다.
+     *
+     * @return token
+     */
+    @Transactional
+    public String userJoinStudyRoom(Long userId, Long id) {
+        User user = findUser(userId);
+        StudyRoom studyRoom = findStudyRoom(id);
+        if (studyRoom.getCurrentUsers() >= studyRoom.getLimitUsers()) throw new StudyRoomIsFullException(id);
+        String sessionId = getSession(studyRoom);
+        String token = sessionService.getToken(sessionId);
+        createParticipant(studyRoom, user);
+        return token;
+    }
+
+    /**
+     * 해당 스터디룸의 sessionId 가 없으면 Openvidu 세션을 생성/등록 후 반환하고, 있으면 해당 세션아이디를 반환합니다.
+     */
+    private String getSession(StudyRoom studyRoom) {
+        if (studyRoom.getSessionId() == null) studyRoom.createSession(sessionService.createSession());
+        return studyRoom.getSessionId();
+    }
+
+    /**
      * 스터디룸을 수정합니다.
      * 방장이 아닐 경우 수정할 수 없으므로 예외를 발생시킵니다.
      */
@@ -65,24 +92,31 @@ public class StudyRoomService {
     @Transactional
     public void deleteStudyRoom(Long id) {
         StudyRoom studyRoom = findStudyRoom(id);
+        if (studyRoom.getSessionId() == null) {
+            sessionService.deleteSession(studyRoom.getSessionId());
+        }
         studyRoomRepository.delete(studyRoom);
     }
 
+    /**
+     * 사용자가 스터디룸을 나가는 과정
+     * 1. 참여자 테이블에서 삭제
+     * 2. 스터디룸의 참여자 수 1 감소
+     * 3. 참여자수가 0일 경우 세션 삭제
+     */
     @Transactional
-    public void createParticipant(Long id, Long userId) {
+    public void userLeaveStudyRoom(Long userId, Long studyRoomId) {
         User user = findUser(userId);
-        StudyRoom studyRoom = findStudyRoom(id);
-
-        // 현재 사용자 수 증가
-        studyRoom.increaseCurrentUsers();
-
-        // 참가자 정보 저장
-        Participant participant = Participant.builder()
-                .studyRoom(studyRoom)
-                .user(user)
-                .build();
-        participantRepository.save(participant);
+        StudyRoom studyRoom = findStudyRoom(studyRoomId);
+        Participant participant = participantRepository.findByUser(user).orElseThrow(() -> new UserNotParticipatingException(userId, studyRoomId));
+        if (!participant.getStudyRoom().equals(studyRoom)) throw new UserNotParticipatingException(userId, studyRoomId);
+        participantRepository.delete(participant);
+        if (studyRoom.decreaseCurrentUsers() == 0) { // 모두 나갔으면 세션삭제
+            sessionService.deleteSession(studyRoom.getSessionId());
+        }
+        studyRoom.deleteSession();
     }
+
 
     public void checkPassword(Long id, String password) {
         StudyRoom studyRoom = findStudyRoom(id);
@@ -96,6 +130,17 @@ public class StudyRoomService {
     public void checkPublisher(Long studyRoomId, Long userId) {
         Long publisherId = findStudyRoom(studyRoomId).getUser().getId();
         if (!publisherId.equals(userId)) throw new UserNotPublisherException(userId);
+    }
+
+    private void createParticipant(StudyRoom studyRoom, User user) {
+        // 참가자 정보 저장
+        Participant participant = Participant.builder()
+                .studyRoom(studyRoom)
+                .user(user)
+                .build();
+        // 현재 사용자 수 증가
+        studyRoom.increaseCurrentUsers();
+        participantRepository.save(participant);
     }
 
     /**
@@ -118,27 +163,4 @@ public class StudyRoomService {
         return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
     }
 
-    /**
-     * 인자가 isPublic만 있을 때 사용하는 함수
-     */
-    public Page<StudyRoomDto> getStudyRooms(Pageable pageable, Boolean isPublic) {
-        // 전체방일 때
-        if(!isPublic)
-            return studyRoomRepository.findAllByStartAtBeforeAndEndAtAfter(LocalDateTime.now(), LocalDateTime.now(), pageable).map(studyRoomMapper::toDto);
-        return studyRoomRepository.findAllByStartAtBeforeAndEndAtAfterAndIsPublicTrue(LocalDateTime.now(), LocalDateTime.now(), pageable).map(studyRoomMapper::toDto);
-    }
-
-    public Page<StudyRoomDto> getStudyRoomsByCategory(Pageable pageable, Boolean isPublic, String category) {
-        // 전체방일 때
-        if(!isPublic)
-            return studyRoomRepository.findAllByStartAtBeforeAndEndAtAfterAndCategory(LocalDateTime.now(), LocalDateTime.now(), Category.valueOf(category), pageable).map(studyRoomMapper::toDto);
-        return studyRoomRepository.findAllByStartAtBeforeAndEndAtAfterAndCategoryAndIsPublicTrue(LocalDateTime.now(), LocalDateTime.now(), Category.valueOf(category), pageable).map(studyRoomMapper::toDto);
-    }
-
-    public Page<StudyRoomDto> getStudyRoomsByName(Pageable pageable, Boolean isPublic, String name) {
-        // 전체방일 때
-        if(!isPublic)
-            return studyRoomRepository.findAllByStartAtBeforeAndEndAtAfterAndNameContaining(LocalDateTime.now(), LocalDateTime.now(), name, pageable).map(studyRoomMapper::toDto);
-        return studyRoomRepository.findAllByStartAtBeforeAndEndAtAfterAndNameContainingAndIsPublicTrue(LocalDateTime.now(), LocalDateTime.now(), name, pageable).map(studyRoomMapper::toDto);
-    }
 }
