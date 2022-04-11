@@ -1,19 +1,17 @@
 package com.oddok.server.domain.studyroom.application;
 
 import com.oddok.server.common.errors.*;
+import com.oddok.server.domain.participant.application.ParticipantService;
 import com.oddok.server.domain.studyroom.dao.HashtagRepository;
 import com.oddok.server.domain.studyroom.dao.StudyRoomRepository;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
-import com.oddok.server.domain.bookmark.dao.ParticipantRepository;
 import com.oddok.server.domain.studyroom.entity.Hashtag;
-import com.oddok.server.domain.studyroom.entity.Participant;
 import com.oddok.server.domain.studyroom.entity.StudyRoom;
 import com.oddok.server.domain.studyroom.mapper.StudyRoomMapper;
-import com.oddok.server.domain.user.dao.UserRepository;
 
+import com.oddok.server.domain.user.application.UserService;
 import com.oddok.server.domain.user.entity.User;
 
-import java.util.Objects;
 import java.util.Set;
 
 import lombok.RequiredArgsConstructor;
@@ -28,17 +26,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class StudyRoomService {
 
     private final SessionService sessionService;
+    private final UserService userService;
+    private final ParticipantService participantService;
 
-    private final UserRepository userRepository;
     private final StudyRoomRepository studyRoomRepository;
-    private final ParticipantRepository participantRepository;
     private final HashtagRepository hashtagRepository;
 
     private final StudyRoomMapper studyRoomMapper = Mappers.getMapper(StudyRoomMapper.class);
 
     @Transactional
     public StudyRoomDto createStudyRoom(StudyRoomDto studyRoomDto) {
-        User user = findUser(studyRoomDto.getUserId());
+        User user = userService.findUser(studyRoomDto.getUserId());
         StudyRoom studyRoom = studyRoomMapper.toEntity(studyRoomDto, user);
         studyRoom = studyRoomRepository.save(studyRoom);
         mapStudyRoomAndHashtags(studyRoom, studyRoomDto.getHashtags());
@@ -60,12 +58,12 @@ public class StudyRoomService {
      */
     @Transactional
     public String userJoinStudyRoom(Long userId, Long id) {
-        User user = findUser(userId);
+        User user = userService.findUser(userId);
         StudyRoom studyRoom = findStudyRoom(id);
         if (studyRoom.getCurrentUsers() >= studyRoom.getLimitUsers()) throw new StudyRoomIsFullException(id);
         String sessionId = getSession(studyRoom);
         String token = sessionService.getToken(sessionId);
-        createParticipant(studyRoom, user);
+        participantService.create(studyRoom, user);
         return token;
     }
 
@@ -106,17 +104,13 @@ public class StudyRoomService {
      */
     @Transactional
     public void userLeaveStudyRoom(Long userId, Long studyRoomId) {
-        User user = findUser(userId);
         StudyRoom studyRoom = findStudyRoom(studyRoomId);
-        Participant participant = participantRepository.findByUser(user).orElseThrow(() -> new UserNotParticipatingException(userId, studyRoomId));
-        if (!participant.getStudyRoom().equals(studyRoom)) throw new UserNotParticipatingException(userId, studyRoomId);
-        participantRepository.delete(participant);
+        participantService.delete(userId, studyRoom);
         if (studyRoom.decreaseCurrentUsers() == 0) { // 모두 나갔으면 세션삭제
             sessionService.deleteSession(studyRoom.getSessionId());
         }
         studyRoom.deleteSession();
     }
-
 
     public void checkPassword(Long id, String password) {
         StudyRoom studyRoom = findStudyRoom(id);
@@ -132,17 +126,6 @@ public class StudyRoomService {
         if (!publisherId.equals(userId)) throw new UserNotPublisherException(userId);
     }
 
-    private void createParticipant(StudyRoom studyRoom, User user) {
-        // 참가자 정보 저장
-        Participant participant = Participant.builder()
-                .studyRoom(studyRoom)
-                .user(user)
-                .build();
-        // 현재 사용자 수 증가
-        studyRoom.increaseCurrentUsers();
-        participantRepository.save(participant);
-    }
-
     /**
      * DB에 해당 해시태그 이름이 없으면 생성하고, 있으면 있는 해시태그와 스터디룸을 매핑해줍니다.
      */
@@ -153,14 +136,8 @@ public class StudyRoomService {
         }
     }
 
-    private StudyRoom findStudyRoom(Long id) {
-        return studyRoomRepository.findById(id)
-                .orElseThrow(() -> new StudyRoomNotFoundException(id));
+    public StudyRoom findStudyRoom(Long studyRoomId) {
+        return studyRoomRepository.findById(studyRoomId)
+                .orElseThrow(() -> new StudyRoomNotFoundException(studyRoomId));
     }
-
-
-    private User findUser(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
-    }
-
 }

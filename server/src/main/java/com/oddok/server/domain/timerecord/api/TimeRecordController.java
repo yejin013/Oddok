@@ -5,6 +5,7 @@ import com.oddok.server.domain.timerecord.api.response.GetTimeRecordResponse;
 import com.oddok.server.domain.timerecord.application.TimeRecordService;
 import com.oddok.server.domain.timerecord.dto.TimeRecordDto;
 import com.oddok.server.domain.timerecord.mapper.TimeRecordDtoMapper;
+import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,17 +15,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/time-record")
+@RequiredArgsConstructor
 public class TimeRecordController {
 
-    private TimeRecordService timeRecordService;
+    private final TimeRecordService timeRecordService;
 
-    private TimeRecordDtoMapper timeRecordDtoMapper;
-
-    public TimeRecordController(TimeRecordService timeRecordService) {
-        this.timeRecordService = timeRecordService;
-
-        timeRecordDtoMapper = Mappers.getMapper(TimeRecordDtoMapper.class);
-    }
+    private final TimeRecordDtoMapper timeRecordDtoMapper = Mappers.getMapper(TimeRecordDtoMapper.class);
 
     /**
      * [POST] /time-record : 시간 기록 API

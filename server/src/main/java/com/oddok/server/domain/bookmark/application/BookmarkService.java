@@ -1,18 +1,15 @@
 package com.oddok.server.domain.bookmark.application;
 
 import com.oddok.server.common.errors.BookmarkNotFoundException;
-import com.oddok.server.common.errors.StudyRoomNotFoundException;
-import com.oddok.server.common.errors.UserNotFoundException;
 import com.oddok.server.domain.bookmark.dao.BookmarkRepository;
-import com.oddok.server.domain.bookmark.dao.ParticipantRepository;
+import com.oddok.server.domain.participant.application.ParticipantService;
 import com.oddok.server.domain.bookmark.dto.BookmarkDto;
-import com.oddok.server.domain.bookmark.dto.ParticipantDto;
 import com.oddok.server.domain.bookmark.entity.Bookmark;
-import com.oddok.server.domain.studyroom.entity.Participant;
+import com.oddok.server.domain.participant.dto.ParticipantDto;
+import com.oddok.server.domain.studyroom.application.StudyRoomService;
 import com.oddok.server.domain.bookmark.mapper.BookmarkMapper;
-import com.oddok.server.domain.studyroom.dao.StudyRoomRepository;
 import com.oddok.server.domain.studyroom.entity.StudyRoom;
-import com.oddok.server.domain.user.dao.UserRepository;
+import com.oddok.server.domain.user.application.UserService;
 import com.oddok.server.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
@@ -27,18 +24,19 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class BookmarkService {
 
+    private final UserService userService;
+    private final StudyRoomService studyRoomService;
+    private final ParticipantService participantService;
+
     private final BookmarkRepository bookmarkRepository;
-    private final UserRepository userRepository;
-    private final StudyRoomRepository studyRoomRepository;
-    private final ParticipantRepository participantRepository;
 
     /**
      * 북마크 생성
      */
     @Transactional
     public void create(Long userId, Long studyRoomId) {
-        User user = findUser(userId);
-        StudyRoom studyRoom = findStudyRoom(studyRoomId);
+        User user = userService.findUser(userId);
+        StudyRoom studyRoom = studyRoomService.findStudyRoom(studyRoomId);
 
         Optional<Bookmark> bookmark = bookmarkRepository.findByUser(user);
         if(bookmark.isPresent()) {
@@ -55,10 +53,10 @@ public class BookmarkService {
      * 북마크 조회
      */
     public BookmarkDto get(Long userId) {
-        User user = findUser(userId);
+        User user = userService.findUser(userId);
         Bookmark bookmark = bookmarkRepository.findByUser(user).orElseThrow(() -> new BookmarkNotFoundException());
         StudyRoom studyRoom = bookmark.getStudyRoom();
-        List<Participant> participant = participantRepository.findTop5ByStudyRoomOrderByJoinTimeAsc(studyRoom);
+        List<ParticipantDto> participant = participantService.get(studyRoom);
         BookmarkMapper bookmarkMapper = Mappers.getMapper(BookmarkMapper.class);
         return bookmarkMapper.toDto(studyRoom, participant);
     }
@@ -68,21 +66,7 @@ public class BookmarkService {
      */
     @Transactional
     public void delete(Long userId) {
-        User user = findUser(userId);
+        User user = userService.findUser(userId);
         bookmarkRepository.deleteByUser(user);
-    }
-
-    /**
-     * 유저 정보 검색
-     */
-    private User findUser(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
-    }
-
-    /**
-     * 스터디룸 정보 검색
-     */
-    private StudyRoom findStudyRoom(Long studyRoomId) {
-        return studyRoomRepository.findById(studyRoomId).orElseThrow(() -> new StudyRoomNotFoundException(studyRoomId));
     }
 }

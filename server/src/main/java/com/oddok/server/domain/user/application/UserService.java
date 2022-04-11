@@ -5,21 +5,19 @@ import com.oddok.server.domain.user.dao.UserRepository;
 import com.oddok.server.domain.user.dto.UserDto;
 import com.oddok.server.domain.user.entity.User;
 import com.oddok.server.domain.user.mapper.UserMapper;
+import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class UserService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    private UserMapper userMapper = Mappers.getMapper(UserMapper.class);
-
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
     //TODO: 현재는 임의의 사용자 3명 저장
     @Transactional
@@ -29,7 +27,6 @@ public class UserService {
         userRepository.save(new User("user1@kakao.com", "user1"));
         userRepository.save(new User("user2@kakao.com", "user2"));
         return savedUser.getId();
-
     }
 
     public UserDto loadUser(Long userId) {
@@ -37,4 +34,7 @@ public class UserService {
         return userMapper.toDto(user);
     }
 
+    public User findUser(Long userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+    }
 }

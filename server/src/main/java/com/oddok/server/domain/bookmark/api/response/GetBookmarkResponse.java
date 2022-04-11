@@ -1,6 +1,6 @@
 package com.oddok.server.domain.bookmark.api.response;
 
-import com.oddok.server.domain.bookmark.dto.ParticipantDto;
+import com.oddok.server.domain.participant.dto.ParticipantDto;
 import lombok.Builder;
 import lombok.Getter;
 
