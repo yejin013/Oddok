@@ -1,5 +1,6 @@
 package com.oddok.server.domain.studyroom.api;
 
+import com.oddok.server.domain.studyroom.api.response.GetPopularHashtagsResponse;
 import com.oddok.server.domain.studyroom.application.HashtagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +17,10 @@ public class HashtagController {
 
     private final HashtagService hashtagService;
 
-    @GetMapping
-    public ResponseEntity<List<String>> getPopularHashtags(){
-        return ResponseEntity.ok(hashtagService.findTop15Hashtags());
+    @GetMapping("/popular")
+    public ResponseEntity<GetPopularHashtagsResponse> getPopularHashtags(){
+        GetPopularHashtagsResponse response = new GetPopularHashtagsResponse(hashtagService.findTop15Hashtags());
+        return ResponseEntity.ok(response);
     }
 
 }
