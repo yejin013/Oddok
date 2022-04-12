@@ -4,6 +4,7 @@ import { videoState, audioState } from "../../recoil/studyroom_state";
 import SettingBar from "../../components/study/setting_bar/setting_bar";
 import SettingSection from "../../components/study/setting_section/setting_section";
 import styles from "./setting_room.module.css";
+import TotalTime from "../../components/study/total_time/total_time";
 
 function SettingRoom({ goToStudyRoom }) {
   const videoRef = useRef();
@@ -53,6 +54,7 @@ function SettingRoom({ goToStudyRoom }) {
       )}
       <section className={`${styles.video_component} ${displayType}`}>
         <video className={styles.video} ref={videoRef} autoPlay />
+        <TotalTime />
       </section>
       <div className={`${styles.bar} ${displayType}`}>
         <SettingBar //

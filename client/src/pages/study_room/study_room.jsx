@@ -4,6 +4,7 @@ import { OpenVidu } from "openvidu-browser";
 import StudyBar from "../../components/study/study_bar/study_bar";
 import UserVideo from "../../components/study/user_video/user_video";
 import styles from "./study_room.module.css";
+import PlanSidebar from "../../components/study/plan_sidebar/plan_sidebar";
 
 function StudyRoom() {
   const OV = new OpenVidu();
@@ -13,6 +14,10 @@ function StudyRoom() {
   const [count, setCount] = useState(1);
   const history = useHistory();
   const location = useLocation();
+
+  const [isPlanOpen, setisPlanOpen] = useState(false);
+  const [isSidebar, setisSidebar] = useState(false);
+  const displayType = isSidebar === false ? styles.hide : styles.show;
 
   const leaveRoom = () => {
     session.disconnect();
@@ -77,16 +82,31 @@ function StudyRoom() {
     }
   }, [session]);
 
+  const clickPlanBtn = () => {
+    setisPlanOpen((prev) => !prev);
+    setisSidebar((prev) => !prev);
+  };
+
   return (
     <div className={styles.room}>
       <div className={styles.video_container}>
-        <ul className={styles.videos}>
-          {publisher && <UserVideo count={count} streamManager={publisher} />}
-          {subscribers && subscribers.map((subscriber) => <UserVideo count={count} streamManager={subscriber} />)}
+        <ul className={`${styles.videos} ${displayType}`}>
+          {publisher && <UserVideo count={count} publisher={publisher} />}
+          {subscribers && subscribers.map((subscriber) => <UserVideo count={count} subscriber={subscriber} />)}
         </ul>
+        {isPlanOpen && (
+          <div className={styles.plan_bar}>
+            <PlanSidebar />
+          </div>
+        )}
       </div>
       <div className={styles.bar}>
-        <StudyBar toggleVideo={toggleVideo} toggleAudio={toggleAudio} leaveRoom={leaveRoom} />
+        <StudyBar
+          toggleVideo={toggleVideo}
+          toggleAudio={toggleAudio}
+          leaveRoom={leaveRoom}
+          onClickplanBtn={clickPlanBtn}
+        />
       </div>
     </div>
   );
