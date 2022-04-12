@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { userState } from "../recoil/user_state";
 import { roomInfoState } from "../recoil/studyroom_state";
 import { createStudyRoom, joinStudyRoom } from "../api/studyroomAPI";
 import SettingRoom from "./settting_room/setting_room";
-
-import { createSession, createToken } from "./testserver";
 
 function CreateRoom() {
   const history = useHistory();
@@ -34,20 +32,6 @@ function CreateRoom() {
       },
     });
   };
-
-  // 테스트용
-  // const goToStudyRoom = async () => {
-  //   console.log(roomInfo);
-  //   const roomId = await createSession(roomInfo.name);
-  //   const token = await createToken(roomId.data.sessionId);
-  //   history.push({
-  //     pathname: `/studyroom/${roomId.data.sessionId}`,
-  //     state: {
-  //       token: token.data.token,
-  //       roomInfo,
-  //     },
-  //   });
-  // };
 
   return <SettingRoom goToStudyRoom={goToStudyRoom} />;
 }

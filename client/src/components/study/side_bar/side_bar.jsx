@@ -1,7 +1,6 @@
 import React, { useRef } from "react";
-import { useSetRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import { userState } from "../../../recoil/user_state";
-import { roomInfoState } from "../../../recoil/studyroom_state";
 import Textarea from "../../commons/textarea/textarea";
 import { updateStudyRoom } from "../../../api/studyroomAPI";
 
@@ -10,7 +9,6 @@ import styles from "./side_bar.module.css";
 // TODO textarea warning
 function SideBar({ session, roomInfo }) {
   const { updateAllowed } = useRecoilValue(userState);
-  const setRoomInfo = useSetRecoilState(roomInfoState);
   const textRef = useRef();
 
   // TODO 사이드바 디자인 완성되면 다른 항목도 추가하기
@@ -36,7 +34,7 @@ function SideBar({ session, roomInfo }) {
       <div className={styles.text_field}>
         <p>스터디 규칙</p>
         <div>
-          <Textarea ref={textRef} disabled={!updateAllowed} content={roomInfo.rule} />
+          <Textarea ref={textRef} content={roomInfo.rule} disabled={!updateAllowed} />
         </div>
       </div>
       {updateAllowed && (

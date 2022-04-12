@@ -1,12 +1,10 @@
 import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { userState } from "../recoil/user_state";
 import { roomInfoState } from "../recoil/studyroom_state";
 import { getStudyRoom, joinStudyRoom } from "../api/studyroomAPI";
 import SettingRoom from "./settting_room/setting_room";
-
-import { createToken } from "./testserver";
 
 function JoinRoom() {
   const history = useHistory();
@@ -14,9 +12,9 @@ function JoinRoom() {
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
 
   useEffect(() => {
+    // TODO 추후 삭제 (방 참여시 사용하기 위함)
     const roomID = localStorage.getItem("roomID");
     getStudyRoom(roomID).then((data) => {
-      console.log(data);
       setRoomInfo(data);
     });
 

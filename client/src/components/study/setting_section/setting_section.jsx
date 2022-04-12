@@ -221,7 +221,7 @@ function SettingSection({ clickSettingBtn, roomName, setRoomName }) {
             </div>
             <div>
               <p className={styles.label}>장치 규칙</p>
-              <div className={styles.content}>
+              <div className={styles.device_item}>
                 <ToggleButton icon={<Video />} label="카메라 ON" onToggle={videoRuleHandler} disabled={disabled} />
                 <ToggleButton icon={<MicOff />} label="마이크 OFF" onToggle={audioRuleHandler} disabled={disabled} />
               </div>
