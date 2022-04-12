@@ -1,0 +1,28 @@
+.container {
+  width: 65%;
+  max-width: 1296px;
+  margin: 300px auto;
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.container h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0px;
+  margin-bottom: 24px;
+}
+
+.lnb {
+  margin-bottom: 43px;
+}
+
+.content {
+  margin-bottom: 53px;
+}
+
+.container button {
+  color: white;
+  font-size: 1.25rem;
+}
