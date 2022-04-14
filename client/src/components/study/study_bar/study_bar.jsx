@@ -9,14 +9,14 @@ import { ReactComponent as Member } from "../../../assets/icons/person.svg";
 import { ReactComponent as Door } from "../../../assets/icons/door.svg";
 import SubjectTime from "../subject_time/subject_time";
 
-function StudyBar({ toggleVideo, toggleAudio, leaveRoom, onClickplanBtn }) {
+function StudyBar({ roomName, clickSettingBtn, toggleVideo, toggleAudio, clickChatBtn, onClickplanBtn, leaveRoom }) {
   return (
     <section className={styles.bar}>
       <div className={styles.info}>
         <button type="button">
-          <Setting />
+          <Setting onClick={clickSettingBtn} />
         </button>
-        <span>자격증 3호실</span>
+        <span>{roomName}</span>
         <div className={styles.music}>
           <i className={styles.music_icon}>
             <Music />
@@ -39,7 +39,7 @@ function StudyBar({ toggleVideo, toggleAudio, leaveRoom, onClickplanBtn }) {
           </button>
         </li>
         <li className={styles.chat_button}>
-          <button type="button">
+          <button type="button" onClick={clickChatBtn}>
             <Chat />
           </button>
         </li>
