@@ -1,7 +1,11 @@
 package com.oddok.server.domain.studyroom.dto;
 
 import com.oddok.server.domain.studyroom.entity.Category;
+
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
+
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -60,7 +64,7 @@ public class StudyRoomDto {
         this.limitUsers = limitUsers;
         this.startAt = startAt;
         this.endAt = endAt;
-        this.hashtags = hashtags;
+        this.hashtags = Objects.requireNonNullElseGet(hashtags, HashSet::new);
     }
 
     @Builder
@@ -80,6 +84,6 @@ public class StudyRoomDto {
         this.limitUsers = limitUsers;
         this.startAt = startAt;
         this.endAt = endAt;
-        this.hashtags = hashtags;
+        this.hashtags = Objects.requireNonNullElseGet(hashtags, HashSet::new);
     }
 }
