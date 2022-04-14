@@ -27,7 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class StudyRoomService {
 
-    private final SessionService sessionService;
+    private final SessionManager sessionManager;
 
     private final UserRepository userRepository;
     private final StudyRoomRepository studyRoomRepository;
@@ -64,7 +64,7 @@ public class StudyRoomService {
         StudyRoom studyRoom = findStudyRoom(id);
         if (studyRoom.getCurrentUsers() >= studyRoom.getLimitUsers()) throw new StudyRoomIsFullException(id);
         String sessionId = getSession(studyRoom);
-        String token = sessionService.getToken(sessionId);
+        String token = sessionManager.getToken(sessionId);
         createParticipant(studyRoom, user);
         return token;
     }
@@ -73,7 +73,7 @@ public class StudyRoomService {
      * 해당 스터디룸의 sessionId 가 없으면 Openvidu 세션을 생성/등록 후 반환하고, 있으면 해당 세션아이디를 반환합니다.
      */
     private String getSession(StudyRoom studyRoom) {
-        if (studyRoom.getSessionId() == null) studyRoom.createSession(sessionService.createSession());
+        if (studyRoom.getSessionId() == null) studyRoom.createSession(sessionManager.createSession());
         return studyRoom.getSessionId();
     }
 
@@ -93,7 +93,7 @@ public class StudyRoomService {
     public void deleteStudyRoom(Long id) {
         StudyRoom studyRoom = findStudyRoom(id);
         if (studyRoom.getSessionId() == null) {
-            sessionService.deleteSession(studyRoom.getSessionId());
+            sessionManager.deleteSession(studyRoom.getSessionId());
         }
         studyRoomRepository.delete(studyRoom);
     }
@@ -112,7 +112,7 @@ public class StudyRoomService {
         if (!participant.getStudyRoom().equals(studyRoom)) throw new UserNotParticipatingException(userId, studyRoomId);
         participantRepository.delete(participant);
         if (studyRoom.decreaseCurrentUsers() == 0) { // 모두 나갔으면 세션삭제
-            sessionService.deleteSession(studyRoom.getSessionId());
+            sessionManager.deleteSession(studyRoom.getSessionId());
         }
         studyRoom.deleteSession();
     }

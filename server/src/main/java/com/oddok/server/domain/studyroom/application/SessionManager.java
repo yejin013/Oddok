@@ -7,16 +7,17 @@ import io.openvidu.java.client.*;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-@Service
-public class SessionService {
+@Component
+public class SessionManager {
 
     private final String OPENVIDU_URL;
     private final String SECRET;
     private final OpenVidu openVidu;
 
-    public SessionService(@Value("${openvidu.url}") String OPENVIDU_URL, @Value("${openvidu.secret}") String SECRET) {
+    public SessionManager(@Value("${openvidu.url}") String OPENVIDU_URL, @Value("${openvidu.secret}") String SECRET) {
         this.OPENVIDU_URL = OPENVIDU_URL;
         this.SECRET = SECRET;
         this.openVidu = new OpenVidu(OPENVIDU_URL, SECRET);
