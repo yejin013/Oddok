@@ -6,23 +6,35 @@
   background-color: #101112;
 }
 
-.video_component.show {
-  flex: 1 1 90%;
+.room.hide {
+  display: none;
+}
+
+.video_component {
+  height: 90vh;
+  display: flex;
+}
+
+.video_component.decrease {
+  flex: 1 1 70%;
+}
+
+.bar {
+  height: 10vh;
+}
+
+.video_container {
+  width: 100%;
   display: flex;
   justify-content: center;
-}
-
-.bar.show {
-  flex: 1 1 10%;
-}
-
-.video_component.hide,
-.bar.hide {
-  display: none;
 }
 
 .video {
   height: 100%;
   object-fit: contain;
   transform: rotateY(180deg);
+}
+
+.plan_bar {
+  flex: 1 1 30%;
 }

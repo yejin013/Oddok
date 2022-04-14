@@ -5,13 +5,17 @@ import SettingBar from "../../components/study/setting_bar/setting_bar";
 import SettingSection from "../../components/study/setting_section/setting_section";
 import styles from "./setting_room.module.css";
 import TotalTime from "../../components/study/total_time/total_time";
+import PlanSidebar from "../../components/study/plan_sidebar/plan_sidebar";
 
 function SettingRoom({ goToStudyRoom }) {
   const videoRef = useRef();
   const setIsPlaying = useSetRecoilState(videoState);
   const setIsMuted = useSetRecoilState(audioState);
   const [clickedSettingBtn, setClickedSettingBtn] = useState(false);
-  const displayType = clickedSettingBtn === true ? styles.hide : styles.show;
+  const [isPlanOpen, setisPlanOpen] = useState(false);
+  const [isSidebar, setisSidebar] = useState(false);
+  const displayType = clickedSettingBtn === true ? styles.hide : "";
+  const videoDisplayType = isSidebar === true ? styles.decrease : "";
 
   const [roomName, setRoomName] = useState("나중에 지우기");
 
@@ -47,8 +51,13 @@ function SettingRoom({ goToStudyRoom }) {
     setClickedSettingBtn((prev) => !prev);
   };
 
+  const clickPlanBtn = () => {
+    setisPlanOpen((prev) => !prev);
+    setisSidebar((prev) => !prev);
+  };
+
   return (
-    <div className={styles.room}>
+    <div>
       {clickedSettingBtn && (
         <SettingSection //
           clickSettingBtn={clickSettingBtn}
@@ -56,18 +65,28 @@ function SettingRoom({ goToStudyRoom }) {
           setRoomName={setRoomName}
         />
       )}
-      <section className={`${styles.video_component} ${displayType}`}>
-        <video className={styles.video} ref={videoRef} autoPlay />
-        <TotalTime />
-      </section>
-      <div className={`${styles.bar} ${displayType}`}>
-        <SettingBar //
-          roomName={roomName}
-          goToStudyRoom={goToStudyRoom}
-          stopOrStartVideo={stopOrStartVideo}
-          stopOrStartAudio={stopOrStartAudio}
-          clickSettingBtn={clickSettingBtn}
-        />
+      <div className={`${styles.room} ${displayType}`}>
+        <section className={`${styles.video_component} ${videoDisplayType}`}>
+          <div className={styles.video_container}>
+            <video className={styles.video} ref={videoRef} autoPlay />
+            <TotalTime />
+          </div>
+          {isPlanOpen && (
+            <div className={styles.plan_bar}>
+              <PlanSidebar />
+            </div>
+          )}
+        </section>
+        <div className={styles.bar}>
+          <SettingBar //
+            roomName={roomName}
+            goToStudyRoom={goToStudyRoom}
+            stopOrStartVideo={stopOrStartVideo}
+            stopOrStartAudio={stopOrStartAudio}
+            clickSettingBtn={clickSettingBtn}
+            onClickplanBtn={clickPlanBtn}
+          />
+        </div>
       </div>
     </div>
   );
