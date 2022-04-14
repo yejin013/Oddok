@@ -108,40 +108,41 @@ function StudyRoom() {
 
   const clickChatBtn = () => {
     setIsChatOpen((prev) => !prev);
-    const clickPlanBtn = () => {
-      setisPlanOpen((prev) => !prev);
-      setisSidebar((prev) => !prev);
-    };
-
-    return (
-      <div className={styles.room}>
-        <div className={styles.video_container}>
-          <ul className={`${styles.videos} ${displayType}`}>
-            {publisher && <UserVideo count={count} publisher={publisher} />}
-            {subscribers && subscribers.map((subscriber) => <UserVideo count={count} subscriber={subscriber} />)}
-          </ul>
-          {isPlanOpen && (
-            <div className={styles.plan_bar}>
-              <PlanSidebar />
-            </div>
-          )}
-        </div>
-        <div className={styles.bar}>
-          <StudyBar
-            roomName={roomInfo && roomInfo.name}
-            clickSettingBtn={clickSettingBtn}
-            toggleVideo={toggleVideo}
-            toggleAudio={toggleAudio}
-            clickChatBtn={clickChatBtn}
-            leaveRoom={leaveRoom}
-            onClickplanBtn={clickPlanBtn}
-          />
-        </div>
-        {isSettingOpen && <SideBar roomInfo={roomInfo} session={session} />}
-        <ChatBar session={session} isChatOpen={isChatOpen} />
-      </div>
-    );
   };
+
+  const clickPlanBtn = () => {
+    setisPlanOpen((prev) => !prev);
+    setisSidebar((prev) => !prev);
+  };
+
+  return (
+    <div className={styles.room}>
+      <div className={styles.video_container}>
+        <ul className={`${styles.videos} ${displayType}`}>
+          {publisher && <UserVideo count={count} publisher={publisher} />}
+          {subscribers && subscribers.map((subscriber) => <UserVideo count={count} subscriber={subscriber} />)}
+        </ul>
+        {isPlanOpen && (
+          <div className={styles.plan_bar}>
+            <PlanSidebar />
+          </div>
+        )}
+      </div>
+      <div className={styles.bar}>
+        <StudyBar
+          roomName={roomInfo && roomInfo.name}
+          clickSettingBtn={clickSettingBtn}
+          toggleVideo={toggleVideo}
+          toggleAudio={toggleAudio}
+          clickChatBtn={clickChatBtn}
+          leaveRoom={leaveRoom}
+          onClickplanBtn={clickPlanBtn}
+        />
+      </div>
+      {isSettingOpen && <SideBar roomInfo={roomInfo} session={session} />}
+      <ChatBar session={session} isChatOpen={isChatOpen} />
+    </div>
+  );
 }
 
 export default StudyRoom;
