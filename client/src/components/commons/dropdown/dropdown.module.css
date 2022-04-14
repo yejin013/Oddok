@@ -11,11 +11,19 @@
 }
 
 .select {
+  display: flex;
   background-color: #212529;
   border: 1px solid #ffffff1a;
   border-radius: 4px;
   width: 100%;
   padding: 13px 15px;
+}
+
+.icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
 }
 
 .container ul {
