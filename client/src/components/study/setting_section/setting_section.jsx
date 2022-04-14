@@ -69,7 +69,6 @@ function SettingSection({ clickSettingBtn, roomName, setRoomName }) {
   };
 
   const clickSaveBtn = () => {
-    console.log(roomInfo.category);
     // 방 이름 입력 설정 or 자동 설정(null값)
     let name = "";
     if (titleRef.current.value) {
@@ -89,18 +88,10 @@ function SettingSection({ clickSettingBtn, roomName, setRoomName }) {
     clickSettingBtn();
   };
 
-  const categoryHandler = (e) => {
-    // 지정된 카테고리가 아닌 value가 들어올 경우 처리
-    // 이게 맞나
-    const selected = categories.findIndex((category) => category.name === e.target.value);
-    if (selected === -1) {
-      alert("유효하지 않은 카테고리입니다");
-      setIsCategorySelected(false);
-      return;
-    }
+  const categoryHandler = (category) => {
     setIsCategorySelected(true);
-    setRoomInfo({ ...roomInfo, category: categories[selected].value });
-    setRoomName(`${e.target.value} n호실`);
+    setRoomInfo({ ...roomInfo, category: category.value });
+    setRoomName(`${category.name} n호실`);
   };
 
   const hashtagHandler = (e) => {
@@ -162,7 +153,14 @@ function SettingSection({ clickSettingBtn, roomName, setRoomName }) {
           <div className={styles.category}>
             {categories.map((c) => (
               <div key={c.value} className={styles.category_item}>
-                <RadioButton label={c.name} group="category" onChange={categoryHandler} disabled={disabled} />
+                <RadioButton
+                  label={c.name}
+                  group="category"
+                  onChange={() => {
+                    categoryHandler(c);
+                  }}
+                  disabled={disabled}
+                />
               </div>
             ))}
           </div>
