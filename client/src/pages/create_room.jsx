@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { userState } from "../recoil/user_state";
 import { roomInfoState } from "../recoil/studyroom_state";
-import { createStudyRoom, joinStudyRoom } from "../api/studyroomAPI";
+import { createStudyRoom, joinStudyRoom } from "../api/study-room-api";
 import SettingRoom from "./settting_room/setting_room";
 
 function CreateRoom() {

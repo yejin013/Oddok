@@ -32,3 +32,12 @@ export const updateStudyRoom = async (roomId, newRoomInfo) => {
   });
   return response;
 };
+
+export const saveTime = async (timeInfo) => {
+  const response = await axiosInstance.post("/time-record", {
+    startTime: timeInfo.startTime,
+    endTime: timeInfo.endTime,
+    subject: timeInfo.subject,
+  });
+  return response;
+};
