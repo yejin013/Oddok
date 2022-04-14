@@ -71,6 +71,14 @@ function SubjectTime({ onClickplanBtn }) {
     return () => clearInterval(timer);
   });
 
+  useEffect(() => {
+    if (endTime != null) {
+      saveTime(timeInfo)
+        .then(() => console.log("시간저장 완료⏱️"))
+        .catch((error) => console.log(`post time-record error!: ${error}`));
+    }
+  }, [endTime]);
+
   const getStartTime = () => {
     const time = new Date();
     setStartTime(time);
@@ -81,10 +89,6 @@ function SubjectTime({ onClickplanBtn }) {
     const time = new Date();
     setEndTime(time);
     setIsRecorded((prev) => !prev);
-    /* server에 timeInfo post */
-    saveTime(timeInfo)
-      .then(() => console.log("시간저장 완료⏱️"))
-      .catch((error) => console.log(`post time-record error!: ${error}`));
   };
 
   return (
