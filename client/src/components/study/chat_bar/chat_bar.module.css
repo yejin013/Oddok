@@ -1,0 +1,26 @@
+.side_box {
+  position: fixed;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: #101112;
+  width: 345px;
+  height: 90vh;
+  padding: 20px;
+}
+
+.side_box.hide {
+  display: none;
+}
+
+.chat_box {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 16px;
+  overflow-y: scroll;
+}
+
+.chat_box::-webkit-scrollbar {
+  display: none;
+}

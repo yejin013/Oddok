@@ -29,6 +29,11 @@
 
 .bar {
   height: 10vh;
+  z-index: 1;
+}
+
+.plan_bar {
+  flex: 1 1 30%;
 }
 
 .plan_bar {

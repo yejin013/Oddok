@@ -5,16 +5,17 @@ import React, { useState } from "react";
 
 import styles from "./dropdown.module.css";
 
-function Dropdown({ options, onSelect }) {
+function Dropdown({ options, onSelect, disabled }) {
   const [isActive, setIsActive] = useState(false);
   const [selectedOpt, setSelectedOpt] = useState();
 
   const toggleMenu = (e) => {
+    if (disabled) return;
     setIsActive(!isActive);
   };
 
-  const clickOptionHandler = (value) => {
-    setSelectedOpt(value);
+  const clickOptionHandler = (name, value) => {
+    setSelectedOpt(name);
     onSelect(value);
     setIsActive(false);
   };
@@ -26,7 +27,7 @@ function Dropdown({ options, onSelect }) {
       </div>
       <ul className={`${isActive ? styles.active : ""}`}>
         {options.map((option) => (
-          <li key={option.value} className={styles.opt} onClick={() => clickOptionHandler(option.value)}>
+          <li key={option.value} className={styles.opt} onClick={() => clickOptionHandler(option.name, option.value)}>
             {option.name}
           </li>
         ))}

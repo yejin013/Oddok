@@ -1,0 +1,31 @@
+.side_box {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  width: 345px;
+  height: 100%;
+  padding: 32px;
+  background-color: #101112;
+  color: #f8f9fa;
+}
+
+.side_box h1 {
+  font-size: 2rem;
+}
+
+.text_field p {
+}
+
+.text_field div {
+  height: 167px;
+  margin-bottom: 16px;
+}
+
+.button {
+  border-radius: 4px;
+  background-color: #bf7d8a;
+  color: white;
+  font-size: 1rem;
+  padding: 16px;
+  cursor: pointer;
+}
