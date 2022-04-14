@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { getStudyRoomList } from "../../api/studyroomAPI";
+import { getStudyRoomList } from "../../api/study-room-api";
 import CategoryNav from "../../components/home/category_nav/category_nav";
 import CardGrid from "../../components/home/card_grid/card_grid";
 
@@ -12,7 +12,8 @@ function StudyRoomList() {
 
   const clickMoreBtn = useCallback(async () => {
     const data = await getStudyRoomList(nextPage);
-    setLoadedRooms((prev) => [...prev, data.content]);
+    console.log(data.content);
+    setLoadedRooms((prev) => [...prev, ...data.content]);
     setNextPage((prev) => prev + 1);
 
     // 마지막 페이지일 경우 버튼 없애기
@@ -26,8 +27,9 @@ function StudyRoomList() {
     clickMoreBtn();
   }, [clickMoreBtn]);
 
+  // TODO 로딩일때 처리
   let content = <p style={{ color: "white" }}>스터디룸이 없어요!🥲</p>;
-  if (loadedRooms.length === 0) {
+  if (loadedRooms.length > 0) {
     content = <CardGrid rooms={loadedRooms} />;
   }
 
