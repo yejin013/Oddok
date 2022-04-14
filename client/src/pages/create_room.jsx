@@ -4,6 +4,7 @@ import { useRecoilState } from "recoil";
 import { userState } from "../recoil/user_state";
 import { roomInfoState } from "../recoil/studyroom_state";
 import { createStudyRoom, joinStudyRoom } from "../api/study-room-api";
+import { getTestUser } from "../api/getUser";
 import SettingRoom from "./settting_room/setting_room";
 
 function CreateRoom() {
@@ -11,9 +12,14 @@ function CreateRoom() {
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
 
-  // 스터디룸을 개설하는 유저에게 방 정보 업데이트 권한을 준다
   useEffect(() => {
+    // 스터디룸을 개설하는 유저에게 방 정보 업데이트 권한을 준다
     setUserInfo({ ...userInfo, updateAllowed: true });
+
+    /* get testUser */
+    getTestUser()
+      .then((users) => console.log(users))
+      .catch((error) => console.log(`get user error!: ${error}`));
   }, []);
 
   /**

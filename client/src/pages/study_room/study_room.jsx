@@ -8,6 +8,7 @@ import UserVideo from "../../components/study/user_video/user_video";
 import SideBar from "../../components/study/side_bar/side_bar";
 import ChatBar from "../../components/study/chat_bar/chat_bar";
 import styles from "./study_room.module.css";
+import PlanSidebar from "../../components/study/plan_sidebar/plan_sidebar";
 
 function StudyRoom() {
   const history = useHistory();
@@ -21,6 +22,10 @@ function StudyRoom() {
   const [isSettingOpen, setIsSettingOpen] = useState(false); // 사이드바 토글하기 위한 state
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
+
+  const [isPlanOpen, setisPlanOpen] = useState(false);
+  const [isSidebar, setisSidebar] = useState(false);
+  const displayType = isSidebar === false ? styles.hide : styles.show;
 
   const leaveRoom = () => {
     session.disconnect();
@@ -103,30 +108,40 @@ function StudyRoom() {
 
   const clickChatBtn = () => {
     setIsChatOpen((prev) => !prev);
-  };
+    const clickPlanBtn = () => {
+      setisPlanOpen((prev) => !prev);
+      setisSidebar((prev) => !prev);
+    };
 
-  return (
-    <div className={styles.room}>
-      <div className={styles.video_container}>
-        <ul className={styles.videos}>
-          {publisher && <UserVideo count={count} streamManager={publisher} />}
-          {subscribers && subscribers.map((subscriber) => <UserVideo count={count} streamManager={subscriber} />)}
-        </ul>
+    return (
+      <div className={styles.room}>
+        <div className={styles.video_container}>
+          <ul className={`${styles.videos} ${displayType}`}>
+            {publisher && <UserVideo count={count} publisher={publisher} />}
+            {subscribers && subscribers.map((subscriber) => <UserVideo count={count} subscriber={subscriber} />)}
+          </ul>
+          {isPlanOpen && (
+            <div className={styles.plan_bar}>
+              <PlanSidebar />
+            </div>
+          )}
+        </div>
+        <div className={styles.bar}>
+          <StudyBar
+            roomName={roomInfo && roomInfo.name}
+            clickSettingBtn={clickSettingBtn}
+            toggleVideo={toggleVideo}
+            toggleAudio={toggleAudio}
+            clickChatBtn={clickChatBtn}
+            leaveRoom={leaveRoom}
+            onClickplanBtn={clickPlanBtn}
+          />
+        </div>
+        {isSettingOpen && <SideBar roomInfo={roomInfo} session={session} />}
+        <ChatBar session={session} isChatOpen={isChatOpen} />
       </div>
-      <div className={styles.bar}>
-        <StudyBar
-          roomName={roomInfo && roomInfo.name}
-          clickSettingBtn={clickSettingBtn}
-          toggleVideo={toggleVideo}
-          toggleAudio={toggleAudio}
-          clickChatBtn={clickChatBtn}
-          leaveRoom={leaveRoom}
-        />
-      </div>
-      {isSettingOpen && <SideBar roomInfo={roomInfo} session={session} />}
-      <ChatBar session={session} isChatOpen={isChatOpen} />
-    </div>
-  );
+    );
+  };
 }
 
 export default StudyRoom;

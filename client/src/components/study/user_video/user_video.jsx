@@ -1,14 +1,19 @@
 import React, { useRef, useEffect } from "react";
+import TotalTime from "../total_time/total_time";
 import styles from "./user_video.module.css";
 
-function UserVideo({ count, streamManager }) {
+function UserVideo({ count, publisher, subscriber }) {
   const videoRef = useRef();
 
   useEffect(() => {
     if (videoRef) {
-      streamManager.addVideoElement(videoRef.current);
+      if (publisher) {
+        publisher.addVideoElement(videoRef.current);
+      } else if (subscriber) {
+        subscriber.addVideoElement(videoRef.current);
+      }
     }
-  }, [streamManager]);
+  }, [publisher, subscriber]);
 
   const getCount = (number) => {
     switch (number) {
@@ -20,13 +25,14 @@ function UserVideo({ count, streamManager }) {
       case 4:
         return styles.multi;
       default:
-        throw new Error(`unknown: ${number}`);
+        return styles.multi;
     }
   };
 
   return (
     <li className={`${styles.video} ${getCount(count)}`}>
       <video className={styles.user_video} ref={videoRef} autoPlay />
+      {publisher && <TotalTime />}
     </li>
   );
 }

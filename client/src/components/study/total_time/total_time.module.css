@@ -1,0 +1,10 @@
+.time {
+  color: white;
+  background-color: #212529;
+  position: absolute;
+  top: 0;
+  padding: 0.4em 0.8em;
+  font-size: 1.5rem;
+  font-weight: bold;
+  border-radius: 0 0 12px 12px;
+}

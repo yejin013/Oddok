@@ -35,19 +35,6 @@ function JoinRoom() {
     });
   };
 
-  // const goToStudyRoom = async () => {
-  //   const sessionId = localStorage.getItem("sessionId");
-
-  //   const token = await createToken(sessionId);
-  //   history.push({
-  //     pathname: `/studyroom/${sessionId}`,
-  //     state: {
-  //       token: token.data.token,
-  //       roomInfo,
-  //     },
-  //   });
-  // };
-
   return <SettingRoom goToStudyRoom={goToStudyRoom} />;
 }
 

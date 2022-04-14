@@ -8,15 +8,15 @@
 }
 
 .info,
-.goal,
+.time,
 .buttons {
   flex: 1;
-  display: flex;
-  align-items: center;
 }
 
-.goal {
-  justify-content: center;
+.info,
+.buttons {
+  display: flex;
+  align-items: center;
 }
 
 .buttons {
@@ -55,8 +55,4 @@
 
 .music_icon {
   padding: 0.5em;
-}
-
-.play_button {
-  margin-right: 1em;
 }
