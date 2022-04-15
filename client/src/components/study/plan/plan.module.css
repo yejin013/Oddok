@@ -1,0 +1,18 @@
+.plan {
+  display: flex;
+  align-items: center;
+  background-color: #212529;
+  margin-bottom: 0.4em;
+  padding: 0.3em;
+  border-radius: 4px;
+}
+
+.name {
+  margin-right: 1.2em;
+  width: 90%;
+  text-align: left;
+}
+
+.button {
+  padding-top: 0.4em;
+}

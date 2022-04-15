@@ -15,9 +15,12 @@
   display: flex;
 }
 
+/*
+사이드바 스타일 수정할 때 다시
 .video_component.decrease {
-  flex: 1 1 70%;
+  flex: 1 1 75%;
 }
+*/
 
 .bar {
   height: 10vh;
@@ -36,5 +39,5 @@
 }
 
 .plan_bar {
-  flex: 1 1 30%;
+  flex: 1 1 25%;
 }

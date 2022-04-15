@@ -13,5 +13,5 @@ export const planState = atom({
 
 export const selectedPlanState = atom({
   key: "selectedPlanState",
-  default: { id: 0, name: "목표를 입력해주세요" },
+  default: { id: 0, name: null },
 });
