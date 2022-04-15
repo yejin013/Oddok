@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { getStudyRoomList } from "../../api/study-room-api";
-import TabMenu from "../../components/home/tab_menu/tab_menu";
-import CardGrid from "../../components/home/card_grid/card_grid";
-import Dropdown from "../../components/commons/dropdown/dropdown";
+import { getStudyRoomList } from "../../../api/study-room-api";
+import TabMenu from "../../../components/home/tab_menu/tab_menu";
+import CardGrid from "../../../components/home/card_grid/card_grid";
+import Dropdown from "../../../components/commons/dropdown/dropdown";
 
 import styles from "./studyroom_list.module.css";
 
