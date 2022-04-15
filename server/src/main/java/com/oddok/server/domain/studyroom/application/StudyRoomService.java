@@ -62,7 +62,12 @@ public class StudyRoomService {
     public String userJoinStudyRoom(Long userId, Long id) {
         User user = findUser(userId);
         StudyRoom studyRoom = findStudyRoom(id);
-        if (studyRoom.getCurrentUsers() >= studyRoom.getLimitUsers()) throw new StudyRoomIsFullException(id);
+        if (participantRepository.findByUser(user).isPresent()) { // 사용자는 한번에 하나의 스터디룸에만 참여할 수 있다.
+            throw new UserAlreadyJoinedStudyRoom();
+        }
+        if (studyRoom.getCurrentUsers() >= studyRoom.getLimitUsers()) { // 정원이 찬 스터디룸에는 참여할 수 없다.
+            throw new StudyRoomIsFullException(id);
+        }
         String sessionId = getSession(studyRoom);
         String token = sessionManager.getToken(sessionId);
         createParticipant(studyRoom, user);

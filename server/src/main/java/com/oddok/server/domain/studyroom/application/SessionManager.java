@@ -4,11 +4,8 @@ import com.oddok.server.common.errors.OpenviduServerException;
 import com.oddok.server.common.errors.SessionNotFoundException;
 import io.openvidu.java.client.*;
 
-import java.util.Objects;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 @Component
 public class SessionManager {
@@ -52,8 +49,7 @@ public class SessionManager {
                 .role(OpenViduRole.PUBLISHER)
                 .build();
         try {
-            String token = session.createConnection(connectionProperties).getToken();
-            return token;
+            return session.createConnection(connectionProperties).getToken();
         } catch (OpenViduJavaClientException e1) {
             throw new OpenviduServerException(e1.getMessage(), e1.getCause());
         } catch (OpenViduHttpException e2) {
@@ -84,7 +80,6 @@ public class SessionManager {
      * SessionId 로 Session 을 삭제합니다.
      *
      * @param sessionId String
-     * @return Session
      */
     public void deleteSession(String sessionId) {
         Session session = getSession(sessionId);
