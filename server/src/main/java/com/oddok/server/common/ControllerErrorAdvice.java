@@ -22,7 +22,7 @@ public class ControllerErrorAdvice {
         return new ErrorResponse("Openvidu 서버 에러");
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(UserNotFoundException.class)
     public ErrorResponse handleUserNotFoundException() {
         return new ErrorResponse("해당 사용자가 없습니다.");
@@ -38,7 +38,7 @@ public class ControllerErrorAdvice {
         return new ErrorResponse("스터디룸의 세션이 없거나 이미 삭제되었습니다.");
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(StudyRoomNotFoundException.class)
     public ErrorResponse handleStudyRoomNotFoundException() {
         return new ErrorResponse("해당 스터디룸이 없습니다.");
@@ -71,7 +71,7 @@ public class ControllerErrorAdvice {
         return new ErrorResponse("해당 유저가 스터디룸에 참여하고 있지 않습니다.");
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(BookmarkNotFoundException.class)
     public ErrorResponse handleBookmarkNotFoundException() {
         return new ErrorResponse("북마크가 존재하지 않습니다.");
