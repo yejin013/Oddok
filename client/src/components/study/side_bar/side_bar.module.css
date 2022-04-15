@@ -1,5 +1,4 @@
 .side_box {
-  position: fixed;
   display: flex;
   flex-direction: column;
   width: 345px;

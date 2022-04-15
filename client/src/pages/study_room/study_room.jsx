@@ -104,20 +104,43 @@ function StudyRoom() {
 
   const clickSettingBtn = () => {
     setIsSettingOpen((prev) => !prev);
+
+    if (isPlanOpen) {
+      setisPlanOpen(false);
+    }
+    if (isChatOpen) {
+      setIsChatOpen(false);
+    }
   };
 
   const clickChatBtn = () => {
     setIsChatOpen((prev) => !prev);
+    setIsSettingOpen(false);
+
+    if (isSettingOpen) {
+      setIsSettingOpen(false);
+    }
+    if (isPlanOpen) {
+      setisPlanOpen(false);
+    }
   };
 
   const clickPlanBtn = () => {
     setisPlanOpen((prev) => !prev);
     setisSidebar((prev) => !prev);
+
+    if (isChatOpen) {
+      setIsChatOpen(false);
+    }
+    if (isSettingOpen) {
+      setIsSettingOpen(false);
+    }
   };
 
   return (
     <div className={styles.room}>
       <div className={styles.video_container}>
+        {isSettingOpen && <SideBar roomInfo={roomInfo} session={session} />}
         <ul className={`${styles.videos} ${displayType}`}>
           {publisher && <UserVideo count={count} publisher={publisher} />}
           {subscribers && subscribers.map((subscriber) => <UserVideo count={count} subscriber={subscriber} />)}
@@ -127,6 +150,7 @@ function StudyRoom() {
             <PlanSidebar />
           </div>
         )}
+        <ChatBar session={session} isChatOpen={isChatOpen} />
       </div>
       <div className={styles.bar}>
         <StudyBar
@@ -139,8 +163,6 @@ function StudyRoom() {
           onClickplanBtn={clickPlanBtn}
         />
       </div>
-      {isSettingOpen && <SideBar roomInfo={roomInfo} session={session} />}
-      <ChatBar session={session} isChatOpen={isChatOpen} />
     </div>
   );
 }

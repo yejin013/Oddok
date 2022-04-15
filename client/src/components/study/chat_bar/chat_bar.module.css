@@ -1,11 +1,10 @@
 .side_box {
-  position: fixed;
   right: 0;
   display: flex;
   flex-direction: column;
   background-color: #101112;
   width: 345px;
-  height: 90vh;
+  height: 100%;
   padding: 20px;
 }
 

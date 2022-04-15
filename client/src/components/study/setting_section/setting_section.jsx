@@ -106,7 +106,7 @@ function SettingSection({ clickSettingBtn, roomName, setRoomName }) {
 
   const userLimitHandler = (value) => {
     setIsUserLimitSelected(true);
-    setRoomInfo({ ...roomInfo, userLimit: value });
+    setRoomInfo({ ...roomInfo, limitUsers: value });
   };
 
   const audioRuleHandler = (e) => {

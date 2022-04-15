@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { useRecoilValue } from "recoil";
 import { userState } from "../../../recoil/user_state";
 import Textarea from "../../commons/textarea/textarea";
-import { updateStudyRoom } from "../../../api/studyroomAPI";
+import { updateStudyRoom } from "../../../api/study-room-api";
 
 import styles from "./side_bar.module.css";
 
