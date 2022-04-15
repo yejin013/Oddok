@@ -13,6 +13,19 @@
   text-align: left;
 }
 
-.button {
+.dots {
   padding-top: 0.4em;
+}
+
+.buttons {
+  position: absolute;
+  right: 1.5%;
+  padding: 0.5em 1em;
+  background-color: #212529;
+}
+
+.button {
+  margin: 0.5em 0;
+  padding: 0 2.8em;
+  font-size: 0.8rem;
 }

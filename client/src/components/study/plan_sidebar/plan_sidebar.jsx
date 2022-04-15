@@ -31,6 +31,11 @@ function PlanSidebar(props) {
     setPlans(updated);
   };
 
+  const deletePlan = (plan) => {
+    const updated = plans.filter((item) => item.id !== plan.id);
+    setPlans(updated);
+  };
+
   const submitPlan = (event) => {
     event.preventDefault();
     const plan = {
@@ -44,7 +49,7 @@ function PlanSidebar(props) {
   return (
     <aside className={styles.plan_bar}>
       <div className={styles.plans}>
-        <Plans plans={plans} onPlanClick={selectPlan} />
+        <Plans plans={plans} onPlanClick={selectPlan} onDelete={deletePlan} />
       </div>
       <form className={styles.form} onSubmit={submitPlan}>
         <Input ref={inputRef} />
