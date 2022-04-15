@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { getStudyRoomList } from "../../api/study-room-api";
-import CategoryNav from "../../components/home/category_nav/category_nav";
+import TabMenu from "../../components/home/tab_menu/tab_menu";
 import CardGrid from "../../components/home/card_grid/card_grid";
 import Dropdown from "../../components/commons/dropdown/dropdown";
 
@@ -8,7 +8,7 @@ import styles from "./studyroom_list.module.css";
 
 function StudyRoomList() {
   const [currentPage, setCurrentPage] = useState(0);
-  const [filterCategory, setFilterCategory] = useState(undefined);
+  const [currentCategory, setCurrentCategory] = useState(undefined);
   const [filterOpt, setFilterOpt] = useState(undefined);
   const [sortOpt, setSortOpt] = useState("createAt");
   const [isLastPage, setIsLastPage] = useState(false);
@@ -26,7 +26,7 @@ function StudyRoomList() {
 
   // 더보기
   const clickMoreBtn = async () => {
-    const data = await fetchRoomData(currentPage + 1, filterOpt, filterCategory, sortOpt);
+    const data = await fetchRoomData(currentPage + 1, filterOpt, currentCategory, sortOpt);
     setLoadedRooms((prev) => [...prev, ...data.content]);
     setCurrentPage((prev) => prev + 1);
   };
@@ -35,11 +35,11 @@ function StudyRoomList() {
   // 0번째 페이지 조회
   useEffect(() => {
     (async () => {
-      const data = await fetchRoomData(0, filterOpt, filterCategory, sortOpt);
+      const data = await fetchRoomData(0, filterOpt, currentCategory, sortOpt);
       setLoadedRooms(data.content);
     })();
     setCurrentPage(0);
-  }, [fetchRoomData, filterOpt, filterCategory, sortOpt]);
+  }, [fetchRoomData, filterOpt, currentCategory, sortOpt]);
 
   const filterRoomHandler = (value) => {
     if (value === undefined) {
@@ -80,7 +80,7 @@ function StudyRoomList() {
         </div>
       </div>
       <div className={styles.tab_menu}>
-        <CategoryNav setCategory={setFilterCategory} />
+        <TabMenu setCurrentCategory={setCurrentCategory} />
       </div>
       <div className={styles.studyroom_list}>{content}</div>
       {!isLastPage && (

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import NavItem from "./nav_item";
+import TabMenuItem from "./tab_menu_item";
 
-import styles from "./category_nav.module.css";
+import styles from "./tab_menu.module.css";
 
 const items = [
   { value: undefined, name: "전체" },
@@ -12,16 +12,18 @@ const items = [
   { value: "ETC", name: "개인" },
 ];
 
-function CategoryNav({ setCategory }) {
+function TabMenu({ setCurrentCategory }) {
   const [current, setCurrent] = useState("전체");
+
   const filterCategoryHandler = (item) => {
     setCurrent(item.name);
-    setCategory(item.value);
+    setCurrentCategory(item.value);
   };
+
   return (
     <nav className={styles.category_nav}>
       {items.map((item) => (
-        <NavItem
+        <TabMenuItem
           title={item.name}
           onClick={() => filterCategoryHandler(item)}
           status={current === item.name ? "active" : ""}
@@ -31,4 +33,4 @@ function CategoryNav({ setCategory }) {
   );
 }
 
-export default CategoryNav;
+export default TabMenu;

@@ -3,7 +3,7 @@
 import React from "react";
 import { ReactComponent as BookMark } from "../../../assets/icons/bookmark.svg";
 
-import styles from "./nav_item.module.css";
+import styles from "./tab_menu_item.module.css";
 
 function NavItem({ title, onClick, status }) {
   return (

@@ -4,7 +4,7 @@ import { ReactComponent as Lock } from "../../../assets/icons/lock.svg";
 import { ReactComponent as Unlock } from "../../../assets/icons/unlock.svg";
 
 import styles from "./studyroom_card.module.css";
-import PeopleCount from "./people_count";
+import UserCount from "./user_count";
 
 function StudyRoomCard({ roomData }) {
   return (
@@ -12,8 +12,8 @@ function StudyRoomCard({ roomData }) {
       <div className={styles.thumbnail_box}>
         <Thumbnail />
         <div className={styles.lock_icon}>{roomData.isPublic ? <Unlock /> : <Lock />}</div>
-        <div className={styles.people_icon}>
-          <PeopleCount number={roomData.limitUsers} />
+        <div className={styles.user_count}>
+          <UserCount number={roomData.limitUsers} />
         </div>
       </div>
       <div className={styles.content_box}>
