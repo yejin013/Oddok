@@ -13,11 +13,11 @@ import java.util.Optional;
 
 @Repository
 public interface StudyRoomRepository extends JpaRepository<StudyRoom, Long> {
-    Optional<StudyRoom> findByIdAndCreateAtBeforeAndEndAtAfter(Long id, LocalDateTime createAt, LocalDate endAt);
-    Page<StudyRoom> findAllByCreateAtBeforeAndEndAtAfter(LocalDateTime createAt, LocalDate endAt, Pageable pageable);
-    Page<StudyRoom> findAllByCreateAtBeforeAndEndAtAfterAndCategory(LocalDateTime createAt, LocalDate endAt, Category category, Pageable pageable);
-    Page<StudyRoom> findAllByCreateAtBeforeAndEndAtAfterAndIsPublicTrue(LocalDateTime createAt, LocalDate endAt, Pageable pageable);
-    Page<StudyRoom> findAllByCreateAtBeforeAndEndAtAfterAndCategoryAndIsPublicTrue(LocalDateTime createAt, LocalDate endAt, Category category, Pageable pageable);
-    Page<StudyRoom> findAllByCreateAtBeforeAndEndAtAfterAndNameContaining(LocalDateTime createAt, LocalDate endAt, String name, Pageable pageable);
-    Page<StudyRoom> findAllByCreateAtBeforeAndEndAtAfterAndNameContainingAndIsPublicTrue(LocalDateTime createAt, LocalDate endAt, String name, Pageable pageable);
+    Optional<StudyRoom> findByIdAndEndAtAfter(Long id, LocalDate endAt);
+    Page<StudyRoom> findAllByEndAtAfter(LocalDate endAt, Pageable pageable);
+    Page<StudyRoom> findAllByEndAtAfterAndCategory(LocalDate endAt, Category category, Pageable pageable);
+    Page<StudyRoom> findAllByEndAtAfterAndIsPublicTrue(LocalDate endAt, Pageable pageable);
+    Page<StudyRoom> findAllByEndAtAfterAndCategoryAndIsPublicTrue(LocalDate endAt, Category category, Pageable pageable);
+    Page<StudyRoom> findAllByEndAtAfterAndNameContaining(LocalDate endAt, String name, Pageable pageable);
+    Page<StudyRoom> findAllByEndAtAfterAndNameContainingAndIsPublicTrue(LocalDate endAt, String name, Pageable pageable);
 }

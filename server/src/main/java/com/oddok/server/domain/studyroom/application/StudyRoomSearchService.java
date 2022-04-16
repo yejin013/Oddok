@@ -27,21 +27,23 @@ public class StudyRoomSearchService {
    * 인자가 isPublic만 있을 때 사용하는 함수
    */
   public Page<StudyRoomDto> getStudyRooms(Pageable pageable, Boolean isPublic) {
+    LocalDate now = LocalDate.now();
     if(isPublic) // 공개방만
-      return studyRoomRepository.findAllByCreateAtBeforeAndEndAtAfterAndIsPublicTrue(
-          LocalDateTime.now(), LocalDate.now(), pageable).map(studyRoomMapper::toDto);
-    return studyRoomRepository.findAllByCreateAtBeforeAndEndAtAfter(LocalDateTime.now(), LocalDate.now(), pageable).map(studyRoomMapper::toDto);
+      return studyRoomRepository.findAllByEndAtAfterAndIsPublicTrue(now, pageable).map(studyRoomMapper::toDto);
+    return studyRoomRepository.findAllByEndAtAfter(now, pageable).map(studyRoomMapper::toDto);
   }
 
   public Page<StudyRoomDto> getStudyRoomsByCategory(Pageable pageable, Boolean isPublic, String category) {
+    LocalDate now = LocalDate.now();
     if(isPublic) // 공개방만
-      return studyRoomRepository.findAllByCreateAtBeforeAndEndAtAfterAndCategoryAndIsPublicTrue(LocalDateTime.now(), LocalDate.now(), Category.valueOf(category), pageable).map(studyRoomMapper::toDto);
-    return studyRoomRepository.findAllByCreateAtBeforeAndEndAtAfterAndCategory(LocalDateTime.now(), LocalDate.now(), Category.valueOf(category), pageable).map(studyRoomMapper::toDto);
+      return studyRoomRepository.findAllByEndAtAfterAndCategoryAndIsPublicTrue(now, Category.valueOf(category), pageable).map(studyRoomMapper::toDto);
+    return studyRoomRepository.findAllByEndAtAfterAndCategory(now, Category.valueOf(category), pageable).map(studyRoomMapper::toDto);
   }
 
   public Page<StudyRoomDto> getStudyRoomsByName(Pageable pageable, Boolean isPublic, String name) {
+    LocalDate now = LocalDate.now();
     if(isPublic) // 공개방만
-      return studyRoomRepository.findAllByCreateAtBeforeAndEndAtAfterAndNameContainingAndIsPublicTrue(LocalDateTime.now(), LocalDate.now(), name, pageable).map(studyRoomMapper::toDto);
-    return studyRoomRepository.findAllByCreateAtBeforeAndEndAtAfterAndNameContaining(LocalDateTime.now(), LocalDate.now(), name, pageable).map(studyRoomMapper::toDto);
+      return studyRoomRepository.findAllByEndAtAfterAndNameContainingAndIsPublicTrue(now, name, pageable).map(studyRoomMapper::toDto);
+    return studyRoomRepository.findAllByEndAtAfterAndNameContaining(now, name, pageable).map(studyRoomMapper::toDto);
   }
 }
