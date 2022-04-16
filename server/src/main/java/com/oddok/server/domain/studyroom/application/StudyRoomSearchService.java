@@ -4,6 +4,8 @@ import com.oddok.server.domain.studyroom.dao.StudyRoomRepository;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import com.oddok.server.domain.studyroom.entity.Category;
 import com.oddok.server.domain.studyroom.mapper.StudyRoomMapper;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
@@ -26,20 +28,20 @@ public class StudyRoomSearchService {
    */
   public Page<StudyRoomDto> getStudyRooms(Pageable pageable, Boolean isPublic) {
     if(isPublic) // 공개방만
-      return studyRoomRepository.findAllByStartAtBeforeAndEndAtAfterAndIsPublicTrue(
-          LocalDateTime.now(), LocalDateTime.now(), pageable).map(studyRoomMapper::toDto);
-    return studyRoomRepository.findAllByStartAtBeforeAndEndAtAfter(LocalDateTime.now(), LocalDateTime.now(), pageable).map(studyRoomMapper::toDto);
+      return studyRoomRepository.findAllByCreateAtBeforeAndEndAtAfterAndIsPublicTrue(
+          LocalDateTime.now(), LocalDate.now(), pageable).map(studyRoomMapper::toDto);
+    return studyRoomRepository.findAllByCreateAtBeforeAndEndAtAfter(LocalDateTime.now(), LocalDate.now(), pageable).map(studyRoomMapper::toDto);
   }
 
   public Page<StudyRoomDto> getStudyRoomsByCategory(Pageable pageable, Boolean isPublic, String category) {
     if(isPublic) // 공개방만
-      return studyRoomRepository.findAllByStartAtBeforeAndEndAtAfterAndCategoryAndIsPublicTrue(LocalDateTime.now(), LocalDateTime.now(), Category.valueOf(category), pageable).map(studyRoomMapper::toDto);
-    return studyRoomRepository.findAllByStartAtBeforeAndEndAtAfterAndCategory(LocalDateTime.now(), LocalDateTime.now(), Category.valueOf(category), pageable).map(studyRoomMapper::toDto);
+      return studyRoomRepository.findAllByCreateAtBeforeAndEndAtAfterAndCategoryAndIsPublicTrue(LocalDateTime.now(), LocalDate.now(), Category.valueOf(category), pageable).map(studyRoomMapper::toDto);
+    return studyRoomRepository.findAllByCreateAtBeforeAndEndAtAfterAndCategory(LocalDateTime.now(), LocalDate.now(), Category.valueOf(category), pageable).map(studyRoomMapper::toDto);
   }
 
   public Page<StudyRoomDto> getStudyRoomsByName(Pageable pageable, Boolean isPublic, String name) {
     if(isPublic) // 공개방만
-      return studyRoomRepository.findAllByStartAtBeforeAndEndAtAfterAndNameContainingAndIsPublicTrue(LocalDateTime.now(), LocalDateTime.now(), name, pageable).map(studyRoomMapper::toDto);
-    return studyRoomRepository.findAllByStartAtBeforeAndEndAtAfterAndNameContaining(LocalDateTime.now(), LocalDateTime.now(), name, pageable).map(studyRoomMapper::toDto);
+      return studyRoomRepository.findAllByCreateAtBeforeAndEndAtAfterAndNameContainingAndIsPublicTrue(LocalDateTime.now(), LocalDate.now(), name, pageable).map(studyRoomMapper::toDto);
+    return studyRoomRepository.findAllByCreateAtBeforeAndEndAtAfterAndNameContaining(LocalDateTime.now(), LocalDate.now(), name, pageable).map(studyRoomMapper::toDto);
   }
 }

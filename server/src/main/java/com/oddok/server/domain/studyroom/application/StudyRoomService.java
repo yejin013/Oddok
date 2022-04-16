@@ -121,7 +121,6 @@ public class StudyRoomService {
         studyRoom.deleteSession();
     }
 
-
     public void checkPassword(Long id, String password) {
         StudyRoom studyRoom = findStudyRoom(id);
 
@@ -158,10 +157,8 @@ public class StudyRoomService {
     }
 
     private StudyRoom findStudyRoom(Long id) {
-        return studyRoomRepository.findById(id)
-                .orElseThrow(() -> new StudyRoomNotFoundException(id));
+        return studyRoomRepository.findById(id).orElseThrow(() -> new StudyRoomNotFoundException(id));
     }
-
 
     private User findUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));

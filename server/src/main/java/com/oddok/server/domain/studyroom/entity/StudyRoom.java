@@ -3,13 +3,14 @@ package com.oddok.server.domain.studyroom.entity;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import com.oddok.server.domain.user.entity.User;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Getter
 @Entity
@@ -57,11 +58,8 @@ public class StudyRoom {
     @Column(name = "limit_users")
     private Integer limitUsers;
 
-    @Column(name = "start_at")
-    private LocalDateTime startAt;
-
     @Column(name = "end_at")
-    private LocalDateTime endAt;
+    private LocalDate endAt;
 
     @CreatedDate
     @Column(name = "create_at")
@@ -85,7 +83,7 @@ public class StudyRoom {
                      String sessionId, String image, Boolean isPublic,
                      String password, Integer targetTime, String rule,
                      Boolean isMicOn, Boolean isCamOn, Integer limitUsers,
-                     LocalDateTime startAt, LocalDateTime endAt) {
+                     LocalDate endAt) {
         this.name = name;
         this.category = Category.valueOf(category);
         this.user = user;
@@ -98,7 +96,6 @@ public class StudyRoom {
         this.isMicOn = isMicOn;
         this.isCamOn = isCamOn;
         this.limitUsers = limitUsers;
-        this.startAt = startAt;
         this.endAt = endAt;
         this.createAt = LocalDateTime.now();
         this.hashtags = new HashSet<>();
@@ -121,8 +118,8 @@ public class StudyRoom {
         this.isMicOn = studyRoomDto.getIsMicOn();
         this.isCamOn = studyRoomDto.getIsCamOn();
         this.limitUsers = studyRoomDto.getLimitUsers();
-        this.startAt = studyRoomDto.getStartAt();
         this.endAt = studyRoomDto.getEndAt();
+
         updateHashtag(studyRoomDto.getHashtags());
     }
 
@@ -131,7 +128,6 @@ public class StudyRoom {
                 .build();
         this.hashtags.add(studyRoomHashtag);
     }
-
 
     private void updateHashtag(Set<String> newHashtags) {
         Set<StudyRoomHashtag> toBeDeletedHashtags = new HashSet<>();
@@ -145,11 +141,9 @@ public class StudyRoom {
         hashtags.removeIf(toBeDeletedHashtags::contains);
     }
 
-
     public void increaseCurrentUsers() {
         this.currentUsers++;
     }
-  
 
     public int decreaseCurrentUsers() {
         return --this.currentUsers;

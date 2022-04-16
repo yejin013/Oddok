@@ -35,8 +35,6 @@ public class CreateStudyRoomRequest {
 
     private Integer limitUsers;
 
-    private LocalDateTime startAt;
-
     private LocalDateTime endAt;
 
     private List<String> hashtags;
