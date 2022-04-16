@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface StudyRoomRepository extends JpaRepository<StudyRoom, Long> {
+    Optional<StudyRoom> findByIdAndStartAtBeforeAndEndAtAfter(Long id, LocalDateTime startAt, LocalDateTime endAt);
     Page<StudyRoom> findAllByStartAtBeforeAndEndAtAfter(LocalDateTime startAt, LocalDateTime endAt, Pageable pageable);
     Page<StudyRoom> findAllByStartAtBeforeAndEndAtAfterAndCategory(LocalDateTime startAt, LocalDateTime endAt, Category category, Pageable pageable);
     Page<StudyRoom> findAllByStartAtBeforeAndEndAtAfterAndIsPublicTrue(LocalDateTime startAt, LocalDateTime endAt, Pageable pageable);
