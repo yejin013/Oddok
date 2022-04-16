@@ -11,7 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class StudyRoomHashtag {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     @ManyToOne
