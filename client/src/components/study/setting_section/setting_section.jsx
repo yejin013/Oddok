@@ -237,7 +237,6 @@ function SettingSection({ clickSettingBtn }) {
             <div>
               <p className={styles.label}>비밀번호</p>
               <Input
-                type="password"
                 placeholder="숫자 4자리 비밀번호를 설정하세요"
                 ref={passwordInputRef}
                 maxLength="4"
@@ -245,6 +244,9 @@ function SettingSection({ clickSettingBtn }) {
                 isInvalid={isInvalidPassword}
                 disabled={disabled}
               />
+              <p className={`${styles.invalid_message} ${isInvalidPassword ? "" : styles.hide}`}>
+                비밀번호는 숫자 4자리 입니다.
+              </p>
             </div>
             <div>
               <p className={styles.label}>장치 규칙</p>

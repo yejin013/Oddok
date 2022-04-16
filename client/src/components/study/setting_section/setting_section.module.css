@@ -112,6 +112,17 @@
   gap: 2em;
 }
 
+.invalid_message {
+  margin: 0;
+  color: #dc3545;
+  font-weight: 400;
+  font-size: 1rem;
+}
+
+.invalid_message.hide {
+  visibility: hidden;
+}
+
 .image_box {
   flex: 1;
   padding: 20%;
