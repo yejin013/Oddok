@@ -4,12 +4,6 @@ import React, { forwardRef, useImperativeHandle } from "react";
 import styles from "./input.module.css";
 
 const Input = forwardRef(({ type, placeholder, maxLength, onChange, isInvalid, disabled }, inputRef) => {
-  // useImperativeHandle(inputRef, () => {
-  //   return {
-  //     focus: () => inputRef.current.focus(),
-  //   };
-  // });
-
   return (
     <div className={`${styles.container} ${!isInvalid ? "" : styles.invalid}`}>
       <input

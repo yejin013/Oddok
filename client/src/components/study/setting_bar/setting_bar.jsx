@@ -6,14 +6,14 @@ import { ReactComponent as VideoOn } from "../../../assets/icons/video.svg";
 import { ReactComponent as MicOff } from "../../../assets/icons/mic_off.svg";
 import { ReactComponent as GoalOpen } from "../../../assets/icons/down.svg";
 
-function SettingBar({ roomName, goToStudyRoom, stopOrStartVideo, stopOrStartAudio, clickSettingBtn }) {
+function SettingBar({ title, goToStudyRoom, stopOrStartVideo, stopOrStartAudio, clickSettingBtn }) {
   return (
     <section className={styles.bar}>
       <div className={styles.info}>
         <button type="button" onClick={clickSettingBtn}>
           <Setting />
         </button>
-        <span>{roomName || "방정보를 설정해주세요"}</span>
+        <span>{title || "방정보를 설정해주세요"}</span>
         <div className={styles.music}>
           <i className={styles.music_icon}>
             <Music />
@@ -39,7 +39,7 @@ function SettingBar({ roomName, goToStudyRoom, stopOrStartVideo, stopOrStartAudi
           </button>
         </li>
         <li>
-          <button type="button" className={styles.start_button} onClick={goToStudyRoom} disabled={!roomName}>
+          <button type="button" className={styles.start_button} onClick={goToStudyRoom} disabled={!title}>
             스터디 시작하기
           </button>
         </li>

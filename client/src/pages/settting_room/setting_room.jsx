@@ -12,8 +12,7 @@ function SettingRoom({ goToStudyRoom }) {
   const setIsMuted = useSetRecoilState(audioState);
   const [clickedSettingBtn, setClickedSettingBtn] = useState(false);
   const displayType = clickedSettingBtn === true ? styles.hide : styles.show;
-
-  const [roomName, setRoomName] = useState("나중에 지우기");
+  const roomInfo = useRecoilValue(roomInfoState);
 
   useEffect(() => {
     const getVideoandAudio = async () => {
@@ -52,8 +51,6 @@ function SettingRoom({ goToStudyRoom }) {
       {clickedSettingBtn && (
         <SettingSection //
           clickSettingBtn={clickSettingBtn}
-          roomName={roomName}
-          setRoomName={setRoomName}
         />
       )}
       <section className={`${styles.video_component} ${displayType}`}>
@@ -62,7 +59,7 @@ function SettingRoom({ goToStudyRoom }) {
       </section>
       <div className={`${styles.bar} ${displayType}`}>
         <SettingBar //
-          roomName={roomName}
+          title={roomInfo.name || (roomInfo.category && `${roomInfo.category} n호실`)}
           goToStudyRoom={goToStudyRoom}
           stopOrStartVideo={stopOrStartVideo}
           stopOrStartAudio={stopOrStartAudio}

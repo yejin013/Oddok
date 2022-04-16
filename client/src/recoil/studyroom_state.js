@@ -18,8 +18,8 @@ export const roomInfoState = atom({
     name: "",
     category: "",
     hashtags: [],
-    targetTime: 0,
-    limitUsers: 0,
+    targetTime: 10,
+    limitUsers: 4,
     isPublic: true,
     password: "",
     rule: "",
@@ -27,6 +27,6 @@ export const roomInfoState = atom({
     isCamOn: false,
     bgmlink: "",
     startAt: "",
-    endAt: "",
+    endAt: new Date(2022, 11, 31).toISOString(),
   },
 });

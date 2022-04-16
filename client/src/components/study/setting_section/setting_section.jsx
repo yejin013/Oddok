@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { userState } from "../../../recoil/user_state";
 import { roomInfoState } from "../../../recoil/studyroom_state";
@@ -20,14 +20,17 @@ const categories = [
   { value: "SCHOOL", name: "수능/내신 준비" },
   { value: "CERTIFICATE", name: "자격증 준비" },
   { value: "EMPLOYEE", name: "취업 준비" },
-  { value: "PRIVATE", name: "개인 학습" },
+  { value: "PERSONAL", name: "개인 학습" },
   { value: "ETC", name: "일반" },
 ];
 const hashtags = ["교시제", "여성전용", "아침기상", "컨셉", "목표시간", "자율", "평일", "주말", "예치금", "인증"];
 const userLimitOptions = [
+  { value: 6, name: "6명" },
+  { value: 5, name: "5명" },
   { value: 4, name: "4명" },
   { value: 3, name: "3명" },
   { value: 2, name: "2명" },
+  { value: 1, name: "1명" },
 ];
 const targetTimeOptions = [
   { value: 10, name: "10시간" },
@@ -36,14 +39,7 @@ const targetTimeOptions = [
 ];
 const periodOptions = [{ value: new Date(2022, 11, 31).toISOString(), name: "2022.12.31" }];
 
-/**
- * TODO
- * 1. 기존 방 정보 가져와서 보여주기
- * 3. 카메라 마이크 토글시 ON/OFF랑 아이콘 변경
- * 7. textarea 글자수 제한
- */
-
-function SettingSection({ clickSettingBtn, roomName, setRoomName }) {
+function SettingSection({ clickSettingBtn }) {
   // 수정 권한에 따라 disabled 처리
   const userInfo = useRecoilValue(userState);
   const [disabled, setDisabled] = useState(!userInfo.updateAllowed);
@@ -55,9 +51,16 @@ function SettingSection({ clickSettingBtn, roomName, setRoomName }) {
   const bgmlinkInputRef = useRef();
   const ruleInputRef = useRef();
 
+  useEffect(() => {
+    titleRef.current.value = roomInfo.name;
+    passwordInputRef.current.value = roomInfo.password ? roomInfo.password : "";
+    bgmlinkInputRef.current.value = roomInfo.bgmlink ? roomInfo.bgmlink : "";
+    ruleInputRef.current.value = roomInfo.rule ? roomInfo.bgmlink : "";
+  }, []);
+
   // 필수 항목 입력 확인
-  const [isCategorySelected, setIsCategorySelected] = useState(false);
-  const [isUserLimitSelected, setIsUserLimitSelected] = useState(false);
+  const [isCategorySelected, setIsCategorySelected] = useState(roomInfo.category);
+  const [isUserLimitSelected, setIsUserLimitSelected] = useState(roomInfo.limitUsers);
 
   // for password validation
   const [isInvalidPassword, setIsInvalidPassword] = useState(false);
@@ -68,16 +71,13 @@ function SettingSection({ clickSettingBtn, roomName, setRoomName }) {
     setIsClickedDetail((prev) => !prev);
   };
 
-  const clickSaveBtn = () => {
-    // 방 이름 입력 설정 or 자동 설정(null값)
-    let name = "";
-    if (titleRef.current.value) {
-      name = titleRef.current.value.replace(/[\u{1F004}-\u{1F9E6}]|[\u{1F600}-\u{1F9D0}]/gu, ""); // 이모지 제거
-      setRoomName(name);
-    }
+  const clickSaveBtn = (e) => {
+    e.preventDefault();
     setRoomInfo({
       ...roomInfo,
-      name,
+      name: titleRef.current.value
+        ? titleRef.current.value.replace(/[\u{1F004}-\u{1F9E6}]|[\u{1F600}-\u{1F9D0}]/gu, "")
+        : "",
       hashtags: Array.from(hashtag), // hashtag set to array
       isPublic: !passwordInputRef.current.value,
       password: passwordInputRef.current.value,
@@ -91,7 +91,11 @@ function SettingSection({ clickSettingBtn, roomName, setRoomName }) {
   const categoryHandler = (category) => {
     setIsCategorySelected(true);
     setRoomInfo({ ...roomInfo, category: category.value });
-    setRoomName(`${category.name} n호실`);
+  };
+
+  const userLimitHandler = (value) => {
+    setIsUserLimitSelected(true);
+    setRoomInfo({ ...roomInfo, limitUsers: value });
   };
 
   const hashtagHandler = (e) => {
@@ -102,11 +106,6 @@ function SettingSection({ clickSettingBtn, roomName, setRoomName }) {
       checkedHashtag.delete(e.target.value);
     }
     setHashtag(checkedHashtag);
-  };
-
-  const userLimitHandler = (value) => {
-    setIsUserLimitSelected(true);
-    setRoomInfo({ ...roomInfo, limitUsers: value });
   };
 
   const audioRuleHandler = (e) => {
@@ -160,6 +159,7 @@ function SettingSection({ clickSettingBtn, roomName, setRoomName }) {
                     categoryHandler(c);
                   }}
                   disabled={disabled}
+                  checked={c.value === roomInfo.category && "checked"}
                 />
               </div>
             ))}
@@ -167,17 +167,36 @@ function SettingSection({ clickSettingBtn, roomName, setRoomName }) {
         </div>
         <div className={styles.roominfo_item}>
           <p className={styles.label}>스터디 명 *</p>
-          <Input placeholder={roomName || "목표를 설정하거나, 직접 입력해주세요"} ref={titleRef} disabled={disabled} />
+          <Input
+            placeholder={
+              roomInfo.name ||
+              (roomInfo.category && `${roomInfo.category} n호실`) ||
+              "목표를 설정하거나, 직접 입력해주세요"
+            }
+            ref={titleRef}
+            disabled={disabled}
+          />
         </div>
         <div className={styles.roominfo_item}>
           <p className={styles.label}>인원 수 *</p>
-          <Dropdown options={userLimitOptions} onSelect={userLimitHandler} disabled={disabled} />
+          <Dropdown
+            options={userLimitOptions}
+            onSelect={userLimitHandler}
+            disabled={disabled}
+            defaultValue={`${roomInfo.limitUsers}명`}
+          />
         </div>
         <div className={styles.roominfo_item}>
           <p className={styles.label}>해시태그</p>
           <div className={styles.content}>
             {hashtags.map((item) => (
-              <ToggleButton icon={<Hashtag />} label={item} onToggle={hashtagHandler} disabled={disabled} />
+              <ToggleButton
+                icon={<Hashtag />}
+                label={item}
+                onToggle={hashtagHandler}
+                disabled={disabled}
+                checked={roomInfo.hashtags.find((tag) => tag === item) && "checked"}
+              />
             ))}
             <AddButton />
           </div>
@@ -199,29 +218,51 @@ function SettingSection({ clickSettingBtn, roomName, setRoomName }) {
           <div>
             <div>
               <p className={styles.label}>목표시간</p>
-              <Dropdown options={targetTimeOptions} onSelect={targetTimeHandler} disabled={disabled} />
+              <Dropdown
+                options={targetTimeOptions}
+                onSelect={targetTimeHandler}
+                disabled={disabled}
+                defaultValue={`${roomInfo.targetTime}시간`}
+              />
             </div>
             <div>
               <p className={styles.label}> 스터디 기간</p>
-              <Dropdown options={periodOptions} onSelect={periodHandler} disabled={disabled} />
+              <Dropdown
+                options={periodOptions}
+                onSelect={periodHandler}
+                disabled={disabled}
+                defaultValue={`${roomInfo.endAt}`}
+              />
             </div>
             <div>
               <p className={styles.label}>비밀번호</p>
               <Input
                 type="password"
                 placeholder="숫자 4자리 비밀번호를 설정하세요"
+                ref={passwordInputRef}
                 maxLength="4"
                 onChange={validPasswordHandler}
                 isInvalid={isInvalidPassword}
-                ref={passwordInputRef}
                 disabled={disabled}
               />
             </div>
             <div>
               <p className={styles.label}>장치 규칙</p>
               <div className={styles.device_item}>
-                <ToggleButton icon={<Video />} label="카메라 ON" onToggle={videoRuleHandler} disabled={disabled} />
-                <ToggleButton icon={<MicOff />} label="마이크 OFF" onToggle={audioRuleHandler} disabled={disabled} />
+                <ToggleButton
+                  icon={<Video />}
+                  label="카메라 ON"
+                  onToggle={videoRuleHandler}
+                  disabled={disabled}
+                  checked={roomInfo.isCamOn && "checked"}
+                />
+                <ToggleButton
+                  icon={<MicOff />}
+                  label="마이크 OFF"
+                  onToggle={audioRuleHandler}
+                  disabled={disabled}
+                  checked={roomInfo.isMicOn && "checked"}
+                />
               </div>
             </div>
           </div>
@@ -237,7 +278,11 @@ function SettingSection({ clickSettingBtn, roomName, setRoomName }) {
       </div>
       {userInfo.updateAllowed && (
         <div className={styles.save_button}>
-          <button type="button" onClick={clickSaveBtn} disabled={!(isCategorySelected && isUserLimitSelected)}>
+          <button
+            type="submit"
+            onClick={clickSaveBtn}
+            disabled={!(isCategorySelected && isUserLimitSelected && !isInvalidPassword)}
+          >
             완료
           </button>
         </div>
