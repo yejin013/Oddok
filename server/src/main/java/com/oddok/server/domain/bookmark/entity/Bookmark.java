@@ -13,7 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Bookmark {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     @OneToOne
