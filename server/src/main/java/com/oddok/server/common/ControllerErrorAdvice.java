@@ -74,7 +74,7 @@ public class ControllerErrorAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(BookmarkNotFoundException.class)
     public ErrorResponse handleBookmarkNotFoundException() {
-        return new ErrorResponse("북마크가 존재하지 않습니다.");
+        return new ErrorResponse("해당 유저의 북마크가 존재하지 않습니다.");
     }
 
     /**

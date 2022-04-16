@@ -4,12 +4,13 @@ import com.oddok.server.common.errors.BookmarkNotFoundException;
 import com.oddok.server.common.errors.StudyRoomNotFoundException;
 import com.oddok.server.common.errors.UserNotFoundException;
 import com.oddok.server.domain.bookmark.dao.BookmarkRepository;
-import com.oddok.server.domain.bookmark.dao.ParticipantRepository;
+import com.oddok.server.domain.participant.dao.ParticipantRepository;
 import com.oddok.server.domain.bookmark.dto.BookmarkDto;
-import com.oddok.server.domain.bookmark.dto.ParticipantDto;
 import com.oddok.server.domain.bookmark.entity.Bookmark;
-import com.oddok.server.domain.studyroom.entity.Participant;
+import com.oddok.server.domain.participant.dto.ParticipantDto;
+import com.oddok.server.domain.participant.entity.Participant;
 import com.oddok.server.domain.bookmark.mapper.BookmarkMapper;
+import com.oddok.server.domain.participant.mapper.ParticipantMapper;
 import com.oddok.server.domain.studyroom.dao.StudyRoomRepository;
 import com.oddok.server.domain.studyroom.entity.StudyRoom;
 import com.oddok.server.domain.user.dao.UserRepository;
@@ -56,11 +57,16 @@ public class BookmarkService {
      */
     public BookmarkDto get(Long userId) {
         User user = findUser(userId);
-        Bookmark bookmark = bookmarkRepository.findByUser(user).orElseThrow(() -> new BookmarkNotFoundException());
+        Bookmark bookmark = bookmarkRepository.findByUser(user).orElseThrow(() -> new BookmarkNotFoundException(userId));
         StudyRoom studyRoom = bookmark.getStudyRoom();
-        List<Participant> participant = participantRepository.findTop5ByStudyRoomOrderByJoinTimeAsc(studyRoom);
+
+        ParticipantMapper participantMapper = Mappers.getMapper(ParticipantMapper.class);
+        List<ParticipantDto> participants = participantMapper.toDto(
+                participantRepository.findTop5ByStudyRoomOrderByJoinTimeAsc(studyRoom)
+        );
+
         BookmarkMapper bookmarkMapper = Mappers.getMapper(BookmarkMapper.class);
-        return bookmarkMapper.toDto(studyRoom, participant);
+        return bookmarkMapper.toDto(studyRoom, participants);
     }
 
     /**

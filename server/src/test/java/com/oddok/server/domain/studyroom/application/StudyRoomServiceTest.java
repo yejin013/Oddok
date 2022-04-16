@@ -6,7 +6,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willReturn;
 
 import com.oddok.server.domain.studyroom.dao.HashtagRepository;
-import com.oddok.server.domain.bookmark.dao.ParticipantRepository;
+import com.oddok.server.domain.participant.dao.ParticipantRepository;
 import com.oddok.server.domain.studyroom.dao.StudyRoomHashtagRepository;
 import com.oddok.server.domain.studyroom.dao.StudyRoomRepository;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
