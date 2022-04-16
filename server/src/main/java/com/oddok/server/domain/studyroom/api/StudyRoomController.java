@@ -127,7 +127,7 @@ public class StudyRoomController {
      * @return GetStudyRoomResponse : 방 정보
      */
     @GetMapping(value = "/{id}")
-    public ResponseEntity<GetStudyRoomResponse> get(@PathVariable Long id) {
+    public ResponseEntity<GetStudyRoomResponse> getDetail(@PathVariable Long id) {
         StudyRoomDto studyRoomDto = studyRoomService.loadStudyRoom(id);
         return ResponseEntity.ok(dtoMapper.toGetResponse(studyRoomDto));
     }

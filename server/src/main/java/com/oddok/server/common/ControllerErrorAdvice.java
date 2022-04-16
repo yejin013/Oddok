@@ -22,34 +22,41 @@ public class ControllerErrorAdvice {
         return new ErrorResponse("Openvidu 서버 에러");
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(UserNotFoundException.class)
     public ErrorResponse handleUserNotFoundException() {
         return new ErrorResponse("해당 사용자가 없습니다.");
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    /**
+     * Openvidu 에 요청 된 SessionId 의 Session 이 없을 경우 에러
+     * ex) 스터디룸 참여 / 삭제 요청-응답 사이에 세션이 삭제 된 경우
+     */
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(SessionNotFoundException.class)
     public ErrorResponse handleSessionNotFoundException() {
-        return new ErrorResponse("해당 세션이 없습니다.");
+        return new ErrorResponse("스터디룸의 세션이 없거나 이미 삭제되었습니다.");
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(StudyRoomNotFoundException.class)
     public ErrorResponse handleStudyRoomNotFoundException() {
-        return new ErrorResponse("해당 스터디방이 없습니다.");
+        return new ErrorResponse("해당 스터디룸이 없습니다.");
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(UserNotPublisherException.class)
     public ErrorResponse handleUserNotPublisherException() {
-        return new ErrorResponse("해당 사용자는 스터디방 생성자가 아닙니다.");
+        return new ErrorResponse("해당 사용자는 스터디룸 생성자가 아닙니다.");
     }
 
+    /**
+     * 스터디룸 비밀번호 오류 시
+     */
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(PasswordsNotMatchException.class)
     public ErrorResponse handlePasswordsNotMatchException() {
-        return new ErrorResponse("스터디방과의 비밀번호가 일치하지 않습니다.");
+        return new ErrorResponse("스터디룸과의 비밀번호가 일치하지 않습니다.");
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -64,16 +71,25 @@ public class ControllerErrorAdvice {
         return new ErrorResponse("해당 유저가 스터디룸에 참여하고 있지 않습니다.");
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(BookmarkNotFoundException.class)
     public ErrorResponse handleBookmarkNotFoundException() {
         return new ErrorResponse("북마크가 존재하지 않습니다.");
     }
 
+    /**
+     * 스터디룸 참여 시
+     */
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(StudyRoomIsFullException.class)
     public ErrorResponse handleStudyRoomIsFullException() {
         return new ErrorResponse("스터디룸 정원이 꽉 찼습니다.");
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(UserAlreadyJoinedStudyRoom.class)
+    public ErrorResponse handleUserAlreadyJoinedStudyRoom() {
+        return new ErrorResponse("사용자가 이미 참여중인 스터디룸이 있습니다.");
     }
 
 }
