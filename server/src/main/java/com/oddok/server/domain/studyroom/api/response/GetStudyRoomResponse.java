@@ -1,5 +1,6 @@
 package com.oddok.server.domain.studyroom.api.response;
 
+import com.oddok.server.domain.studyroom.entity.Category;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -11,7 +12,7 @@ import java.util.List;
 public class GetStudyRoomResponse {
     private String name;
 
-    private String category;
+    private Category category;
 
     private List<String> hashtags;
 
@@ -34,7 +35,7 @@ public class GetStudyRoomResponse {
     private LocalDate endAt;
 
     @Builder
-    public GetStudyRoomResponse(String name, String category, List<String> hashtags, String image,
+    public GetStudyRoomResponse(String name, Category category, List<String> hashtags, String image,
                                 Boolean isPublic, Integer targetTime, String rule, Boolean isMicOn,
                                 Boolean isCamOn, Integer currentUsers, Integer limitUsers, LocalDate endAt) {
         this.name = name;

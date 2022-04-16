@@ -2,7 +2,7 @@ package com.oddok.server.domain.studyroom.api.request;
 
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -35,7 +35,7 @@ public class CreateStudyRoomRequest {
 
     private Integer limitUsers;
 
-    private LocalDateTime endAt;
+    private LocalDate endAt;
 
     private List<String> hashtags;
 

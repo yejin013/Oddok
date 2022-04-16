@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -57,8 +58,7 @@ class HashtagRepositoryTest {
                 .isCamOn(true)
                 .currentUsers(0)
                 .limitUsers(6)
-                .startAt(LocalDateTime.now())
-                .endAt(LocalDateTime.now().plusDays(5))
+                .endAt(LocalDate.now().plusDays(5))
                 .hashtags(hashtags)
                 .build();
     }

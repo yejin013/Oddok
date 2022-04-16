@@ -3,6 +3,7 @@ package com.oddok.server.domain.studyroom.api.response;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -34,15 +35,13 @@ public class UpdateStudyRoomResponse {
 
     private Integer limitUsers;
 
-    private LocalDateTime startAt;
-
-    private LocalDateTime endAt;
+    private LocalDate endAt;
 
     @Builder
     public UpdateStudyRoomResponse(String name, String category, List<String> hashtags, Long userId,
                                    String image, String password, Boolean isPublic, Integer targetTime,
                                    String rule, Boolean isMicOn, Boolean isCamOn, Integer currentUsers,
-                                   Integer limitUsers, LocalDateTime startAt, LocalDateTime endAt) {
+                                   Integer limitUsers, LocalDate endAt) {
         this.name = name;
         this.category = category;
         this.hashtags = hashtags;
@@ -56,7 +55,6 @@ public class UpdateStudyRoomResponse {
         this.isCamOn = isCamOn;
         this.currentUsers = currentUsers;
         this.limitUsers = limitUsers;
-        this.startAt = startAt;
         this.endAt = endAt;
     }
 }

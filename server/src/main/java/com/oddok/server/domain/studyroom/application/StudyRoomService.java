@@ -5,6 +5,7 @@ import com.oddok.server.domain.studyroom.dao.HashtagRepository;
 import com.oddok.server.domain.studyroom.dao.StudyRoomRepository;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import com.oddok.server.domain.participant.dao.ParticipantRepository;
+import com.oddok.server.domain.studyroom.entity.Category;
 import com.oddok.server.domain.studyroom.entity.Hashtag;
 import com.oddok.server.domain.participant.entity.Participant;
 import com.oddok.server.domain.studyroom.entity.StudyRoom;
