@@ -3,6 +3,7 @@ import { useSetRecoilState, useRecoilValue } from "recoil";
 import { videoState, audioState, roomInfoState } from "../../recoil/studyroom_state";
 import SettingBar from "../../components/study/setting_bar/setting_bar";
 import SettingSection from "../../components/study/setting_section/setting_section";
+import ToolTip from "../../components/commons/tool_tip/tool_tip";
 import styles from "./setting_room.module.css";
 import TotalTime from "../../components/study/total_time/total_time";
 
@@ -58,6 +59,11 @@ function SettingRoom({ goToStudyRoom }) {
         <TotalTime />
       </section>
       <div className={`${styles.bar} ${displayType}`}>
+        {!roomInfo.category && (
+          <div className={styles.setting_tooltip}>
+            <ToolTip type="left" message="방설정 머시기는 요기서!" />
+          </div>
+        )}
         <SettingBar //
           title={roomInfo.name || (roomInfo.category && `${roomInfo.category} n호실`)}
           goToStudyRoom={goToStudyRoom}
