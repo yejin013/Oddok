@@ -17,10 +17,16 @@
   position: relative;
 }
 
-.setting_tooltip {
+.setting_tooltip,
+.plan_tooltip {
   position: absolute;
   top: -70px;
   left: 16px;
+}
+
+.plan_tooltip {
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .video_component.hide,

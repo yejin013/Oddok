@@ -61,9 +61,12 @@ function SettingRoom({ goToStudyRoom }) {
       <div className={`${styles.bar} ${displayType}`}>
         {!roomInfo.category && (
           <div className={styles.setting_tooltip}>
-            <ToolTip type="left" message="방설정 머시기는 요기서!" />
+            <ToolTip type="left" message="해시태그나 스터디 유형 설정은 여기에서!" />
           </div>
         )}
+        <div className={styles.plan_tooltip}>
+          <ToolTip message="오늘의 스터디 플랜을 적어볼까요?" />
+        </div>
         <SettingBar //
           title={roomInfo.name || (roomInfo.category && `${roomInfo.category} n호실`)}
           goToStudyRoom={goToStudyRoom}

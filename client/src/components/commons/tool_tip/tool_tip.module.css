@@ -13,8 +13,12 @@
   content: "";
   position: absolute;
   bottom: -16px;
-  left: 10px;
+  left: calc(50% - 16px);
   border-top: 16px solid #212529;
   border-left: 12px solid transparent;
   border-right: 12px solid transparent;
+}
+
+.tooltip.left::before {
+  left: 10px;
 }
