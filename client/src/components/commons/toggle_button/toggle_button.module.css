@@ -7,16 +7,19 @@
 }
 
 .content {
-  display: inline-block;
-  padding: 16px;
+  display: flex;
+  padding: 1em;
   background-color: #212529;
   color: #f8f9fa;
   border-radius: 99px;
 }
 
 .icon {
-  vertical-align: middle;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-right: 4px;
+  width: 1em;
 }
 
 .toggle_button input:checked + span {

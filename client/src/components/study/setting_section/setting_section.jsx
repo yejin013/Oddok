@@ -12,6 +12,7 @@ import Textarea from "../../commons/textarea/textarea";
 import { ReactComponent as Video } from "../../../assets/icons/video.svg";
 import { ReactComponent as MicOff } from "../../../assets/icons/mic_off.svg";
 import { ReactComponent as Hashtag } from "../../../assets/icons/hashtag.svg";
+import Image from "./image";
 
 import styles from "./setting_section.module.css";
 
@@ -188,7 +189,7 @@ function SettingSection({ clickSettingBtn }) {
         </div>
         <div className={styles.roominfo_item}>
           <p className={styles.label}>해시태그</p>
-          <div className={styles.content}>
+          <div className={styles.hashtag_item}>
             {hashtags.map((item) => (
               <ToggleButton
                 icon={<Hashtag />}
@@ -212,7 +213,7 @@ function SettingSection({ clickSettingBtn }) {
           <div>
             <p className={styles.label}>스터디 이미지</p>
             <div className={styles.image_box}>
-              <img src="https://image.istarbucks.co.kr/common/img/main/rewards-logo.png" alt="대표 이미지" />
+              <Image />
             </div>
           </div>
           <div>

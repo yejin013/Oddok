@@ -1,9 +1,8 @@
 .container {
   position: relative;
-  margin: 0.5rem;
   color: #f8f9fa;
-  font-size: 0.875rem;
   cursor: pointer;
+  font-size: inherit;
 }
 
 .container p {
@@ -15,7 +14,7 @@
   border: 1px solid #ffffff1a;
   border-radius: 4px;
   width: 100%;
-  padding: 13px 15px;
+  padding: 0.8125em 1em;
 }
 
 .container ul {
