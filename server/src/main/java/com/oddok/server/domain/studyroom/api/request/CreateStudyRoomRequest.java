@@ -4,7 +4,7 @@ import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -36,9 +36,7 @@ public class CreateStudyRoomRequest {
 
     private Integer limitUsers;
 
-    private LocalDateTime startAt;
-
-    private LocalDateTime endAt;
+    private LocalDate endAt;
 
     private List<String> hashtags;
 

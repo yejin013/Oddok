@@ -1,10 +1,10 @@
 package com.oddok.server.domain.bookmark.api.response;
 
-import com.oddok.server.domain.bookmark.dto.ParticipantDto;
+import com.oddok.server.domain.participant.dto.ParticipantDto;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -23,14 +23,14 @@ public class GetBookmarkResponse {
 
     private Integer limitUsers;
 
-    private LocalDateTime endAt;
+    private LocalDate endAt;
 
     private List<ParticipantDto> participant;
 
     @Builder
     public GetBookmarkResponse(Long id, String name, List<String> hashtags, String image,
                                     String rule, Integer currentUsers, Integer limitUsers,
-                                    LocalDateTime endAt, List<ParticipantDto> participant) {
+                                    LocalDate endAt, List<ParticipantDto> participant) {
         this.id = id;
         this.name = name;
         this.hashtags = hashtags;

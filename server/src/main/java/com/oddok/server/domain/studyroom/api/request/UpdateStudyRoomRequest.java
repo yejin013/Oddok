@@ -3,6 +3,7 @@ package com.oddok.server.domain.studyroom.api.request;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -34,9 +35,7 @@ public class UpdateStudyRoomRequest {
 
     private Integer limitUsers;
 
-    private LocalDateTime startAt;
-
-    private LocalDateTime endAt;
+    private LocalDate endAt;
 
     private List<String> hashtags;
 }

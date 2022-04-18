@@ -14,19 +14,18 @@ public interface StudyRoomDtoMapper {
 
     @Mapping(source = "userId", target = "userId")
     @Mapping(source = "studyRoomId", target = "id")
-    @Mapping(target = "category", expression="java(Category.valueOf(request.getCategory()))")
+    @Mapping(target = "currentUsers", ignore = true)
     StudyRoomDto fromUpdateRequest(UpdateStudyRoomRequest request, Long userId, Long studyRoomId);
 
     @Mapping(source = "userId", target="userId")
-    @Mapping(target = "category", expression="java(Category.valueOf(request.getCategory()))")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "sessionId", ignore = true)
     StudyRoomDto fromCreateRequest(CreateStudyRoomRequest request, String userId);
 
-    @Mapping(source = "category.value", target = "category")
     GetStudyRoomResponse toGetResponse(StudyRoomDto studyRoomDto);
 
     GetStudyRoomListEntityResponse toGetResponseList(StudyRoomDto studyRoomDto);
 
-    @Mapping(source = "category.value", target = "category")
     UpdateStudyRoomResponse toUpdateResponse(StudyRoomDto studyRoomDto);
 
 

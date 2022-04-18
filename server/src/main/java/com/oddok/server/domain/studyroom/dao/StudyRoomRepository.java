@@ -7,15 +7,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Repository
 public interface StudyRoomRepository extends JpaRepository<StudyRoom, Long> {
-    Page<StudyRoom> findAllByStartAtBeforeAndEndAtAfter(LocalDateTime startAt, LocalDateTime endAt, Pageable pageable);
-    Page<StudyRoom> findAllByStartAtBeforeAndEndAtAfterAndCategory(LocalDateTime startAt, LocalDateTime endAt, Category category, Pageable pageable);
-    Page<StudyRoom> findAllByStartAtBeforeAndEndAtAfterAndIsPublicTrue(LocalDateTime startAt, LocalDateTime endAt, Pageable pageable);
-    Page<StudyRoom> findAllByStartAtBeforeAndEndAtAfterAndCategoryAndIsPublicTrue(LocalDateTime startAt, LocalDateTime endAt, Category category, Pageable pageable);
-    Page<StudyRoom> findAllByStartAtBeforeAndEndAtAfterAndNameContaining(LocalDateTime startAt, LocalDateTime endAt, String name, Pageable pageable);
-    Page<StudyRoom> findAllByStartAtBeforeAndEndAtAfterAndNameContainingAndIsPublicTrue(LocalDateTime startAt, LocalDateTime endAt, String name, Pageable pageable);
+    Optional<StudyRoom> findByIdAndEndAtAfter(Long id, LocalDate endAt);
+    Page<StudyRoom> findAllByEndAtAfter(LocalDate endAt, Pageable pageable);
+    Page<StudyRoom> findAllByEndAtAfterAndCategory(LocalDate endAt, Category category, Pageable pageable);
+    Page<StudyRoom> findAllByEndAtAfterAndIsPublicTrue(LocalDate endAt, Pageable pageable);
+    Page<StudyRoom> findAllByEndAtAfterAndCategoryAndIsPublicTrue(LocalDate endAt, Category category, Pageable pageable);
+    Page<StudyRoom> findAllByEndAtAfterAndNameContaining(LocalDate endAt, String name, Pageable pageable);
+    Page<StudyRoom> findAllByEndAtAfterAndNameContainingAndIsPublicTrue(LocalDate endAt, String name, Pageable pageable);
 }
