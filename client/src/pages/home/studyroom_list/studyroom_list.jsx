@@ -53,11 +53,6 @@ function StudyRoomList() {
     setSortOpt(value);
   };
 
-  let content = <p style={{ color: "white" }}>스터디룸이 없어요!🥲</p>;
-  if (loadedRooms.length > 0) {
-    content = <CardGrid rooms={loadedRooms} />;
-  }
-
   return (
     <div className={styles.container}>
       <div className={styles.studyroom_head}>
@@ -82,7 +77,13 @@ function StudyRoomList() {
       <div className={styles.tab_menu}>
         <TabMenu setCurrentCategory={setCurrentCategory} />
       </div>
-      <div className={styles.studyroom_list}>{content}</div>
+      <div className={styles.studyroom_list}>
+        {loadedRooms.length > 0 ? (
+          <CardGrid rooms={loadedRooms} />
+        ) : (
+          <p style={{ color: "white" }}>스터디룸이 없어요!🥲</p>
+        )}
+      </div>
       {!isLastPage && (
         <button type="button" onClick={clickMoreBtn}>
           더보기
