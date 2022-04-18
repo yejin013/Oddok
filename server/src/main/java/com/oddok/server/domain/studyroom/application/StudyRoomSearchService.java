@@ -7,6 +7,7 @@ import com.oddok.server.domain.studyroom.mapper.StudyRoomMapper;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Page;
@@ -32,6 +33,19 @@ public class StudyRoomSearchService {
       return studyRoomRepository.findAllByEndAtAfterAndIsPublicTrue(now, pageable).map(studyRoomMapper::toDto);
     return studyRoomRepository.findAllByEndAtAfter(now, pageable).map(studyRoomMapper::toDto);
   }
+
+  /**
+   * 이름으로 검색
+   * @param isPublic
+   * @param category
+   * @param name
+   * @param pageable
+   * @return
+   */
+  public List<StudyRoomDto> getStudyRooms(Boolean isPublic, String category, String name, Pageable pageable) {
+    return studyRoomMapper.toDtoList(studyRoomRepository.findStudyRooms(isPublic, category, name, pageable));
+  }
+
 
   public Page<StudyRoomDto> getStudyRoomsByCategory(Pageable pageable, Boolean isPublic, String category) {
     LocalDate now = LocalDate.now();
