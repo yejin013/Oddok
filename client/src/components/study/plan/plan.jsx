@@ -1,9 +1,16 @@
-import React, { useState } from "react";
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+import React, { useRef, useState } from "react";
 import styles from "./plan.module.css";
 import { ReactComponent as Dots } from "../../../assets/icons/three-dots-vertical.svg";
+import Input from "../../commons/Input/input";
 
-function Plan({ plan, onPlanClick, onDelete }) {
+function Plan({ plan, onPlanClick, onDelete, onEdit }) {
   const [isClickedBtn, setIsClickedBtn] = useState(false);
+  const [isEdited, setIsEdited] = useState(false);
+  const displayType = isEdited ? styles.hide : "";
+  const formRef = useRef();
+  const inputRef = useRef();
 
   const clickBtn = () => {
     setIsClickedBtn((prev) => !prev);
@@ -13,11 +20,39 @@ function Plan({ plan, onPlanClick, onDelete }) {
     onDelete(plan);
   };
 
+  const clickEditBtn = () => {
+    setIsEdited((prev) => !prev);
+    setIsClickedBtn((prev) => !prev); // edit input 나오면 옵션버튼 자동으로 사라짐
+  };
+
+  const changeHandler = (event) => {
+    if (event.currentTarget == null) {
+      // undifined를 구분하기 위해 == 사용
+      return;
+    }
+    event.preventDefault();
+    const updated = {
+      ...plan,
+      name: inputRef.current.value,
+    };
+    onEdit(updated);
+  };
+
+  const submitHandler = (event) => {
+    event.preventDefault();
+    setIsEdited((prev) => !prev);
+  };
+
   return (
-    <li className={styles.plan}>
-      <button type="button" className={styles.name} onClick={() => onPlanClick(plan)}>
+    <li className={styles.list}>
+      <span type="button" className={`${styles.name} ${displayType}`} onClick={() => onPlanClick(plan)}>
         {plan.name}
-      </button>
+      </span>
+      {isEdited && (
+        <form ref={formRef} className={styles.form} onSubmit={submitHandler}>
+          <Input ref={inputRef} value={plan.name} onChange={changeHandler} />
+        </form>
+      )}
       <ul>
         <li>
           <button type="button" className={styles.dots} onClick={clickBtn}>
@@ -27,7 +62,7 @@ function Plan({ plan, onPlanClick, onDelete }) {
         {isClickedBtn && (
           <ul className={styles.buttons}>
             <li>
-              <button type="button" className={styles.button}>
+              <button type="button" className={styles.button} onClick={clickEditBtn}>
                 수정
               </button>
             </li>

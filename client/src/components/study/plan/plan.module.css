@@ -1,4 +1,4 @@
-.plan {
+.list {
   display: flex;
   align-items: center;
   background-color: #212529;
@@ -8,12 +8,22 @@
 }
 
 .name {
-  margin-right: 1.2em;
   width: 90%;
   text-align: left;
+  padding: 0 0.5em;
+  cursor: pointer;
+}
+
+.name.hide {
+  display: none;
+}
+
+.form {
+  width: 90%;
 }
 
 .dots {
+  margin-left: 1.2em;
   padding-top: 0.4em;
 }
 

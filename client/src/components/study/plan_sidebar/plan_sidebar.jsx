@@ -15,6 +15,7 @@ function PlanSidebar(props) {
   const setStartTime = useSetRecoilState(startTimeState);
   const setEndTime = useSetRecoilState(endTimeState);
 
+  const formRef = useRef();
   const inputRef = useRef();
 
   const selectPlan = (plan) => {
@@ -36,22 +37,34 @@ function PlanSidebar(props) {
     setPlans(updated);
   };
 
+  const editPlan = (plan) => {
+    const updated = [...plans];
+    const index = updated.findIndex((item) => item.id === plan.id);
+    if (index !== -1) {
+      updated[index] = plan;
+    }
+    setPlans(updated);
+  };
+
   const submitPlan = (event) => {
     event.preventDefault();
+    if (inputRef.current.value === "") {
+      return;
+    }
     const plan = {
       id: Date.now(),
       name: inputRef.current.value,
     };
-    inputRef.current.value = "";
+    formRef.current.reset();
     addPlan(plan);
   };
 
   return (
     <aside className={styles.plan_bar}>
       <div className={styles.plans}>
-        <Plans plans={plans} onPlanClick={selectPlan} onDelete={deletePlan} />
+        <Plans plans={plans} onPlanClick={selectPlan} onDelete={deletePlan} onEdit={editPlan} />
       </div>
-      <form className={styles.form} onSubmit={submitPlan}>
+      <form ref={formRef} className={styles.form} onSubmit={submitPlan}>
         <Input ref={inputRef} />
       </form>
     </aside>

@@ -1,11 +1,17 @@
 import React from "react";
 import Plan from "../plan/plan";
 
-function Plans({ plans, onPlanClick, onDelete }) {
+function Plans({ plans, onPlanClick, onDelete, onEdit }) {
   return (
     <ul>
       {plans.map((plan) => (
-        <Plan key={plan.id} plan={plan} onPlanClick={onPlanClick} onDelete={onDelete} />
+        <Plan //
+          key={plan.id}
+          plan={plan}
+          onPlanClick={onPlanClick}
+          onDelete={onDelete}
+          onEdit={onEdit}
+        />
       ))}
     </ul>
   );
