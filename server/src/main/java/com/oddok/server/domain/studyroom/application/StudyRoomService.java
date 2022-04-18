@@ -4,16 +4,16 @@ import com.oddok.server.common.errors.*;
 import com.oddok.server.domain.studyroom.dao.HashtagRepository;
 import com.oddok.server.domain.studyroom.dao.StudyRoomRepository;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
-import com.oddok.server.domain.bookmark.dao.ParticipantRepository;
+import com.oddok.server.domain.participant.dao.ParticipantRepository;
+import com.oddok.server.domain.studyroom.entity.Category;
 import com.oddok.server.domain.studyroom.entity.Hashtag;
-import com.oddok.server.domain.studyroom.entity.Participant;
+import com.oddok.server.domain.participant.entity.Participant;
 import com.oddok.server.domain.studyroom.entity.StudyRoom;
 import com.oddok.server.domain.studyroom.mapper.StudyRoomMapper;
 import com.oddok.server.domain.user.dao.UserRepository;
 
 import com.oddok.server.domain.user.entity.User;
 
-import java.util.Objects;
 import java.util.Set;
 
 import lombok.RequiredArgsConstructor;
@@ -122,7 +122,6 @@ public class StudyRoomService {
         studyRoom.deleteSession();
     }
 
-
     public void checkPassword(Long id, String password) {
         StudyRoom studyRoom = findStudyRoom(id);
 
@@ -159,10 +158,8 @@ public class StudyRoomService {
     }
 
     private StudyRoom findStudyRoom(Long id) {
-        return studyRoomRepository.findById(id)
-                .orElseThrow(() -> new StudyRoomNotFoundException(id));
+        return studyRoomRepository.findById(id).orElseThrow(() -> new StudyRoomNotFoundException(id));
     }
-
 
     private User findUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));

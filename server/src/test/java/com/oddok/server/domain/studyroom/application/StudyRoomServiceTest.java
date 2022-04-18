@@ -6,7 +6,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willReturn;
 
 import com.oddok.server.domain.studyroom.dao.HashtagRepository;
-import com.oddok.server.domain.bookmark.dao.ParticipantRepository;
+import com.oddok.server.domain.participant.dao.ParticipantRepository;
 import com.oddok.server.domain.studyroom.dao.StudyRoomHashtagRepository;
 import com.oddok.server.domain.studyroom.dao.StudyRoomRepository;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
@@ -16,6 +16,8 @@ import com.oddok.server.domain.studyroom.entity.StudyRoom;
 import com.oddok.server.domain.studyroom.mapper.StudyRoomMapper;
 import com.oddok.server.domain.user.dao.UserRepository;
 import com.oddok.server.domain.user.entity.User;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Optional;
@@ -125,8 +127,7 @@ class StudyRoomServiceTest {
         .isCamOn(true)
         .currentUsers(0)
         .limitUsers(6)
-        .startAt(LocalDateTime.now())
-        .endAt(LocalDateTime.now().plusDays(5))
+        .endAt(LocalDate.now().plusDays(5))
         .hashtags(hashtags)
         .build();
   }

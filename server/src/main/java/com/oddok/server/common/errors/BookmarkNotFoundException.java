@@ -1,7 +1,7 @@
 package com.oddok.server.common.errors;
 
 public class BookmarkNotFoundException  extends RuntimeException{
-    public BookmarkNotFoundException() {
-        super();
+    public BookmarkNotFoundException(Long userId) {
+        super(userId + "'s Bookmark Not Found");
     }
 }

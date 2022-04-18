@@ -2,13 +2,12 @@ package com.oddok.server.domain.studyroom.dto;
 
 import com.oddok.server.domain.studyroom.entity.Category;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 import lombok.*;
-
-import java.time.LocalDateTime;
 
 @Getter
 public class StudyRoomDto {
@@ -40,14 +39,12 @@ public class StudyRoomDto {
 
     private Integer limitUsers;
 
-    private LocalDateTime startAt;
-
-    private LocalDateTime endAt;
+    private LocalDate endAt;
 
     private Set<String> hashtags;
 
     @Builder
-    public StudyRoomDto(Long id, String name, Category category, Long userId, String sessionId, String image, Boolean isPublic, String password, Integer targetTime, String rule, Boolean isMicOn, Boolean isCamOn, Integer currentUsers, Integer limitUsers, LocalDateTime startAt, LocalDateTime endAt, Set<String> hashtags) {
+    public StudyRoomDto(Long id, String name, Category category, Long userId, String sessionId, String image, Boolean isPublic, String password, Integer targetTime, String rule, Boolean isMicOn, Boolean isCamOn, Integer currentUsers, Integer limitUsers, LocalDate endAt, Set<String> hashtags) {
         this.id = id;
         this.name = name;
         this.category = category;
@@ -62,13 +59,12 @@ public class StudyRoomDto {
         this.isCamOn = isCamOn;
         this.currentUsers = currentUsers;
         this.limitUsers = limitUsers;
-        this.startAt = startAt;
         this.endAt = endAt;
         this.hashtags = Objects.requireNonNullElseGet(hashtags, HashSet::new);
     }
 
     @Builder
-    public StudyRoomDto(String name, Category category, Long userId, String sessionId, String image, Boolean isPublic, String password, Integer targetTime, String rule, Boolean isMicOn, Boolean isCamOn, Integer currentUsers, Integer limitUsers, LocalDateTime startAt, LocalDateTime endAt, Set<String> hashtags) {
+    public StudyRoomDto(String name, Category category, Long userId, String sessionId, String image, Boolean isPublic, String password, Integer targetTime, String rule, Boolean isMicOn, Boolean isCamOn, Integer currentUsers, Integer limitUsers, LocalDate endAt, Set<String> hashtags) {
         this.name = name;
         this.category = category;
         this.userId = userId;
@@ -82,7 +78,6 @@ public class StudyRoomDto {
         this.isCamOn = isCamOn;
         this.currentUsers = currentUsers;
         this.limitUsers = limitUsers;
-        this.startAt = startAt;
         this.endAt = endAt;
         this.hashtags = Objects.requireNonNullElseGet(hashtags, HashSet::new);
     }

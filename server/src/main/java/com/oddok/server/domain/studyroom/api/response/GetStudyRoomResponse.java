@@ -1,8 +1,10 @@
 package com.oddok.server.domain.studyroom.api.response;
 
+import com.oddok.server.domain.studyroom.entity.Category;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -10,7 +12,7 @@ import java.util.List;
 public class GetStudyRoomResponse {
     private String name;
 
-    private String category;
+    private Category category;
 
     private List<String> hashtags;
 
@@ -30,15 +32,12 @@ public class GetStudyRoomResponse {
 
     private Integer limitUsers;
 
-    private LocalDateTime startAt;
-
-    private LocalDateTime endAt;
+    private LocalDate endAt;
 
     @Builder
-    public GetStudyRoomResponse(String name, String category, List<String> hashtags, String image,
+    public GetStudyRoomResponse(String name, Category category, List<String> hashtags, String image,
                                 Boolean isPublic, Integer targetTime, String rule, Boolean isMicOn,
-                                Boolean isCamOn, Integer currentUsers, Integer limitUsers,
-                                LocalDateTime startAt, LocalDateTime endAt) {
+                                Boolean isCamOn, Integer currentUsers, Integer limitUsers, LocalDate endAt) {
         this.name = name;
         this.category = category;
         this.hashtags = hashtags;
@@ -50,7 +49,6 @@ public class GetStudyRoomResponse {
         this.isCamOn = isCamOn;
         this.currentUsers = currentUsers;
         this.limitUsers = limitUsers;
-        this.startAt = startAt;
         this.endAt = endAt;
     }
 

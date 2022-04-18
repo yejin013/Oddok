@@ -41,7 +41,7 @@ public class ControllerErrorAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(StudyRoomNotFoundException.class)
     public ErrorResponse handleStudyRoomNotFoundException() {
-        return new ErrorResponse("해당 스터디룸이 없습니다.");
+        return new ErrorResponse("해당 스터디룸이 없거나 기간이 만료되었습니다.");
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
@@ -74,7 +74,7 @@ public class ControllerErrorAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(BookmarkNotFoundException.class)
     public ErrorResponse handleBookmarkNotFoundException() {
-        return new ErrorResponse("북마크가 존재하지 않습니다.");
+        return new ErrorResponse("해당 유저의 북마크가 존재하지 않습니다.");
     }
 
     /**

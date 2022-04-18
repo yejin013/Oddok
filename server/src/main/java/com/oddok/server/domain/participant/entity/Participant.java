@@ -1,5 +1,6 @@
-package com.oddok.server.domain.studyroom.entity;
+package com.oddok.server.domain.participant.entity;
 
+import com.oddok.server.domain.studyroom.entity.StudyRoom;
 import com.oddok.server.domain.user.entity.User;
 import lombok.AccessLevel;
 import lombok.Builder;
