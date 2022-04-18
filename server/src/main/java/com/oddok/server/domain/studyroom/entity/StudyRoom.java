@@ -82,14 +82,13 @@ public class StudyRoom {
 
     @Builder
     public StudyRoom(String name, String category, User user,
-                     String sessionId, String image, Boolean isPublic,
+                     String image, Boolean isPublic,
                      String password, Integer targetTime, String rule,
                      Boolean isMicOn, Boolean isCamOn, Integer limitUsers,
                      LocalDateTime startAt, LocalDateTime endAt) {
         this.name = name;
         this.category = Category.valueOf(category);
         this.user = user;
-        this.sessionId = sessionId;
         this.image = image;
         this.isPublic = isPublic;
         this.password = password;

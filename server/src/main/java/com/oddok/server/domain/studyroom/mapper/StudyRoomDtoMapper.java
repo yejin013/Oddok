@@ -8,7 +8,6 @@ import com.oddok.server.domain.studyroom.api.response.UpdateStudyRoomResponse;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.springframework.data.domain.Page;
 
 @Mapper
 public interface StudyRoomDtoMapper {
