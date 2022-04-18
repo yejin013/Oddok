@@ -78,7 +78,7 @@ public class StudyRoomService {
      * 해당 스터디룸의 sessionId 가 없으면 Openvidu 세션을 생성/등록 후 반환하고, 있으면 해당 세션아이디를 반환합니다.
      */
     private String getSession(StudyRoom studyRoom) {
-        if (studyRoom.getSessionId() == null) studyRoom.createSession(sessionManager.createSession());
+        if (studyRoom.getSessionId() == null || studyRoom.getSessionId().isBlank()) studyRoom.createSession(sessionManager.createSession());
         return studyRoom.getSessionId();
     }
 
@@ -118,8 +118,8 @@ public class StudyRoomService {
         participantRepository.delete(participant);
         if (studyRoom.decreaseCurrentUsers() == 0) { // 모두 나갔으면 세션삭제
             sessionManager.deleteSession(studyRoom.getSessionId());
+            studyRoom.deleteSession();
         }
-        studyRoom.deleteSession();
     }
 
 
