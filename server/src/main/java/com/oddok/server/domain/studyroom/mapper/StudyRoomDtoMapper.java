@@ -14,11 +14,9 @@ public interface StudyRoomDtoMapper {
 
     @Mapping(source = "userId", target = "userId")
     @Mapping(source = "studyRoomId", target = "id")
-    @Mapping(target = "category", expression="java(com.oddok.server.domain.studyroom.entity.Category.valueOf(request.getCategory()))")
     StudyRoomDto fromUpdateRequest(UpdateStudyRoomRequest request, Long userId, Long studyRoomId);
 
     @Mapping(source = "userId", target="userId")
-    @Mapping(target = "category", expression="java(com.oddok.server.domain.studyroom.entity.Category.valueOf(request.getCategory()))")
     StudyRoomDto fromCreateRequest(CreateStudyRoomRequest request, String userId);
 
     GetStudyRoomResponse toGetResponse(StudyRoomDto studyRoomDto);
