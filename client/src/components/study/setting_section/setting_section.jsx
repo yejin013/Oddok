@@ -4,6 +4,7 @@ import { userState } from "../../../recoil/user_state";
 import { roomInfoState } from "../../../recoil/studyroom_state";
 import RadioButton from "../../commons/radio_button/radio_button";
 import ToggleButton from "../../commons/toggle_button/toggle_button";
+import InputButton from "../../commons/input_button/input_button";
 import AddButton from "../../commons/add_button/add_button";
 import Dropdown from "../../commons/dropdown/dropdown";
 import Input from "../../commons/Input/input";
@@ -48,6 +49,7 @@ function SettingSection({ clickSettingBtn }) {
 
   const titleRef = useRef();
   const [hashtag, setHashtag] = useState([]);
+  const [newHashtag, setNewHashtag] = useState([]);
   const passwordInputRef = useRef();
   const bgmlinkInputRef = useRef();
   const ruleInputRef = useRef();
@@ -107,6 +109,22 @@ function SettingSection({ clickSettingBtn }) {
       checkedHashtag.delete(e.target.value);
     }
     setHashtag(checkedHashtag);
+  };
+
+  // useEffect(() => {
+  //   console.log(newHashtag);
+  // }, [newHashtag]);
+
+  const addHashtagBtnHandler = () => {
+    setNewHashtag((prev) => [...prev, undefined]);
+  };
+
+  const newHashtagHandler = (i, label) => {
+    setNewHashtag((prev) => [...prev.slice(0, i), label, ...prev.slice(i + 1)]);
+  };
+
+  const deleteHandler = (itemNo) => {
+    setNewHashtag((prev) => [...prev.slice(0, itemNo), ...prev.slice(itemNo + 1)]);
   };
 
   const audioRuleHandler = (e) => {
@@ -199,7 +217,15 @@ function SettingSection({ clickSettingBtn }) {
                 checked={roomInfo.hashtags.find((tag) => tag === item) && "checked"}
               />
             ))}
-            <AddButton />
+            {newHashtag.map((item, i) => (
+              <InputButton
+                icon={<Hashtag />}
+                label={item}
+                onSubmit={(label) => newHashtagHandler(i, label)}
+                onDelete={() => deleteHandler(i)}
+              />
+            ))}
+            <AddButton onClick={addHashtagBtnHandler} />
           </div>
         </div>
       </div>
