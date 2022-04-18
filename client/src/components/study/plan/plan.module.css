@@ -7,10 +7,15 @@
   border-radius: 4px;
 }
 
+.check.hide {
+  display: none;
+}
+
 .name {
   width: 90%;
   text-align: left;
-  padding: 0 0.5em;
+  margin-left: 0.5em;
+  padding-right: 0.5em;
   cursor: pointer;
 }
 

@@ -26,6 +26,7 @@ function StudyRoom() {
   const [isPlanOpen, setisPlanOpen] = useState(false);
   const [isSidebar, setisSidebar] = useState(false);
   const displayType = isSidebar === true ? styles.decrease : "";
+  const isStudyRoom = true;
 
   const leaveRoom = () => {
     session.disconnect();
@@ -124,7 +125,7 @@ function StudyRoom() {
         </ul>
         {isPlanOpen && (
           <div className={styles.plan_bar}>
-            <PlanSidebar />
+            <PlanSidebar isStudyRoom={isStudyRoom} />
           </div>
         )}
       </div>

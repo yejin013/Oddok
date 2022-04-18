@@ -1,7 +1,7 @@
 import React from "react";
 import Plan from "../plan/plan";
 
-function Plans({ plans, onPlanClick, onDelete, onEdit }) {
+function Plans({ plans, onPlanClick, onDelete, onEdit, isStudyRoom }) {
   return (
     <ul>
       {plans.map((plan) => (
@@ -11,6 +11,7 @@ function Plans({ plans, onPlanClick, onDelete, onEdit }) {
           onPlanClick={onPlanClick}
           onDelete={onDelete}
           onEdit={onEdit}
+          isStudyRoom={isStudyRoom}
         />
       ))}
     </ul>

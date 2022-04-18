@@ -6,7 +6,7 @@ import Input from "../../commons/Input/input";
 import Plans from "../plans/plans";
 import styles from "./plan_sidebar.module.css";
 
-function PlanSidebar(props) {
+function PlanSidebar({ isStudyRoom }) {
   const [plans, setPlans] = useRecoilState(planState);
   const [selectedPlan, setSelectedplan] = useRecoilState(selectedPlanState);
   const setHour = useSetRecoilState(hourState);
@@ -57,6 +57,7 @@ function PlanSidebar(props) {
     const plan = {
       id: Date.now(),
       name: inputRef.current.value,
+      isDone: false,
     };
     formRef.current.reset();
     addPlan(plan);
@@ -65,7 +66,13 @@ function PlanSidebar(props) {
   return (
     <aside className={styles.plan_bar}>
       <div className={styles.plans}>
-        <Plans plans={plans} onPlanClick={selectPlan} onDelete={deletePlan} onEdit={editPlan} />
+        <Plans
+          plans={plans}
+          onPlanClick={selectPlan}
+          onDelete={deletePlan}
+          onEdit={editPlan}
+          isStudyRoom={isStudyRoom}
+        />
       </div>
       <form ref={formRef} className={styles.form} onSubmit={submitPlan}>
         <Input ref={inputRef} />
