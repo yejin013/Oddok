@@ -8,7 +8,7 @@ import UserCount from "./user_count";
 
 function StudyRoomCard({ roomData }) {
   return (
-    <div className={styles.container}>
+    <li className={styles.container}>
       <div className={styles.thumbnail_box}>
         <Thumbnail />
         <div className={styles.lock_icon}>{roomData.isPublic ? <Unlock /> : <Lock />}</div>
@@ -27,7 +27,7 @@ function StudyRoomCard({ roomData }) {
           {roomData.currentUsers}/{roomData.limitUsers}
         </span>
       </div>
-    </div>
+    </li>
   );
 }
 
