@@ -31,11 +31,10 @@ function Plan({ plan, onPlanClick, onDelete, onEdit }) {
       return;
     }
     event.preventDefault();
-    const updated = {
+    onEdit({
       ...plan,
-      name: inputRef.current.value,
-    };
-    onEdit(updated);
+      name: event.currentTarget.value,
+    });
   };
 
   const submitHandler = (event) => {
@@ -62,12 +61,12 @@ function Plan({ plan, onPlanClick, onDelete, onEdit }) {
         {isClickedBtn && (
           <ul className={styles.buttons}>
             <li>
-              <button type="button" className={styles.button} onClick={clickEditBtn}>
+              <button type="button" className={styles.edit_button} onClick={clickEditBtn}>
                 수정
               </button>
             </li>
             <li>
-              <button type="button" className={styles.button} onClick={clickDeleteBtn}>
+              <button type="button" className={styles.delete_button} onClick={clickDeleteBtn}>
                 삭제
               </button>
             </li>

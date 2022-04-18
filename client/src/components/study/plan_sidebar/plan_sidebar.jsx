@@ -35,6 +35,9 @@ function PlanSidebar(props) {
   const deletePlan = (plan) => {
     const updated = plans.filter((item) => item.id !== plan.id);
     setPlans(updated);
+    if (selectedPlan.id === plan.id) {
+      setSelectedplan({});
+    }
   };
 
   const editPlan = (plan) => {

@@ -18,10 +18,6 @@
   display: none;
 }
 
-.form {
-  width: 90%;
-}
-
 .dots {
   margin-left: 1.2em;
   padding-top: 0.4em;
@@ -34,8 +30,14 @@
   background-color: #212529;
 }
 
-.button {
+.edit_button,
+.delete_button {
   margin: 0.5em 0;
-  padding: 0 2.8em;
-  font-size: 0.8rem;
+  padding: 0 3em;
+  font-size: 0.7rem;
+}
+
+.edit_button {
+  padding-bottom: 1em;
+  border-bottom: 0.25px solid #343a40;
 }
