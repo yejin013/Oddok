@@ -1,5 +1,6 @@
 package com.oddok.server.domain.studyroom.dao;
 
+import com.oddok.server.domain.studyroom.dao.querydsl.HashtagQuerydslRepository;
 import com.oddok.server.domain.studyroom.entity.Hashtag;
 import java.util.List;
 import org.springframework.data.domain.Sort;
@@ -9,6 +10,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface HashtagRepository extends JpaRepository<Hashtag, Long> {
+public interface HashtagRepository extends JpaRepository<Hashtag, Long>, HashtagQuerydslRepository {
     Optional<Hashtag> findByName(String name);
 }
