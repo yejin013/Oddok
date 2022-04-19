@@ -1,15 +1,14 @@
 package com.oddok.server.domain.studyroom.application;
 
-import com.oddok.server.domain.studyroom.dao.StudyRoomRepository;
+import com.oddok.server.domain.studyroom.dao.HashtagRepository;
+import com.oddok.server.domain.studyroom.dao.querydsl.StudyRoomQueryRepository;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
-import com.oddok.server.domain.studyroom.entity.Category;
 import com.oddok.server.domain.studyroom.mapper.StudyRoomMapper;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,31 +18,21 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class StudyRoomSearchService {
 
-  private final StudyRoomRepository studyRoomRepository;
+    private final HashtagRepository hashtagRepository;
+    private final StudyRoomQueryRepository studyRoomQueryRepository;
 
-  private final StudyRoomMapper studyRoomMapper = Mappers.getMapper(StudyRoomMapper.class);
+    private final StudyRoomMapper studyRoomMapper = Mappers.getMapper(StudyRoomMapper.class);
 
-  /**
-   * 인자가 isPublic만 있을 때 사용하는 함수
-   */
-  public Page<StudyRoomDto> getStudyRooms(Pageable pageable, Boolean isPublic) {
-    LocalDate now = LocalDate.now();
-    if(isPublic) // 공개방만
-      return studyRoomRepository.findAllByEndAtAfterAndIsPublicTrue(now, pageable).map(studyRoomMapper::toDto);
-    return studyRoomRepository.findAllByEndAtAfter(now, pageable).map(studyRoomMapper::toDto);
-  }
+    // 방제목으로 스터디룸 리스트 조회
+    public List<StudyRoomDto> getStudyRooms(Boolean isPublic, String category, String name, Pageable pageable) {
+        return studyRoomMapper.toDtoList(studyRoomQueryRepository.findAllBySearchConditions(isPublic, category, name, pageable));
+    }
 
-  public Page<StudyRoomDto> getStudyRoomsByCategory(Pageable pageable, Boolean isPublic, String category) {
-    LocalDate now = LocalDate.now();
-    if(isPublic) // 공개방만
-      return studyRoomRepository.findAllByEndAtAfterAndCategoryAndIsPublicTrue(now, Category.valueOf(category), pageable).map(studyRoomMapper::toDto);
-    return studyRoomRepository.findAllByEndAtAfterAndCategory(now, Category.valueOf(category), pageable).map(studyRoomMapper::toDto);
-  }
+    // 해시태그로 스터디룸 리스트 조회
+    public List<StudyRoomDto> getStudyRoomsByHashtag(Boolean isPublic, String category, String hashtagName, Pageable pageable) {
+        return hashtagRepository.findByName(hashtagName)
+                .map(hashtag -> studyRoomMapper.toDtoList(studyRoomQueryRepository.findAllByHashtag(isPublic, category, hashtag, pageable)))
+                .orElse(null);
+    }
 
-  public Page<StudyRoomDto> getStudyRoomsByName(Pageable pageable, Boolean isPublic, String name) {
-    LocalDate now = LocalDate.now();
-    if(isPublic) // 공개방만
-      return studyRoomRepository.findAllByEndAtAfterAndNameContainingAndIsPublicTrue(now, name, pageable).map(studyRoomMapper::toDto);
-    return studyRoomRepository.findAllByEndAtAfterAndNameContaining(now, name, pageable).map(studyRoomMapper::toDto);
-  }
 }

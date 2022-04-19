@@ -8,7 +8,6 @@ import com.oddok.server.common.errors.UserAlreadyJoinedStudyRoom;
 import com.oddok.server.domain.participant.dao.ParticipantRepository;
 import com.oddok.server.domain.participant.entity.Participant;
 import com.oddok.server.domain.studyroom.dao.HashtagRepository;
-import com.oddok.server.domain.studyroom.dao.StudyRoomHashtagRepository;
 import com.oddok.server.domain.studyroom.dao.StudyRoomRepository;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import com.oddok.server.domain.studyroom.entity.Category;
@@ -48,8 +47,6 @@ class StudyRoomServiceTest {
     private StudyRoomRepository studyRoomRepository;
     @Mock
     private HashtagRepository hashtagRepository;
-    @Mock
-    private StudyRoomHashtagRepository studyRoomHashtagRepository;
     @Mock
     private ParticipantRepository participantRepository;
 

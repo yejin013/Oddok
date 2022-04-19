@@ -21,6 +21,8 @@ public interface StudyRoomMapper {
     @Mapping(source = "user", target = "user")
     StudyRoom toEntity(StudyRoomDto studyRoomDto, User user);
 
+    List<StudyRoomDto> toDtoList(List<StudyRoom> studyRooms);
+
     default Set<String> hashtagToString(Set<StudyRoomHashtag> hashtags) {
         return hashtags.stream().map((hashtag) -> hashtag.getHashtag().getName()).collect(Collectors.toSet());
     }

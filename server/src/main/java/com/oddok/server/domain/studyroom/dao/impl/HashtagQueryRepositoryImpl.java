@@ -3,7 +3,7 @@ package com.oddok.server.domain.studyroom.dao.impl;
 import static com.oddok.server.domain.studyroom.entity.QHashtag.hashtag;
 import static com.oddok.server.domain.studyroom.entity.QStudyRoomHashtag.studyRoomHashtag;
 
-import com.oddok.server.domain.studyroom.dao.querydsl.HashtagQuerydslRepository;
+import com.oddok.server.domain.studyroom.dao.querydsl.HashtagQueryRepository;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class HashtagQuerydslRepositoryImpl implements HashtagQuerydslRepository {
+public class HashtagQueryRepositoryImpl implements HashtagQueryRepository {
 
   private final JPAQueryFactory queryFactory;
 
