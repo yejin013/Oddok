@@ -3,6 +3,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { userState } from "../../../recoil/user_state";
 import { roomInfoState } from "../../../recoil/studyroom_state";
 import RadioButton from "../../commons/radio_button/radio_button";
+import HashtagButton from "../../commons/hashtag_button/hashtag_button";
 import ToggleButton from "../../commons/toggle_button/toggle_button";
 import InputButton from "../../commons/input_button/input_button";
 import AddButton from "../../commons/add_button/add_button";
@@ -12,7 +13,6 @@ import Textarea from "../../commons/textarea/textarea";
 
 import { ReactComponent as Video } from "../../../assets/icons/video.svg";
 import { ReactComponent as MicOff } from "../../../assets/icons/mic_off.svg";
-import { ReactComponent as Hashtag } from "../../../assets/icons/hashtag.svg";
 import Image from "./image";
 
 import styles from "./setting_section.module.css";
@@ -53,6 +53,7 @@ function SettingSection({ clickSettingBtn }) {
   const passwordInputRef = useRef();
   const bgmlinkInputRef = useRef();
   const ruleInputRef = useRef();
+  const hashtagRef = useRef();
 
   useEffect(() => {
     titleRef.current.value = roomInfo.name;
@@ -69,6 +70,7 @@ function SettingSection({ clickSettingBtn }) {
   const [isInvalidPassword, setIsInvalidPassword] = useState(false);
 
   const [isClickedDetail, setIsClickedDetail] = useState(false);
+  const [isHashtagInput, setIsHashtagInput] = useState(false);
 
   const clickDetailBtn = () => {
     setIsClickedDetail((prev) => !prev);
@@ -111,20 +113,23 @@ function SettingSection({ clickSettingBtn }) {
     setHashtag(checkedHashtag);
   };
 
-  // useEffect(() => {
-  //   console.log(newHashtag);
-  // }, [newHashtag]);
-
-  const addHashtagBtnHandler = () => {
-    setNewHashtag((prev) => [...prev, undefined]);
+  const addHashtagInputHandler = () => {
+    setIsHashtagInput(true);
   };
 
-  const newHashtagHandler = (i, label) => {
-    setNewHashtag((prev) => [...prev.slice(0, i), label, ...prev.slice(i + 1)]);
+  const deleteHashtagInputHandler = () => {
+    setIsHashtagInput(false);
   };
 
-  const deleteHandler = (itemNo) => {
-    setNewHashtag((prev) => [...prev.slice(0, itemNo), ...prev.slice(itemNo + 1)]);
+  const newHashtagHandler = (label) => {
+    setIsHashtagInput(false);
+    const userInput = new Set(newHashtag);
+    userInput.add(label);
+    setNewHashtag(Array.from(userInput));
+  };
+
+  const deleteHandler = (label) => {
+    setNewHashtag((prev) => prev.filter((item) => item !== label));
   };
 
   const audioRuleHandler = (e) => {
@@ -207,25 +212,22 @@ function SettingSection({ clickSettingBtn }) {
         </div>
         <div className={styles.roominfo_item}>
           <p className={styles.label}>해시태그</p>
-          <div className={styles.hashtag_item}>
+          <div ref={hashtagRef} className={styles.hashtag_item}>
             {hashtags.map((item) => (
-              <ToggleButton
-                icon={<Hashtag />}
+              <HashtagButton
                 label={item}
                 onToggle={hashtagHandler}
                 disabled={disabled}
                 checked={roomInfo.hashtags.find((tag) => tag === item) && "checked"}
               />
             ))}
-            {newHashtag.map((item, i) => (
-              <InputButton
-                icon={<Hashtag />}
-                label={item}
-                onSubmit={(label) => newHashtagHandler(i, label)}
-                onDelete={() => deleteHandler(i)}
-              />
+            {newHashtag.map((label) => (
+              <HashtagButton label={label} onDelete={() => deleteHandler(label)} checked="checked" />
             ))}
-            <AddButton onClick={addHashtagBtnHandler} />
+            {isHashtagInput && (
+              <InputButton onSubmit={(label) => newHashtagHandler(label)} onDelete={deleteHashtagInputHandler} />
+            )}
+            <AddButton onClick={addHashtagInputHandler} />
           </div>
         </div>
       </div>
