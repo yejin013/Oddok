@@ -1,10 +1,12 @@
 package com.oddok.server.domain.studyroom.dao.impl;
 
 import static com.oddok.server.domain.studyroom.entity.QStudyRoom.studyRoom;
+import static com.oddok.server.domain.studyroom.entity.QStudyRoomHashtag.studyRoomHashtag;
 import static com.querydsl.core.types.Order.*;
 
 import com.oddok.server.domain.studyroom.dao.querydsl.StudyRoomRepositoryCustom;
 import com.oddok.server.domain.studyroom.entity.Category;
+import com.oddok.server.domain.studyroom.entity.Hashtag;
 import com.oddok.server.domain.studyroom.entity.StudyRoom;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -33,6 +35,22 @@ public class StudyRoomRepositoryCustomImpl implements StudyRoomRepositoryCustom 
                         eqIsPublic(isPublic),
                         eqCategory(category),
                         containsName(name))
+                .orderBy(studyRoomSort(pageable))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize());
+        return query.fetch();
+    }
+
+    public List<StudyRoom> findAllByHashtag(Boolean isPublic, String category, Hashtag hashtag,
+                                                     Pageable pageable) {
+        LocalDate now = LocalDate.now();
+        JPAQuery<StudyRoom> query = queryFactory.selectFrom(studyRoom)
+                .innerJoin(studyRoomHashtag)
+                .on(studyRoom.eq(studyRoomHashtag.studyRoom))
+                .where(studyRoom.endAt.isNull().or(studyRoom.endAt.after(now)),
+                        eqIsPublic(isPublic),
+                        eqCategory(category),
+                        studyRoomHashtag.hashtag.eq(hashtag))
                 .orderBy(studyRoomSort(pageable))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize());

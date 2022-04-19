@@ -9,8 +9,11 @@ import com.oddok.server.domain.studyroom.application.StudyRoomService;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import com.oddok.server.domain.studyroom.mapper.*;
 import com.oddok.server.domain.user.application.UserService;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Pageable;
@@ -60,7 +63,7 @@ public class StudyRoomController {
     @PutMapping("/{id}")
     public ResponseEntity<UpdateStudyRoomResponse> update(@PathVariable Long id, @RequestHeader String userId, @RequestBody @Valid UpdateStudyRoomRequest updateStudyRoomRequest) {
         studyRoomService.checkPublisher(id, Long.parseLong(userId));
-        StudyRoomDto requestDto = dtoMapper.fromUpdateRequest(updateStudyRoomRequest,Long.parseLong(userId),id);
+        StudyRoomDto requestDto = dtoMapper.fromUpdateRequest(updateStudyRoomRequest, Long.parseLong(userId), id);
         StudyRoomDto studyRoomDto = studyRoomService.updateStudyRoom(requestDto);
         return ResponseEntity.ok(dtoMapper.toUpdateResponse(studyRoomDto));
     }
@@ -93,9 +96,20 @@ public class StudyRoomController {
                                                                     @RequestParam(required = false) Boolean isPublic,
                                                                     @RequestParam(required = false) String name,
                                                                     @RequestParam(required = false) String hashtag) {
-        List<GetStudyRoomListEntityResponse> studyRoomResponse = studyRoomSearchService.getStudyRooms(isPublic,category,name,pageable).stream().map(
-            dtoMapper::toGetResponseList).collect(Collectors.toList());
+        List<StudyRoomDto> studyRoomDtos;
+        if (hashtag == null) {
+            studyRoomDtos = studyRoomSearchService.getStudyRooms(isPublic, category, name, pageable);
+        } else {
+            studyRoomDtos = studyRoomSearchService.getStudyRoomsByHashtag(isPublic, category, hashtag, pageable);
+        }
+
+        List<GetStudyRoomListEntityResponse> studyRoomResponse = new ArrayList<>();
+        if (studyRoomDtos != null) {
+            studyRoomResponse = studyRoomDtos.stream().map(
+                    dtoMapper::toGetResponseList).collect(Collectors.toList());
+        }
         return ResponseEntity.ok(studyRoomResponse);
+
     }
 
 
@@ -124,6 +138,7 @@ public class StudyRoomController {
 
     /**
      * 스터디룸 나가기 요청
+     *
      * @param id
      * @param userId
      * @return
@@ -131,14 +146,14 @@ public class StudyRoomController {
     @GetMapping("/leave/{id}")
     public ResponseEntity leave(@PathVariable Long id, @RequestHeader String userId) {
         studyRoomService.userLeaveStudyRoom(Long.parseLong(userId), id);
-        return ResponseEntity.ok(userId+"님이 "+id+"번 방에서 나갔습니다.");
+        return ResponseEntity.ok(userId + "님이 " + id + "번 방에서 나갔습니다.");
     }
 
     /**
      * [DELETE] /study-room/{study-room-id} : 스터디방 삭제
      *
-     * @param id        : 방 식별자
-     * @param userId    : 유저
+     * @param id     : 방 식별자
+     * @param userId : 유저
      * @return
      */
     @DeleteMapping("/{id}")
