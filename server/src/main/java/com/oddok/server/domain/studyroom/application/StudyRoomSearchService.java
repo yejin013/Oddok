@@ -23,19 +23,12 @@ public class StudyRoomSearchService {
 
     private final StudyRoomMapper studyRoomMapper = Mappers.getMapper(StudyRoomMapper.class);
 
-
-    /**
-     * 이름으로 검색
-     *
-     * @param isPublic
-     * @param category
-     * @param name
-     * @param pageable
-     */
+    // 방제목으로 스터디룸 리스트 조회
     public List<StudyRoomDto> getStudyRooms(Boolean isPublic, String category, String name, Pageable pageable) {
         return studyRoomMapper.toDtoList(studyRoomRepositoryCustom.findAllBySearchConditions(isPublic, category, name, pageable));
     }
 
+    // 해시태그로 스터디룸 리스트 조회
     public List<StudyRoomDto> getStudyRoomsByHashtag(Boolean isPublic, String category, String hashtagName, Pageable pageable) {
         return hashtagRepository.findByName(hashtagName)
                 .map(hashtag -> studyRoomMapper.toDtoList(studyRoomRepositoryCustom.findAllByHashtag(isPublic, category, hashtag, pageable)))

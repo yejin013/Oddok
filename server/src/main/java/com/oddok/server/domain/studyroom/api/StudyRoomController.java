@@ -83,12 +83,12 @@ public class StudyRoomController {
     }
 
     /**
-     * [GET] /study-room
-     *
-     * @param category : 카테고리
-     * @param isPublic : 공개방 유무
-     * @param pageable : 페이징
-     * @return
+     * [GET] /study-room : 해시태그 리스트 조회 / 검색
+     * @param pageable 페이징 정보
+     * @param category 특정 카테고리만 조회
+     * @param isPublic 공개방만 조회할지의 여부
+     * @param name 방제목으로 검색
+     * @param hashtag 해시태그로 검색
      */
     @GetMapping
     public ResponseEntity<List<GetStudyRoomListEntityResponse>> get(@PageableDefault(size = 16, sort = "createAt", direction = Sort.Direction.DESC) Pageable pageable,
@@ -111,7 +111,6 @@ public class StudyRoomController {
         return ResponseEntity.ok(studyRoomResponse);
 
     }
-
 
     /**
      * [GET] /study-room/:id : 방 상세 조회 API
