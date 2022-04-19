@@ -1,12 +1,12 @@
 package com.oddok.server.domain.studyroom.application;
 
 import com.oddok.server.domain.studyroom.dao.StudyRoomRepository;
+import com.oddok.server.domain.studyroom.dao.querydsl.StudyRoomRepositoryCustom;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import com.oddok.server.domain.studyroom.entity.Category;
 import com.oddok.server.domain.studyroom.mapper.StudyRoomMapper;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class StudyRoomSearchService {
 
   private final StudyRoomRepository studyRoomRepository;
+  private final StudyRoomRepositoryCustom studyRoomRepositoryCustom;
 
   private final StudyRoomMapper studyRoomMapper = Mappers.getMapper(StudyRoomMapper.class);
 
@@ -43,7 +44,7 @@ public class StudyRoomSearchService {
    * @return
    */
   public List<StudyRoomDto> getStudyRooms(Boolean isPublic, String category, String name, Pageable pageable) {
-    return studyRoomMapper.toDtoList(studyRoomRepository.findStudyRooms(isPublic, category, name, pageable));
+    return studyRoomMapper.toDtoList(studyRoomRepositoryCustom.findAllBySearchConditions(isPublic, category, name, pageable));
   }
 
 
