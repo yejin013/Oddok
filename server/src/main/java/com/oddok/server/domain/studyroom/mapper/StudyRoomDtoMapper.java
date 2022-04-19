@@ -14,9 +14,12 @@ public interface StudyRoomDtoMapper {
 
     @Mapping(source = "userId", target = "userId")
     @Mapping(source = "studyRoomId", target = "id")
+    @Mapping(target = "currentUsers", ignore = true)
     StudyRoomDto fromUpdateRequest(UpdateStudyRoomRequest request, Long userId, Long studyRoomId);
 
     @Mapping(source = "userId", target="userId")
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "sessionId", ignore = true)
     StudyRoomDto fromCreateRequest(CreateStudyRoomRequest request, String userId);
 
     GetStudyRoomResponse toGetResponse(StudyRoomDto studyRoomDto);
