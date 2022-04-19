@@ -27,6 +27,6 @@ export const roomInfoState = atom({
     isCamOn: false,
     bgmlink: "",
     startAt: "",
-    endAt: new Date(2022, 11, 31).toISOString(),
+    endAt: "",
   },
 });

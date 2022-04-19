@@ -53,13 +53,16 @@ function SettingSection({ clickSettingBtn }) {
   const passwordInputRef = useRef();
   const bgmlinkInputRef = useRef();
   const ruleInputRef = useRef();
-  const hashtagRef = useRef();
 
   useEffect(() => {
     titleRef.current.value = roomInfo.name;
     passwordInputRef.current.value = roomInfo.password ? roomInfo.password : "";
     bgmlinkInputRef.current.value = roomInfo.bgmlink ? roomInfo.bgmlink : "";
     ruleInputRef.current.value = roomInfo.rule ? roomInfo.bgmlink : "";
+    if (roomInfo.hashtags) {
+      const set = new Set(hashtags);
+      setNewHashtag(roomInfo.hashtags.filter((tag) => !set.has(tag)));
+    }
   }, []);
 
   // 필수 항목 입력 확인
@@ -83,7 +86,7 @@ function SettingSection({ clickSettingBtn }) {
       name: titleRef.current.value
         ? titleRef.current.value.replace(/[\u{1F004}-\u{1F9E6}]|[\u{1F600}-\u{1F9D0}]/gu, "")
         : "",
-      hashtags: Array.from(hashtag), // hashtag set to array
+      hashtags: Array.from(hashtag).concat(newHashtag), // hashtag set to array
       isPublic: !passwordInputRef.current.value,
       password: passwordInputRef.current.value,
       bgmlink: bgmlinkInputRef.current.value,
@@ -212,17 +215,22 @@ function SettingSection({ clickSettingBtn }) {
         </div>
         <div className={styles.roominfo_item}>
           <p className={styles.label}>해시태그</p>
-          <div ref={hashtagRef} className={styles.hashtag_item}>
-            {hashtags.map((item) => (
+          <div className={styles.hashtag_item}>
+            {hashtags.map((label) => (
               <HashtagButton
-                label={item}
+                label={label}
                 onToggle={hashtagHandler}
                 disabled={disabled}
-                checked={roomInfo.hashtags.find((tag) => tag === item) && "checked"}
+                checked={roomInfo.hashtags.find((tag) => tag === label) && "checked"}
               />
             ))}
             {newHashtag.map((label) => (
-              <HashtagButton label={label} onDelete={() => deleteHandler(label)} checked="checked" />
+              <HashtagButton
+                label={label}
+                onDelete={() => deleteHandler(label)}
+                disabled={disabled}
+                checked="checked"
+              />
             ))}
             {isHashtagInput && (
               <InputButton onSubmit={(label) => newHashtagHandler(label)} onDelete={deleteHashtagInputHandler} />
