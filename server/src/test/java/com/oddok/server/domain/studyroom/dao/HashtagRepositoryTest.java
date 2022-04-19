@@ -4,9 +4,6 @@ package com.oddok.server.domain.studyroom.dao;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import com.oddok.server.domain.studyroom.entity.Category;
 import com.oddok.server.domain.studyroom.entity.Hashtag;
-import com.oddok.server.domain.studyroom.entity.StudyRoom;
-import com.oddok.server.domain.studyroom.entity.StudyRoomHashtag;
-import com.oddok.server.domain.user.entity.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Set;
 
 @ExtendWith(SpringExtension.class)
@@ -28,8 +23,6 @@ class HashtagRepositoryTest {
     @Autowired
     HashtagRepository hashtagRepository;
 
-    @Autowired
-    StudyRoomHashtagRepository studyRoomHashtagRepository;
 
     @Test
     void findTop15Hashtags(){
@@ -37,8 +30,6 @@ class HashtagRepositoryTest {
         hashtagRepository.save(new Hashtag("목표시간"));
         hashtagRepository.save(new Hashtag("아침기상"));
         hashtagRepository.save(new Hashtag("컨셉"));
-        //studyRoomHashtagRepository.save(StudyRoom.builder().name("방").build());
-
 
     }
 
