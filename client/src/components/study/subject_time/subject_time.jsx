@@ -11,7 +11,7 @@ import {
   startTimeState,
   endTimeState,
 } from "../../../recoil/timer_state";
-import { saveTime } from "../../../api/studyRoomAPI";
+import { saveTime } from "../../../api/study-room-api";
 import styles from "./subject_time.module.css";
 import { ReactComponent as Play } from "../../../assets/icons/play-fill.svg";
 import { ReactComponent as Pause } from "../../../assets/icons/pause-fill.svg";
@@ -30,10 +30,9 @@ function SubjectTime({ onClickplanBtn }) {
   const [totalSecond, setTotalSecond] = useRecoilState(totalSecondState);
 
   const timeInfo = {
-    // userId: 1, 나중에 지우기
-    subject: selectedPlan.name,
     startTime,
     endTime,
+    subject: selectedPlan.name,
   };
 
   useEffect(() => {
