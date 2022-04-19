@@ -5,7 +5,7 @@ import com.oddok.server.domain.studyroom.entity.StudyRoom;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
 
-public interface StudyRoomRepositoryCustom {
+public interface StudyRoomQueryRepository {
   List<StudyRoom> findAllBySearchConditions(Boolean isPublic, String category, String name, Pageable pageable);
   List<StudyRoom> findAllByHashtag(Boolean isPublic, String category, Hashtag hashtag, Pageable pageable);
 }

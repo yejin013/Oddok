@@ -4,7 +4,7 @@ import static com.oddok.server.domain.studyroom.entity.QStudyRoom.studyRoom;
 import static com.oddok.server.domain.studyroom.entity.QStudyRoomHashtag.studyRoomHashtag;
 import static com.querydsl.core.types.Order.*;
 
-import com.oddok.server.domain.studyroom.dao.querydsl.StudyRoomRepositoryCustom;
+import com.oddok.server.domain.studyroom.dao.querydsl.StudyRoomQueryRepository;
 import com.oddok.server.domain.studyroom.entity.Category;
 import com.oddok.server.domain.studyroom.entity.Hashtag;
 import com.oddok.server.domain.studyroom.entity.StudyRoom;
@@ -23,7 +23,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class StudyRoomRepositoryCustomImpl implements StudyRoomRepositoryCustom {
+public class StudyRoomQueryRepositoryImpl implements StudyRoomQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
