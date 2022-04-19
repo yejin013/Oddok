@@ -1,0 +1,21 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 20px;
+  gap: 10px;
+  color: #6c757d;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.container.active {
+  color: white;
+  border-bottom: 2px solid white;
+  transition: 0.1s;
+}
+
+.icon {
+  display: flex;
+}

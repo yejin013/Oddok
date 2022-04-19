@@ -1,0 +1,11 @@
+.user {
+  display: flex;
+  width: 18px;
+  height: 18px;
+}
+
+.count {
+  display: flex;
+  color: #efc457;
+  gap: 14px;
+}
