@@ -29,7 +29,7 @@ public class StudyRoomRepositoryCustomImpl implements StudyRoomRepositoryCustom 
                                                      Pageable pageable) {
         LocalDate now = LocalDate.now();
         JPAQuery<StudyRoom> query = queryFactory.selectFrom(studyRoom)
-                .where(studyRoom.endAt.after(now),
+                .where(studyRoom.endAt.isNull().or(studyRoom.endAt.after(now)),
                         eqIsPublic(isPublic),
                         eqCategory(category),
                         containsName(name))
