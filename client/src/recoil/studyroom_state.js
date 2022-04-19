@@ -14,8 +14,10 @@ export const audioState = atom({
 export const roomInfoState = atom({
   key: "roomInfoState",
   default: {
+    id: 0,
+    name: "",
     category: "",
-    hastags: [],
+    hashtags: [],
     targetTime: 0,
     limitUsers: 0,
     isPublic: true,
@@ -24,5 +26,7 @@ export const roomInfoState = atom({
     isMicOn: false,
     isCamOn: false,
     bgmlink: "",
+    startAt: "",
+    endAt: "",
   },
 });

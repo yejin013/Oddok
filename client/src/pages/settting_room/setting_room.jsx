@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useSetRecoilState } from "recoil";
-import { videoState, audioState } from "../../recoil/studyroom_state";
+import { useSetRecoilState, useRecoilValue } from "recoil";
+import { videoState, audioState, roomInfoState } from "../../recoil/studyroom_state";
 import SettingBar from "../../components/study/setting_bar/setting_bar";
 import SettingSection from "../../components/study/setting_section/setting_section";
 import styles from "./setting_room.module.css";
+import TotalTime from "../../components/study/total_time/total_time";
 
 function SettingRoom({ goToStudyRoom }) {
   const videoRef = useRef();
@@ -11,6 +12,8 @@ function SettingRoom({ goToStudyRoom }) {
   const setIsMuted = useSetRecoilState(audioState);
   const [clickedSettingBtn, setClickedSettingBtn] = useState(false);
   const displayType = clickedSettingBtn === true ? styles.hide : styles.show;
+
+  const [roomName, setRoomName] = useState("나중에 지우기");
 
   useEffect(() => {
     const getVideoandAudio = async () => {
@@ -49,13 +52,17 @@ function SettingRoom({ goToStudyRoom }) {
       {clickedSettingBtn && (
         <SettingSection //
           clickSettingBtn={clickSettingBtn}
+          roomName={roomName}
+          setRoomName={setRoomName}
         />
       )}
       <section className={`${styles.video_component} ${displayType}`}>
         <video className={styles.video} ref={videoRef} autoPlay />
+        <TotalTime />
       </section>
       <div className={`${styles.bar} ${displayType}`}>
         <SettingBar //
+          roomName={roomName}
           goToStudyRoom={goToStudyRoom}
           stopOrStartVideo={stopOrStartVideo}
           stopOrStartAudio={stopOrStartAudio}

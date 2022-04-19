@@ -8,6 +8,7 @@
 
 .video_container {
   height: 90vh;
+  display: flex; /* 사이드바 있을 때 */
 }
 
 .videos {
@@ -22,6 +23,18 @@
   margin: 0;
 }
 
+.videos.show {
+  flex: 1 1 70%;
+}
+
 .bar {
   height: 10vh;
+}
+
+.plan_bar {
+  flex: 1 1 30%;
+}
+
+.plan_bar {
+  flex: 1 1 30%;
 }
