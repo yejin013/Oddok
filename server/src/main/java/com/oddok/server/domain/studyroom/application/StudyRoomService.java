@@ -39,6 +39,9 @@ public class StudyRoomService {
     @Transactional
     public StudyRoomDto createStudyRoom(StudyRoomDto studyRoomDto) {
         User user = findUser(studyRoomDto.getUserId());
+        if (studyRoomRepository.findByUser(user).isPresent()) { // 사용자는 하나의 스터디룸만 개설할 수 있습니다.
+            throw new UserAlreadyPublishStudyRoomException(user.getId());
+        }
         StudyRoom studyRoom = studyRoomMapper.toEntity(studyRoomDto, user);
         studyRoom = studyRoomRepository.save(studyRoom);
         mapStudyRoomAndHashtags(studyRoom, studyRoomDto.getHashtags());
@@ -47,14 +50,12 @@ public class StudyRoomService {
 
     public StudyRoomDto loadStudyRoom(Long id) {
         StudyRoom studyRoom = studyRoomRepository.findById(id)
-                .orElseThrow(() -> new StudyRoomNotFoundException(id));
+            .orElseThrow(() -> new StudyRoomNotFoundException(id));
         return studyRoomMapper.toDto(studyRoom);
     }
 
     /**
-     * userId의 사용자가 id 방에 참여합니다.
-     * 스터디룸 세션에 커넥션을 생성하고 토큰을 반환합니다.
-     * 스터디룸에 참여합니다.
+     * userId의 사용자가 id 방에 참여합니다. 스터디룸 세션에 커넥션을 생성하고 토큰을 반환합니다. 스터디룸에 참여합니다.
      *
      * @return token
      */
@@ -62,7 +63,7 @@ public class StudyRoomService {
     public String userJoinStudyRoom(Long userId, Long id) {
         User user = findUser(userId);
         StudyRoom studyRoom = findStudyRoom(id);
-        if(studyRoom.getEndAt().isBefore(LocalDate.now())){ // 기간이 지난 스터디룸에는 참여할 수 없다.
+        if (studyRoom.getEndAt().isBefore(LocalDate.now())) { // 기간이 지난 스터디룸에는 참여할 수 없다.
             throw new StudyRoomEndException(id);
         }
         if (participantRepository.findByUser(user).isPresent()) { // 사용자는 두 개 이상의 스터디룸에 참여할 수 없다.
@@ -81,13 +82,14 @@ public class StudyRoomService {
      * 해당 스터디룸의 sessionId 가 없으면 Openvidu 세션을 생성/등록 후 반환하고, 있으면 해당 세션아이디를 반환합니다.
      */
     private String getSession(StudyRoom studyRoom) {
-        if (studyRoom.getSessionId() == null || studyRoom.getSessionId().isBlank()) studyRoom.createSession(sessionManager.createSession());
+        if (studyRoom.getSessionId() == null || studyRoom.getSessionId().isBlank()) {
+            studyRoom.createSession(sessionManager.createSession());
+        }
         return studyRoom.getSessionId();
     }
 
     /**
-     * 스터디룸을 수정합니다.
-     * 방장이 아닐 경우 수정할 수 없으므로 예외를 발생시킵니다.
+     * 스터디룸을 수정합니다. 방장이 아닐 경우 수정할 수 없으므로 예외를 발생시킵니다.
      */
     @Transactional
     public StudyRoomDto updateStudyRoom(StudyRoomDto requestDto) {
@@ -107,17 +109,17 @@ public class StudyRoomService {
     }
 
     /**
-     * 사용자가 스터디룸을 나가는 과정
-     * 1. 참여자 테이블에서 삭제
-     * 2. 스터디룸의 참여자 수 1 감소
-     * 3. 참여자수가 0일 경우 세션 삭제
+     * 사용자가 스터디룸을 나가는 과정 1. 참여자 테이블에서 삭제 2. 스터디룸의 참여자 수 1 감소 3. 참여자수가 0일 경우 세션 삭제
      */
     @Transactional
     public void userLeaveStudyRoom(Long userId, Long studyRoomId) {
         User user = findUser(userId);
         StudyRoom studyRoom = findStudyRoom(studyRoomId);
-        Participant participant = participantRepository.findByUser(user).orElseThrow(() -> new UserNotParticipatingException(userId, studyRoomId));
-        if (!participant.getStudyRoom().equals(studyRoom)) throw new UserNotParticipatingException(userId, studyRoomId);
+        Participant participant = participantRepository.findByUser(user)
+            .orElseThrow(() -> new UserNotParticipatingException(userId, studyRoomId));
+        if (!participant.getStudyRoom().equals(studyRoom)) {
+            throw new UserNotParticipatingException(userId, studyRoomId);
+        }
         participantRepository.delete(participant);
         if (studyRoom.decreaseCurrentUsers() == 0) { // 모두 나갔으면 세션삭제
             sessionManager.deleteSession(studyRoom.getSessionId());
@@ -128,23 +130,27 @@ public class StudyRoomService {
     public void checkPassword(Long id, String password) {
         StudyRoom studyRoom = findStudyRoom(id);
 
-        if (studyRoom.getIsPublic())
+        if (studyRoom.getIsPublic()) {
             throw new WrongApproachException();
-        if (!studyRoom.getPassword().equals(password))
+        }
+        if (!studyRoom.getPassword().equals(password)) {
             throw new PasswordsNotMatchException();
+        }
     }
 
     public void checkPublisher(Long studyRoomId, Long userId) {
         Long publisherId = findStudyRoom(studyRoomId).getUser().getId();
-        if (!publisherId.equals(userId)) throw new UserNotPublisherException(userId);
+        if (!publisherId.equals(userId)) {
+            throw new UserNotPublisherException(userId);
+        }
     }
 
     private void createParticipant(StudyRoom studyRoom, User user) {
         // 참가자 정보 저장
         Participant participant = Participant.builder()
-                .studyRoom(studyRoom)
-                .user(user)
-                .build();
+            .studyRoom(studyRoom)
+            .user(user)
+            .build();
         // 현재 사용자 수 증가
         studyRoom.increaseCurrentUsers();
         participantRepository.save(participant);
@@ -155,15 +161,16 @@ public class StudyRoomService {
      */
     private void mapStudyRoomAndHashtags(StudyRoom studyRoom, Set<String> newHashtags) {
         for (String name : newHashtags) {
-            Hashtag hashtag = hashtagRepository.findByName(name).orElseGet(() -> hashtagRepository.save(new Hashtag(name)));
+            Hashtag hashtag = hashtagRepository.findByName(name)
+                .orElseGet(() -> hashtagRepository.save(new Hashtag(name)));
             studyRoom.addHashtag(hashtag);
         }
     }
 
     private StudyRoom findStudyRoom(Long id) {
-        return studyRoomRepository.findById(id).orElseThrow(() -> new StudyRoomNotFoundException(id));
+        return studyRoomRepository.findById(id)
+            .orElseThrow(() -> new StudyRoomNotFoundException(id));
     }
-
 
     private User findUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));

@@ -98,4 +98,13 @@ public class ControllerErrorAdvice {
         return new ErrorResponse("기간이 지나 참여할 수 없는 스터디룸입니다.");
     }
 
+    /**
+     * 스터디룸 생성 시
+     */
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(UserAlreadyPublishStudyRoomException.class)
+    public ErrorResponse handleUserAlreadyPublishStudyRoomException() {
+        return new ErrorResponse("사용자가 이미 개설한 방이 있습니다.");
+    }
+
 }
