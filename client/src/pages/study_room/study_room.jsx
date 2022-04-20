@@ -25,7 +25,7 @@ function StudyRoom() {
 
   const [isPlanOpen, setisPlanOpen] = useState(false);
   const [isSidebar, setisSidebar] = useState(false);
-  const displayType = isSidebar === true ? styles.decrease : "";
+  const displayType = isSidebar ? styles.decrease : "";
   const isStudyRoom = true;
 
   const leaveRoom = () => {

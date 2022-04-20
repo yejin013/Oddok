@@ -14,8 +14,8 @@ function SettingRoom({ goToStudyRoom }) {
   const [clickedSettingBtn, setClickedSettingBtn] = useState(false);
   const [isPlanOpen, setisPlanOpen] = useState(false);
   const [isSidebar, setisSidebar] = useState(false);
-  const displayType = clickedSettingBtn === true ? styles.hide : "";
-  const videoDisplayType = isSidebar === true ? styles.decrease : "";
+  const displayType = clickedSettingBtn ? styles.hide : "";
+  const videoDisplayType = isSidebar ? styles.decrease : "";
 
   const [roomName, setRoomName] = useState("나중에 지우기");
 
@@ -78,7 +78,7 @@ function SettingRoom({ goToStudyRoom }) {
           )}
         </section>
         <div className={styles.bar}>
-          <SettingBar //
+          <SettingBar
             roomName={roomName}
             goToStudyRoom={goToStudyRoom}
             stopOrStartVideo={stopOrStartVideo}
