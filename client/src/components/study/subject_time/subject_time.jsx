@@ -90,7 +90,7 @@ function SubjectTime({ onClickplanBtn }) {
 
   return (
     <section className={styles.subject_time}>
-      {isRecorded === false ? (
+      {!isRecorded ? (
         <button type="button" className={styles.play_button} onClick={getStartTime}>
           <Play />
         </button>
