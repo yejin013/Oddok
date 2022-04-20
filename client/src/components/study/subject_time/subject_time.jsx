@@ -79,14 +79,12 @@ function SubjectTime({ onClickplanBtn }) {
   }, [endTime]);
 
   const getStartTime = () => {
-    const time = new Date();
-    setStartTime(time);
+    setStartTime(new Date());
     setIsRecorded((prev) => !prev);
   };
 
   const getEndTime = () => {
-    const time = new Date();
-    setEndTime(time);
+    setEndTime(new Date());
     setIsRecorded((prev) => !prev);
   };
 
