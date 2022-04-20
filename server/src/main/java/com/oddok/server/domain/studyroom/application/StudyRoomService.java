@@ -13,6 +13,7 @@ import com.oddok.server.domain.user.dao.UserRepository;
 
 import com.oddok.server.domain.user.entity.User;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 import lombok.RequiredArgsConstructor;
@@ -61,7 +62,10 @@ public class StudyRoomService {
     public String userJoinStudyRoom(Long userId, Long id) {
         User user = findUser(userId);
         StudyRoom studyRoom = findStudyRoom(id);
-        if (participantRepository.findByUser(user).isPresent()) { // 사용자는 한번에 하나의 스터디룸에만 참여할 수 있다.
+        if(studyRoom.getEndAt().isBefore(LocalDate.now())){ // 기간이 지난 스터디룸에는 참여할 수 없다.
+            throw new StudyRoomEndException(id);
+        }
+        if (participantRepository.findByUser(user).isPresent()) { // 사용자는 두 개 이상의 스터디룸에 참여할 수 없다.
             throw new UserAlreadyJoinedStudyRoom();
         }
         if (studyRoom.getCurrentUsers() >= studyRoom.getLimitUsers()) { // 정원이 찬 스터디룸에는 참여할 수 없다.
@@ -159,6 +163,7 @@ public class StudyRoomService {
     private StudyRoom findStudyRoom(Long id) {
         return studyRoomRepository.findById(id).orElseThrow(() -> new StudyRoomNotFoundException(id));
     }
+
 
     private User findUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));

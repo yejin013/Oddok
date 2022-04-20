@@ -41,7 +41,7 @@ public class ControllerErrorAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(StudyRoomNotFoundException.class)
     public ErrorResponse handleStudyRoomNotFoundException() {
-        return new ErrorResponse("해당 스터디룸이 없거나 기간이 만료되었습니다.");
+        return new ErrorResponse("해당 스터디룸이 없습니다.");
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
@@ -90,6 +90,12 @@ public class ControllerErrorAdvice {
     @ExceptionHandler(UserAlreadyJoinedStudyRoom.class)
     public ErrorResponse handleUserAlreadyJoinedStudyRoom() {
         return new ErrorResponse("사용자가 이미 참여중인 스터디룸이 있습니다.");
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(StudyRoomEndException.class)
+    public ErrorResponse handleStudyRoomEndException() {
+        return new ErrorResponse("기간이 지나 참여할 수 없는 스터디룸입니다.");
     }
 
 }
