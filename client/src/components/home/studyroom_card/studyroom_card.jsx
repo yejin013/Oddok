@@ -1,15 +1,15 @@
 import React from "react";
 import Thumbnail from "./thumbnail";
+import UserCount from "./user_count";
 import { ReactComponent as Lock } from "../../../assets/icons/lock.svg";
 import { ReactComponent as Unlock } from "../../../assets/icons/unlock.svg";
 import { ReactComponent as BookMark } from "../../../assets/icons/bookmark.svg";
 
 import styles from "./studyroom_card.module.css";
-import UserCount from "./user_count";
 
 function StudyRoomCard({ roomData }) {
   return (
-    <li className={styles.container}>
+    <li key={roomData.id} className={styles.container}>
       <div className={styles.thumbnail_box}>
         <Thumbnail />
         <div className={styles.bookmark_icon}>

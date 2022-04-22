@@ -36,6 +36,12 @@
   flex-direction: column;
 }
 
+.content_box div {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .content_head {
   display: flex;
   align-items: center;
@@ -45,10 +51,11 @@
 .content_box .title {
   font-size: 20px;
   font-weight: 600;
+  margin-right: 10px;
 }
 
 .lock_icon {
   color: #495057;
   height: 18px;
-  margin-left: 10px;
+  min-width: 18px;
 }
