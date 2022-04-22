@@ -3,7 +3,7 @@ import React, { forwardRef, useImperativeHandle } from "react";
 
 import styles from "./input.module.css";
 
-const Input = forwardRef(({ type, placeholder, maxLength, onChange, isInvalid, disabled }, inputRef) => {
+const Input = forwardRef(({ type, placeholder, maxLength, onChange, isInvalid, disabled, value }, inputRef) => {
   // useImperativeHandle(inputRef, () => {
   //   return {
   //     focus: () => inputRef.current.focus(),
@@ -19,6 +19,7 @@ const Input = forwardRef(({ type, placeholder, maxLength, onChange, isInvalid, d
         maxLength={maxLength}
         onChange={onChange}
         disabled={disabled}
+        value={value}
       />
     </div>
   );

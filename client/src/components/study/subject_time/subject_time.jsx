@@ -11,7 +11,7 @@ import {
   startTimeState,
   endTimeState,
 } from "../../../recoil/timer_state";
-import { saveTime } from "../../../api/studyRoomAPI";
+import { saveTime } from "../../../api/study-room-api";
 import styles from "./subject_time.module.css";
 import { ReactComponent as Play } from "../../../assets/icons/play-fill.svg";
 import { ReactComponent as Pause } from "../../../assets/icons/pause-fill.svg";
@@ -30,10 +30,9 @@ function SubjectTime({ onClickplanBtn }) {
   const [totalSecond, setTotalSecond] = useRecoilState(totalSecondState);
 
   const timeInfo = {
-    // userId: 1, 나중에 지우기
-    subject: selectedPlan.name,
     startTime,
     endTime,
+    subject: selectedPlan.name,
   };
 
   useEffect(() => {
@@ -71,6 +70,14 @@ function SubjectTime({ onClickplanBtn }) {
     return () => clearInterval(timer);
   });
 
+  useEffect(() => {
+    if (endTime != null) {
+      saveTime(timeInfo)
+        .then(() => console.log("시간저장 완료⏱️"))
+        .catch((error) => console.log(`post time-record error!: ${error}`));
+    }
+  }, [endTime]);
+
   const getStartTime = () => {
     const time = new Date();
     setStartTime(time);
@@ -81,10 +88,6 @@ function SubjectTime({ onClickplanBtn }) {
     const time = new Date();
     setEndTime(time);
     setIsRecorded((prev) => !prev);
-    /* server에 timeInfo post */
-    saveTime(timeInfo)
-      .then(() => console.log("시간저장 완료⏱️"))
-      .catch((error) => console.log(`post time-record error!: ${error}`));
   };
 
   return (
@@ -100,7 +103,7 @@ function SubjectTime({ onClickplanBtn }) {
       )}
       <div className={styles.plan}>
         <div>
-          <span>{selectedPlan.name}</span>
+          <span>{selectedPlan.name || "목표를 입력해주세요"}</span>
           <button type="button" onClick={onClickplanBtn}>
             <GoalOpen />
           </button>
