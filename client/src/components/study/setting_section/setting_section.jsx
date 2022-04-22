@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { userState } from "../../../recoil/user_state";
-import { roomInfoState } from "../../../recoil/studyroom_state";
+import { roomInfoState, roomTitleState } from "../../../recoil/studyroom_state";
 import RadioButton from "../../commons/radio_button/radio_button";
 import HashtagButton from "../../commons/hashtag_button/hashtag_button";
 import ToggleButton from "../../commons/toggle_button/toggle_button";
@@ -18,12 +18,12 @@ import Image from "./image";
 import styles from "./setting_section.module.css";
 
 const categories = [
-  { value: "OFFICIAL", name: "공무원 준비" },
-  { value: "SCHOOL", name: "수능/내신 준비" },
-  { value: "CERTIFICATE", name: "자격증 준비" },
-  { value: "EMPLOYEE", name: "취업 준비" },
-  { value: "PERSONAL", name: "개인 학습" },
-  { value: "ETC", name: "일반" },
+  { value: "OFFICIAL", label: "공무원 준비" },
+  { value: "SCHOOL", label: "수능/내신 준비" },
+  { value: "CERTIFICATE", label: "자격증 준비" },
+  { value: "EMPLOYEE", label: "취업 준비" },
+  { value: "PERSONAL", label: "개인 학습" },
+  { value: "ETC", label: "일반" },
 ];
 const hashtags = ["교시제", "여성전용", "아침기상", "컨셉", "목표시간", "자율", "평일", "주말", "예치금", "인증"];
 const userLimitOptions = [
@@ -46,6 +46,7 @@ function SettingSection({ clickSettingBtn }) {
   const userInfo = useRecoilValue(userState);
   const [disabled, setDisabled] = useState(!userInfo.updateAllowed);
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
+  const roomTitle = useRecoilValue(roomTitleState);
 
   const titleRef = useRef();
   const [hashtag, setHashtag] = useState([]);
@@ -180,7 +181,7 @@ function SettingSection({ clickSettingBtn }) {
             {categories.map((c) => (
               <div key={c.value} className={styles.category_item}>
                 <RadioButton
-                  label={c.name}
+                  label={c.label}
                   group="category"
                   onChange={() => {
                     categoryHandler(c);
@@ -195,11 +196,7 @@ function SettingSection({ clickSettingBtn }) {
         <div className={styles.roominfo_item}>
           <p className={styles.label}>스터디 명 *</p>
           <Input
-            placeholder={
-              roomInfo.name ||
-              (roomInfo.category && `${roomInfo.category} n호실`) ||
-              "목표를 설정하거나, 직접 입력해주세요"
-            }
+            placeholder={roomInfo.name || roomTitle || "목표를 설정하거나, 직접 입력해주세요"}
             ref={titleRef}
             disabled={disabled}
           />

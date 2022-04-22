@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSetRecoilState, useRecoilValue } from "recoil";
-import { videoState, audioState, roomInfoState } from "../../recoil/studyroom_state";
+import { videoState, audioState, roomInfoState, roomTitleState } from "../../recoil/studyroom_state";
 import SettingBar from "../../components/study/setting_bar/setting_bar";
 import SettingSection from "../../components/study/setting_section/setting_section";
 import ToolTip from "../../components/commons/tool_tip/tool_tip";
@@ -14,6 +14,7 @@ function SettingRoom({ goToStudyRoom }) {
   const [clickedSettingBtn, setClickedSettingBtn] = useState(false);
   const displayType = clickedSettingBtn === true ? styles.hide : styles.show;
   const roomInfo = useRecoilValue(roomInfoState);
+  const roomTitle = useRecoilValue(roomTitleState);
 
   useEffect(() => {
     const getVideoandAudio = async () => {
@@ -68,7 +69,7 @@ function SettingRoom({ goToStudyRoom }) {
           <ToolTip message="오늘의 스터디 플랜을 적어볼까요?" />
         </div>
         <SettingBar //
-          title={roomInfo.name || (roomInfo.category && `${roomInfo.category} n호실`)}
+          title={roomInfo.name || roomTitle || "방정보를 입력해주세요"}
           goToStudyRoom={goToStudyRoom}
           stopOrStartVideo={stopOrStartVideo}
           stopOrStartAudio={stopOrStartAudio}

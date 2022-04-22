@@ -13,7 +13,7 @@ function SettingBar({ title, goToStudyRoom, stopOrStartVideo, stopOrStartAudio, 
         <button type="button" onClick={clickSettingBtn}>
           <Setting />
         </button>
-        <span>{title || "방정보를 설정해주세요"}</span>
+        <span>{title}</span>
         <div className={styles.music}>
           <i className={styles.music_icon}>
             <Music />

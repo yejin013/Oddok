@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import { atom } from "recoil";
+import { atom, selector } from "recoil";
 
 export const videoState = atom({
   key: "videoState",
@@ -28,5 +28,23 @@ export const roomInfoState = atom({
     bgmlink: "",
     startAt: "",
     endAt: "",
+  },
+});
+
+const categories = [
+  { value: "OFFICIAL", label: "공시생" },
+  { value: "SCHOOL", label: "대입" },
+  { value: "CERTIFICATE", label: "자격증" },
+  { value: "EMPLOYEE", label: "취준생" },
+  { value: "PERSONAL", label: "개인학습" },
+  { value: "ETC", label: "일반" },
+];
+
+export const roomTitleState = selector({
+  key: "roomTitleState",
+  get: ({ get }) => {
+    const value = get(roomInfoState).category;
+    const title = categories.find((category) => category.value === value);
+    return `${title.label} n호실`;
   },
 });
