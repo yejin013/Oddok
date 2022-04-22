@@ -44,6 +44,9 @@ public class StudyRoomService {
         }
         StudyRoom studyRoom = studyRoomMapper.toEntity(studyRoomDto, user);
         studyRoom = studyRoomRepository.save(studyRoom);
+        if (studyRoom.getName() == null) {
+            studyRoom.setDefaultName();
+        }
         mapStudyRoomAndHashtags(studyRoom, studyRoomDto.getHashtags());
         return studyRoomMapper.toDto(studyRoom);
     }

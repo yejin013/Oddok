@@ -83,7 +83,9 @@ class StudyRoomServiceTest {
         for (String name : newStudyRoomDto.getHashtags()) {
             assertTrue(studyRoomDto.getHashtags().contains(name));
         }
+        assertTrue(studyRoom.getName().contains(studyRoomDto.getCategory().getValue()));
     }
+
 
     @Test
     void 사용자가_이미_개설한_방이_있을경우_생성_실패() {
@@ -196,7 +198,7 @@ class StudyRoomServiceTest {
     StudyRoomDto createStudyRoomDto(Set<String> hashtags) {
         return StudyRoomDto.builder()
                 .id(studyRoomId)
-                .name("방 제목")
+                .name(null)
                 .category(Category.SCHOOL)
                 .userId(userId)
                 .image("imageUrl")

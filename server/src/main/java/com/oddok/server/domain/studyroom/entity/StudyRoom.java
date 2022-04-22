@@ -78,6 +78,10 @@ public class StudyRoom {
         this.sessionId = null;
     }
 
+    public void setDefaultName(){
+        this.name = category.getValue()+" "+id+"호실";
+    }
+
     @Builder
     public StudyRoom(String name, String category, User user,
                      String image, Boolean isPublic,
