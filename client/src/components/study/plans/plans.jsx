@@ -5,7 +5,7 @@ function Plans({ plans, onPlanClick, onDelete, onEdit, isStudyRoom }) {
   return (
     <ul>
       {plans.map((plan) => (
-        <Plan //
+        <Plan
           key={plan.id}
           plan={plan}
           onPlanClick={onPlanClick}

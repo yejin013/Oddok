@@ -13,7 +13,6 @@ function Plan({ plan, onPlanClick, onDelete, onEdit, isStudyRoom }) {
   const displayType = isEdited ? styles.hide : "";
   const checkDisplayType = isStudyRoom ? styles.show : styles.hide;
   const formRef = useRef();
-  const inputRef = useRef();
 
   // dots button
   const clickBtn = () => {
@@ -53,7 +52,7 @@ function Plan({ plan, onPlanClick, onDelete, onEdit, isStudyRoom }) {
 
   return (
     <li className={styles.list}>
-      {plan.isDone === false ? (
+      {!plan.isDone ? (
         <button type="button" onClick={clickCheckBtn} className={`${styles.check} ${checkDisplayType}`}>
           <Circle />
         </button>
@@ -67,7 +66,7 @@ function Plan({ plan, onPlanClick, onDelete, onEdit, isStudyRoom }) {
       </span>
       {isEdited && (
         <form ref={formRef} className={styles.form} onSubmit={submitHandler}>
-          <Input ref={inputRef} value={plan.name} onChange={changeHandler} />
+          <Input value={plan.name} onChange={changeHandler} />
         </form>
       )}
       <ul>

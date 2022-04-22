@@ -79,20 +79,18 @@ function SubjectTime({ onClickplanBtn }) {
   }, [endTime]);
 
   const getStartTime = () => {
-    const time = new Date();
-    setStartTime(time);
+    setStartTime(new Date());
     setIsRecorded((prev) => !prev);
   };
 
   const getEndTime = () => {
-    const time = new Date();
-    setEndTime(time);
+    setEndTime(new Date());
     setIsRecorded((prev) => !prev);
   };
 
   return (
     <section className={styles.subject_time}>
-      {isRecorded === false ? (
+      {!isRecorded ? (
         <button type="button" className={styles.play_button} onClick={getStartTime}>
           <Play />
         </button>
