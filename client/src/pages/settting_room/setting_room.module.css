@@ -7,13 +7,12 @@
 }
 
 .video_component.show {
-  flex: 1 1 90%;
+  flex-grow: 1;
   display: flex;
   justify-content: center;
 }
 
 .bar.show {
-  flex: 1 1 10%;
   position: relative;
 }
 

@@ -1,16 +1,9 @@
-button {
-  outline: none;
-  border: 0;
-  cursor: pointer;
-  background-color: transparent;
-}
-
 .bar {
   display: flex;
   align-items: center;
   background-color: #101112;
   color: #dee2e6;
-  height: 100%;
+  height: 77px;
   padding: 0.2em 1.5em;
 }
 
@@ -45,6 +38,7 @@ button {
 .start_button {
   font-size: 1rem;
   padding: 0.9em 5em;
+  width: 300px;
   background-color: #bf7d8a;
   color: white;
   border-radius: 4px;
