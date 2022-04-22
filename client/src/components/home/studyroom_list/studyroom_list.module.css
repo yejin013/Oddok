@@ -1,7 +1,7 @@
 .container {
   width: 65%;
   max-width: 1296px;
-  margin: 300px auto;
+  margin: 0 auto;
   color: white;
   display: flex;
   flex-direction: column;
