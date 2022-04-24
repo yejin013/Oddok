@@ -15,8 +15,10 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.jni.Local;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Repository;
@@ -55,6 +57,15 @@ public class StudyRoomQueryRepositoryImpl implements StudyRoomQueryRepository {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize());
         return query.fetch();
+    }
+
+    public Optional<StudyRoom> findById(Long id) {
+
+        LocalDate now = LocalDate.now();
+        JPAQuery<StudyRoom> query = queryFactory.selectFrom(studyRoom)
+                .where(studyRoom.endAt.isNull().or(studyRoom.endAt.after(now)),
+                        studyRoom.id.eq(id));
+        return Optional.ofNullable(query.fetchOne());
     }
 
     private OrderSpecifier<?> studyRoomSort(Pageable pageable) {

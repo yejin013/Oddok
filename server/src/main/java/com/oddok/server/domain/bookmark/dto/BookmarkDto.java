@@ -42,4 +42,7 @@ public class BookmarkDto {
         this.endAt = endAt;
         this.participant = participant;
     }
+
+    @Builder
+    public BookmarkDto() {}
 }
