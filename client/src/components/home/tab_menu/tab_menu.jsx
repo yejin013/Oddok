@@ -21,7 +21,7 @@ function TabMenu({ setCurrentCategory }) {
   };
 
   return (
-    <nav className={styles.category_nav}>
+    <nav className={styles.tab_menu}>
       {items.map((item) => (
         <TabMenuItem
           title={item.name}
