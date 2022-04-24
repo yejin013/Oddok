@@ -1,0 +1,48 @@
+.list {
+  display: flex;
+  align-items: center;
+  background-color: #212529;
+  margin-bottom: 0.4em;
+  padding: 0.3em;
+  border-radius: 4px;
+}
+
+.check.hide {
+  display: none;
+}
+
+.name {
+  width: 90%;
+  text-align: left;
+  margin-left: 0.5em;
+  padding-right: 0.5em;
+  cursor: pointer;
+}
+
+.name.hide {
+  display: none;
+}
+
+.dots {
+  margin-left: 1.2em;
+  padding-top: 0.4em;
+}
+
+.buttons {
+  position: absolute;
+  right: 1.5%;
+  padding: 0.5em 1em;
+  background-color: #212529;
+}
+
+.edit_button,
+.delete_button {
+  margin: 0.5em 0;
+  padding: 0 3em;
+  font-size: 0.7rem;
+}
+
+.edit_button {
+  padding-bottom: 1em;
+  border-bottom: 0.25px solid #343a40;
+}

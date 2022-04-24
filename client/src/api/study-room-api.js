@@ -1,4 +1,5 @@
 /* eslint-disable import/prefer-default-export */
+import axios from "axios";
 import axiosInstance from "./axios_config";
 
 export const createStudyRoom = async (roomInfo) => {
@@ -40,4 +41,11 @@ export const saveTime = async (timeInfo) => {
     subject: timeInfo.subject,
   });
   return response;
+};
+
+export const getStudyRoomList = async (page, isPublic, category, sort) => {
+  const response = await axios.get("/study-room", {
+    params: { page, isPublic, category, sort: [sort, "desc"].join(",") },
+  });
+  return response.data;
 };

@@ -4,7 +4,7 @@ import { useRecoilState } from "recoil";
 import { userState } from "../recoil/user_state";
 import { roomInfoState } from "../recoil/studyroom_state";
 import { createStudyRoom, joinStudyRoom } from "../api/study-room-api";
-import { getTestUser } from "../api/getUser";
+import { getTestUser } from "../api/getTestUser";
 import SettingRoom from "./settting_room/setting_room";
 
 function CreateRoom() {

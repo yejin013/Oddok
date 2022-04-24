@@ -6,14 +6,13 @@
   background-color: #101112;
 }
 
-.video_component.show {
-  flex-grow: 1;
-  display: flex;
-  justify-content: center;
+.room.hide {
+  display: none;
 }
 
-.bar.show {
-  position: relative;
+.video_component {
+  flex-grow: 1;
+  display: flex;
 }
 
 .setting_tooltip,
@@ -26,15 +25,30 @@
 .plan_tooltip {
   left: 50%;
   transform: translateX(-50%);
+
+/*
+사이드바 스타일 수정할 때 다시
+.video_component.decrease {
+  flex: 1 1 75%;
+}
+*/
+
+.bar {
+  position: relative;
 }
 
-.video_component.hide,
-.bar.hide {
-  display: none;
+.video_container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .video {
   height: 100%;
   object-fit: contain;
   transform: rotateY(180deg);
+}
+
+.plan_bar {
+  flex: 1 1 25%;
 }

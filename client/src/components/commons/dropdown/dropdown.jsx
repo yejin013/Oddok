@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useState } from "react";
+import { ReactComponent as ArrowDown } from "../../../assets/icons/chevron-down.svg";
 
 import styles from "./dropdown.module.css";
 
@@ -24,6 +25,9 @@ function Dropdown({ options, onSelect, disabled, defaultValue }) {
     <div className={styles.container}>
       <div className={styles.select} onClick={toggleMenu}>
         <p className={styles.selected_opt}>{selectedOpt || options[0].name}</p>
+        <div className={styles.icon}>
+          <ArrowDown />
+        </div>
       </div>
       <ul className={`${isActive ? styles.active : ""}`}>
         {options.map((option) => (
