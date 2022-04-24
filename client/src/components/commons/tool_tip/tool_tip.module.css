@@ -1,0 +1,24 @@
+.tooltip {
+  position: relative;
+  background-color: #212529;
+  border-radius: 12px;
+  color: white;
+  font-size: 0.875rem;
+  padding: 12px;
+  width: fit-content;
+  z-index: 10;
+}
+
+.tooltip::before {
+  content: "";
+  position: absolute;
+  bottom: -16px;
+  left: calc(50% - 16px);
+  border-top: 16px solid #212529;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+}
+
+.tooltip.left::before {
+  left: 10px;
+}

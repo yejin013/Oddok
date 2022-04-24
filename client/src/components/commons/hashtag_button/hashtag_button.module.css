@@ -18,8 +18,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 4px;
   width: 1em;
+  margin-right: 4px;
+}
+
+.cancel_icon {
+  display: flex;
+  align-items: center;
+  width: 1.25em;
+  height: 1.25em;
+  margin-left: 4px;
 }
 
 .toggle_button input:checked + div {

@@ -1,0 +1,45 @@
+.content {
+  display: flex;
+  align-items: center;
+  background-color: #bf7d8a;
+  color: #f8f9fa;
+  padding: 1em;
+  border-radius: 99px;
+  gap: 4px;
+}
+
+.content span {
+  position: absolute;
+  opacity: 0;
+  white-space: pre;
+}
+
+.content input {
+  width: 0;
+  border: none;
+  background-color: transparent;
+  color: white;
+  padding: 0;
+  font-size: inherit;
+}
+
+.content input::placeholder {
+  color: white;
+}
+
+.content input:focus {
+  outline: none;
+}
+
+.icon {
+  display: flex;
+  width: 1em;
+}
+
+.cancel_icon {
+  display: flex;
+  align-items: center;
+  width: 1.25em;
+  height: 1.25em;
+  cursor: pointer;
+}

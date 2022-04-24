@@ -6,12 +6,11 @@
 }
 
 .radio_item p {
-  padding: 1.25rem 0;
+  padding: 1.25em 0;
   margin: 0;
-  border-radius: 0.75rem;
+  border-radius: 12px;
   background-color: #212529;
   color: #f8f9fa;
-  font-size: 1rem;
   text-align: center;
 }
 

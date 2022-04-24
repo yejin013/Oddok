@@ -4,8 +4,10 @@ import styles from "./add_button.module.css";
 
 function AddButton({ onClick }) {
   return (
-    <button type="button" className={styles.button} onClick={onClick}>
-      <Plus />
+    <button type="button" className={styles.add_button} onClick={onClick}>
+      <div className={styles.icon}>
+        <Plus />
+      </div>
     </button>
   );
 }

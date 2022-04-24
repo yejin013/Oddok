@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSetRecoilState, useRecoilValue } from "recoil";
-import { videoState, audioState, roomInfoState } from "../../recoil/studyroom_state";
+import { videoState, audioState, roomInfoState, roomTitleState } from "../../recoil/studyroom_state";
 import SettingBar from "../../components/study/setting_bar/setting_bar";
 import SettingSection from "../../components/study/setting_section/setting_section";
+import ToolTip from "../../components/commons/tool_tip/tool_tip";
 import styles from "./setting_room.module.css";
 import TotalTime from "../../components/study/total_time/total_time";
 import PlanSidebar from "../../components/study/plan_sidebar/plan_sidebar";
@@ -12,12 +13,12 @@ function SettingRoom({ goToStudyRoom }) {
   const setIsPlaying = useSetRecoilState(videoState);
   const setIsMuted = useSetRecoilState(audioState);
   const [clickedSettingBtn, setClickedSettingBtn] = useState(false);
+  const roomInfo = useRecoilValue(roomInfoState);
+  const roomTitle = useRecoilValue(roomTitleState);
   const [isPlanOpen, setisPlanOpen] = useState(false);
   const [isSidebar, setisSidebar] = useState(false);
   const displayType = clickedSettingBtn ? styles.hide : "";
   const videoDisplayType = isSidebar ? styles.decrease : "";
-
-  const [roomName, setRoomName] = useState("나중에 지우기");
 
   useEffect(() => {
     const getVideoandAudio = async () => {
@@ -61,8 +62,6 @@ function SettingRoom({ goToStudyRoom }) {
       {clickedSettingBtn && (
         <SettingSection //
           clickSettingBtn={clickSettingBtn}
-          roomName={roomName}
-          setRoomName={setRoomName}
         />
       )}
       <div className={`${styles.room} ${displayType}`}>
@@ -78,8 +77,16 @@ function SettingRoom({ goToStudyRoom }) {
           )}
         </section>
         <div className={styles.bar}>
+          {!roomInfo.category && (
+            <div className={styles.setting_tooltip}>
+              <ToolTip type="left" message="해시태그나 스터디 유형 설정은 여기에서!" />
+            </div>
+          )}
+          <div className={styles.plan_tooltip}>
+            <ToolTip message="오늘의 스터디 플랜을 적어볼까요?" />
+          </div>
           <SettingBar
-            roomName={roomName}
+            title={roomInfo.name || roomTitle || "방정보를 입력해주세요"}
             goToStudyRoom={goToStudyRoom}
             stopOrStartVideo={stopOrStartVideo}
             stopOrStartAudio={stopOrStartAudio}

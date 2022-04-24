@@ -11,9 +11,20 @@
 }
 
 .video_component {
-  height: 90vh;
+  flex-grow: 1;
   display: flex;
 }
+
+.setting_tooltip,
+.plan_tooltip {
+  position: absolute;
+  top: -70px;
+  left: 16px;
+}
+
+.plan_tooltip {
+  left: 50%;
+  transform: translateX(-50%);
 
 /*
 사이드바 스타일 수정할 때 다시
@@ -23,7 +34,7 @@
 */
 
 .bar {
-  height: 10vh;
+  position: relative;
 }
 
 .video_container {
