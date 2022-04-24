@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 import com.oddok.server.common.errors.UserAlreadyJoinedStudyRoom;
+import com.oddok.server.common.errors.UserAlreadyPublishStudyRoomException;
 import com.oddok.server.domain.participant.dao.ParticipantRepository;
 import com.oddok.server.domain.participant.entity.Participant;
 import com.oddok.server.domain.studyroom.dao.HashtagRepository;
@@ -82,7 +83,23 @@ class StudyRoomServiceTest {
         for (String name : newStudyRoomDto.getHashtags()) {
             assertTrue(studyRoomDto.getHashtags().contains(name));
         }
+        assertTrue(studyRoom.getName().contains(studyRoomDto.getCategory().getValue()));
     }
+
+
+    @Test
+    void 사용자가_이미_개설한_방이_있을경우_생성_실패() {
+        //given
+        StudyRoomDto studyRoomDto = studyRoomMapper.toDto(studyRoom);
+
+        //when
+        given(userRepository.findById(any())).willReturn(Optional.ofNullable(studyRoom.getUser()));
+        given(studyRoomRepository.findByUser(any())).willReturn(Optional.ofNullable(studyRoom));
+
+        //then
+        assertThrows(UserAlreadyPublishStudyRoomException.class, () -> studyRoomService.createStudyRoom(studyRoomDto));
+    }
+
 
     @Test
     void 스터디룸_수정_성공_없는해시태그삭제_새로운해시태그등록() {
@@ -181,7 +198,7 @@ class StudyRoomServiceTest {
     StudyRoomDto createStudyRoomDto(Set<String> hashtags) {
         return StudyRoomDto.builder()
                 .id(studyRoomId)
-                .name("방 제목")
+                .name(null)
                 .category(Category.SCHOOL)
                 .userId(userId)
                 .image("imageUrl")

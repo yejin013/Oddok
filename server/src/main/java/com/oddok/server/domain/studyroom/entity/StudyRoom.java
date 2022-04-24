@@ -27,7 +27,7 @@ public class StudyRoom {
     private Category category;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", unique = true)
     private User user;
 
     @Column(name = "session_id")
@@ -76,6 +76,10 @@ public class StudyRoom {
 
     public void deleteSession(){
         this.sessionId = null;
+    }
+
+    public void setDefaultName(){
+        this.name = category.getValue()+" "+id+"호실";
     }
 
     @Builder
