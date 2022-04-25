@@ -10,5 +10,5 @@ import org.springframework.data.domain.Pageable;
 public interface StudyRoomQueryRepository {
   List<StudyRoom> findAllBySearchConditions(Boolean isPublic, String category, String name, Pageable pageable);
   List<StudyRoom> findAllByHashtag(Boolean isPublic, String category, Hashtag hashtag, Pageable pageable);
-  Optional<StudyRoom> findById(Long id);
+  Optional<StudyRoom> findByIdAndEndAtIsNullOrAfter(Long id);
 }

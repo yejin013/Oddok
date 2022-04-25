@@ -59,7 +59,7 @@ public class StudyRoomQueryRepositoryImpl implements StudyRoomQueryRepository {
         return query.fetch();
     }
 
-    public Optional<StudyRoom> findById(Long id) {
+    public Optional<StudyRoom> findByIdAndEndAtIsNullOrAfter(Long id) {
 
         LocalDate now = LocalDate.now();
         JPAQuery<StudyRoom> query = queryFactory.selectFrom(studyRoom)

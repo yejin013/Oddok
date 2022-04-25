@@ -96,7 +96,7 @@ public class BookmarkService {
      * 스터디룸 정보 검색
      */
     private StudyRoom findStudyRoom(Long studyRoomId) {
-        return studyRoomQueryRepository.findById(studyRoomId)
+        return studyRoomQueryRepository.findByIdAndEndAtIsNullOrAfter(studyRoomId)
                 .orElseThrow(() -> new StudyRoomNotFoundException(studyRoomId));
     }
 }
