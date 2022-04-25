@@ -10,6 +10,5 @@ import java.util.Optional;
 
 @Repository
 public interface StudyRoomRepository extends JpaRepository<StudyRoom, Long> {
-    Optional<StudyRoom> findByIdAndEndAtAfter(Long id, LocalDate endAt);
     Optional<StudyRoom> findByUser(User user);
 }

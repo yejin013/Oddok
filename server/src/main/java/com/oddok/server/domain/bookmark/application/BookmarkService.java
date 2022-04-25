@@ -11,6 +11,7 @@ import com.oddok.server.domain.participant.dto.ParticipantDto;
 import com.oddok.server.domain.bookmark.mapper.BookmarkMapper;
 import com.oddok.server.domain.participant.mapper.ParticipantMapper;
 import com.oddok.server.domain.studyroom.dao.StudyRoomRepository;
+import com.oddok.server.domain.studyroom.dao.querydsl.StudyRoomQueryRepository;
 import com.oddok.server.domain.studyroom.entity.StudyRoom;
 import com.oddok.server.domain.user.dao.UserRepository;
 import com.oddok.server.domain.user.entity.User;
@@ -32,6 +33,7 @@ public class BookmarkService {
     private final BookmarkRepository bookmarkRepository;
     private final UserRepository userRepository;
     private final StudyRoomRepository studyRoomRepository;
+    private final StudyRoomQueryRepository studyRoomQueryRepository;
     private final ParticipantRepository participantRepository;
 
     /**
@@ -58,8 +60,12 @@ public class BookmarkService {
      */
     public BookmarkDto get(Long userId) {
         User user = findUser(userId);
-        Bookmark bookmark = bookmarkRepository.findByUser(user).orElseThrow(() -> new BookmarkNotFoundException(userId));
-        StudyRoom studyRoom = bookmark.getStudyRoom();
+        Optional<Bookmark> bookmark = bookmarkRepository.findByUser(user);
+
+        if(bookmark.isEmpty())
+            return null;
+
+        StudyRoom studyRoom = bookmark.get().getStudyRoom();
 
         ParticipantMapper participantMapper = Mappers.getMapper(ParticipantMapper.class);
         List<ParticipantDto> participants = participantMapper.toDto(
@@ -90,7 +96,7 @@ public class BookmarkService {
      * 스터디룸 정보 검색
      */
     private StudyRoom findStudyRoom(Long studyRoomId) {
-        return studyRoomRepository.findByIdAndEndAtAfter(studyRoomId, LocalDate.now())
+        return studyRoomQueryRepository.findByIdAndEndAtIsNullOrAfter(studyRoomId)
                 .orElseThrow(() -> new StudyRoomNotFoundException(studyRoomId));
     }
 }

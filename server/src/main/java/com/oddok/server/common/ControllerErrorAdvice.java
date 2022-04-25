@@ -41,7 +41,7 @@ public class ControllerErrorAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(StudyRoomNotFoundException.class)
     public ErrorResponse handleStudyRoomNotFoundException() {
-        return new ErrorResponse("해당 스터디룸이 없습니다.");
+        return new ErrorResponse("해당 스터디룸이 존재하지 않습니다.");
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
