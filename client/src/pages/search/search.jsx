@@ -33,7 +33,6 @@ function Search() {
 
   const fetchSearchedRooms = async (name, hashtag) => {
     const rooms = await getStudyRoomList(undefined, undefined, undefined, undefined, name, hashtag);
-    console.log(rooms);
     setLoadedRooms(rooms);
   };
 
