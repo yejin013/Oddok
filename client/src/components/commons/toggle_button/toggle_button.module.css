@@ -1,0 +1,27 @@
+.toggle_button {
+  cursor: pointer;
+}
+
+.toggle_button input {
+  display: none;
+}
+
+.content {
+  display: flex;
+  padding: 1em;
+  background-color: #212529;
+  color: #f8f9fa;
+  border-radius: 99px;
+}
+
+.icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 4px;
+  width: 1em;
+}
+
+.toggle_button input:checked + div {
+  background-color: #bf7d8a;
+}

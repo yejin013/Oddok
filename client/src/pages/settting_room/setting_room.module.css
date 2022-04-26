@@ -1,0 +1,54 @@
+.room {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  background-color: #101112;
+}
+
+.room.hide {
+  display: none;
+}
+
+.video_component {
+  flex-grow: 1;
+  display: flex;
+}
+
+.setting_tooltip,
+.plan_tooltip {
+  position: absolute;
+  top: -70px;
+  left: 16px;
+}
+
+.plan_tooltip {
+  left: 50%;
+  transform: translateX(-50%);
+
+/*
+사이드바 스타일 수정할 때 다시
+.video_component.decrease {
+  flex: 1 1 75%;
+}
+*/
+
+.bar {
+  position: relative;
+}
+
+.video_container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.video {
+  height: 100%;
+  object-fit: contain;
+  transform: rotateY(180deg);
+}
+
+.plan_bar {
+  flex: 1 1 25%;
+}

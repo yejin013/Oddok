@@ -11,6 +11,24 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": ["react"],
-  "rules": {}
+  "plugins": ["react", "react-hooks"],
+  "rules": {
+    "no-console": "off",
+    "no-unused-vars": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/jsx-one-expression-per-line": 0,
+    "react/prop-types": "off",
+    "jsx-a11y/media-has-caption": "off",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "import/prefer-default-export": "off",
+    "jsx-a11y/label-has-associated-control": [
+      "error",
+      {
+        "required": {
+          "some": ["nesting", "id"]
+        }
+      }
+    ]
+  }
 }

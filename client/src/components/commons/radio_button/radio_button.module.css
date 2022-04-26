@@ -1,0 +1,19 @@
+.radio_item {
+  cursor: pointer;
+}
+.radio_item input {
+  display: none;
+}
+
+.radio_item p {
+  padding: 1.25em 0;
+  margin: 0;
+  border-radius: 12px;
+  background-color: #212529;
+  color: #f8f9fa;
+  text-align: center;
+}
+
+.radio_item input:checked + p {
+  background-color: #bf7d8a;
+}

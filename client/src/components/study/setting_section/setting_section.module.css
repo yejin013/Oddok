@@ -1,0 +1,143 @@
+.container {
+  width: 67.5%;
+  max-width: 1296px;
+  margin: 100px auto;
+  color: #f8f9fa;
+  font-weight: 500;
+}
+
+.heading {
+  margin: 0;
+  margin-bottom: 4px;
+  font-size: 1.75em;
+  font-weight: 600;
+}
+
+.sub_heading {
+  margin: 0;
+  margin-bottom: 1.5em;
+  color: #6c757d;
+  font-size: 1.25em;
+}
+
+.label {
+  margin: 0;
+  margin-bottom: 0.5em;
+  font-size: 1.25em;
+  font-weight: 600;
+}
+
+.roominfo_item {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+  font-size: 0.875rem;
+}
+
+.category {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 3em;
+  margin-bottom: 1em;
+  border-bottom: 1px solid #212529;
+}
+
+.category_item {
+  flex: 1;
+}
+
+.hashtag_item,
+.device_item {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+}
+
+.detail_button,
+.save_button {
+  display: flex;
+}
+
+.detail_button button {
+  margin: 3em auto;
+  color: #6c757d;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.default_box {
+  margin-bottom: -2em;
+}
+
+.save_button button {
+  background-color: #bf7d8a;
+  border-radius: 4px;
+  color: #f8f9fa;
+  font-size: 0.875rem;
+  margin-bottom: 100px;
+  padding: 16px;
+  width: 100%;
+}
+
+.save_button button:disabled {
+  background-color: #212529;
+  color: #6c757d;
+}
+
+.detail {
+  display: none;
+}
+
+.detail_clicked {
+  display: block;
+  margin-bottom: 3rem;
+}
+
+.detail_box {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 2rem;
+  font-size: 0.875rem;
+}
+
+.detail_box > div {
+  flex: 1;
+}
+
+.detail_box > div:nth-child(2) {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.invalid_message {
+  margin: 0;
+  color: #dc3545;
+  font-weight: 400;
+  font-size: 0.875rem;
+}
+
+.invalid_message.hide {
+  visibility: hidden;
+}
+
+.image_box {
+  margin-right: 24px;
+}
+
+@media screen and (max-height: 1000px) {
+  .container {
+    margin: 60px auto;
+  }
+  .save_button button {
+    margin-bottom: 40px;
+    padding: 0.75em;
+  }
+  .roominfo_item {
+    font-size: 0.75rem;
+  }
+  .detail_box {
+    font-size: 0.75rem;
+  }
+}
