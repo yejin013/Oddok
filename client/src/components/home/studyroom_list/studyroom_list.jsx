@@ -18,9 +18,9 @@ function StudyRoomList() {
   const fetchRoomData = useCallback(async (page, isPublic, category, sort) => {
     const data = await getStudyRoomList(page, isPublic, category, sort);
     // 마지막 페이지일 경우 버튼 없애기
-    if (data.last) {
-      setIsLastPage(true);
-    }
+    // if (data.last) {
+    //   setIsLastPage(true);
+    // }
     return data;
   }, []);
 
@@ -36,7 +36,7 @@ function StudyRoomList() {
   useEffect(() => {
     (async () => {
       const data = await fetchRoomData(0, filterOpt, currentCategory, sortOpt);
-      setLoadedRooms(data.content);
+      setLoadedRooms(data);
     })();
     setCurrentPage(0);
   }, [fetchRoomData, filterOpt, currentCategory, sortOpt]);
@@ -78,11 +78,7 @@ function StudyRoomList() {
         <TabMenu setCurrentCategory={setCurrentCategory} />
       </div>
       <div className={styles.studyroom_list}>
-        {loadedRooms.length > 0 ? (
-          <CardGrid rooms={loadedRooms} />
-        ) : (
-          <p style={{ color: "white" }}>스터디룸이 없어요!🥲</p>
-        )}
+        {loadedRooms ? <CardGrid rooms={loadedRooms} /> : <p style={{ color: "white" }}>스터디룸이 없어요!🥲</p>}
       </div>
       {!isLastPage && (
         <button type="button" onClick={clickMoreBtn}>

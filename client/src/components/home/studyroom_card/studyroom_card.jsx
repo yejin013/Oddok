@@ -27,7 +27,7 @@ function StudyRoomCard({ roomData }) {
             {!isBookMark ? <BookMark /> : <BookMarkHeart />}
           </div>
           <div className={styles.user_count}>
-            <UserCount number={roomData.limitUsers} />
+            <UserCount number={roomData.currentUsers} />
             <span>/ {roomData.limitUsers}</span>
           </div>
         </div>

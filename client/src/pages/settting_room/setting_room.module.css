@@ -25,6 +25,7 @@
 .plan_tooltip {
   left: 50%;
   transform: translateX(-50%);
+}
 
 /*
 사이드바 스타일 수정할 때 다시
