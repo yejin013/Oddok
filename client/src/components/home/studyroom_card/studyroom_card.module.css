@@ -1,5 +1,6 @@
 .container {
   color: white;
+  margin-bottom: 20px;
 }
 
 .thumbnail_box {
@@ -8,29 +9,56 @@
   margin-bottom: 16px;
 }
 
-.lock_icon {
+.bookmark_icon {
   position: absolute;
-  top: 15px;
-  right: 15px;
+  top: 16px;
+  left: 16px;
+  width: 16px;
+  z-index: 100px;
 }
 
 .user_count {
+  display: flex;
   width: fit-content;
   position: absolute;
-  bottom: 13px;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
+  bottom: 20px;
+  right: 20px;
+  align-items: baseline;
+}
+
+.user_count span {
+  font-size: 0.75rem;
+  color: #dee2e6;
+  margin-left: 6px;
+  vertical-align: sub;
 }
 
 .content_box {
   display: flex;
   flex-direction: column;
-  line-height: 28px;
+  font-size: 0.875rem;
+}
+
+.content_box div {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.content_head {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
 }
 
 .content_box .title {
-  font-size: 20px;
+  font-size: 1.125rem;
   font-weight: 600;
-  margin-bottom: 4px;
+  margin-right: 10px;
+}
+
+.lock_icon {
+  color: #495057;
+  height: 18px;
+  min-width: 18px;
 }

@@ -8,9 +8,6 @@ import styles from "./tab_menu_item.module.css";
 function NavItem({ title, onClick, status }) {
   return (
     <div className={`${styles.container} ${status ? styles.active : ""}`} onClick={onClick}>
-      <div className={styles.icon}>
-        <BookMark />
-      </div>
       <div>{title}</div>
     </div>
   );
