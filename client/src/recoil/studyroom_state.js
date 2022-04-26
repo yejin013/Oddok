@@ -26,8 +26,7 @@ export const roomInfoState = atom({
     isMicOn: false,
     isCamOn: false,
     bgmlink: "",
-    startAt: "",
-    endAt: "",
+    endAt: new Date(new Date(2022, 11, 32) + 3240 * 10000).toISOString().split("T")[0],
   },
 });
 
