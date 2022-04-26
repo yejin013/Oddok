@@ -43,9 +43,9 @@ export const saveTime = async (timeInfo) => {
   return response;
 };
 
-export const getStudyRoomList = async (page, isPublic, category, sort) => {
+export const getStudyRoomList = async (page, isPublic, category, sort, name, hashtag) => {
   const response = await axios.get("/study-room", {
-    params: { page, isPublic, category, sort: [sort, "desc"].join(",") },
+    params: { page, isPublic, category, sort: [sort, "desc"].join(","), name, hashtag },
   });
   return response.data;
 };
