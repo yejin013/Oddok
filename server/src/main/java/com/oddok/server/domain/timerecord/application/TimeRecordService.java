@@ -47,6 +47,23 @@ public class TimeRecordService {
         return timeRecordMapper.toDto(timeRecords);
     }
 
+    /**
+     * 일주일 지난 타임레코드 가져오기
+     */
+    public List<TimeRecordDto> get() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime aWeekAgo = now.minusDays(7);
+        List<TimeRecord> timeRecords = timeRecordRepository.findAllByEndTimeLessThan(aWeekAgo);
+        return timeRecordMapper.toDto(timeRecords);
+    }
+
+    /**
+     * timeRecord 삭제
+     */
+    public void delete(Long id) {
+        timeRecordRepository.deleteById(id);
+    }
+
     private User findUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
     }
