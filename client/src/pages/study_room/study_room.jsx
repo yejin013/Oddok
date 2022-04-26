@@ -9,6 +9,7 @@ import SideBar from "../../components/study/side_bar/side_bar";
 import ChatBar from "../../components/study/chat_bar/chat_bar";
 import styles from "./study_room.module.css";
 import PlanSidebar from "../../components/study/plan_sidebar/plan_sidebar";
+import SettingSection from "../../components/study/setting_section/setting_section";
 
 function StudyRoom() {
   const history = useHistory();
@@ -21,6 +22,7 @@ function StudyRoom() {
 
   const [isSettingOpen, setIsSettingOpen] = useState(false); // 사이드바 토글하기 위한 state
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
 
   const [isPlanOpen, setisPlanOpen] = useState(false);
@@ -103,6 +105,11 @@ function StudyRoom() {
     }
   }, [session]);
 
+  const clickDetailBtn = () => {
+    console.log("nn");
+    setIsDetailOpen((prev) => !prev);
+  };
+
   const clickSettingBtn = () => {
     setIsSettingOpen((prev) => !prev);
 
@@ -116,7 +123,6 @@ function StudyRoom() {
 
   const clickChatBtn = () => {
     setIsChatOpen((prev) => !prev);
-    setIsSettingOpen(false);
 
     if (isSettingOpen) {
       setIsSettingOpen(false);
@@ -140,8 +146,9 @@ function StudyRoom() {
 
   return (
     <div className={styles.room}>
+      <div className={styles.setting}>{isDetailOpen && <SettingSection clickSettingBtn={clickDetailBtn} />}</div>
       <div className={styles.video_container}>
-        {isSettingOpen && <SideBar roomInfo={roomInfo} session={session} />}
+        {isSettingOpen && <SideBar roomInfo={roomInfo} session={session} clickDetailBtn={clickDetailBtn} />}
         <ul className={`${styles.videos} ${displayType}`}>
           {publisher && <UserVideo count={count} publisher={publisher} />}
           {subscribers && subscribers.map((subscriber) => <UserVideo count={count} subscriber={subscriber} />)}
