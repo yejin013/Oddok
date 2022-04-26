@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { getStudyRoomList } from "../../../api/study-room-api";
-import TabMenu from "../../../components/home/tab_menu/tab_menu";
-import CardGrid from "../../../components/home/card_grid/card_grid";
-import Dropdown from "../../../components/commons/dropdown/dropdown";
+import TabMenu from "../tab_menu/tab_menu";
+import CardGrid from "../card_grid/card_grid";
+import Dropdown from "../../commons/dropdown/dropdown";
 
 import styles from "./studyroom_list.module.css";
 
-function StudyRoomList() {
+function StudyRoomList({ searchedTitle, searchedHashtag }) {
   const [currentPage, setCurrentPage] = useState(0);
   const [currentCategory, setCurrentCategory] = useState(undefined);
   const [filterOpt, setFilterOpt] = useState(undefined);
@@ -14,19 +14,18 @@ function StudyRoomList() {
   const [isLastPage, setIsLastPage] = useState(false);
   const [loadedRooms, setLoadedRooms] = useState([]);
 
-  const fetchRoomData = useCallback(async (page, sort, isPublic, category) => {
-    const rooms = await getStudyRoomList(page, sort, isPublic, category);
+  const fetchRoomData = useCallback(async (page, sort, isPublic, category, name, hashtag) => {
+    const rooms = await getStudyRoomList(page, sort, isPublic, category, name, hashtag);
     return rooms;
   }, []);
 
-  // 첫 렌더링, 필터, 정렬 변경시 0번째 페이지를 새로 fetch
   useEffect(() => {
     (async () => {
-      const rooms = await fetchRoomData(undefined, sortOpt, filterOpt, currentCategory);
+      const rooms = await fetchRoomData(undefined, sortOpt, filterOpt, currentCategory, searchedTitle, searchedHashtag);
       setLoadedRooms(rooms);
     })();
     setCurrentPage(0);
-  }, [fetchRoomData, sortOpt, filterOpt, currentCategory]);
+  }, [fetchRoomData, sortOpt, filterOpt, currentCategory, searchedTitle, searchedHashtag]);
 
   const sortRoomHandler = (value) => {
     setSortOpt(value);
@@ -38,7 +37,14 @@ function StudyRoomList() {
 
   // 더보기
   const clickMoreBtn = async () => {
-    const rooms = await fetchRoomData(currentPage + 1, sortOpt, filterOpt, currentCategory);
+    const rooms = await fetchRoomData(
+      currentPage + 1,
+      sortOpt,
+      filterOpt,
+      currentCategory,
+      searchedTitle,
+      searchedHashtag,
+    );
     // 더이상 가져올 데이터가 없으면 더보기 버튼을 없앤다
     if (rooms.length === 0) {
       setIsLastPage(true);
