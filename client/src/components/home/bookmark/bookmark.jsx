@@ -40,38 +40,32 @@ function Bookmark(props) {
             </p>
             <p className={styles.rule}>
               <span className={styles.rule_title}>스터디규칙</span>
-              <span className={styles.rule_content}>
-                안녕하세요gkrlgklr하기하ㅣ실허아하기ㅏ라이ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ아ㅣ그만하고싶어하럭개맣아종강종ㄱ아하기싫어주겠다아짜증나자고싶어하럭개많은데ㅠㅠㅠ엄마곰
-                아빠곰 애기곰 아빠곰은 뚱뚱해 엄마곰은 날씬해애기 곰은 너무 귀여워 으쓱으쓱잘한다
-                그만하고싶어요요요요요ㅛ 히히히히히히ㅣㅎ히ㅣ
-              </span>
+              <span className={styles.rule_content}>안녕하세요</span>
             </p>
           </div>
         </div>
-        <div className={styles.user_list}>
-          <ul>
-            <li className={styles.list}>
-              <span className={styles.user}>1. 도너츠</span>
-              <span className={styles.time}>01:42 ~ 지금까지</span>
-            </li>
-            <li className={styles.list}>
-              <span className={styles.user}>1. 도너츠</span>
-              <span className={styles.time}>01:42 ~ 지금까지</span>
-            </li>
-            <li className={styles.list}>
-              <span className={styles.user}>1. 도너츠</span>
-              <span className={styles.time}>01:42 ~ 지금까지</span>
-            </li>
-            <li className={styles.list}>
-              <span className={styles.user}>1. 나는야 지오니</span>
-              <span className={styles.time}>01:42 ~ 지금까지</span>
-            </li>
-            <li className={styles.list}>
-              <span className={styles.user}>1. 도너츠</span>
-              <span className={styles.time}>01:42 ~ 지금까지</span>
-            </li>
-          </ul>
-        </div>
+        <ul className={styles.user_list}>
+          <li className={styles.list}>
+            <span className={styles.user}>1. 도너츠</span>
+            <span className={styles.time}>01:42 ~ 지금까지</span>
+          </li>
+          <li className={styles.list}>
+            <span className={styles.user}>1. 도너츠</span>
+            <span className={styles.time}>01:42 ~ 지금까지</span>
+          </li>
+          <li className={styles.list}>
+            <span className={styles.user}>1. 도너츠</span>
+            <span className={styles.time}>01:42 ~ 지금까지</span>
+          </li>
+          <li className={styles.list}>
+            <span className={styles.user}>1. 나는야 지오니</span>
+            <span className={styles.time}>01:42 ~ 지금까지</span>
+          </li>
+          <li className={styles.list}>
+            <span className={styles.user}>1. 도너츠</span>
+            <span className={styles.time}>01:42 ~ 지금까지</span>
+          </li>
+        </ul>
       </div>
     </div>
   );
