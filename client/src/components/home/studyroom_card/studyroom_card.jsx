@@ -2,12 +2,11 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useState } from "react";
 import Thumbnail from "./thumbnail";
-import UserCount from "./user_count";
+import UserCount from "../../commons/user_count/user_count";
 import { ReactComponent as Lock } from "../../../assets/icons/lock.svg";
 import { ReactComponent as Unlock } from "../../../assets/icons/unlock.svg";
 import { ReactComponent as BookMark } from "../../../assets/icons/bookmark.svg";
 import { ReactComponent as BookMarkHeart } from "../../../assets/icons/bookmark-heart-fill.svg";
-
 import styles from "./studyroom_card.module.css";
 
 function StudyRoomCard({ roomData }) {

@@ -1,8 +1,80 @@
 import React from "react";
+import UserCount from "../../commons/user_count/user_count";
+import { ReactComponent as Thumbnail } from "../../../assets/icons/thumbnail.svg";
 import styles from "./bookmark.module.css";
 
 function Bookmark(props) {
-  return <h1 className={styles.bookmark}>Bookmark</h1>;
+  const isBookmark = true;
+
+  return (
+    <div className={styles.bookmark}>
+      <div className={styles.count_info}>
+        <div className={styles.count_box}>
+          <UserCount number={3} isBookmark={isBookmark} />
+          <p className={styles.count}>스터디원 3명이 공부 중이에요</p>
+        </div>
+        <div className={styles.button_box}>
+          <button className={styles.button} type="button">
+            바로 스터디 시작하기
+          </button>
+        </div>
+      </div>
+      <div className={styles.info}>
+        <div className={styles.detail}>
+          <div className={styles.thumbnail}>
+            <Thumbnail />
+          </div>
+          <div className={styles.room_info}>
+            <h3 className={styles.name}>공시생 2호실</h3>
+            <p className={styles.detail_box}>
+              <span className={styles.title}>해시태그</span>
+              <span className={styles.content}>#교시제 #컨셉</span>
+            </p>
+            <p className={styles.detail_box}>
+              <span className={styles.title}>인원</span>
+              <span className={styles.content}>3명 / 8명</span>
+            </p>
+            <p className={styles.detail_box}>
+              <span className={styles.title}>기간</span>
+              <span className={styles.content}>2022. 12. 31 까지</span>
+            </p>
+            <p className={styles.rule}>
+              <span className={styles.rule_title}>스터디규칙</span>
+              <span className={styles.rule_content}>
+                안녕하세요gkrlgklr하기하ㅣ실허아하기ㅏ라이ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ아ㅣ그만하고싶어하럭개맣아종강종ㄱ아하기싫어주겠다아짜증나자고싶어하럭개많은데ㅠㅠㅠ엄마곰
+                아빠곰 애기곰 아빠곰은 뚱뚱해 엄마곰은 날씬해애기 곰은 너무 귀여워 으쓱으쓱잘한다
+                그만하고싶어요요요요요ㅛ 히히히히히히ㅣㅎ히ㅣ
+              </span>
+            </p>
+          </div>
+        </div>
+        <div className={styles.user_list}>
+          <ul>
+            <li className={styles.list}>
+              <span className={styles.user}>1. 도너츠</span>
+              <span className={styles.time}>01:42 ~ 지금까지</span>
+            </li>
+            <li className={styles.list}>
+              <span className={styles.user}>1. 도너츠</span>
+              <span className={styles.time}>01:42 ~ 지금까지</span>
+            </li>
+            <li className={styles.list}>
+              <span className={styles.user}>1. 도너츠</span>
+              <span className={styles.time}>01:42 ~ 지금까지</span>
+            </li>
+            <li className={styles.list}>
+              <span className={styles.user}>1. 나는야 지오니</span>
+              <span className={styles.time}>01:42 ~ 지금까지</span>
+            </li>
+            <li className={styles.list}>
+              <span className={styles.user}>1. 도너츠</span>
+              <span className={styles.time}>01:42 ~ 지금까지</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default Bookmark;

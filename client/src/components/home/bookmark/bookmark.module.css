@@ -1,3 +1,129 @@
+p {
+  margin: 0;
+}
+
 .bookmark {
-  background-color: darksalmon;
+  /*background-color: darksalmon;*/
+  color: white;
+}
+
+.count_info {
+  width: 75%;
+  margin: 0 auto;
+  background-color: #101112;
+  display: flex;
+  justify-content: space-between;
+  padding: 2em 1em;
+}
+
+.count {
+  margin-top: 0.5em;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.button_box {
+  display: flex;
+  align-items: flex-end;
+}
+
+.button {
+  padding: 0.7em 5.5em;
+  font-weight: 700;
+  background-color: #cfa028;
+  border-radius: 4px;
+}
+
+.info {
+  display: flex;
+  padding: 1em 12em;
+  /*background-color: cornflowerblue;*/
+  background-color: black;
+}
+
+.detail {
+  flex: 1 1 75%;
+  /*background-color: darkorange;*/
+  display: flex;
+  margin: 1em;
+}
+
+.thumbnail {
+  margin-right: 1em;
+  background-color: #212529;
+}
+
+.room_info {
+  width: 60%;
+}
+
+.name {
+  margin: 0;
+  margin-bottom: 0.5em;
+  font-weight: 500;
+  font-size: 1.2rem;
+}
+
+.detail_box {
+  margin-bottom: 0.3em;
+}
+
+.title {
+  color: #dee2e6;
+  font-weight: 500;
+  margin-right: 0.5em;
+  font-size: 0.9rem;
+}
+
+.content {
+  color: #adb5bd;
+  font-size: 0.9rem;
+}
+
+.rule {
+  display: flex;
+}
+
+.rule_title {
+  flex: 1 1 15%;
+  color: #dee2e6;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.rule_content {
+  flex: 1 1 85%;
+  display: -webkit-box;
+  height: 85px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  color: #adb5bd;
+  font-size: 0.9rem;
+}
+
+.user_list {
+  flex: 1 1 25%;
+  /*background-color: chocolate;*/
+}
+
+.list {
+  background-color: #101112;
+  padding: 0.5em;
+  margin: 0.5em 0;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+}
+
+.user {
+  font-size: 0.9rem;
+  color: #495057;
+  flex: 1 1 60%;
+}
+
+.time {
+  font-size: 0.7rem;
+  color: #495057;
 }
