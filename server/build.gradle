@@ -49,6 +49,10 @@ dependencies {
     // java.lang.NoClassDefFoundError(javax.annotation.Generated) 에러 대응
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
 
+    // batch & scheduler
+    implementation 'org.springframework.boot:spring-boot-starter-batch'
+    implementation 'org.springframework.boot:spring-boot-starter-quartz'
+    testImplementation 'org.springframework.batch:spring-batch-test'
 }
 
 tasks.named('test') {
