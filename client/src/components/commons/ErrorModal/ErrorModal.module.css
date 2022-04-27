@@ -1,0 +1,59 @@
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.overlay {
+  position: fixed;
+  top: 30vh;
+  left: calc(50% - 180px);
+  width: 360px;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.modal_box {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: center;
+  background-color: white;
+  border-radius: 4px;
+}
+
+.header {
+  padding: 0.5rem;
+  background-color: #dc3545;
+}
+
+.header h2 {
+  margin: 0;
+}
+
+.content {
+  padding: 2rem;
+}
+
+.actions {
+  margin-bottom: 1rem;
+}
+
+.actions button {
+  color: black;
+  padding: 0.5rem 2rem;
+  border: 1px solid #dc3545;
+  border-radius: 4px;
+}
+
+@media (min-width: 768px) {
+  .modal {
+    left: calc(50% - 20rem);
+    width: 40rem;
+  }
+}
