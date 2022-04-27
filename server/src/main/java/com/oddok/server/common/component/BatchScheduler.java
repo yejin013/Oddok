@@ -22,7 +22,7 @@ public class BatchScheduler {
     @Autowired
     private BatchConfig batchConfig;
 
-    @Scheduled(cron = "* * 9 * * 7")
+    @Scheduled(cron = "0 0 9 * * 7") // 일요일 아침 9시 정각 0초
     public void runJob() {
         // job parameter 설정
         Map<String, JobParameter> confMap = new HashMap<>();
