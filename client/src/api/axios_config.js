@@ -25,6 +25,7 @@ axiosInstance.interceptors.response.use(
   },
   (error) => {
     console.log("😵응답 에러", error);
+    throw error;
   },
 );
 
