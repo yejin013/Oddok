@@ -10,7 +10,7 @@ import { updateStudyRoom } from "../../../api/study-room-api";
 
 import styles from "./side_bar.module.css";
 
-function SideBar({ session, roomInfo, clickDetailBtn }) {
+function SettingSideBar({ session, roomInfo, clickDetailBtn }) {
   const { updateAllowed } = useRecoilValue(userState);
   const textRef = useRef();
 
@@ -82,4 +82,4 @@ function SideBar({ session, roomInfo, clickDetailBtn }) {
   );
 }
 
-export default SideBar;
+export default SettingSideBar;
