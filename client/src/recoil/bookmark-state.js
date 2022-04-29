@@ -2,5 +2,5 @@ import { atom } from "recoil";
 
 export const bookmarkState = atom({
   key: "bookmarkState",
-  default: { isBookmark: false },
+  default: { info: null, isBookmark: false },
 });

@@ -9,20 +9,28 @@ import { ReactComponent as Unlock } from "../../../assets/icons/unlock.svg";
 import { ReactComponent as BookMark } from "../../../assets/icons/bookmark.svg";
 import { ReactComponent as BookMarkHeart } from "../../../assets/icons/bookmark-heart-fill.svg";
 import styles from "./studyroom_card.module.css";
-import { addBookmark } from "../../../api/study-room-api";
+import { addBookmark, deleteBookmark } from "../../../api/study-room-api";
 import { bookmarkState } from "../../../recoil/bookmark-state";
 
 function StudyRoomCard({ roomData }) {
   // const [isBookMark, setIsBookMark] = useState(false);
   const [bookmark, setBookmark] = useRecoilState(bookmarkState);
 
-  const addBookMark = (event) => {
+  const selectBookmark = (event) => {
     event.preventDefault();
     // setIsBookMark((prev) => !prev);
     addBookmark(roomData.id)
-      .then((response) => console.log(response))
-      .then(setBookmark({ isBookmark: true }))
+      .then((response) => console.log("북마크추가", response))
+      .then(setBookmark({ ...bookmark, isBookmark: true }))
       .catch((error) => console.log("add bookmark error", error));
+  };
+
+  const cancelBookmark = (event) => {
+    event.preventDefault();
+    deleteBookmark()
+      .then((response) => console.log("북마크삭제", response))
+      .then(setBookmark({ ...bookmark, isBookmark: false }))
+      .catch((error) => console.log("delete bookmark error", error));
   };
 
   return (
@@ -31,11 +39,11 @@ function StudyRoomCard({ roomData }) {
         <div className={styles.thumbnail_box}>
           <Thumbnail />
           {!bookmark.isBookmark ? (
-            <div className={styles.bookmark_icon} onClick={addBookMark}>
+            <div className={styles.bookmark_icon} onClick={selectBookmark}>
               <BookMark />
             </div>
           ) : (
-            <div className={styles.bookmark_icon} onClick={addBookMark}>
+            <div className={styles.bookmark_icon} onClick={cancelBookmark}>
               <BookMarkHeart />
             </div>
           )}

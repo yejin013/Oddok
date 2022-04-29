@@ -12,11 +12,10 @@ function Bookmark(props) {
 
   useEffect(() => {
     getBookmark()
-      .then((response) => setBookmark({ response, isBookmark: true }))
+      .then((response) => setBookmark({ ...bookmark, info: response }))
+      .then(console.log("북마크정보", bookmark))
       .catch((error) => console.log("get bookmark error", error));
-  }, []);
-
-  console.log("북마크정보", bookmark);
+  }, [bookmark.isBookmark]);
 
   return (
     <div className={styles.bookmark}>
