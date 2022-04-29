@@ -122,15 +122,26 @@
   background-color: #101112;
 }
 
-.user {
+.user,
+.current_user {
   flex: 1 1 60%;
   font-size: 0.9rem;
-  /*color: #495057;*/
+}
+
+.user {
+  color: #495057;
+}
+
+.current_user {
   color: #efc457;
 }
 
 .time {
   font-size: 0.7rem;
-  /*color: #495057;*/
+  color: #495057;
+}
+
+.current_time {
+  font-size: 0.7rem;
   color: #adb5bd;
 }

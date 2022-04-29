@@ -27,7 +27,7 @@ function MainHome(props) {
 
   const selectBookmark = async (roomId) => {
     await addBookmark(roomId)
-      .then((response) => console.log("add bookmark", response))
+      .then((response) => console.log("add bookmark"))
       .catch((error) => console.log("add bookmark error", error));
   };
 
