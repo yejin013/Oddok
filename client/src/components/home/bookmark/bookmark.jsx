@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import UserCount from "../../commons/user_count/user_count";
 import { ReactComponent as Thumbnail } from "../../../assets/icons/thumbnail.svg";
 import styles from "./bookmark.module.css";
+import { getBookmark } from "../../../api/study-room-api";
 
 function Bookmark(props) {
   const isBookmark = true;
+  const [bookmark, setBookmark] = useState(null);
+
+  useEffect(() => {
+    getBookmark()
+      .then((response) => setBookmark(response.data))
+      .catch((error) => console.log("get bookmark error", error));
+  }, []);
 
   return (
     <div className={styles.bookmark}>
