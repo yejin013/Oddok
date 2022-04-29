@@ -12,6 +12,7 @@ import com.oddok.server.domain.user.application.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
@@ -160,5 +161,17 @@ public class StudyRoomController {
         studyRoomService.checkPublisher(id, Long.parseLong(userId));
         studyRoomService.deleteStudyRoom(id);
         return ResponseEntity.ok("삭제되었습니다.");
+    }
+
+    /**
+     * [GET] /study-room/user/:id : 특정 사용자가 개설한 스터디룸 상세 조회 API
+     *
+     * @param id : 사용자 식별자
+     * @return GetStudyRoomResponse : 방 정보
+     */
+    @GetMapping(value = "/user/{id}")
+    public ResponseEntity<Optional<GetStudyRoomResponse>> getUserPublishedStudyRoom(@PathVariable Long id) {
+        Optional<StudyRoomDto> studyRoomDto = studyRoomService.loadStudyRoomByUser(id);
+        return ResponseEntity.ok(studyRoomDto.map(dtoMapper::toGetResponse));
     }
 }

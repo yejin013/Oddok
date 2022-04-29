@@ -14,6 +14,7 @@ import com.oddok.server.domain.user.dao.UserRepository;
 import com.oddok.server.domain.user.entity.User;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.Set;
 
 import lombok.RequiredArgsConstructor;
@@ -51,10 +52,24 @@ public class StudyRoomService {
         return studyRoomMapper.toDto(studyRoom);
     }
 
+
     public StudyRoomDto loadStudyRoom(Long id) {
         StudyRoom studyRoom = studyRoomRepository.findById(id)
             .orElseThrow(() -> new StudyRoomNotFoundException(id));
         return studyRoomMapper.toDto(studyRoom);
+    }
+
+    /**
+     * 사용자가 개설한 스터디룸을 가져옵니다.
+     *
+     * @param userId 사용자 식별자
+     * @return 개설한 스터디룸 (없을 경우 빈 객체)
+     */
+    public Optional<StudyRoomDto> loadStudyRoomByUser(Long userId) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new UserNotFoundException(userId));
+        Optional<StudyRoom> studyRoom = studyRoomRepository.findByUser(user);
+        return studyRoom.map(studyRoomMapper::toDto);
     }
 
     /**
