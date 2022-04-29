@@ -4,6 +4,7 @@ import com.oddok.server.domain.studyroom.api.request.CheckPasswordRequest;
 import com.oddok.server.domain.studyroom.api.request.CreateStudyRoomRequest;
 import com.oddok.server.domain.studyroom.api.request.UpdateStudyRoomRequest;
 import com.oddok.server.domain.studyroom.api.response.*;
+import com.oddok.server.domain.studyroom.application.StudyRoomInformationService;
 import com.oddok.server.domain.studyroom.application.StudyRoomSearchService;
 import com.oddok.server.domain.studyroom.application.StudyRoomService;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
@@ -31,8 +32,9 @@ import javax.validation.Valid;
 public class StudyRoomController {
 
     private final StudyRoomService studyRoomService;
-    private final UserService userService;
     private final StudyRoomSearchService studyRoomSearchService;
+    private final StudyRoomInformationService studyRoomInformationService;
+    private final UserService userService;
 
     private final StudyRoomDtoMapper dtoMapper = Mappers.getMapper(StudyRoomDtoMapper.class);
 
@@ -121,7 +123,7 @@ public class StudyRoomController {
      */
     @GetMapping(value = "/{id}")
     public ResponseEntity<GetStudyRoomResponse> getDetail(@PathVariable Long id) {
-        StudyRoomDto studyRoomDto = studyRoomService.loadStudyRoom(id);
+        StudyRoomDto studyRoomDto = studyRoomInformationService.loadStudyRoom(id);
         return ResponseEntity.ok(dtoMapper.toGetResponse(studyRoomDto));
     }
 
@@ -171,7 +173,7 @@ public class StudyRoomController {
      */
     @GetMapping(value = "/user/{id}")
     public ResponseEntity<Optional<GetStudyRoomResponse>> getUserPublishedStudyRoom(@PathVariable Long id) {
-        Optional<StudyRoomDto> studyRoomDto = studyRoomService.loadStudyRoomByUser(id);
+        Optional<StudyRoomDto> studyRoomDto = studyRoomInformationService.loadStudyRoomByUser(id);
         return ResponseEntity.ok(studyRoomDto.map(dtoMapper::toGetResponse));
     }
 }

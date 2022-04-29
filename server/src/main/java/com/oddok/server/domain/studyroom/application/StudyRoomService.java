@@ -52,26 +52,6 @@ public class StudyRoomService {
         return studyRoomMapper.toDto(studyRoom);
     }
 
-
-    public StudyRoomDto loadStudyRoom(Long id) {
-        StudyRoom studyRoom = studyRoomRepository.findById(id)
-            .orElseThrow(() -> new StudyRoomNotFoundException(id));
-        return studyRoomMapper.toDto(studyRoom);
-    }
-
-    /**
-     * 사용자가 개설한 스터디룸을 가져옵니다.
-     *
-     * @param userId 사용자 식별자
-     * @return 개설한 스터디룸 (없을 경우 빈 객체)
-     */
-    public Optional<StudyRoomDto> loadStudyRoomByUser(Long userId) {
-        User user = userRepository.findById(userId)
-            .orElseThrow(() -> new UserNotFoundException(userId));
-        Optional<StudyRoom> studyRoom = studyRoomRepository.findByUser(user);
-        return studyRoom.map(studyRoomMapper::toDto);
-    }
-
     /**
      * userId의 사용자가 id 방에 참여합니다. 스터디룸 세션에 커넥션을 생성하고 토큰을 반환합니다. 스터디룸에 참여합니다.
      *
