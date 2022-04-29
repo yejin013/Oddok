@@ -1,21 +1,28 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { userState } from "../../../recoil/user_state";
+import { updateStudyRoom } from "../../../api/study-room-api";
+import useAsync from "../../../hooks/useAsync";
+import ErrorModal from "../../commons/ErrorModal/ErrorModal";
 import { ReactComponent as Hashtag } from "../../../assets/icons/hashtag.svg";
 import { ReactComponent as Play } from "../../../assets/icons/play-fill.svg";
 import { ReactComponent as Pause } from "../../../assets/icons/pause-fill.svg";
-import { updateStudyRoom } from "../../../api/study-room-api";
-import ErrorModal from "../../commons/ErrorModal/ErrorModal";
 
-import styles from "./side_bar.module.css";
+import styles from "./setting_side_bar.module.css";
 
-function SideBar({ session, roomInfo, clickDetailBtn }) {
+function SettingSideBar({ session, roomInfo, clickDetailBtn }) {
+  const { id } = useParams();
   const { updateAllowed } = useRecoilValue(userState);
-  const [error, setError] = useState(null);
-
+  const { error, sendRequest: updateRoom } = useAsync(() => updateStudyRoom(id, roomInfo), [id, roomInfo]);
   const [isPlay, setIsPlay] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    setHasError(error?.response);
+  }, [error]);
 
   const toggleBgm = () => {
     setIsPlay((prev) => !prev);
@@ -23,28 +30,24 @@ function SideBar({ session, roomInfo, clickDetailBtn }) {
 
   const submitHandler = async (event) => {
     event.preventDefault();
-    try {
-      const res = await updateStudyRoom(roomInfo.id, roomInfo);
-      // 수정된 정보 브로드캐스트하기
-      session
-        .signal({
-          data: JSON.stringify(res), // JSON stringify 해야됨!
-          to: [],
-          type: "updated-roominfo",
-        })
-        .then(() => console.log("데이터 잘 갔엉🙂👋"))
-        .catch((e) => console.error(e));
-    } catch (e) {
-      setError({ status: e.response.status, message: e.response.data.message });
-    }
+    const updateResponse = await updateRoom(id, roomInfo);
+    session
+      .signal({
+        data: JSON.stringify(updateResponse), // JSON stringify 해야됨!
+        to: [],
+        type: "updated-roominfo",
+      })
+      .then(() => console.log("데이터 잘 갔엉🙂👋"))
+      .catch((e) => console.error(e));
   };
 
   const confirmError = () => {
-    setError(null);
+    setHasError(false);
   };
+
   return (
     <>
-      {error && <ErrorModal message={`${error.status} ${error.message}`} onConfirm={confirmError} />}
+      {hasError && <ErrorModal message={`${hasError?.status} ${hasError?.data.message}`} onConfirm={confirmError} />}
       <aside className={styles.side_box}>
         <h1>{roomInfo.name}</h1>
         <div className={styles.roomInfo_item}>
@@ -91,4 +94,4 @@ function SideBar({ session, roomInfo, clickDetailBtn }) {
   );
 }
 
-export default SideBar;
+export default SettingSideBar;

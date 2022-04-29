@@ -5,6 +5,7 @@ import { userState } from "../recoil/user_state";
 import { roomInfoState } from "../recoil/studyroom_state";
 import { createStudyRoom, joinStudyRoom } from "../api/study-room-api";
 import { getTestUser } from "../api/getTestUser";
+import useAsync from "../hooks/useAsync";
 import SettingRoom from "./settting_room/setting_room";
 import Loading from "../components/study/Loading/Loading";
 import ErrorModal from "../components/commons/ErrorModal/ErrorModal";
@@ -13,8 +14,10 @@ function CreateRoom() {
   const history = useHistory();
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
+  const { error: createError, sendRequest: createRoom } = useAsync(createStudyRoom);
+  const { error: joinError, sendRequest: joinRoom } = useAsync(joinStudyRoom);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [hasError, setHasError] = useState(null);
 
   useEffect(() => {
     // 스터디룸을 개설하는 유저에게 방 정보 업데이트 권한을 준다
@@ -26,33 +29,31 @@ function CreateRoom() {
       .catch((e) => console.log(`get user error!: ${e}`));
   }, []);
 
+  useEffect(() => {
+    setHasError(createError?.response || joinError?.response);
+  }, [createError, joinError]);
+
   const goToStudyRoom = async () => {
     setIsLoading(true);
-    try {
-      const data = await createStudyRoom(roomInfo);
-      localStorage.setItem("roomID", data.id); // TODO 추후 삭제 (방 참여시 사용하기 위함)
-      setRoomInfo({ ...roomInfo, id: data.id });
-      const token = await joinStudyRoom(data.id);
-      history.push({
-        pathname: `/studyroom/${data.id}`,
-        state: {
-          token: token.token,
-        },
-      });
-    } catch (e) {
-      setIsLoading(false);
-      setError({ status: e.response.status, message: e.response.data.message });
-    }
+    const createResponse = await createRoom(roomInfo);
+    const joinResponse = await joinRoom(createResponse.id);
+    setIsLoading(false);
+    history.push({
+      pathname: `/studyroom/${createResponse.id}`,
+      state: {
+        token: joinResponse.token,
+      },
+    });
   };
 
   const confirmError = () => {
-    setError(null);
+    setHasError(null);
   };
 
   return (
     <>
       {isLoading && <Loading />}
-      {error && <ErrorModal message={`${error.status} ${error.message}`} onConfirm={confirmError} />}
+      {hasError && <ErrorModal message={`${hasError?.status} ${hasError?.data.message}`} onConfirm={confirmError} />}
       <SettingRoom goToStudyRoom={goToStudyRoom} />
     </>
   );
