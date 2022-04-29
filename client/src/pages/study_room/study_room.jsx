@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import { OpenVidu } from "openvidu-browser";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { roomInfoState } from "../../recoil/studyroom_state";
@@ -14,6 +14,7 @@ import SettingSection from "../../components/study/setting_section/setting_secti
 function StudyRoom() {
   const history = useHistory();
   const location = useLocation();
+  const { id } = useParams();
   const OV = new OpenVidu();
   const [session, setSession] = useState();
   const [publisher, setPublisher] = useState();
@@ -57,7 +58,9 @@ function StudyRoom() {
 
   // 1. 유저 세션 생성
   useEffect(() => {
-    console.log("roominfo🙂", roomInfo);
+    if (!location.state) {
+      history.push(`/studyroom/${id}/setting`);
+    }
     setSession(OV.initSession());
   }, []);
 
@@ -65,7 +68,6 @@ function StudyRoom() {
   useEffect(() => {
     if (session) {
       (async () => {
-        console.log("🙂", location.state.token);
         await session.connect(location.state.token);
         const devices = await OV.getDevices();
         const videoDevices = devices.filter((device) => device.kind === "videoinput");

@@ -13,7 +13,6 @@ axiosInstance.interceptors.request.use((config) => {
   const userId = "1";
   if (userId) {
     config.headers.userId = userId;
-    console.log("🙂header에 userId 설정 성공!!", config.headers.userId);
   }
   return config;
 });
