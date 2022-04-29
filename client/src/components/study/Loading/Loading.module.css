@@ -1,0 +1,60 @@
+/* @keyframes gradient {
+  0% {
+    background-color: rgba(70, 70, 70, 0.15);
+  }
+  50% {
+    background-color: rgb(100, 100, 100, 0.2);
+  }
+  100% {
+    background-color: rgb(70, 70, 70, 0.15);
+  }
+}
+
+.loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 1;
+  animation: gradient 2s infinite ease-in-out;
+}
+
+.text {
+  color: white;
+  font-size: 2rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+} */
+
+.loading {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.7);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 1;
+}
+
+@keyframes waviy {
+  0%,
+  40%,
+  100% {
+    transform: translate(-50%, -30px);
+  }
+  20% {
+    transform: translate(-50%, -50px);
+  }
+}
+
+.text {
+  color: white;
+  font-size: 2rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  animation: waviy 1s infinite;
+}

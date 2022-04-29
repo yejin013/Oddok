@@ -4,9 +4,9 @@ import { videoState, audioState, roomInfoState, roomTitleState } from "../../rec
 import SettingBar from "../../components/study/setting_bar/setting_bar";
 import SettingSection from "../../components/study/setting_section/setting_section";
 import ToolTip from "../../components/commons/tool_tip/tool_tip";
-import styles from "./setting_room.module.css";
 import TotalTime from "../../components/study/total_time/total_time";
 import PlanSidebar from "../../components/study/plan_sidebar/plan_sidebar";
+import styles from "./setting_room.module.css";
 
 function SettingRoom({ goToStudyRoom }) {
   const videoRef = useRef();
@@ -27,7 +27,6 @@ function SettingRoom({ goToStudyRoom }) {
         video: true,
       });
       videoRef.current.srcObject = stream;
-
       const audioTrack = videoRef.current.srcObject.getAudioTracks()[0];
       audioTrack.enabled = !audioTrack.enabled; // enabled 초기값: true
     };
@@ -59,11 +58,7 @@ function SettingRoom({ goToStudyRoom }) {
 
   return (
     <div>
-      {clickedSettingBtn && (
-        <SettingSection //
-          clickSettingBtn={clickSettingBtn}
-        />
-      )}
+      {clickedSettingBtn && <SettingSection clickSettingBtn={clickSettingBtn} />}
       <div className={`${styles.room} ${displayType}`}>
         <section className={`${styles.video_component} ${videoDisplayType}`}>
           <div className={styles.video_container}>

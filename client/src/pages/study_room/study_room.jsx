@@ -19,8 +19,7 @@ function StudyRoom() {
   const [publisher, setPublisher] = useState();
   const [subscribers, setSubscribers] = useState([]);
   const [count, setCount] = useState(1);
-
-  const [isSettingOpen, setIsSettingOpen] = useState(false); // 사이드바 토글하기 위한 state
+  const [isSettingOpen, setIsSettingOpen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
@@ -106,7 +105,6 @@ function StudyRoom() {
   }, [session]);
 
   const clickDetailBtn = () => {
-    console.log("nn");
     setIsDetailOpen((prev) => !prev);
   };
 
@@ -162,7 +160,7 @@ function StudyRoom() {
       </div>
       <div className={styles.bar}>
         <StudyBar
-          roomName={roomInfo && roomInfo.name}
+          roomName={roomInfo.name}
           clickSettingBtn={clickSettingBtn}
           toggleVideo={toggleVideo}
           toggleAudio={toggleAudio}

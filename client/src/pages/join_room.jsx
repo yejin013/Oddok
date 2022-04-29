@@ -5,12 +5,14 @@ import { userState } from "../recoil/user_state";
 import { roomInfoState } from "../recoil/studyroom_state";
 import { getStudyRoom, joinStudyRoom } from "../api/study-room-api";
 import SettingRoom from "./settting_room/setting_room";
+import Loading from "../components/study/Loading/Loading";
 import ErrorModal from "../components/commons/ErrorModal/ErrorModal";
 
 function JoinRoom() {
   const history = useHistory();
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -29,6 +31,7 @@ function JoinRoom() {
   }, []);
 
   const goToStudyRoom = async () => {
+    setIsLoading(true);
     try {
       const roomID = localStorage.getItem("roomID"); // TODO roomInfo.id로 바꾸기
       const token = await joinStudyRoom(roomID);
@@ -39,6 +42,7 @@ function JoinRoom() {
         },
       });
     } catch (e) {
+      setIsLoading(false);
       setError({ status: e.response.status, message: e.response.data.message });
     }
   };
@@ -49,6 +53,7 @@ function JoinRoom() {
 
   return (
     <>
+      {isLoading && <Loading />}
       {error && <ErrorModal message={`${error.status} ${error.message}`} onConfirm={confirmError} />}
       <SettingRoom goToStudyRoom={goToStudyRoom} />
     </>
