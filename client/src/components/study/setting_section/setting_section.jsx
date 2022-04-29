@@ -39,7 +39,9 @@ const targetTimeOptions = [
   { value: 9, name: "9시간" },
   { value: 8, name: "8시간" },
 ];
-const periodOptions = [{ value: new Date(2022, 11, 31).toISOString(), name: "2022.12.31" }];
+const periodOptions = [
+  { value: new Date(new Date(2022, 11, 32) + 3240 * 10000).toISOString().split("T")[0], name: "2022.12.31" },
+];
 
 function SettingSection({ clickSettingBtn }) {
   // 수정 권한에 따라 disabled 처리

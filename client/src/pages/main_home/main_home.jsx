@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import Bookmark from "../../components/home/bookmark/bookmark";
 import Footer from "../../components/home/footer/footer";
@@ -7,9 +7,17 @@ import StudyRoomList from "../../components/home/studyroom_list/studyroom_list";
 import styles from "./main_home.module.css";
 import { getBookmark, addBookmark, deleteBookmark } from "../../api/study-room-api";
 import { bookmarkState } from "../../recoil/bookmark-state";
+import { getTestUser } from "../../api/getTestUser";
 
 function MainHome(props) {
   const [bookmark, setBookmark] = useRecoilState(bookmarkState);
+
+  useEffect(() => {
+    /* get testUser */
+    getTestUser()
+      .then((users) => console.log(users))
+      .catch((error) => console.log("get user error", error));
+  }, []);
 
   const showBookmark = async () => {
     await getBookmark()

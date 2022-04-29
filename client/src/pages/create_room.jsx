@@ -17,9 +17,9 @@ function CreateRoom() {
     setUserInfo({ ...userInfo, updateAllowed: true });
 
     /* get testUser */
-    getTestUser()
-      .then((users) => console.log(users))
-      .catch((error) => console.log(`get user error!: ${error}`));
+    // getTestUser()
+    //   .then((users) => console.log(users))
+    //   .catch((error) => console.log(`get user error!: ${error}`));
   }, []);
 
   /**
