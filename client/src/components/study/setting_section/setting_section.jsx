@@ -39,7 +39,9 @@ const targetTimeOptions = [
   { value: 9, name: "9시간" },
   { value: 8, name: "8시간" },
 ];
-const periodOptions = [{ value: new Date(2022, 11, 31).toISOString(), name: "2022.12.31" }];
+const periodOptions = [
+  { value: new Date(new Date(2022, 11, 32) + 3240 * 10000).toISOString().split("T")[0], name: "2022.12.31" },
+];
 
 function SettingSection({ clickSettingBtn }) {
   // 수정 권한에 따라 disabled 처리
@@ -59,7 +61,7 @@ function SettingSection({ clickSettingBtn }) {
     titleRef.current.value = roomInfo.name;
     passwordInputRef.current.value = roomInfo.password ? roomInfo.password : "";
     bgmlinkInputRef.current.value = roomInfo.bgmlink ? roomInfo.bgmlink : "";
-    ruleInputRef.current.value = roomInfo.rule ? roomInfo.bgmlink : "";
+    ruleInputRef.current.value = roomInfo.rule ? roomInfo.rule : "";
     if (roomInfo.hashtags) {
       const set = new Set(hashtags);
       setNewHashtag(roomInfo.hashtags.filter((tag) => !set.has(tag)));
@@ -82,18 +84,20 @@ function SettingSection({ clickSettingBtn }) {
 
   const clickSaveBtn = (e) => {
     e.preventDefault();
-    setRoomInfo({
-      ...roomInfo,
-      name: titleRef.current.value
-        ? titleRef.current.value.replace(/[\u{1F004}-\u{1F9E6}]|[\u{1F600}-\u{1F9D0}]/gu, "")
-        : "",
-      hashtags: Array.from(hashtag).concat(newHashtag), // hashtag set to array
-      isPublic: !passwordInputRef.current.value,
-      password: passwordInputRef.current.value,
-      bgmlink: bgmlinkInputRef.current.value,
-      rule: ruleInputRef.current.value,
-      startAt: new Date().toISOString(),
-    });
+    if (userInfo.updateAllowed) {
+      setRoomInfo({
+        ...roomInfo,
+        name: titleRef.current.value
+          ? titleRef.current.value.replace(/[\u{1F004}-\u{1F9E6}]|[\u{1F600}-\u{1F9D0}]/gu, "")
+          : "",
+        hashtags: Array.from(hashtag).concat(newHashtag), // hashtag set to array
+        isPublic: !passwordInputRef.current.value,
+        password: passwordInputRef.current.value,
+        bgmlink: bgmlinkInputRef.current.value,
+        rule: ruleInputRef.current.value,
+        startAt: new Date().toISOString(),
+      });
+    }
     clickSettingBtn();
   };
 
@@ -312,17 +316,15 @@ function SettingSection({ clickSettingBtn }) {
           <Textarea placeholder="스터디 규칙은 여기에 작성해주세요." ref={ruleInputRef} disabled={disabled} />
         </div>
       </div>
-      {userInfo.updateAllowed && (
-        <div className={styles.save_button}>
-          <button
-            type="submit"
-            onClick={clickSaveBtn}
-            disabled={!(isCategorySelected && isUserLimitSelected && !isInvalidPassword)}
-          >
-            완료
-          </button>
-        </div>
-      )}
+      <div className={styles.save_button}>
+        <button
+          type="submit"
+          onClick={clickSaveBtn}
+          disabled={!(isCategorySelected && isUserLimitSelected && !isInvalidPassword)}
+        >
+          확인
+        </button>
+      </div>
     </section>
   );
 }

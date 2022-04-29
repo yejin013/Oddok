@@ -1,3 +1,26 @@
-h1 {
+.section {
+  width: 65%;
+  margin: 0 auto;
   color: white;
+}
+
+.section h3 {
+  margin: 32px 0;
+}
+
+.search {
+  display: flex;
+  flex-direction: column;
+}
+
+.title_input {
+  font-size: 0.8125rem;
+}
+
+.hashtag_input {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 0.75rem;
 }
