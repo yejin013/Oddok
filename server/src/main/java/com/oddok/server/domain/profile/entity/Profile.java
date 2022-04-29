@@ -24,16 +24,23 @@ public class Profile {
     private String goal;
 
     @Column(name = "target_time")
-    private LocalDate targetTime;
+    private Integer targetTime;
 
     @Column(name = "d_day")
-    private LocalDate dDay;
+    private LocalDate dday;
 
     @Builder
-    public Profile(User user, String goal, LocalDate targetTime, LocalDate dDay) {
+    public Profile(User user, String goal, Integer targetTime, LocalDate dday) {
         this.user = user;
         this.goal = goal;
         this.targetTime = targetTime;
-        this.dDay = dDay;
+        this.dday = dday;
+    }
+
+    public Profile update(String goal, Integer targetTime, LocalDate dday) {
+        this.goal = goal;
+        this.targetTime = targetTime;
+        this.dday = dday;
+        return this;
     }
 }
