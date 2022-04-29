@@ -6,7 +6,7 @@ import Dropdown from "../../commons/dropdown/dropdown";
 
 import styles from "./studyroom_list.module.css";
 
-function StudyRoomList() {
+function StudyRoomList({ clickAddBtn, clickDeleteBtn }) {
   const [currentPage, setCurrentPage] = useState(0);
   const [currentCategory, setCurrentCategory] = useState(undefined);
   const [filterOpt, setFilterOpt] = useState(undefined);
@@ -78,7 +78,15 @@ function StudyRoomList() {
         <TabMenu setCurrentCategory={setCurrentCategory} />
       </div>
       <div className={styles.studyroom_list}>
-        {loadedRooms ? <CardGrid rooms={loadedRooms} /> : <p style={{ color: "white" }}>스터디룸이 없어요!🥲</p>}
+        {loadedRooms ? (
+          <CardGrid //
+            rooms={loadedRooms}
+            clickAddBtn={clickAddBtn}
+            clickDeleteBtn={clickDeleteBtn}
+          />
+        ) : (
+          <p style={{ color: "white" }}>스터디룸이 없어요!🥲</p>
+        )}
       </div>
       {!isLastPage && (
         <button type="button" onClick={clickMoreBtn}>
