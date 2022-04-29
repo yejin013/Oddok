@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import Bookmark from "../../components/home/bookmark/bookmark";
 import Footer from "../../components/home/footer/footer";
 import Header from "../../components/home/header/header";
@@ -10,10 +10,10 @@ import { bookmarkState } from "../../recoil/bookmark-state";
 import { getTestUser } from "../../api/getTestUser";
 
 function MainHome(props) {
-  const [bookmark, setBookmark] = useRecoilState(bookmarkState);
+  const setBookmark = useSetRecoilState(bookmarkState);
 
   useEffect(() => {
-    /* get testUser */
+    // get testUser
     getTestUser()
       .then((users) => console.log(users))
       .catch((error) => console.log("get user error", error));
@@ -27,7 +27,7 @@ function MainHome(props) {
 
   const selectBookmark = async (roomId) => {
     await addBookmark(roomId)
-      .then((response) => console.log("add bookmark"))
+      .then(() => console.log("add bookmark"))
       .catch((error) => console.log("add bookmark error", error));
   };
 
@@ -37,6 +37,7 @@ function MainHome(props) {
       .catch((error) => console.log("delete bookmark error", error));
   };
 
+  // 북마크 버튼 누르면 새로고침 없이 바로 북마크 정보 보여줌
   const clickAddBtn = async (roomId) => {
     await selectBookmark(roomId);
     await showBookmark();

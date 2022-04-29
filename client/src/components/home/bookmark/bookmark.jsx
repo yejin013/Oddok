@@ -9,7 +9,6 @@ import { bookmarkState } from "../../../recoil/bookmark-state";
 import UserList from "../UserList/UserList";
 
 function Bookmark({ showBookmark }) {
-  const isBookmarkUser = true;
   const bookmark = useRecoilValue(bookmarkState);
   const [participants, setParticipants] = useState([
     { nickname: "현재 스터디원", joinTime: "없음", isActive: false },
@@ -19,40 +18,39 @@ function Bookmark({ showBookmark }) {
     { nickname: "현재 스터디원", joinTime: "없음", isActive: false },
   ]);
   const history = useHistory();
+  const isBookmarkUser = true; // UserCount style위한 변수
 
   useEffect(() => {
-    if (!bookmark) {
-      return;
-    }
+    // if (!bookmark) {
+    //   return;
+    // }
     showBookmark();
   }, []);
 
+  // 현재 참여 중인 유저 set
   useEffect(() => {
     if (bookmark) {
-      const newUsers = [...participants];
-
-      for (let i = 0; i < newUsers.length; i += 1) {
+      const updatedUsers = [...participants];
+      for (let i = 0; i < updatedUsers.length; i += 1) {
         if (!bookmark.participant[i]) {
           return;
         }
         const name = bookmark.participant[i].nickname;
         const time = bookmark.participant[i].joinTime.split(/[T, .]/)[1];
-        const updated = { ...newUsers[i], nickname: name, joinTime: time, isActive: true };
-        newUsers[i] = updated;
-        setParticipants(newUsers);
+        const updated = { ...updatedUsers[i], nickname: name, joinTime: time, isActive: true };
+        updatedUsers[i] = updated;
+        setParticipants(updatedUsers);
       }
     }
   }, [bookmark]);
 
+  // TODO
+  // 비밀번호 확인
   const goToStudyRoom = () => {
     history.push({
       pathname: "/studyroom/",
     });
   };
-
-  // TODO
-  // 비밀번호 확인
-  // 버튼 눌렀을 때 이동
 
   return (
     <div className={styles.bookmark}>
@@ -62,7 +60,7 @@ function Bookmark({ showBookmark }) {
         <div>
           <div className={styles.count_info}>
             <div className={styles.count_box}>
-              <UserCount number={bookmark.currentUsers} isBookmark={isBookmarkUser} />
+              <UserCount number={bookmark.currentUsers} isBookmarkUser={isBookmarkUser} />
               <p className={styles.count}>스터디원 {bookmark.currentUsers}명이 공부 중이에요</p>
             </div>
             <div className={styles.button_box}>
@@ -113,24 +111,3 @@ function Bookmark({ showBookmark }) {
 }
 
 export default Bookmark;
-
-/*
-{bookmark.participant.length === 0
-                ? participants.map((participant) => (
-                    <li className={styles.list}>
-                      <div className={styles.user}>
-                        <span>{participant.id} </span>
-                        <span>{participant.name}</span>
-                      </div>
-                      <span className={styles.time}>{participant.time}</span>
-                    </li>
-                  ))
-                : bookmark.participant.map((user) => (
-                    <li className={styles.list}>
-                      <div className={styles.user}>
-                        <span>{user.nickname}</span>
-                      </div>
-                      <span className={styles.time}>{`${user.joinTime.split(/[T, .]/)[1]} ~ 지금까지`}</span>
-                    </li>
-                  ))}
-*/
