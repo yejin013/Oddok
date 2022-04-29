@@ -52,7 +52,7 @@ function StudyRoomList({ searchedTitle, searchedHashtag }) {
     }
     setLoadedRooms((prev) => [...prev, ...rooms]);
     setCurrentPage((prev) => prev + 1);
-  };
+  }
 
   return (
     <div className={styles.container}>
