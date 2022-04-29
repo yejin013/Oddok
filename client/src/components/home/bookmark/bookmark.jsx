@@ -5,19 +5,18 @@ import UserCount from "../../commons/user_count/user_count";
 import { ReactComponent as Thumbnail } from "../../../assets/icons/thumbnail.svg";
 import styles from "./bookmark.module.css";
 import { bookmarkState } from "../../../recoil/bookmark-state";
+import UserList from "../UserList/UserList";
 
 function Bookmark({ showBookmark }) {
   const isBookmarkUser = true;
   const bookmark = useRecoilValue(bookmarkState);
   const [participants, setParticipants] = useState([
-    { id: 1, nickname: "현재 스터디원", joinTime: "없음" },
-    { id: 2, nickname: "현재 스터디원", joinTime: "없음" },
-    { id: 3, nickname: "현재 스터디원", joinTime: "없음" },
-    { id: 4, nickname: "현재 스터디원", joinTime: "없음" },
-    { id: 5, nickname: "현재 스터디원", joinTime: "없음" },
+    { nickname: "현재 스터디원", joinTime: "없음", isActive: false },
+    { nickname: "현재 스터디원", joinTime: "없음", isActive: false },
+    { nickname: "현재 스터디원", joinTime: "없음", isActive: false },
+    { nickname: "현재 스터디원", joinTime: "없음", isActive: false },
+    { nickname: "현재 스터디원", joinTime: "없음", isActive: false },
   ]);
-
-  const [array, setArray] = useState([]);
 
   useEffect(() => {
     if (!bookmark) {
@@ -28,26 +27,25 @@ function Bookmark({ showBookmark }) {
 
   useEffect(() => {
     if (bookmark) {
-      // for (let i = 0; i < bookmark.participant.length; i += 1) {
-      //   const user = bookmark.participant[i];
-      //   const stringTime = user.joinTime.split(/[T, .]/)[1];
-      //   // console.log("업데이트", updated);
-      //   // const updated = { ...user, joinTime: user.joinTime.split(/[T, .]/)[1] };
-      //   const updated = { ...participants[i], nickname: user.nickname, joinTime: stringTime };
-      //   const newParticipant = [...participants];
-      //   newParticipant[i] = updated;
-      //   setParticipants(newParticipant);
-      // }
+      const newUsers = [...participants];
+
+      for (let i = 0; i < newUsers.length; i += 1) {
+        if (!bookmark.participant[i]) {
+          return;
+        }
+        const name = bookmark.participant[i].nickname;
+        const time = bookmark.participant[i].joinTime.split(/[T, .]/)[1];
+        const updated = { ...newUsers[i], nickname: name, joinTime: time, isActive: true };
+        newUsers[i] = updated;
+        setParticipants(newUsers);
+      }
     }
   }, [bookmark]);
 
-  console.log("북마크정보", bookmark);
-  console.log("참여자정보", participants);
-
   // TODO
-  // participant 보여주기
   // 비밀번호 확인
   // 버튼 눌렀을 때 이동
+
   return (
     <div className={styles.bookmark}>
       {!bookmark ? (
@@ -95,25 +93,9 @@ function Bookmark({ showBookmark }) {
               </div>
             </div>
             <ul className={styles.user_list}>
-              {bookmark.participant.length === 0
-                ? participants.map((participant) => (
-                    <li className={styles.list}>
-                      <div className={styles.user}>
-                        <span>{participant.id}. </span>
-                        <span>{participant.nickname}</span>
-                      </div>
-                      <span className={styles.time}>{participant.joinTime}</span>
-                    </li>
-                  ))
-                : array.map((user) => (
-                    <li className={styles.list}>
-                      <div className={styles.current_user}>
-                        <span>{user.id}. </span>
-                        <span>{user.nickname}</span>
-                      </div>
-                      <span className={styles.current_time}>{`${user.joinTime} ~ 지금까지`}</span>
-                    </li>
-                  ))}
+              {participants.map((participant) => (
+                <UserList participant={participant} />
+              ))}
             </ul>
           </div>
         </div>
