@@ -1,5 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import UserCount from "../../commons/user_count/user_count";
 import { ReactComponent as Thumbnail } from "../../../assets/icons/thumbnail.svg";
@@ -17,6 +18,7 @@ function Bookmark({ showBookmark }) {
     { nickname: "현재 스터디원", joinTime: "없음", isActive: false },
     { nickname: "현재 스터디원", joinTime: "없음", isActive: false },
   ]);
+  const history = useHistory();
 
   useEffect(() => {
     if (!bookmark) {
@@ -42,6 +44,12 @@ function Bookmark({ showBookmark }) {
     }
   }, [bookmark]);
 
+  const goToStudyRoom = () => {
+    history.push({
+      pathname: "/studyroom/",
+    });
+  };
+
   // TODO
   // 비밀번호 확인
   // 버튼 눌렀을 때 이동
@@ -58,7 +66,7 @@ function Bookmark({ showBookmark }) {
               <p className={styles.count}>스터디원 {bookmark.currentUsers}명이 공부 중이에요</p>
             </div>
             <div className={styles.button_box}>
-              <button className={styles.button} type="button">
+              <button className={styles.button} type="button" onClick={goToStudyRoom}>
                 바로 스터디 시작하기
               </button>
             </div>
