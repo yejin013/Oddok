@@ -1,24 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useRecoilState } from "recoil";
 import UserCount from "../../commons/user_count/user_count";
 import { ReactComponent as Thumbnail } from "../../../assets/icons/thumbnail.svg";
 import styles from "./bookmark.module.css";
 import { getBookmark } from "../../../api/study-room-api";
+import { bookmarkState } from "../../../recoil/bookmark-state";
 
 function Bookmark(props) {
-  const isBookmark = true;
-  const [bookmark, setBookmark] = useState(null);
+  const isBookmarkUser = true;
+  const [bookmark, setBookmark] = useRecoilState(bookmarkState);
 
   useEffect(() => {
     getBookmark()
-      .then((response) => setBookmark(response.data))
+      .then((response) => setBookmark({ response, isBookmark: true }))
       .catch((error) => console.log("get bookmark error", error));
   }, []);
+
+  console.log("북마크정보", bookmark);
 
   return (
     <div className={styles.bookmark}>
       <div className={styles.count_info}>
         <div className={styles.count_box}>
-          <UserCount number={3} isBookmark={isBookmark} />
+          <UserCount number={3} isBookmark={isBookmarkUser} />
           <p className={styles.count}>스터디원 3명이 공부 중이에요</p>
         </div>
         <div className={styles.button_box}>
