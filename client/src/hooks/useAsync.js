@@ -38,7 +38,6 @@ function useAsync(callback, deps = [], skip = true) {
         dispatch({ type: "SUCCESS", data });
         return data;
       } catch (error) {
-        console.error(error);
         dispatch({ type: "ERROR", error });
       }
     },

@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import { OpenVidu } from "openvidu-browser";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useResetRecoilState } from "recoil";
 import { roomInfoState } from "../../recoil/studyroom_state";
+import { leaveStudyRoom } from "../../api/study-room-api";
 import StudyBar from "../../components/study/study_bar/study_bar";
 import UserVideo from "../../components/study/user_video/user_video";
 import SettingSideBar from "../../components/study/setting_side_bar/setting_side_bar";
 import ChatBar from "../../components/study/chat_bar/chat_bar";
-import styles from "./study_room.module.css";
 import PlanSidebar from "../../components/study/plan_sidebar/plan_sidebar";
 import SettingSection from "../../components/study/setting_section/setting_section";
+import ErrorModal from "../../components/commons/ErrorModal/ErrorModal";
+import styles from "./study_room.module.css";
 
 function StudyRoom() {
   const history = useHistory();
@@ -24,16 +26,23 @@ function StudyRoom() {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
-
+  const resetRoomInfo = useResetRecoilState(roomInfoState);
   const [isPlanOpen, setisPlanOpen] = useState(false);
   const [isSidebar, setisSidebar] = useState(false);
   const displayType = isSidebar ? styles.decrease : "";
   const isStudyRoom = true;
+  const [isLeaveOpen, setIsLeaveOpen] = useState(false);
 
-  const leaveRoom = () => {
-    session.disconnect();
-    setSubscribers([]);
-    setCount(1);
+  const clickLeaveBtn = () => {
+    setIsLeaveOpen(true);
+  };
+
+  const leaveRoom = async () => {
+    await leaveStudyRoom(id);
+    await session.disconnect();
+    resetRoomInfo();
+    // setSubscribers([]);
+    // setCount(1);
     history.push({
       pathname: "/",
     });
@@ -167,10 +176,18 @@ function StudyRoom() {
           toggleVideo={toggleVideo}
           toggleAudio={toggleAudio}
           clickChatBtn={clickChatBtn}
-          leaveRoom={leaveRoom}
           onClickplanBtn={clickPlanBtn}
+          onClickLeaveBtn={clickLeaveBtn}
+          leaveRoom={leaveRoom}
         />
       </div>
+      {isLeaveOpen && (
+        <ErrorModal
+          message="정말 나가시겠습니까?"
+          onConfirm={() => setIsLeaveOpen(false)}
+          onAction={{ handleAction: () => leaveRoom(), action: "진짜 나가기" }}
+        />
+      )}
     </div>
   );
 }

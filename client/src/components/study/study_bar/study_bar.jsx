@@ -9,7 +9,15 @@ import { ReactComponent as Member } from "../../../assets/icons/person.svg";
 import { ReactComponent as Door } from "../../../assets/icons/door.svg";
 import SubjectTime from "../subject_time/subject_time";
 
-function StudyBar({ roomName, clickSettingBtn, toggleVideo, toggleAudio, clickChatBtn, onClickplanBtn, leaveRoom }) {
+function StudyBar({
+  roomName,
+  clickSettingBtn,
+  toggleVideo,
+  toggleAudio,
+  clickChatBtn,
+  onClickplanBtn,
+  onClickLeaveBtn,
+}) {
   return (
     <section className={styles.bar}>
       <div className={styles.info}>
@@ -49,7 +57,7 @@ function StudyBar({ roomName, clickSettingBtn, toggleVideo, toggleAudio, clickCh
           </button>
         </li>
         <li className={styles.door_button}>
-          <button type="button" onClick={leaveRoom}>
+          <button type="button" onClick={onClickLeaveBtn}>
             <Door />
           </button>
         </li>

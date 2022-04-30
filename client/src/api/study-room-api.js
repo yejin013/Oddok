@@ -43,6 +43,13 @@ export const saveTime = async (timeInfo) => {
   return response;
 };
 
+export const leaveStudyRoom = async (roomId) => {
+  const response = await axiosInstance({
+    url: `/study-room/leave/${roomId}`,
+  });
+  return response;
+};
+
 export const getStudyRoomList = async (page, sort, isPublic, category, name, hashtag) => {
   const response = await axios.get("/study-room", {
     params: { page, sort, isPublic, category, name, hashtag },

@@ -31,6 +31,7 @@ function CreateRoom() {
 
   useEffect(() => {
     setHasError(createError?.response || joinError?.response);
+    setIsLoading(false);
   }, [createError, joinError]);
 
   const goToStudyRoom = async () => {
