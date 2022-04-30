@@ -44,10 +44,10 @@ export const saveTime = async (timeInfo) => {
 };
 
 export const getStudyRoomList = async (page, isPublic, category, sort) => {
-  const response = await axiosInstance.get("/study-room", {
+  const response = await axios.get("/study-room", {
     params: { page, isPublic, category, sort: [sort, "desc"].join(",") },
   });
-  return response;
+  return response.data;
 };
 
 export const getBookmark = async () => {

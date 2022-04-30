@@ -21,13 +21,14 @@ function Bookmark({ showBookmark }) {
   const isBookmarkUser = true; // UserCount style위한 변수
 
   useEffect(() => {
+    // if(유저가 로그인했다면)
     // if (!bookmark) {
     //   return;
     // }
     showBookmark();
   }, []);
 
-  // 현재 참여 중인 유저 set
+  // 현재 참여 중인 유저리스트
   useEffect(() => {
     if (bookmark) {
       const updatedUsers = [...participants];
@@ -48,7 +49,7 @@ function Bookmark({ showBookmark }) {
   // 비밀번호 확인
   const goToStudyRoom = () => {
     history.push({
-      pathname: "/studyroom/",
+      pathname: "/studyroom",
     });
   };
 
