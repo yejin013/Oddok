@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import { OpenVidu } from "openvidu-browser";
 import { useRecoilState, useResetRecoilState } from "recoil";
@@ -13,6 +13,19 @@ import SettingSection from "../../components/study/setting_section/setting_secti
 import ErrorModal from "../../components/commons/ErrorModal/ErrorModal";
 import styles from "./study_room.module.css";
 
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "TOGGLE_SETTING":
+      return { setting: !state.setting, chatting: false, plan: false };
+    case "TOGGLE_CHATTING":
+      return { setting: false, chatting: !state.chatting, plan: false };
+    case "TOGGLE_PLAN":
+      return { setting: false, chatting: false, plan: !state.plan };
+    default:
+      return { setting: false, chatting: false, plan: false };
+  }
+};
+
 function StudyRoom() {
   const history = useHistory();
   const location = useLocation();
@@ -22,12 +35,10 @@ function StudyRoom() {
   const [publisher, setPublisher] = useState();
   const [subscribers, setSubscribers] = useState([]);
   const [count, setCount] = useState(1);
-  const [isSettingOpen, setIsSettingOpen] = useState(false);
-  const [isChatOpen, setIsChatOpen] = useState(false);
-  const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
   const resetRoomInfo = useResetRecoilState(roomInfoState);
-  const [isPlanOpen, setisPlanOpen] = useState(false);
+  const [sideBarState, dispatch] = useReducer(reducer, { setting: false, chatting: false, plan: false });
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [isSidebar, setisSidebar] = useState(false);
   const displayType = isSidebar ? styles.decrease : "";
   const isStudyRoom = true;
@@ -120,54 +131,34 @@ function StudyRoom() {
   };
 
   const clickSettingBtn = () => {
-    setIsSettingOpen((prev) => !prev);
-
-    if (isPlanOpen) {
-      setisPlanOpen(false);
-    }
-    if (isChatOpen) {
-      setIsChatOpen(false);
-    }
+    dispatch({ type: "TOGGLE_SETTING" });
   };
 
   const clickChatBtn = () => {
-    setIsChatOpen((prev) => !prev);
-
-    if (isSettingOpen) {
-      setIsSettingOpen(false);
-    }
-    if (isPlanOpen) {
-      setisPlanOpen(false);
-    }
+    dispatch({ type: "TOGGLE_CHATTING" });
   };
 
   const clickPlanBtn = () => {
-    setisPlanOpen((prev) => !prev);
-    setisSidebar((prev) => !prev);
-
-    if (isChatOpen) {
-      setIsChatOpen(false);
-    }
-    if (isSettingOpen) {
-      setIsSettingOpen(false);
-    }
+    dispatch({ type: "TOGGLE_PLAN" });
   };
 
   return (
     <div className={styles.room}>
       <div className={styles.setting}>{isDetailOpen && <SettingSection clickSettingBtn={clickDetailBtn} />}</div>
       <div className={styles.video_container}>
-        {isSettingOpen && <SettingSideBar roomInfo={roomInfo} session={session} clickDetailBtn={clickDetailBtn} />}
+        {sideBarState.setting && (
+          <SettingSideBar roomInfo={roomInfo} session={session} clickDetailBtn={clickDetailBtn} />
+        )}
         <ul className={`${styles.videos} ${displayType}`}>
           {publisher && <UserVideo count={count} publisher={publisher} />}
           {subscribers && subscribers.map((subscriber) => <UserVideo count={count} subscriber={subscriber} />)}
         </ul>
-        {isPlanOpen && (
+        {sideBarState.plan && (
           <div className={styles.plan_bar}>
             <PlanSidebar isStudyRoom={isStudyRoom} />
           </div>
         )}
-        <ChatBar session={session} isChatOpen={isChatOpen} />
+        <ChatBar session={session} isChatOpen={sideBarState.chatting} />
       </div>
       <div className={styles.bar}>
         <StudyBar
