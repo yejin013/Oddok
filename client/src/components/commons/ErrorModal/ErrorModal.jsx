@@ -1,9 +1,10 @@
 import React from "react";
 import { createPortal } from "react-dom";
+import { ReactComponent as CloseIcon } from "../../../assets/icons/x.svg";
 
 import styles from "./ErrorModal.module.css";
 
-function ErrorModal({ title, message, onConfirm }) {
+function ErrorModal({ message, onConfirm, onAction }) {
   return (
     <>
       {createPortal(<div className={styles.backdrop} onClick={onConfirm} />, document.getElementById("backdrop-root"))}
@@ -11,12 +12,19 @@ function ErrorModal({ title, message, onConfirm }) {
         <div className={styles.overlay}>
           <div className={styles.modal_box}>
             <header className={styles.header}>
-              <h2>⚠️ ERROR ⚠️</h2>
+              <div className={styles.icon} onClick={onConfirm}>
+                <CloseIcon />
+              </div>
             </header>
             <div className={styles.content}>{message}</div>
             <footer className={styles.actions}>
+              {onAction && (
+                <button type="button" onClick={onAction.handleAction}>
+                  {onAction.action}
+                </button>
+              )}
               <button type="button" onClick={onConfirm}>
-                OK
+                확인
               </button>
             </footer>
           </div>

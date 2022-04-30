@@ -18,7 +18,6 @@
 }
 
 .modal_box {
-  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -28,27 +27,44 @@
 }
 
 .header {
+  display: flex;
   padding: 0.5rem;
-  background-color: #dc3545;
 }
 
-.header h2 {
-  margin: 0;
+.icon {
+  margin-left: auto;
 }
 
 .content {
-  padding: 2rem;
+  padding: 1.5rem;
 }
 
 .actions {
-  margin-bottom: 1rem;
+  margin: 1rem;
 }
 
 .actions button {
   color: black;
   padding: 0.5rem 2rem;
-  border: 1px solid #dc3545;
+  margin: 0 0.5rem;
+  border: 1px solid #cfa028;
   border-radius: 4px;
+}
+
+.actions button:nth-child(1) {
+  background-color: #cfa028;
+}
+
+.actions button:nth-child(1):hover {
+  background-color: #e9b636;
+}
+
+.actions button:nth-child(2) {
+  background-color: white;
+}
+
+.actions button:nth-child(2):hover {
+  background-color: rgb(243, 243, 243);
 }
 
 @media (min-width: 768px) {
