@@ -50,13 +50,9 @@
   margin: 0 0.5rem;
   border: 1px solid #cfa028;
   border-radius: 4px;
-}
-
-.actions button:nth-child(1) {
   background-color: #cfa028;
 }
-
-.actions button:nth-child(1):hover {
+.actions button:hover {
   background-color: #e9b636;
 }
 

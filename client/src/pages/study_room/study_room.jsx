@@ -176,7 +176,7 @@ function StudyRoom() {
         <ErrorModal
           message="정말 나가시겠습니까?"
           onConfirm={() => setIsLeaveOpen(false)}
-          onAction={{ handleAction: () => leaveRoom(), action: "진짜 나가기" }}
+          onAction={{ action: "진짜 나가기", route: "/" }}
         />
       )}
     </div>

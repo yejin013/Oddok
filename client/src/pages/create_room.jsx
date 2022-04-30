@@ -6,6 +6,7 @@ import { roomInfoState } from "../recoil/studyroom_state";
 import { createStudyRoom, joinStudyRoom } from "../api/study-room-api";
 import { getTestUser } from "../api/getTestUser";
 import useAsync from "../hooks/useAsync";
+import { errorMapping } from "../api/studyroom-error-mapping";
 import SettingRoom from "./settting_room/setting_room";
 import Loading from "../components/study/Loading/Loading";
 import ErrorModal from "../components/commons/ErrorModal/ErrorModal";
@@ -14,18 +15,27 @@ function CreateRoom() {
   const history = useHistory();
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
+  const [handleError, setHandleError] = useState(); // message, action, route
   const {
     loading: createLoading,
     error: createError,
     sendRequest: createRequest,
     reset: createReset,
-  } = useAsync(createStudyRoom);
+  } = useAsync(createStudyRoom, {
+    onError: (error) => {
+      setHandleError(errorMapping("create-room", error));
+    },
+  });
   const {
     loading: joinLoading,
     error: joinError,
     sendRequest: joinRequest,
     reset: joinReset,
-  } = useAsync(joinStudyRoom);
+  } = useAsync(joinStudyRoom, {
+    onError: (error) => {
+      setHandleError(errorMapping("join-room", error));
+    },
+  });
 
   useEffect(() => {
     // 스터디룸을 개설하는 유저에게 방 정보 업데이트 권한을 준다
@@ -59,13 +69,8 @@ function CreateRoom() {
   return (
     <>
       {(createLoading || joinLoading) && <Loading />}
-      {(createError || joinError) && (
-        <ErrorModal
-          message={`${createError?.response.status || joinError?.response.status} ${
-            createError?.response.data.message || joinError?.response.data.message
-          }`}
-          onConfirm={confirmError}
-        />
+      {(createError || joinError) && ( //
+        <ErrorModal onConfirm={confirmError} onAction={handleError} />
       )}
       <SettingRoom goToStudyRoom={goToStudyRoom} />
     </>

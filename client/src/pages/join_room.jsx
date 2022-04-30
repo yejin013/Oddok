@@ -8,14 +8,38 @@ import useAsync from "../hooks/useAsync";
 import SettingRoom from "./settting_room/setting_room";
 import Loading from "../components/study/Loading/Loading";
 import ErrorModal from "../components/commons/ErrorModal/ErrorModal";
+import { errorMapping } from "../api/studyroom-error-mapping";
 
 function JoinRoom() {
   const history = useHistory();
   const { id } = useParams();
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const setRoomInfo = useSetRecoilState(roomInfoState);
-  const { data: roomData, error: getInfoError, reset: getInfoReset } = useAsync(() => getStudyRoom(id), [id], false);
-  const { loading: isLoading, error: joinError, sendRequest: joinRoom, reset: joinReset } = useAsync(joinStudyRoom);
+  const [handleError, setHandleError] = useState();
+  const {
+    data: roomData,
+    error: getInfoError,
+    reset: getInfoReset,
+  } = useAsync(
+    () => getStudyRoom(id),
+    {
+      onError: (error) => {
+        setHandleError(errorMapping("get-info", error));
+      },
+    },
+    [id],
+    false,
+  );
+  const {
+    loading: isLoading,
+    error: joinError,
+    sendRequest: joinRoom,
+    reset: joinReset,
+  } = useAsync(joinStudyRoom, {
+    onError: (error) => {
+      setHandleError(errorMapping("join-room", error));
+    },
+  });
 
   useEffect(() => {
     setUserInfo({ ...userInfo, updateAllowed: false }); // TODO 방장 아이디와 일치할 경우 수정 권한 주기
@@ -48,13 +72,8 @@ function JoinRoom() {
   return (
     <>
       {isLoading && <Loading />}
-      {(getInfoError || joinError) && (
-        <ErrorModal
-          message={`${getInfoError?.response.status || joinError?.response.status} ${
-            getInfoError?.response.data.message || joinError?.response.data.message
-          }`}
-          onConfirm={confirmError}
-        />
+      {(getInfoError || joinError) && ( //
+        <ErrorModal onConfirm={confirmError} onAction={handleError} />
       )}
       <SettingRoom goToStudyRoom={goToStudyRoom} />
     </>

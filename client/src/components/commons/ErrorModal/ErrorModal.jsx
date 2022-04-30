@@ -1,5 +1,6 @@
 import React from "react";
 import { createPortal } from "react-dom";
+import { Link } from "react-router-dom";
 import { ReactComponent as CloseIcon } from "../../../assets/icons/x.svg";
 
 import styles from "./ErrorModal.module.css";
@@ -16,12 +17,12 @@ function ErrorModal({ message, onConfirm, onAction }) {
                 <CloseIcon />
               </div>
             </header>
-            <div className={styles.content}>{message}</div>
+            <div className={styles.content}>{message || onAction.message}</div>
             <footer className={styles.actions}>
-              {onAction && (
-                <button type="button" onClick={onAction.handleAction}>
-                  {onAction.action}
-                </button>
+              {onAction.action && (
+                <Link to={onAction.route}>
+                  <button type="button">{onAction.action}</button>
+                </Link>
               )}
               <button type="button" onClick={onConfirm}>
                 확인
