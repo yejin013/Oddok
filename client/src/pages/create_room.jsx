@@ -14,31 +14,32 @@ function CreateRoom() {
   const history = useHistory();
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
-  const { error: createError, sendRequest: createRoom } = useAsync(createStudyRoom);
-  const { error: joinError, sendRequest: joinRoom } = useAsync(joinStudyRoom);
-  const [isLoading, setIsLoading] = useState(false);
-  const [hasError, setHasError] = useState(null);
+  const {
+    loading: createLoading,
+    error: createError,
+    sendRequest: createRequest,
+    reset: createReset,
+  } = useAsync(createStudyRoom);
+  const {
+    loading: joinLoading,
+    error: joinError,
+    sendRequest: joinRequest,
+    reset: joinReset,
+  } = useAsync(joinStudyRoom);
 
   useEffect(() => {
     // 스터디룸을 개설하는 유저에게 방 정보 업데이트 권한을 준다
     setUserInfo({ ...userInfo, updateAllowed: true });
 
     /* get testUser */
-    getTestUser()
-      .then((users) => console.log(users))
-      .catch((e) => console.log(`get user error!: ${e}`));
+    // getTestUser()
+    //   .then((users) => console.log(users))
+    //   .catch((e) => console.log(`get user error!: ${e}`));
   }, []);
 
-  useEffect(() => {
-    setHasError(createError?.response || joinError?.response);
-    setIsLoading(false);
-  }, [createError, joinError]);
-
   const goToStudyRoom = async () => {
-    setIsLoading(true);
-    const createResponse = await createRoom(roomInfo);
-    const joinResponse = await joinRoom(createResponse.id);
-    setIsLoading(false);
+    const createResponse = await createRequest(roomInfo);
+    const joinResponse = await joinRequest(createResponse.id);
     history.push({
       pathname: `/studyroom/${createResponse.id}`,
       state: {
@@ -48,13 +49,24 @@ function CreateRoom() {
   };
 
   const confirmError = () => {
-    setHasError(null);
+    if (createError) {
+      createReset();
+      return;
+    }
+    if (joinError) joinReset();
   };
 
   return (
     <>
-      {isLoading && <Loading />}
-      {hasError && <ErrorModal message={`${hasError?.status} ${hasError?.data.message}`} onConfirm={confirmError} />}
+      {(createLoading || joinLoading) && <Loading />}
+      {(createError || joinError) && (
+        <ErrorModal
+          message={`${createError?.response.status || joinError?.response.status} ${
+            createError?.response.data.message || joinError?.response.data.message
+          }`}
+          onConfirm={confirmError}
+        />
+      )}
       <SettingRoom goToStudyRoom={goToStudyRoom} />
     </>
   );

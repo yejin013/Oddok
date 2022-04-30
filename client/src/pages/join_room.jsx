@@ -14,9 +14,8 @@ function JoinRoom() {
   const { id } = useParams();
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const setRoomInfo = useSetRecoilState(roomInfoState);
-  const { data: roomData, error: getInfoError } = useAsync(() => getStudyRoom(id), [id], false);
-  const { loading: isLoading, error: joinError, sendRequest: joinRoom } = useAsync(joinStudyRoom);
-  const [hasError, setHasError] = useState(false);
+  const { data: roomData, error: getInfoError, reset: getInfoReset } = useAsync(() => getStudyRoom(id), [id], false);
+  const { loading: isLoading, error: joinError, sendRequest: joinRoom, reset: joinReset } = useAsync(joinStudyRoom);
 
   useEffect(() => {
     setUserInfo({ ...userInfo, updateAllowed: false }); // TODO 방장 아이디와 일치할 경우 수정 권한 주기
@@ -26,15 +25,10 @@ function JoinRoom() {
     if (roomData) {
       setRoomInfo(roomData);
     }
-  }, [roomData]);
-
-  useEffect(() => {
-    setHasError(getInfoError?.reponse || joinError?.response);
-  }, [getInfoError, joinError]);
+  }, [roomData, setRoomInfo]);
 
   const goToStudyRoom = async () => {
     const joinResponse = await joinRoom(id);
-    console.log(joinResponse);
     history.push({
       pathname: `/studyroom/${id}`,
       state: {
@@ -44,13 +38,24 @@ function JoinRoom() {
   };
 
   const confirmError = () => {
-    setHasError(null);
+    if (getInfoError) {
+      getInfoReset();
+      return;
+    }
+    if (joinError) joinReset();
   };
 
   return (
     <>
       {isLoading && <Loading />}
-      {hasError && <ErrorModal message={`${hasError.status} ${hasError.message}`} onConfirm={confirmError} />}
+      {(getInfoError || joinError) && (
+        <ErrorModal
+          message={`${getInfoError?.response.status || joinError?.response.status} ${
+            getInfoError?.response.data.message || joinError?.response.data.message
+          }`}
+          onConfirm={confirmError}
+        />
+      )}
       <SettingRoom goToStudyRoom={goToStudyRoom} />
     </>
   );

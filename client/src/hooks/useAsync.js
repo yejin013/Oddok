@@ -44,12 +44,16 @@ function useAsync(callback, deps = [], skip = true) {
     [callback],
   );
 
+  const reset = () => {
+    dispatch({});
+  };
+
   useEffect(() => {
     if (skip) return;
     sendRequest();
   }, deps);
 
-  return { ...state, sendRequest };
+  return { ...state, sendRequest, reset };
 }
 
 export default useAsync;

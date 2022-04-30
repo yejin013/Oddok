@@ -33,6 +33,7 @@
 
 .icon {
   margin-left: auto;
+  cursor: pointer;
 }
 
 .content {
