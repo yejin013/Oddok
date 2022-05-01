@@ -1,9 +1,12 @@
 package com.oddok.server.domain.user.application;
 
 import com.oddok.server.common.errors.UserNotFoundException;
+import com.oddok.server.domain.user.api.request.ChangeNicknameRequest;
+import com.oddok.server.domain.user.api.response.ChangeNicknameResponse;
 import com.oddok.server.domain.user.dao.UserRepository;
 import com.oddok.server.domain.user.dto.UserDto;
 import com.oddok.server.domain.user.entity.User;
+import com.oddok.server.domain.user.mapper.UserDtoMapper;
 import com.oddok.server.domain.user.mapper.UserMapper;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
@@ -32,9 +35,19 @@ public class UserService {
 
     }
 
+    @Transactional
+    public UserDto changeNickname(UserDto userDto, Long userId) {
+        User user = findUser(userId);
+        user.changeNickname(userDto.getNickname());
+        return userMapper.toDto(user);
+    }
+
     public UserDto loadUser(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
         return userMapper.toDto(user);
     }
 
+    private User findUser(Long userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+    }
 }

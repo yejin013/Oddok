@@ -5,15 +5,16 @@ import lombok.Getter;
 
 @Getter
 public class UserDto {
-    private Long id;
+    private final Long id;
 
-    private String email;
+    private final String email;
 
-//    private String nickname;
+    private final String nickname;
 
     @Builder
-    public UserDto (Long id, String email) {
+    public UserDto (Long id, String email, String nickname) {
         this.id = id;
         this.email = email;
+        this.nickname = nickname;
     }
 }
