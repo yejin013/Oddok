@@ -45,8 +45,8 @@ public class StudyRoomService {
         }
         StudyRoom studyRoom = studyRoomMapper.toEntity(studyRoomDto, user);
         studyRoom = studyRoomRepository.save(studyRoom);
-        if (studyRoom.getName() == null) {
-            studyRoom.setDefaultName();
+        if (studyRoomDto.getName() == null) {
+            studyRoom.update(studyRoomDto);
         }
         mapStudyRoomAndHashtags(studyRoom, studyRoomDto.getHashtags());
         return studyRoomMapper.toDto(studyRoom);
@@ -114,12 +114,13 @@ public class StudyRoomService {
         User user = findUser(userId);
         StudyRoom studyRoom = findStudyRoom(studyRoomId);
         Participant participant = participantRepository.findByUser(user)
-            .orElseThrow(() -> new UserNotParticipatingException(userId, studyRoomId));
+                .orElseThrow(() -> new UserNotParticipatingException(userId, studyRoomId));
         if (!participant.getStudyRoom().equals(studyRoom)) {
             throw new UserNotParticipatingException(userId, studyRoomId);
         }
         participantRepository.delete(participant);
-        if (studyRoom.decreaseCurrentUsers() == 0) { // 모두 나갔으면 세션삭제
+        studyRoom.decreaseCurrentUsers();
+        if (studyRoom.getCurrentUsers() == 0) { // 모두 나갔으면 세션삭제
             sessionManager.deleteSession(studyRoom.getSessionId());
             studyRoom.deleteSession();
         }
@@ -146,9 +147,9 @@ public class StudyRoomService {
     private void createParticipant(StudyRoom studyRoom, User user) {
         // 참가자 정보 저장
         Participant participant = Participant.builder()
-            .studyRoom(studyRoom)
-            .user(user)
-            .build();
+                .studyRoom(studyRoom)
+                .user(user)
+                .build();
         // 현재 사용자 수 증가
         studyRoom.increaseCurrentUsers();
         participantRepository.save(participant);
@@ -160,14 +161,14 @@ public class StudyRoomService {
     private void mapStudyRoomAndHashtags(StudyRoom studyRoom, Set<String> newHashtags) {
         for (String name : newHashtags) {
             Hashtag hashtag = hashtagRepository.findByName(name)
-                .orElseGet(() -> hashtagRepository.save(new Hashtag(name)));
+                    .orElseGet(() -> hashtagRepository.save(new Hashtag(name)));
             studyRoom.addHashtag(hashtag);
         }
     }
 
     private StudyRoom findStudyRoom(Long id) {
         return studyRoomRepository.findById(id)
-            .orElseThrow(() -> new StudyRoomNotFoundException(id));
+                .orElseThrow(() -> new StudyRoomNotFoundException(id));
     }
 
     private User findUser(Long userId) {

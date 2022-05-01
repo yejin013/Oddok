@@ -3,6 +3,8 @@ package com.oddok.server.domain.studyroom.api.request;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,14 +15,12 @@ public class UpdateStudyRoomRequest {
 
     private String name;
 
+    @NotBlank
     private String category;
-
-    private Long userId;
-
-    private String sessionId;
 
     private String image;
 
+    @NotNull
     private Boolean isPublic;
 
     private String password;
