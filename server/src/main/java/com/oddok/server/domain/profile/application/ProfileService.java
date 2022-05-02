@@ -41,12 +41,14 @@ public class ProfileService {
     @Transactional
     public ProfileDto update(ProfileDto profileDto) {
         User user = findUser(profileDto.getUserId());
-        Profile profile = profileRepository.findByUser(user).orElseThrow(() -> new ProfileNotFoundException(user.getId()));
+        Profile profile = profileRepository.findByUser(user)
+                .orElseThrow(() -> new ProfileNotFoundException(user.getId()));
         profile.update(profileDto.getGoal(), profileDto.getTargetTime(), profileDto.getDday());
         return profileMapper.toDto(profile);
     }
 
     private User findUser(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
     }
 }
