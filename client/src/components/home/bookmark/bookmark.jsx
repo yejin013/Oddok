@@ -79,9 +79,7 @@ function Bookmark({ showBookmark }) {
                 <h3 className={styles.name}>{bookmark.name}</h3>
                 <p className={styles.detail_box}>
                   <span className={styles.title}>해시태그</span>
-                  {bookmark.hashtags.map((hashtag) => (
-                    <span className={styles.content}>#{hashtag} </span>
-                  ))}
+                  {bookmark.hashtags.map((hashtag) => <span className={styles.content}>#{hashtag} </span>) || "없음"}
                 </p>
                 <p className={styles.detail_box}>
                   <span className={styles.title}>인원</span>

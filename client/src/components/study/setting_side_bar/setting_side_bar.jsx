@@ -7,8 +7,7 @@ import { ReactComponent as Hashtag } from "../../../assets/icons/hashtag.svg";
 import { ReactComponent as Play } from "../../../assets/icons/play-fill.svg";
 import { ReactComponent as Pause } from "../../../assets/icons/pause-fill.svg";
 import { updateStudyRoom } from "../../../api/study-room-api";
-
-import styles from "./side_bar.module.css";
+import styles from "./setting_side_bar.module.css";
 
 function SettingSideBar({ session, roomInfo, clickDetailBtn }) {
   const { updateAllowed } = useRecoilValue(userState);

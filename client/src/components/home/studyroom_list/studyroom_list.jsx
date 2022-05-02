@@ -5,7 +5,7 @@ import CardGrid from "../card_grid/card_grid";
 import Dropdown from "../../commons/dropdown/dropdown";
 import styles from "./studyroom_list.module.css";
 
-function StudyRoomList({ searchedTitle, searchedHashtag, clickAddBtn, clickDeleteBtn }) {
+function StudyRoomList({ searchedTitle, searchedHashtag, showBookmark }) {
   const [currentPage, setCurrentPage] = useState(0);
   const [currentCategory, setCurrentCategory] = useState(undefined);
   const [filterOpt, setFilterOpt] = useState(undefined);
@@ -81,8 +81,7 @@ function StudyRoomList({ searchedTitle, searchedHashtag, clickAddBtn, clickDelet
         {loadedRooms ? (
           <CardGrid //
             rooms={loadedRooms}
-            clickAddBtn={clickAddBtn}
-            clickDeleteBtn={clickDeleteBtn}
+            showBookmark={showBookmark}
           />
         ) : (
           <p style={{ color: "white" }}>스터디룸이 없어요!🥲</p>

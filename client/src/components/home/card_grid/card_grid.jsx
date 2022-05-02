@@ -4,7 +4,7 @@ import StudyRoomCard from "../studyroom_card/studyroom_card";
 
 import styles from "./card_grid.module.css";
 
-function CardGrid({ rooms, clickAddBtn, clickDeleteBtn }) {
+function CardGrid({ rooms, showBookmark }) {
   // 디자인 테스트용
   // const studyroomList = [];
   // eslint-disable-next-line no-plusplus
@@ -23,8 +23,7 @@ function CardGrid({ rooms, clickAddBtn, clickDeleteBtn }) {
         <Link to="/studyroom" className={styles.studyroom}>
           <StudyRoomCard //
             roomData={roomData}
-            clickAddBtn={clickAddBtn}
-            clickDeleteBtn={clickDeleteBtn}
+            showBookmark={showBookmark}
           />
         </Link>
       ))}

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { OpenVidu } from "openvidu-browser";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { roomInfoState } from "../../recoil/studyroom_state";
 import StudyBar from "../../components/study/study_bar/study_bar";
 import UserVideo from "../../components/study/user_video/user_video";
-import SideBar from "../../components/study/side_bar/side_bar";
+import SettingSideBar from "../../components/study/setting_side_bar/setting_side_bar";
 import ChatBar from "../../components/study/chat_bar/chat_bar";
 import styles from "./study_room.module.css";
 import PlanSidebar from "../../components/study/plan_sidebar/plan_sidebar";
@@ -106,7 +106,6 @@ function StudyRoom() {
   }, [session]);
 
   const clickDetailBtn = () => {
-    console.log("nn");
     setIsDetailOpen((prev) => !prev);
   };
 
@@ -148,7 +147,7 @@ function StudyRoom() {
     <div className={styles.room}>
       <div className={styles.setting}>{isDetailOpen && <SettingSection clickSettingBtn={clickDetailBtn} />}</div>
       <div className={styles.video_container}>
-        {isSettingOpen && <SideBar roomInfo={roomInfo} session={session} clickDetailBtn={clickDetailBtn} />}
+        {isSettingOpen && <SettingSideBar roomInfo={roomInfo} session={session} clickDetailBtn={clickDetailBtn} />}
         <ul className={`${styles.videos} ${displayType}`}>
           {publisher && <UserVideo count={count} publisher={publisher} />}
           {subscribers && subscribers.map((subscriber) => <UserVideo count={count} subscriber={subscriber} />)}
