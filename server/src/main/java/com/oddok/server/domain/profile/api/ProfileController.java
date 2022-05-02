@@ -1,7 +1,9 @@
 package com.oddok.server.domain.profile.api;
 
 import com.oddok.server.domain.profile.api.request.CreateProfileRequest;
-import com.oddok.server.domain.profile.api.response.ProfileResponse;
+import com.oddok.server.domain.profile.api.request.UpdateProfileRequest;
+import com.oddok.server.domain.profile.api.response.CreateProfileResponse;
+import com.oddok.server.domain.profile.api.response.UpdateProfileResponse;
 import com.oddok.server.domain.profile.application.ProfileService;
 import com.oddok.server.domain.profile.dto.ProfileDto;
 import com.oddok.server.domain.profile.mapper.ProfileDtoMapper;
@@ -22,9 +24,16 @@ public class ProfileController {
     private final ProfileDtoMapper dtoMapper = Mappers.getMapper(ProfileDtoMapper.class);;
 
     @PostMapping
-    public ResponseEntity<ProfileResponse> create(@RequestHeader String userId, @RequestBody @Valid CreateProfileRequest createProfileRequest) {
+    public ResponseEntity<CreateProfileResponse> create(@RequestHeader String userId, @RequestBody @Valid CreateProfileRequest createProfileRequest) {
         ProfileDto profileDto = dtoMapper.fromCreateRequest(createProfileRequest, Long.parseLong(userId));
         ProfileDto response = profileService.create(profileDto);
-        return ResponseEntity.ok(dtoMapper.toResponse(response));
+        return ResponseEntity.ok(dtoMapper.toCreateResponse(response));
+    }
+
+    @PutMapping
+    public ResponseEntity<UpdateProfileResponse> update(@RequestHeader String userId, @RequestBody @Valid UpdateProfileRequest updateProfileRequest) {
+        ProfileDto profileDto = dtoMapper.fromUpdateRequest(updateProfileRequest, Long.parseLong(userId));
+        ProfileDto response = profileService.update(profileDto);
+        return ResponseEntity.ok(dtoMapper.toUpdateResponse(response));
     }
 }

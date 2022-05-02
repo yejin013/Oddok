@@ -1,5 +1,7 @@
 package com.oddok.server.domain.profile.application;
 
+import com.oddok.server.common.errors.ProfileAlreadyExistsException;
+import com.oddok.server.common.errors.ProfileNotFoundException;
 import com.oddok.server.common.errors.UserNotFoundException;
 import com.oddok.server.domain.profile.dao.ProfileRepository;
 import com.oddok.server.domain.profile.dto.ProfileDto;
@@ -28,14 +30,20 @@ public class ProfileService {
     public ProfileDto create(ProfileDto profileDto) {
         User user = findUser(profileDto.getUserId());
 
-        Optional<Profile> profile = profileRepository.findByUser(user);
-        if (profile.isPresent()) {
-            profile.get().update(profileDto.getGoal(), profileDto.getTargetTime(), profileDto.getDday());
-            return profileMapper.toDto(profile.get());
-        } else {
-            Profile res = profileMapper.toEntity(profileDto, user);
-            return profileMapper.toDto(profileRepository.save(res));
+        if (profileRepository.findByUser(user).isPresent()){
+            throw new ProfileAlreadyExistsException(user.getId());
         }
+
+        Profile profile = profileMapper.toEntity(profileDto, user);
+        return profileMapper.toDto(profileRepository.save(profile));
+    }
+
+    @Transactional
+    public ProfileDto update(ProfileDto profileDto) {
+        User user = findUser(profileDto.getUserId());
+        Profile profile = profileRepository.findByUser(user).orElseThrow(() -> new ProfileNotFoundException(user.getId()));
+        profile.update(profileDto.getGoal(), profileDto.getTargetTime(), profileDto.getDday());
+        return profileMapper.toDto(profile);
     }
 
     private User findUser(Long userId) {

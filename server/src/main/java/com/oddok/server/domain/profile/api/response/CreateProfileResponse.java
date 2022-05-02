@@ -6,7 +6,7 @@ import lombok.Getter;
 import java.time.LocalDate;
 
 @Getter
-public class ProfileResponse {
+public class CreateProfileResponse {
     private final String goal;
 
     private final Integer targetTime;
@@ -14,7 +14,7 @@ public class ProfileResponse {
     private final LocalDate dday;
 
     @Builder
-    public ProfileResponse(String goal, Integer targetTime, LocalDate dday) {
+    public CreateProfileResponse(String goal, Integer targetTime, LocalDate dday) {
         this.goal = goal;
         this.targetTime = targetTime;
         this.dday = dday;
