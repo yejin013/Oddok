@@ -9,7 +9,7 @@ public class UserDto {
 
     private String email;
 
-//    private String nickname;
+    private String nickname;
 
     @Builder
     public UserDto (Long id, String email) {
