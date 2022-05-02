@@ -17,9 +17,9 @@ function CreateRoom() {
     setUserInfo({ ...userInfo, updateAllowed: true });
 
     /* get testUser */
-    getTestUser()
-      .then((users) => console.log(users))
-      .catch((error) => console.log(`get user error!: ${error}`));
+    // getTestUser()
+    //   .then((users) => console.log(users))
+    //   .catch((error) => console.log(`get user error!: ${error}`));
   }, []);
 
   /**
@@ -28,7 +28,7 @@ function CreateRoom() {
    */
   const goToStudyRoom = async () => {
     const data = await createStudyRoom(roomInfo);
-    localStorage.setItem("roomID", data.id); // TODO 추후 삭제 (방 참여시 사용하기 위함)
+    // localStorage.setItem("roomID", data.id); // TODO 추후 삭제 (방 참여시 사용하기 위함)
     setRoomInfo({ ...roomInfo, id: data.id });
     const token = await joinStudyRoom(data.id);
     history.push({

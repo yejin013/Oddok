@@ -1,0 +1,17 @@
+.bookmark_user {
+  width: 2em;
+  height: 2em;
+  margin-right: 0.5em;
+}
+
+.user {
+  display: flex;
+  width: 1em;
+  height: 1em;
+}
+
+.count {
+  display: flex;
+  color: #efc457;
+  gap: 8px;
+}

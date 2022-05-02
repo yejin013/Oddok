@@ -3,17 +3,18 @@ package com.oddok.server.domain.studyroom.application;
 import com.oddok.server.common.errors.OpenviduServerException;
 import com.oddok.server.common.errors.SessionNotFoundException;
 import io.openvidu.java.client.*;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
-@Service
-public class SessionService {
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+@Component
+public class SessionManager {
 
     private final String OPENVIDU_URL;
     private final String SECRET;
     private final OpenVidu openVidu;
 
-    public SessionService(@Value("${openvidu.url}") String OPENVIDU_URL, @Value("${openvidu.secret}") String SECRET) {
+    public SessionManager(@Value("${openvidu.url}") String OPENVIDU_URL, @Value("${openvidu.secret}") String SECRET) {
         this.OPENVIDU_URL = OPENVIDU_URL;
         this.SECRET = SECRET;
         this.openVidu = new OpenVidu(OPENVIDU_URL, SECRET);
@@ -23,11 +24,16 @@ public class SessionService {
     /**
      * OpenVidu에 새로운 Session 생성 후 SessionId 반환
      */
-    public String createSession() throws OpenViduJavaClientException, OpenViduHttpException {
+    public String createSession() {
         SessionProperties properties = new SessionProperties.Builder().build();
-        Session session = openVidu.createSession(properties);
-        System.out.println("💘 세션 생성 : " + session);
-        return session.getSessionId();
+        try {
+            Session session = openVidu.createSession(properties);
+            System.out.println("💘 세션 생성 : " + session);
+            return session.getSessionId();
+        } catch (OpenViduJavaClientException | OpenViduHttpException e) {
+            e.printStackTrace();
+            throw new OpenviduServerException(e.getMessage(), e.getCause());
+        }
     }
 
     /**
@@ -42,9 +48,8 @@ public class SessionService {
                 .type(ConnectionType.WEBRTC)
                 .role(OpenViduRole.PUBLISHER)
                 .build();
-        String token = "";
         try {
-            token = session.createConnection(connectionProperties).getToken();
+            return session.createConnection(connectionProperties).getToken();
         } catch (OpenViduJavaClientException e1) {
             throw new OpenviduServerException(e1.getMessage(), e1.getCause());
         } catch (OpenViduHttpException e2) {
@@ -54,7 +59,6 @@ public class SessionService {
                 throw new OpenviduServerException(e2.getMessage(), e2.getCause());
             }
         }
-        return token;
     }
 
 
@@ -65,9 +69,25 @@ public class SessionService {
      * @return Session
      */
     public Session getSession(String sessionId) {
-        return openVidu.getActiveSessions().stream().filter(session -> session.getSessionId().equals(sessionId))
-                .findFirst()
-                .orElseThrow(() -> new SessionNotFoundException(sessionId));
+        for (Session session : openVidu.getActiveSessions()) {
+            if (session.getSessionId().equals(sessionId))
+                return session;
+        }
+        throw new SessionNotFoundException(sessionId);
+    }
+
+    /**
+     * SessionId 로 Session 을 삭제합니다.
+     *
+     * @param sessionId String
+     */
+    public void deleteSession(String sessionId) {
+        Session session = getSession(sessionId);
+        try {
+            session.close();
+        } catch (OpenViduJavaClientException | OpenViduHttpException e) {
+            e.printStackTrace();
+        }
     }
 
 }

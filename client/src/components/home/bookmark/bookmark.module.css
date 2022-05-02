@@ -1,3 +1,114 @@
 .bookmark {
-  background-color: darksalmon;
+  color: white;
+}
+
+.count,
+.detail_box,
+.rule {
+  margin: 0;
+}
+
+.count_info {
+  display: flex;
+  padding: 2em 12em;
+  background-color: #101112;
+}
+
+.count_box {
+  flex: 1 1 70%;
+  padding-left: 1em;
+}
+
+.count {
+  margin-top: 0.5em;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.button_box {
+  flex: 1 1 30%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+
+.button {
+  padding: 0.7em 6em;
+  font-weight: 700;
+  border-radius: 4px;
+  background-color: #cfa028;
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  padding: 1em 12em;
+  background-color: black;
+}
+
+.detail {
+  flex: 1 1 75%;
+  display: flex;
+  margin: 1em;
+}
+
+.user_list {
+  flex: 1 1 25%;
+  display: flex;
+  flex-direction: column;
+}
+
+.thumbnail {
+  margin-right: 1em;
+  background-color: #212529;
+}
+
+.room_info {
+  width: 60%;
+}
+
+.name {
+  margin: 0;
+  margin-bottom: 0.5em;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.detail_box {
+  margin-bottom: 0.3em;
+}
+
+.title {
+  margin-right: 0.5em;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #dee2e6;
+}
+
+.content {
+  font-size: 0.9rem;
+  color: #adb5bd;
+}
+
+.rule {
+  display: flex;
+}
+
+.rule_title {
+  flex: 1 1 15%;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #dee2e6;
+}
+
+.rule_content {
+  flex: 1 1 85%;
+  display: -webkit-box;
+  height: 85px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  font-size: 0.9rem;
+  color: #adb5bd;
 }
