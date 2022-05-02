@@ -15,7 +15,7 @@ function MainHome(props) {
   useEffect(() => {
     // get testUser
     getTestUser()
-      .then((users) => console.log(users))
+      .then((users) => console.log("get user", users))
       .catch((error) => console.log("get user error", error));
   }, []);
 

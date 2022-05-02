@@ -112,36 +112,3 @@
   font-size: 0.9rem;
   color: #adb5bd;
 }
-
-.list {
-  display: flex;
-  align-items: center;
-  margin: 0.3em 0;
-  padding: 0.5em;
-  border-radius: 4px;
-  background-color: #101112;
-}
-
-.user,
-.current_user {
-  flex: 1 1 60%;
-  font-size: 0.9rem;
-}
-
-.user {
-  color: #495057;
-}
-
-.current_user {
-  color: #efc457;
-}
-
-.time {
-  font-size: 0.7rem;
-  color: #495057;
-}
-
-.current_time {
-  font-size: 0.7rem;
-  color: #adb5bd;
-}
