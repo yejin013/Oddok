@@ -43,7 +43,7 @@
 
 .container ul li {
   list-style: none;
-  padding: 13px 15px;
+  padding: 0.8125em 1em;
 }
 
 .container ul li:hover {
