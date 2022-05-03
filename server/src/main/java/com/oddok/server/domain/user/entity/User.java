@@ -38,4 +38,9 @@ public class User {
         this.createAt = LocalDateTime.now();
         this.updateAt = LocalDateTime.now();
     }
+
+    public User changeNickname(String nickname) {
+        this.nickname = nickname;
+        return this;
+    }
 }
