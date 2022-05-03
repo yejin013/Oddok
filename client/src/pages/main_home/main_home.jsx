@@ -25,6 +25,7 @@ function MainHome(props) {
       .catch((error) => console.log("get bookmark error", error));
   };
 
+  /*
   const selectBookmark = async (roomId) => {
     await addBookmark(roomId)
       .then(() => console.log("add bookmark"))
@@ -42,15 +43,18 @@ function MainHome(props) {
     await selectBookmark(roomId);
     await showBookmark();
   };
+  */
 
   return (
     <div className={styles.home}>
       <Header />
       <Bookmark showBookmark={showBookmark} />
-      <StudyRoomList clickAddBtn={clickAddBtn} clickDeleteBtn={cancelBookmark} />
+      <StudyRoomList showBookmark={showBookmark} />
       <Footer />
     </div>
   );
 }
 
 export default MainHome;
+
+// clickAddBtn={clickAddBtn} clickDeleteBtn={cancelBookmark}

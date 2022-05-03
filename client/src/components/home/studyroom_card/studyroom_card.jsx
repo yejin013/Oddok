@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import Thumbnail from "./thumbnail";
 import UserCount from "../../commons/user_count/user_count";
 import { ReactComponent as Lock } from "../../../assets/icons/lock.svg";
@@ -10,9 +10,29 @@ import { ReactComponent as BookMark } from "../../../assets/icons/bookmark.svg";
 import { ReactComponent as BookMarkHeart } from "../../../assets/icons/bookmark-heart-fill.svg";
 import styles from "./studyroom_card.module.css";
 import { bookmarkState } from "../../../recoil/bookmark-state";
+import { addBookmark, deleteBookmark } from "../../../api/study-room-api";
 
-function StudyRoomCard({ roomData, clickAddBtn, clickDeleteBtn }) {
-  const bookmark = useRecoilValue(bookmarkState);
+function StudyRoomCard({ roomData, showBookmark }) {
+  const [bookmark, setBookmark] = useRecoilState(bookmarkState);
+
+  const selectBookmark = async (roomId) => {
+    await addBookmark(roomId)
+      .then(() => console.log("add bookmark"))
+      .catch((error) => console.log("add bookmark error", error));
+  };
+
+  const cancelBookmark = async (event) => {
+    event.preventDefault();
+    await deleteBookmark()
+      .then(setBookmark(null))
+      .catch((error) => console.log("delete bookmark error", error));
+  };
+
+  // 북마크 버튼 누르면 새로고침 없이 바로 북마크 정보 보여줌
+  const clickAddBtn = async () => {
+    await selectBookmark(roomData.id);
+    await showBookmark();
+  };
 
   return (
     <li key={roomData.id} className={styles.container}>
@@ -24,19 +44,13 @@ function StudyRoomCard({ roomData, clickAddBtn, clickDeleteBtn }) {
               className={styles.bookmark_icon}
               onClick={(event) => {
                 event.preventDefault();
-                clickAddBtn(roomData.id);
+                clickAddBtn();
               }}
             >
               <BookMark />
             </div>
           ) : (
-            <div
-              className={styles.bookmark_icon}
-              onClick={(event) => {
-                event.preventDefault();
-                clickDeleteBtn();
-              }}
-            >
+            <div className={styles.bookmark_icon} onClick={cancelBookmark}>
               <BookMarkHeart />
             </div>
           )}
