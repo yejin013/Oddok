@@ -38,6 +38,12 @@ public class ProfileService {
         return profileMapper.toDto(profileRepository.save(profile));
     }
 
+    public Optional<ProfileDto> get(Long userId) {
+        User user = findUser(userId);
+        Optional<Profile> profile = profileRepository.findByUser(user);
+        return profile.map(profileMapper::toDto);
+    }
+
     @Transactional
     public ProfileDto update(ProfileDto profileDto) {
         User user = findUser(profileDto.getUserId());
