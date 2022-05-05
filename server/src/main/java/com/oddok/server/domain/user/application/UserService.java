@@ -23,7 +23,7 @@ public class UserService {
 
     private final AuthTokenProvider authTokenProvider;
 
-    private UserMapper userMapper = Mappers.getMapper(UserMapper.class);
+    private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
     //TODO: 현재는 임의의 사용자 3명 저장
     @Transactional
