@@ -5,6 +5,7 @@ import com.oddok.server.common.jwt.AuthTokenProvider;
 import com.oddok.server.domain.user.client.ClientKakao;
 import com.oddok.server.domain.user.dao.UserRepository;
 import com.oddok.server.domain.user.dto.TokenDto;
+import com.oddok.server.domain.user.dto.TokensDto;
 import com.oddok.server.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,20 +24,24 @@ public class AuthService {
     private final AuthTokenProvider authTokenProvider;
 
     @Transactional
-    public TokenDto login(TokenDto request) {
+    public TokensDto login(TokenDto request) {
         User kakaoUser = clientKakao.getUserData(request.getToken());
 
         String userEmail = kakaoUser.getEmail();
         Optional<User> user = userRepository.findByEmail(userEmail);
 
-        AuthToken appToken = authTokenProvider.createUserAppToken(userEmail);
+        AuthToken accessToken = authTokenProvider.createUserAccessToken(userEmail);
 
         if (user.isEmpty()) {
+            kakaoUser.updateRefreshToken(authTokenProvider.createUserRefreshToken(userEmail).getToken());
             userRepository.save(kakaoUser);
+        } else {
+            user.get().updateRefreshToken(authTokenProvider.createUserRefreshToken(userEmail).getToken());
         }
 
-        return TokenDto.builder()
-                .token(appToken.getToken())
+        return TokensDto.builder()
+                .accessToken(accessToken.getToken())
+                .refreshToken(kakaoUser.getRefreshToken())
                 .build();
     }
 

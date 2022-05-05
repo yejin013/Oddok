@@ -1,7 +1,7 @@
 package com.oddok.server.domain.user.api;
 
 import com.oddok.server.domain.user.api.request.ChangeNicknameRequest;
-import com.oddok.server.domain.user.api.response.AuthResponse;
+import com.oddok.server.domain.user.api.request.RefreshTokenRequest;
 import com.oddok.server.domain.user.api.response.ChangeNicknameResponse;
 import com.oddok.server.domain.user.api.response.UpdateTokenResponse;
 import com.oddok.server.domain.user.application.UserService;
@@ -23,9 +23,10 @@ public class UserController {
 
     private final UserDtoMapper userDtoMapper = Mappers.getMapper(UserDtoMapper.class);
 
-    @GetMapping("/refresh")
-    public ResponseEntity<UpdateTokenResponse> refreshAccessToken(@RequestHeader String userId) {
-        TokenDto tokenDto = userService.refresh(Long.parseLong(userId));
+    @PostMapping("/refresh")
+    public ResponseEntity<UpdateTokenResponse> refreshAccessToken(@RequestHeader String userId,
+                                                                  @RequestBody @Valid RefreshTokenRequest refreshTokenRequest) {
+        TokenDto tokenDto = userService.refresh(Long.parseLong(userId), refreshTokenRequest.getRefreshToken());
         return ResponseEntity.ok(userDtoMapper.toTokenResponse(tokenDto));
     }
 

@@ -3,7 +3,7 @@ package com.oddok.server.domain.user.api;
 import com.oddok.server.domain.user.api.request.AuthRequest;
 import com.oddok.server.domain.user.api.response.AuthResponse;
 import com.oddok.server.domain.user.application.AuthService;
-import com.oddok.server.domain.user.dto.TokenDto;
+import com.oddok.server.domain.user.dto.TokensDto;
 import com.oddok.server.domain.user.mapper.AuthMapper;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
@@ -20,7 +20,7 @@ public class AuthController {
 
     @PostMapping
     public ResponseEntity<AuthResponse> kakaoAuthRequest(@RequestBody AuthRequest authRequest) {
-        TokenDto tokenDto = authService.login(authMapper.fromAuthRequest(authRequest));
-        return ResponseEntity.ok(authMapper.toAuthResponse(tokenDto));
+        TokensDto tokensDto = authService.login(authMapper.fromAuthRequest(authRequest));
+        return ResponseEntity.ok(authMapper.toAuthResponse(tokensDto));
     }
 }

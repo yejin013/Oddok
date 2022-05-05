@@ -3,6 +3,8 @@ package com.oddok.server.common.jwt;
 import com.oddok.server.common.errors.TokenValidFailedException;
 import com.oddok.server.domain.user.entity.Role;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,7 +42,7 @@ public class AuthTokenProvider {
         return new AuthToken(id, roleType, expiryDate, key);
     }
 
-    public AuthToken createUserAppToken(String id) {
+    public AuthToken createUserAccessToken(String id) {
         return createToken(id, Role.USER, accessTokenExpiry);
     }
 
@@ -59,7 +61,6 @@ public class AuthTokenProvider {
     public Authentication getAuthentication(AuthToken authToken) {
 
         if(authToken.validate()) {
-
             Claims claims = authToken.getTokenClaims();
             Collection<? extends GrantedAuthority> authorities =
                     Arrays.stream(new String[]{claims.get(AUTHORITIES_KEY).toString()})
@@ -74,4 +75,19 @@ public class AuthTokenProvider {
         }
     }
 
+    public boolean isValidToken(String token) {
+        try {
+            AuthToken authToken = convertAuthToken(token);
+            return authToken.validate();
+        } catch (ExpiredJwtException exception) {
+            log.info("Token Expired UserID : " + exception.getClaims().getSubject());
+            return false;
+        } catch (JwtException exception) {
+            log.info("Token Tampered");
+            return false;
+        } catch (NullPointerException exception) {
+            log.info("Token is null");
+            return false;
+        }
+    }
 }
