@@ -24,7 +24,9 @@ import java.util.stream.Collectors;
 public class AuthTokenProvider {
 
     @Value("${jwt.access-token.expire-length}")
-    private String expiry;
+    private String accessTokenExpiry;
+    @Value("${jwt.refresh-token.expire-length}")
+    private String refreshTokenExpiry;
 
     private final Key key;
     private static final String AUTHORITIES_KEY = "role";
@@ -39,7 +41,11 @@ public class AuthTokenProvider {
     }
 
     public AuthToken createUserAppToken(String id) {
-        return createToken(id, Role.USER, expiry);
+        return createToken(id, Role.USER, accessTokenExpiry);
+    }
+
+    public AuthToken createUserRefreshToken(String id) {
+        return createToken(id, Role.USER, refreshTokenExpiry);
     }
 
     public AuthToken convertAuthToken(String token) {

@@ -1,13 +1,13 @@
 package com.oddok.server.domain.user.application;
 
 import com.oddok.server.common.errors.UserNotFoundException;
-import com.oddok.server.domain.user.api.request.ChangeNicknameRequest;
-import com.oddok.server.domain.user.api.response.ChangeNicknameResponse;
+import com.oddok.server.common.jwt.AuthToken;
+import com.oddok.server.common.jwt.AuthTokenProvider;
 import com.oddok.server.domain.user.dao.UserRepository;
+import com.oddok.server.domain.user.dto.TokenDto;
 import com.oddok.server.domain.user.dto.UserDto;
 import com.oddok.server.domain.user.entity.Role;
 import com.oddok.server.domain.user.entity.User;
-import com.oddok.server.domain.user.mapper.UserDtoMapper;
 import com.oddok.server.domain.user.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
@@ -19,7 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class UserService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    private final AuthTokenProvider authTokenProvider;
 
     private UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
@@ -35,14 +37,27 @@ public class UserService {
     }
 
     @Transactional
+    public TokenDto refresh(Long userId) {
+        User user = findUser(userId);
+        AuthToken appToken = authTokenProvider.createUserAppToken(user.getEmail());
+        return TokenDto.builder()
+                .token(appToken.getToken())
+                .build();
+    }
+
+    @Transactional
+    public void updateRefreshToken(Long userId) {
+        User user = findUser(userId);
+        AuthToken refreshToken = authTokenProvider.createUserRefreshToken(user.getEmail());
+        TokenDto.builder()
+                .token(refreshToken.getToken())
+                .build();
+    }
+
+    @Transactional
     public UserDto changeNickname(Long userId, String nickname) {
         User user = findUser(userId);
         user.changeNickname(nickname);
-        return userMapper.toDto(user);
-    }
-
-    public UserDto loadUser(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
         return userMapper.toDto(user);
     }
 
