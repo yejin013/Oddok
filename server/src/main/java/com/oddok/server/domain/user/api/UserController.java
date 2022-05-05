@@ -7,6 +7,7 @@ import com.oddok.server.domain.user.dto.UserDto;
 import com.oddok.server.domain.user.mapper.UserDtoMapper;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,9 +22,9 @@ public class UserController {
     private final UserDtoMapper userDtoMapper = Mappers.getMapper(UserDtoMapper.class);
 
     @PutMapping("/nickname")
-    public ChangeNicknameResponse changeNickname(@RequestHeader String userId,
-                                                 @RequestBody @Valid ChangeNicknameRequest changeNicknameRequest) {
-        return userDtoMapper.toChangeNicknameResponse(
-                userService.changeNickname(Long.parseLong(userId), changeNicknameRequest.getNickname()));
+    public ResponseEntity<ChangeNicknameResponse> changeNickname(@RequestHeader String userId,
+                                         @RequestBody @Valid ChangeNicknameRequest changeNicknameRequest) {
+        return ResponseEntity.ok(userDtoMapper.toChangeNicknameResponse(
+                userService.changeNickname(Long.parseLong(userId), changeNicknameRequest.getNickname())));
     }
 }
