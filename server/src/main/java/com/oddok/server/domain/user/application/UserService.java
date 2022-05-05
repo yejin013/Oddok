@@ -50,15 +50,6 @@ public class UserService {
     }
 
     @Transactional
-    public void updateRefreshToken(Long userId) {
-        User user = findUser(userId);
-        AuthToken refreshToken = authTokenProvider.createUserRefreshToken(user.getEmail());
-        TokenDto.builder()
-                .token(refreshToken.getToken())
-                .build();
-    }
-
-    @Transactional
     public UserDto changeNickname(Long userId, String nickname) {
         User user = findUser(userId);
         user.changeNickname(nickname);

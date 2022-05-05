@@ -30,12 +30,6 @@ public class UserController {
         return ResponseEntity.ok(userDtoMapper.toTokenResponse(tokenDto));
     }
 
-    @GetMapping("/update-refresh-token")
-    public ResponseEntity<?> updateRefreshToken(@RequestHeader String userId) {
-        userService.updateRefreshToken(Long.parseLong(userId));
-        return ResponseEntity.ok("refresh token 수정");
-    }
-
     @PutMapping("/nickname")
     public ResponseEntity<ChangeNicknameResponse> changeNickname(@RequestHeader String userId,
                                          @RequestBody @Valid ChangeNicknameRequest changeNicknameRequest) {
