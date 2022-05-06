@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { OpenVidu } from "openvidu-browser";
 import { useRecoilState } from "recoil";
-import { roomInfoState } from "../../recoil/studyroom_state";
+import { roomInfoState, videoState, audioState } from "../../recoil/studyroom_state";
 import StudyBar from "../../components/study/study_bar/study_bar";
 import UserVideo from "../../components/study/user_video/user_video";
 import SettingSideBar from "../../components/study/setting_side_bar/setting_side_bar";
@@ -19,6 +19,8 @@ function StudyRoom() {
   const [publisher, setPublisher] = useState();
   const [subscribers, setSubscribers] = useState([]);
   const [count, setCount] = useState(1);
+  const [isPlaying, setIsPlaying] = useRecoilState(videoState);
+  const [isMuted, setIsMuted] = useRecoilState(audioState);
 
   const [isSettingOpen, setIsSettingOpen] = useState(false); // 사이드바 토글하기 위한 state
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -47,10 +49,12 @@ function StudyRoom() {
 
   const toggleVideo = () => {
     publisher.publishVideo(!publisher.stream.videoActive);
+    setIsPlaying((prev) => !prev);
   };
 
   const toggleAudio = () => {
     publisher.publishAudio(!publisher.stream.audioActive);
+    setIsMuted((prev) => !prev);
   };
 
   // 1. 유저 세션 생성
@@ -70,8 +74,8 @@ function StudyRoom() {
         const localUser = OV.initPublisher(undefined, {
           audioSource: undefined,
           videoSource: videoDevices[0].label ? videoDevices.deviceId : undefined,
-          publishAudio: true,
-          publishVideo: true,
+          publishAudio: isMuted,
+          publishVideo: isPlaying,
           frameRate: 30,
           mirror: false,
         });
@@ -138,7 +142,8 @@ function StudyRoom() {
       setIsSettingOpen(false);
     }
   };
-
+  console.log("비디오!!!!!!!!!", isPlaying);
+  console.log("오디오!!!!!!!!!", isMuted);
   return (
     <div className={styles.room}>
       <div className={styles.setting}>{isDetailOpen && <SettingSection clickSettingBtn={clickDetailBtn} />}</div>
@@ -169,6 +174,8 @@ function StudyRoom() {
           clickSettingBtn={clickSettingBtn}
           toggleVideo={toggleVideo}
           toggleAudio={toggleAudio}
+          isPlaying={isPlaying}
+          isMuted={isMuted}
           clickChatBtn={clickChatBtn}
           leaveRoom={leaveRoom}
           onClickplanBtn={clickPlanBtn}

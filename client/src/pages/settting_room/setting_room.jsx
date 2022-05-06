@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useSetRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue, useRecoilState } from "recoil";
 import { videoState, audioState, roomInfoState, roomTitleState } from "../../recoil/studyroom_state";
 import { planState } from "../../recoil/plan_state";
 import SettingBar from "../../components/study/setting_bar/setting_bar";
@@ -11,8 +11,8 @@ import PlanSidebar from "../../components/study/plan_sidebar/plan_sidebar";
 
 function SettingRoom({ goToStudyRoom }) {
   const videoRef = useRef();
-  const setIsPlaying = useSetRecoilState(videoState);
-  const setIsMuted = useSetRecoilState(audioState);
+  const [isPlaying, setIsPlaying] = useRecoilState(videoState);
+  const [isMuted, setIsMuted] = useRecoilState(audioState);
   const [clickedSettingBtn, setClickedSettingBtn] = useState(false);
   const roomInfo = useRecoilValue(roomInfoState);
   const roomTitle = useRecoilValue(roomTitleState);
@@ -20,28 +20,29 @@ function SettingRoom({ goToStudyRoom }) {
   const plan = useRecoilValue(planState);
   const displayType = clickedSettingBtn ? styles.hide : "";
 
-  useEffect(() => {
-    const getVideoandAudio = async () => {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: true,
-        video: true,
-      });
-      videoRef.current.srcObject = stream;
+  const getVideoandAudio = async () => {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: true,
+      video: true,
+    });
+    videoRef.current.srcObject = stream;
 
-      const audioTrack = videoRef.current.srcObject.getAudioTracks()[0];
-      audioTrack.enabled = !audioTrack.enabled; // enabled 초기값: true
-    };
+    const audioTrack = videoRef.current.srcObject.getAudioTracks()[0];
+    audioTrack.enabled = !audioTrack.enabled; // enabled 초기값: true
+  };
+
+  useEffect(() => {
     getVideoandAudio();
   }, []);
 
-  const stopOrStartVideo = () => {
+  const toggleVideo = () => {
     const myStream = videoRef.current.srcObject;
     const videoTrack = myStream.getVideoTracks()[0];
     videoTrack.enabled = !videoTrack.enabled;
     setIsPlaying((prev) => !prev);
   };
 
-  const stopOrStartAudio = () => {
+  const toggleAudio = () => {
     const myStream = videoRef.current.srcObject;
     const audioTrack = myStream.getAudioTracks()[0];
     audioTrack.enabled = !audioTrack.enabled;
@@ -85,10 +86,12 @@ function SettingRoom({ goToStudyRoom }) {
           <SettingBar
             title={roomInfo.name || roomTitle || "방정보를 입력해주세요"}
             goToStudyRoom={goToStudyRoom}
-            stopOrStartVideo={stopOrStartVideo}
-            stopOrStartAudio={stopOrStartAudio}
+            toggleVideo={toggleVideo}
+            toggleAudio={toggleAudio}
             clickSettingBtn={clickSettingBtn}
             onClickplanBtn={clickPlanBtn}
+            isPlaying={isPlaying}
+            isMuted={isMuted}
           />
         </div>
       </div>

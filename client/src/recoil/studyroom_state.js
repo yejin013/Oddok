@@ -8,7 +8,7 @@ export const videoState = atom({
 
 export const audioState = atom({
   key: "audioState",
-  default: true,
+  default: false,
 });
 
 export const roomInfoState = atom({
