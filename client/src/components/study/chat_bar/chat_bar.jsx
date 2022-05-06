@@ -10,13 +10,14 @@ import styles from "./chat_bar.module.css";
  * 2. infinite scroll
  */
 
-function ChatBar({ session, isChatOpen }) {
+function ChatBar({ session }) {
   // 내 채팅인지 다른 유저의 채팅인지 구분하기 위한 임시 변수
   const [myName, setMyName] = useState(`도비${Math.floor(Math.random() * 100000000)}`);
 
   const inputRef = useRef();
   const chatBoxRef = useRef();
   const [bubbles, setBubbles] = useState([]);
+  const isChatBar = true; // UI위한 변수
 
   const scrollToBottom = () => {
     if (chatBoxRef.current) {
@@ -57,7 +58,7 @@ function ChatBar({ session, isChatOpen }) {
   };
 
   return (
-    <aside className={`${styles.side_box} ${isChatOpen ? "" : styles.hide}`}>
+    <aside className={styles.side_box}>
       <div ref={chatBoxRef} className={styles.chat_box}>
         {bubbles.map((bubble) => (
           <ChatBubble
@@ -69,7 +70,7 @@ function ChatBar({ session, isChatOpen }) {
         ))}
       </div>
       <form className={styles.form} onSubmit={submitChatHandler}>
-        <Input placeholder="메시지를 입력하세요" ref={inputRef} />
+        <Input placeholder="메시지를 입력하세요" ref={inputRef} isChatBar={isChatBar} />
       </form>
     </aside>
   );

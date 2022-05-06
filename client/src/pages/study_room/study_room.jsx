@@ -159,7 +159,7 @@ function StudyRoom() {
         )}
         {isChatOpen && (
           <div className={styles.side_bar}>
-            <ChatBar session={session} isChatOpen={isChatOpen} />
+            <ChatBar session={session} />
           </div>
         )}
       </div>

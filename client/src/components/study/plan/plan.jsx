@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import styles from "./plan.module.css";
 import { ReactComponent as Dots } from "../../../assets/icons/three-dots-vertical.svg";
 import { ReactComponent as Circle } from "../../../assets/icons/circle.svg";
