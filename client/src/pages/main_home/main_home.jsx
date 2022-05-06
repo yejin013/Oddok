@@ -12,12 +12,12 @@ import { getTestUser } from "../../api/getTestUser";
 function MainHome(props) {
   const setBookmark = useSetRecoilState(bookmarkState);
 
-  // useEffect(() => {
-  //   // get testUser
-  //   getTestUser()
-  //     .then((users) => console.log("get user", users))
-  //     .catch((error) => console.log("get user error", error));
-  // }, []);
+  useEffect(() => {
+    // get testUser
+    getTestUser()
+      .then((users) => console.log("get user", users))
+      .catch((error) => console.log("get user error", error));
+  }, []);
 
   const showBookmark = async () => {
     await getBookmark()

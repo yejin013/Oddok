@@ -27,8 +27,8 @@ function StudyRoom() {
 
   const [isPlanOpen, setisPlanOpen] = useState(false);
   const [isSidebar, setisSidebar] = useState(false);
-  const displayType = isSidebar ? styles.decrease : "";
-  const isStudyRoom = true;
+  // const displayType = isSidebar ? styles.decrease : "";
+  const isStudyRoom = true; // studyroom에 입장했을 때만 생기는 UI를 위한 변수
 
   const leaveRoom = () => {
     session.disconnect();
@@ -133,7 +133,6 @@ function StudyRoom() {
 
   const clickPlanBtn = () => {
     setisPlanOpen((prev) => !prev);
-    setisSidebar((prev) => !prev);
 
     if (isChatOpen) {
       setIsChatOpen(false);
@@ -147,17 +146,25 @@ function StudyRoom() {
     <div className={styles.room}>
       <div className={styles.setting}>{isDetailOpen && <SettingSection clickSettingBtn={clickDetailBtn} />}</div>
       <div className={styles.video_container}>
-        {isSettingOpen && <SettingSideBar roomInfo={roomInfo} session={session} clickDetailBtn={clickDetailBtn} />}
-        <ul className={`${styles.videos} ${displayType}`}>
+        {isSettingOpen && (
+          <div className={styles.side_bar}>
+            <SettingSideBar roomInfo={roomInfo} session={session} clickDetailBtn={clickDetailBtn} />
+          </div>
+        )}
+        <ul className={styles.videos}>
           {publisher && <UserVideo count={count} publisher={publisher} />}
           {subscribers && subscribers.map((subscriber) => <UserVideo count={count} subscriber={subscriber} />)}
         </ul>
         {isPlanOpen && (
-          <div className={styles.plan_bar}>
+          <div className={styles.side_bar}>
             <PlanSidebar isStudyRoom={isStudyRoom} />
           </div>
         )}
-        <ChatBar session={session} isChatOpen={isChatOpen} />
+        {isChatOpen && (
+          <div className={styles.side_bar}>
+            <ChatBar session={session} isChatOpen={isChatOpen} />
+          </div>
+        )}
       </div>
       <div className={styles.bar}>
         <StudyBar
