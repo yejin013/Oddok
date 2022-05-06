@@ -29,8 +29,14 @@ function SettingRoom({ goToStudyRoom }) {
       videoRef.current.srcObject = stream;
       const audioTrack = videoRef.current.srcObject.getAudioTracks()[0];
       audioTrack.enabled = !audioTrack.enabled; // enabled 초기값: true
+      window.localStream = stream;
     };
     getVideoandAudio();
+    return () => {
+      window.localStream.getTracks().forEach((track) => {
+        track.stop();
+      });
+    };
   }, []);
 
   const stopOrStartVideo = () => {
