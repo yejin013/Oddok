@@ -13,19 +13,6 @@ import SettingSection from "../../components/study/setting_section/setting_secti
 import ErrorModal from "../../components/commons/ErrorModal/ErrorModal";
 import styles from "./study_room.module.css";
 
-const reducer = (state, action) => {
-  switch (action.type) {
-    case "TOGGLE_SETTING":
-      return { setting: !state.setting, chatting: false, plan: false };
-    case "TOGGLE_CHATTING":
-      return { setting: false, chatting: !state.chatting, plan: false };
-    case "TOGGLE_PLAN":
-      return { setting: false, chatting: false, plan: !state.plan };
-    default:
-      return { setting: false, chatting: false, plan: false };
-  }
-};
-
 function StudyRoom() {
   const history = useHistory();
   const location = useLocation();
@@ -37,7 +24,7 @@ function StudyRoom() {
   const [count, setCount] = useState(1);
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
   const resetRoomInfo = useResetRecoilState(roomInfoState);
-  const [sideBarState, dispatch] = useReducer(reducer, { setting: false, chatting: false, plan: false });
+  const [sideBarState, setSideBarState] = useState({ setting: false, chatting: false, plan: false });
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [isSidebar, setisSidebar] = useState(false);
   const displayType = isSidebar ? styles.decrease : "";
@@ -129,15 +116,15 @@ function StudyRoom() {
   };
 
   const clickSettingBtn = () => {
-    dispatch({ type: "TOGGLE_SETTING" });
+    setSideBarState({ ...sideBarState, setting: !sideBarState.setting, chatting: false, plan: false });
   };
 
   const clickChatBtn = () => {
-    dispatch({ type: "TOGGLE_CHATTING" });
+    setSideBarState({ ...sideBarState, setting: false, chatting: !sideBarState.chatting, plan: false });
   };
 
   const clickPlanBtn = () => {
-    dispatch({ type: "TOGGLE_PLAN" });
+    setSideBarState({ ...sideBarState, setting: false, chatting: false, plan: !sideBarState.plan });
   };
 
   return (
