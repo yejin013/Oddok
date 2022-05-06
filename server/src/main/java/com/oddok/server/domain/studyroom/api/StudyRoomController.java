@@ -4,6 +4,7 @@ import com.oddok.server.domain.studyroom.api.request.CheckPasswordRequest;
 import com.oddok.server.domain.studyroom.api.request.CreateStudyRoomRequest;
 import com.oddok.server.domain.studyroom.api.request.UpdateStudyRoomRequest;
 import com.oddok.server.domain.studyroom.api.response.*;
+import com.oddok.server.domain.studyroom.application.StudyRoomInformationService;
 import com.oddok.server.domain.studyroom.application.StudyRoomSearchService;
 import com.oddok.server.domain.studyroom.application.StudyRoomService;
 import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
@@ -12,9 +13,11 @@ import com.oddok.server.domain.user.application.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -24,14 +27,16 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+@Slf4j
 @RestController
 @RequestMapping("/study-room")
 @RequiredArgsConstructor
 public class StudyRoomController {
 
     private final StudyRoomService studyRoomService;
-    private final UserService userService;
     private final StudyRoomSearchService studyRoomSearchService;
+    private final StudyRoomInformationService studyRoomInformationService;
+    private final UserService userService;
 
     private final StudyRoomDtoMapper dtoMapper = Mappers.getMapper(StudyRoomDtoMapper.class);
 
@@ -76,7 +81,7 @@ public class StudyRoomController {
      */
     @GetMapping(value = "/join/{id}")
     public ResponseEntity<TokenResponse> join(@PathVariable Long id, @RequestHeader String userId) {
-        System.out.println("💘 " + userId + "님이 {" + id + "}방에 입장하셨습니다.");
+        log.info("userId = {}, id = {}",userId,id);
         String token = studyRoomService.userJoinStudyRoom(Long.parseLong(userId), id);
         TokenResponse tokenResponse = new TokenResponse(token);
         return ResponseEntity.ok(tokenResponse);
@@ -84,11 +89,12 @@ public class StudyRoomController {
 
     /**
      * [GET] /study-room : 해시태그 리스트 조회 / 검색
+     *
      * @param pageable 페이징 정보
      * @param category 특정 카테고리만 조회
      * @param isPublic 공개방만 조회할지의 여부
-     * @param name 방제목으로 검색
-     * @param hashtag 해시태그로 검색
+     * @param name     방제목으로 검색
+     * @param hashtag  해시태그로 검색
      */
     @GetMapping
     public ResponseEntity<List<GetStudyRoomListEntityResponse>> get(@PageableDefault(size = 16, sort = "createAt", direction = Sort.Direction.DESC) Pageable pageable,
@@ -120,7 +126,7 @@ public class StudyRoomController {
      */
     @GetMapping(value = "/{id}")
     public ResponseEntity<GetStudyRoomResponse> getDetail(@PathVariable Long id) {
-        StudyRoomDto studyRoomDto = studyRoomService.loadStudyRoom(id);
+        StudyRoomDto studyRoomDto = studyRoomInformationService.loadStudyRoom(id);
         return ResponseEntity.ok(dtoMapper.toGetResponse(studyRoomDto));
     }
 
@@ -160,5 +166,17 @@ public class StudyRoomController {
         studyRoomService.checkPublisher(id, Long.parseLong(userId));
         studyRoomService.deleteStudyRoom(id);
         return ResponseEntity.ok("삭제되었습니다.");
+    }
+
+    /**
+     * [GET] /study-room/user/:id : 특정 사용자가 개설한 스터디룸 상세 조회 API
+     *
+     * @param id : 사용자 식별자
+     * @return GetStudyRoomResponse : 방 정보
+     */
+    @GetMapping(value = "/user/{id}")
+    public ResponseEntity<Optional<GetStudyRoomResponse>> getUserPublishedStudyRoom(@PathVariable Long id) {
+        Optional<StudyRoomDto> studyRoomDto = studyRoomInformationService.loadStudyRoomByUser(id);
+        return ResponseEntity.ok(studyRoomDto.map(dtoMapper::toGetResponse));
     }
 }
