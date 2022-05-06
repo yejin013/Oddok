@@ -52,8 +52,6 @@ function StudyRoom() {
     await leaveStudyRoom(id);
     await session.disconnect();
     resetRoomInfo();
-    // setSubscribers([]);
-    // setCount(1);
     history.push({
       pathname: "/",
     });
@@ -176,7 +174,7 @@ function StudyRoom() {
         <ErrorModal
           message="정말 나가시겠습니까?"
           onConfirm={() => setIsLeaveOpen(false)}
-          onAction={{ action: "진짜 나가기", route: "/" }}
+          onAction={{ text: "진짜 나가기", action: leaveRoom }}
         />
       )}
     </div>

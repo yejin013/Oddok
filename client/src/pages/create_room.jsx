@@ -6,7 +6,6 @@ import { roomInfoState } from "../recoil/studyroom_state";
 import { createStudyRoom, joinStudyRoom } from "../api/study-room-api";
 import { getTestUser } from "../api/getTestUser";
 import useAsync from "../hooks/useAsync";
-import { errorMapping } from "../api/studyroom-error-mapping";
 import SettingRoom from "./settting_room/setting_room";
 import Loading from "../components/study/Loading/Loading";
 import ErrorModal from "../components/commons/ErrorModal/ErrorModal";
@@ -15,26 +14,21 @@ function CreateRoom() {
   const history = useHistory();
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
-  const [handleError, setHandleError] = useState(); // message, action, route
   const {
     loading: createLoading,
     error: createError,
     sendRequest: createRequest,
-    reset: createReset,
+    reset: createErrorReset,
   } = useAsync(createStudyRoom, {
-    onError: (error) => {
-      setHandleError(errorMapping("create-room", error));
-    },
+    onError: (error) => console.error(error),
   });
   const {
     loading: joinLoading,
     error: joinError,
     sendRequest: joinRequest,
-    reset: joinReset,
+    reset: joinErrorReset,
   } = useAsync(joinStudyRoom, {
-    onError: (error) => {
-      setHandleError(errorMapping("join-room", error));
-    },
+    onError: (error) => console.error(error),
   });
 
   useEffect(() => {
@@ -58,19 +52,23 @@ function CreateRoom() {
     });
   };
 
-  const confirmError = () => {
+  const onConfirm = () => {
     if (createError) {
-      createReset();
+      createErrorReset();
       return;
     }
-    if (joinError) joinReset();
+    if (joinError) joinErrorReset();
   };
 
   return (
     <>
       {(createLoading || joinLoading) && <Loading />}
-      {(createError || joinError) && ( //
-        <ErrorModal onConfirm={confirmError} onAction={handleError} />
+      {(createError || joinError) && (
+        <ErrorModal
+          message={createError?.data.message || joinError?.data.message}
+          onConfirm={onConfirm}
+          onAction={{ text: "메인으로 돌아가기", action: () => history.push("/") }}
+        />
       )}
       <SettingRoom goToStudyRoom={goToStudyRoom} />
     </>

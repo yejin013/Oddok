@@ -8,37 +8,24 @@ import useAsync from "../hooks/useAsync";
 import SettingRoom from "./settting_room/setting_room";
 import Loading from "../components/study/Loading/Loading";
 import ErrorModal from "../components/commons/ErrorModal/ErrorModal";
-import { errorMapping } from "../api/studyroom-error-mapping";
 
 function JoinRoom() {
   const history = useHistory();
   const { id } = useParams();
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const setRoomInfo = useSetRecoilState(roomInfoState);
-  const [handleError, setHandleError] = useState();
   const {
     data: roomData,
     error: getInfoError,
-    reset: getInfoReset,
-  } = useAsync(
-    () => getStudyRoom(id),
-    {
-      onError: (error) => {
-        setHandleError(errorMapping("get-info", error));
-      },
-    },
-    [id],
-    false,
-  );
+    reset: getInfoErrorReset,
+  } = useAsync(() => getStudyRoom(id), { onError: (error) => console.log(error) }, [id], false);
   const {
     loading: isLoading,
     error: joinError,
     sendRequest: joinRoom,
-    reset: joinReset,
+    reset: joinErrorReset,
   } = useAsync(joinStudyRoom, {
-    onError: (error) => {
-      setHandleError(errorMapping("join-room", error));
-    },
+    onError: (error) => console.error(error),
   });
 
   useEffect(() => {
@@ -63,17 +50,21 @@ function JoinRoom() {
 
   const confirmError = () => {
     if (getInfoError) {
-      getInfoReset();
+      getInfoErrorReset();
       return;
     }
-    if (joinError) joinReset();
+    if (joinError) joinErrorReset();
   };
 
   return (
     <>
       {isLoading && <Loading />}
-      {(getInfoError || joinError) && ( //
-        <ErrorModal onConfirm={confirmError} onAction={handleError} />
+      {(getInfoError || joinError) && (
+        <ErrorModal
+          message={getInfoError?.data.message || joinError?.data.message}
+          onConfirm={confirmError}
+          onAction={{ text: "메인으로 돌아가기", action: () => history.push("/") }}
+        />
       )}
       <SettingRoom goToStudyRoom={goToStudyRoom} />
     </>
