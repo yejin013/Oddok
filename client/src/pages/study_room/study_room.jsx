@@ -24,10 +24,7 @@ function StudyRoom() {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
-
   const [isPlanOpen, setisPlanOpen] = useState(false);
-  const [isSidebar, setisSidebar] = useState(false);
-  // const displayType = isSidebar ? styles.decrease : "";
   const isStudyRoom = true; // studyroom에 입장했을 때만 생기는 UI를 위한 변수
 
   const leaveRoom = () => {

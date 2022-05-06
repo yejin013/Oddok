@@ -68,7 +68,7 @@ function ChatBar({ session, isChatOpen }) {
           />
         ))}
       </div>
-      <form onSubmit={submitChatHandler}>
+      <form className={styles.form} onSubmit={submitChatHandler}>
         <Input placeholder="메시지를 입력하세요" ref={inputRef} />
       </form>
     </aside>

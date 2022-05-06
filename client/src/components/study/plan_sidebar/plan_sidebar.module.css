@@ -3,7 +3,7 @@
   color: white;
   width: 100%;
   height: 100%;
-  padding: 0.5em 0.5em;
+  padding: 0.5em;
 }
 
 .plans {
@@ -13,4 +13,5 @@
 
 .form {
   height: 10%;
+  padding: 0 0.5em;
 }
