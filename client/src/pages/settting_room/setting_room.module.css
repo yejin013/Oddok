@@ -27,13 +27,6 @@
   transform: translateX(-50%);
 }
 
-/*
-사이드바 스타일 수정할 때 다시
-.video_component.decrease {
-  flex: 1 1 75%;
-}
-*/
-
 .bar {
   position: relative;
 }
