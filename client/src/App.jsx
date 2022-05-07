@@ -2,9 +2,9 @@ import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import CreateRoom from "@pages/create_room";
 import JoinRoom from "@pages/join_room";
-import MainHome from "@pages/main_home/main_home";
-import Search from "@pages/search/search";
-import StudyRoom from "@pages/study_room/study_room";
+import MainHome from "@pages/main_home";
+import Search from "@pages/search";
+import StudyRoom from "@pages/study_room";
 
 function App() {
   return (

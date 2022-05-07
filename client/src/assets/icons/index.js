@@ -19,6 +19,10 @@ import { ReactComponent as Lock } from "./lock.svg";
 import { ReactComponent as Unlock } from "./unlock.svg";
 import { ReactComponent as BookMark } from "./bookmark.svg";
 import { ReactComponent as BookMarkHeart } from "./bookmark-heart-fill.svg";
+import { ReactComponent as ArrowDown } from "./chevron-down.svg";
+import { ReactComponent as Cancel } from "./x-circle-fill.svg";
+import { ReactComponent as Person } from "./person-fill.svg";
+import { ReactComponent as Plus } from "./plus.svg";
 
 export {
   VideoOn,
@@ -42,4 +46,8 @@ export {
   Unlock,
   BookMark,
   BookMarkHeart,
+  ArrowDown,
+  Cancel,
+  Person,
+  Plus,
 };
