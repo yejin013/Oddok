@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { selectedPlanState } from "../../../recoil/plan_state";
+import { selectedPlanState } from "@recoil/plan_state";
 import {
   hourState,
   minuteState,
@@ -10,12 +10,10 @@ import {
   totalSecondState,
   startTimeState,
   endTimeState,
-} from "../../../recoil/timer_state";
-import { saveTime } from "../../../api/study-room-api";
+} from "@recoil/timer_state";
+import { saveTime } from "@api/study-room-api";
+import { Play, Pause, GoalOpen } from "@icons";
 import styles from "./subject_time.module.css";
-import { ReactComponent as Play } from "../../../assets/icons/play-fill.svg";
-import { ReactComponent as Pause } from "../../../assets/icons/pause-fill.svg";
-import { ReactComponent as GoalOpen } from "../../../assets/icons/down.svg";
 
 function SubjectTime({ onClickplanBtn }) {
   const [isRecorded, setIsRecorded] = useState(false);

@@ -2,11 +2,9 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useState, useEffect, useRef } from "react";
 import { useRecoilValue } from "recoil";
-import { userState } from "../../../recoil/user_state";
-import { ReactComponent as Hashtag } from "../../../assets/icons/hashtag.svg";
-import { ReactComponent as Play } from "../../../assets/icons/play-fill.svg";
-import { ReactComponent as Pause } from "../../../assets/icons/pause-fill.svg";
-import { updateStudyRoom } from "../../../api/study-room-api";
+import { userState } from "@recoil/user_state";
+import { updateStudyRoom } from "@api/study-room-api";
+import { Hashtag, Play, Pause } from "@icons";
 import styles from "./setting_side_bar.module.css";
 
 function SettingSideBar({ session, roomInfo, clickDetailBtn }) {

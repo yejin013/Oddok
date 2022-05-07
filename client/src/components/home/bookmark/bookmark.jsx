@@ -2,11 +2,11 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import UserCount from "../../commons/user_count/user_count";
-import { ReactComponent as Thumbnail } from "../../../assets/icons/thumbnail.svg";
-import styles from "./bookmark.module.css";
-import { bookmarkState } from "../../../recoil/bookmark-state";
+import UserCount from "@components/commons/user_count/user_count";
+import { bookmarkState } from "@recoil/bookmark-state";
+import { Thumbnail } from "@icons";
 import UserList from "../UserList/UserList";
+import styles from "./bookmark.module.css";
 
 function Bookmark({ showBookmark }) {
   const bookmark = useRecoilValue(bookmarkState);

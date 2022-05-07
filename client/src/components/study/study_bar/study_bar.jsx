@@ -1,13 +1,7 @@
 import React from "react";
-import styles from "./study_bar.module.css";
-import { ReactComponent as Setting } from "../../../assets/icons/setting.svg";
-import { ReactComponent as Music } from "../../../assets/icons/music.svg";
-import { ReactComponent as VideoOn } from "../../../assets/icons/video.svg";
-import { ReactComponent as MicOff } from "../../../assets/icons/mic_off.svg";
-import { ReactComponent as Chat } from "../../../assets/icons/chat.svg";
-import { ReactComponent as Member } from "../../../assets/icons/person.svg";
-import { ReactComponent as Door } from "../../../assets/icons/door.svg";
+import { Setting, Music, VideoOn, MicOff, Chat, Member, Door } from "@icons";
 import SubjectTime from "../subject_time/subject_time";
+import styles from "./study_bar.module.css";
 
 function StudyBar({ roomName, clickSettingBtn, toggleVideo, toggleAudio, clickChatBtn, onClickplanBtn, leaveRoom }) {
   return (

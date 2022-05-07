@@ -1,11 +1,9 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useEffect, useRef, useState } from "react";
+import { Dots, Circle, CheckedCircle } from "@icons";
+import Input from "@components/commons/Input/input";
 import styles from "./plan.module.css";
-import { ReactComponent as Dots } from "../../../assets/icons/three-dots-vertical.svg";
-import { ReactComponent as Circle } from "../../../assets/icons/circle.svg";
-import { ReactComponent as CheckedCircle } from "../../../assets/icons/check2-circle.svg";
-import Input from "../../commons/Input/input";
 
 function Plan({ plan, onPlanClick, onDelete, onEdit, isStudyRoom }) {
   const [isClickedBtn, setIsClickedBtn] = useState(false);

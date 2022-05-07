@@ -2,15 +2,12 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from "react";
 import { useRecoilState } from "recoil";
+import { addBookmark, deleteBookmark } from "@api/study-room-api";
+import { bookmarkState } from "@recoil/bookmark-state";
+import UserCount from "@components/commons/user_count/user_count";
+import { Lock, Unlock, BookMark, BookMarkHeart } from "@icons";
 import Thumbnail from "./thumbnail";
-import UserCount from "../../commons/user_count/user_count";
-import { ReactComponent as Lock } from "../../../assets/icons/lock.svg";
-import { ReactComponent as Unlock } from "../../../assets/icons/unlock.svg";
-import { ReactComponent as BookMark } from "../../../assets/icons/bookmark.svg";
-import { ReactComponent as BookMarkHeart } from "../../../assets/icons/bookmark-heart-fill.svg";
 import styles from "./studyroom_card.module.css";
-import { bookmarkState } from "../../../recoil/bookmark-state";
-import { addBookmark, deleteBookmark } from "../../../api/study-room-api";
 
 function StudyRoomCard({ roomData, showBookmark }) {
   const [bookmark, setBookmark] = useRecoilState(bookmarkState);

@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
+import { Search, Profile } from "@icons";
 import styles from "./header.module.css";
-import { ReactComponent as Search } from "../../../assets/icons/search.svg";
-import { ReactComponent as Profile } from "../../../assets/icons/person-circle.svg";
 
 function Header(props) {
   const history = useHistory();

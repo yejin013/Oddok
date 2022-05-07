@@ -1,18 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { userState } from "../../../recoil/user_state";
-import { roomInfoState, roomTitleState } from "../../../recoil/studyroom_state";
-import RadioButton from "../../commons/radio_button/radio_button";
-import HashtagButton from "../../commons/hashtag_button/hashtag_button";
-import ToggleButton from "../../commons/toggle_button/toggle_button";
-import InputButton from "../../commons/input_button/input_button";
-import AddButton from "../../commons/add_button/add_button";
-import Dropdown from "../../commons/dropdown/dropdown";
-import Input from "../../commons/Input/input";
-import Textarea from "../../commons/textarea/textarea";
+import { userState } from "@recoil/user_state";
+import { roomInfoState, roomTitleState } from "@recoil/studyroom_state";
+import RadioButton from "@components/commons/radio_button/radio_button";
+import HashtagButton from "@components/commons/hashtag_button/hashtag_button";
+import ToggleButton from "@components/commons/toggle_button/toggle_button";
+import InputButton from "@components/commons/input_button/input_button";
+import AddButton from "@components/commons/add_button/add_button";
+import Dropdown from "@components/commons/dropdown/dropdown";
+import Input from "@components/commons/Input/input";
+import Textarea from "@components/commons/textarea/textarea";
 
-import { ReactComponent as Video } from "../../../assets/icons/video.svg";
-import { ReactComponent as MicOff } from "../../../assets/icons/mic_off.svg";
+import { VideoOn, MicOff } from "@icons";
 import Image from "./image";
 
 import styles from "./setting_section.module.css";
@@ -290,7 +289,7 @@ function SettingSection({ clickSettingBtn }) {
               <p className={styles.label}>장치 규칙</p>
               <div className={styles.device_item}>
                 <ToggleButton
-                  icon={<Video />}
+                  icon={<VideoOn />}
                   label="카메라 ON"
                   onToggle={videoRuleHandler}
                   disabled={disabled}
