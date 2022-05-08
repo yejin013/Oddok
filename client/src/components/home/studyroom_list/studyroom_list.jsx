@@ -56,7 +56,9 @@ function StudyRoomList({ searchedTitle, searchedHashtag, showBookmark }) {
   return (
     <div className={styles.container}>
       <div className={styles.studyroom_head}>
-        <h2>STUDY ROOM</h2>
+        <div className={styles.tab_menu}>
+          <TabMenu setCurrentCategory={setCurrentCategory} />
+        </div>
         <div className={styles.filter}>
           <Dropdown
             options={[
@@ -73,9 +75,6 @@ function StudyRoomList({ searchedTitle, searchedHashtag, showBookmark }) {
             onSelect={sortRoomHandler}
           />
         </div>
-      </div>
-      <div className={styles.tab_menu}>
-        <TabMenu setCurrentCategory={setCurrentCategory} />
       </div>
       <div className={styles.studyroom_list}>
         {loadedRooms ? (
