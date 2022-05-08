@@ -155,11 +155,9 @@ function StudyRoom() {
             <PlanSidebar isStudyRoom={isStudyRoom} />
           </div>
         )}
-        {isChatOpen && (
-          <div className={styles.side_bar}>
-            <ChatBar session={session} />
-          </div>
-        )}
+        <div className={`${styles.side_bar} ${!isChatOpen && styles.hide}`}>
+          <ChatBar session={session} />
+        </div>
       </div>
       <div className={styles.bar}>
         <StudyBar

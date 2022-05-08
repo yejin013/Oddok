@@ -10,7 +10,7 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use((config) => {
   // const userId = localStorage.getItem("userId");
-  const userId = "4";
+  const userId = "1";
   if (userId) {
     config.headers.userId = userId;
     console.log("🙂header에 userId 설정 성공!!", config.headers.userId);

@@ -38,6 +38,10 @@
   flex: 1 1 25%;
 }
 
+.side_bar.hide {
+  display: none;
+}
+
 .bar {
   height: 10vh;
 }
