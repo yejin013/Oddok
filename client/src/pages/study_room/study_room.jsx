@@ -40,20 +40,6 @@ function StudyRoom() {
     });
   };
 
-  const deleteSubscriber = (streamManager) => {
-    if (subscribers.length !== 0) {
-      const index = subscribers.findIndex((subscriber) => subscriber.stream.streamId === streamManager.stream.streamId);
-      if (index > -1) {
-        console.log("인덱스삭제~!");
-        subscribers.splice(index, 1);
-        setSubscribers(subscribers);
-      } else {
-        console.log("인덱스는???", index);
-      }
-      setCount((prev) => prev - 1);
-    }
-  };
-
   const toggleVideo = () => {
     publisher.publishVideo(!publisher.stream.videoActive);
     setIsPlaying((prev) => !prev);
@@ -99,7 +85,8 @@ function StudyRoom() {
       });
       // 2) 스트림 삭제
       session.on("streamDestroyed", (event) => {
-        deleteSubscriber(event.stream.streamManager);
+        setSubscribers((prev) => prev.filter((subscriber) => subscriber !== event.stream.streamManager));
+        setCount((prev) => prev - 1);
       });
       session.on("exception", (exception) => {
         console.warn(exception);
@@ -149,11 +136,7 @@ function StudyRoom() {
       setIsSettingOpen(false);
     }
   };
-  /*
-  if (subscribers !== 0) {
-    subscribers.forEach((subscriber) => console.log("구독자~!~!!!!", subscriber.stream.streamId));
-  }
-  */
+
   return (
     <div className={styles.room}>
       <div className={styles.setting}>{isDetailOpen && <SettingSection clickSettingBtn={clickDetailBtn} />}</div>
