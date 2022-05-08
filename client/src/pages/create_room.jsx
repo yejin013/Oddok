@@ -15,11 +15,6 @@ function CreateRoom() {
   useEffect(() => {
     // 스터디룸을 개설하는 유저에게 방 정보 업데이트 권한을 준다
     setUserInfo({ ...userInfo, updateAllowed: true });
-
-    /* get testUser */
-    // getTestUser()
-    //   .then((users) => console.log(users))
-    //   .catch((error) => console.log(`get user error!: ${error}`));
   }, []);
 
   /**

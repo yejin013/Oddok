@@ -30,7 +30,9 @@ function StudyRoom() {
   const isStudyRoom = true; // studyroom에 입장했을 때만 생기는 UI를 위한 변수
 
   const leaveRoom = () => {
-    session.disconnect();
+    if (session) {
+      session.disconnect();
+    }
     setSubscribers([]);
     setCount(1);
     history.push({
@@ -39,12 +41,17 @@ function StudyRoom() {
   };
 
   const deleteSubscriber = (streamManager) => {
-    const index = subscribers.indexOf(streamManager, 0);
-    if (index > -1) {
-      subscribers.splice(index, 1);
-      setSubscribers(subscribers);
+    if (subscribers.length !== 0) {
+      const index = subscribers.findIndex((subscriber) => subscriber.stream.streamId === streamManager.stream.streamId);
+      if (index > -1) {
+        console.log("인덱스삭제~!");
+        subscribers.splice(index, 1);
+        setSubscribers(subscribers);
+      } else {
+        console.log("인덱스는???", index);
+      }
+      setCount((prev) => prev - 1);
     }
-    setCount((prev) => prev - 1);
   };
 
   const toggleVideo = () => {
@@ -59,7 +66,7 @@ function StudyRoom() {
 
   // 1. 유저 세션 생성
   useEffect(() => {
-    console.log("roominfo🙂", roomInfo);
+    // console.log("roominfo🙂", roomInfo);
     setSession(OV.initSession());
   }, []);
 
@@ -67,7 +74,7 @@ function StudyRoom() {
   useEffect(() => {
     if (session) {
       (async () => {
-        console.log("🙂", location.state.token);
+        // console.log("🙂", location.state.token);
         await session.connect(location.state.token);
         const devices = await OV.getDevices();
         const videoDevices = devices.filter((device) => device.kind === "videoinput");
@@ -142,8 +149,11 @@ function StudyRoom() {
       setIsSettingOpen(false);
     }
   };
-  console.log("비디오!!!!!!!!!", isPlaying);
-  console.log("오디오!!!!!!!!!", isMuted);
+  /*
+  if (subscribers !== 0) {
+    subscribers.forEach((subscriber) => console.log("구독자~!~!!!!", subscriber.stream.streamId));
+  }
+  */
   return (
     <div className={styles.room}>
       <div className={styles.setting}>{isDetailOpen && <SettingSection clickSettingBtn={clickDetailBtn} />}</div>
