@@ -20,7 +20,7 @@ public class User {
     @Column(unique = true, nullable = false, length = 255)
     private String email;
 
-    @Column(unique = true, length = 8)
+    @Column(length = 8)
     private String nickname;
 
     @Column(name = "refresh_token")
