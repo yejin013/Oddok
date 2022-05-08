@@ -1,11 +1,7 @@
-.section {
-  width: 65%;
-  margin: 0 auto;
+.container {
+  width: 70%;
+  margin: 90px auto;
   color: white;
-}
-
-.section h3 {
-  margin: 32px 0;
 }
 
 .search {
@@ -14,7 +10,8 @@
 }
 
 .title_input {
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
+  margin-bottom: 70px;
 }
 
 .hashtag_input {
@@ -23,4 +20,39 @@
   flex-wrap: wrap;
   gap: 8px;
   font-size: 0.75rem;
+  margin-bottom: 50px;
+}
+
+.search_history {
+  display: flex;
+  flex-direction: column;
+}
+
+.container h2 {
+  font-size: 1.5rem;
+  margin-top: 0;
+  margin-bottom: 50px;
+}
+
+.container h3 {
+  font-size: 1rem;
+  margin-top: 0;
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+}
+
+.head div {
+  font-size: 0.875rem;
+}
+
+.content li {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  margin-bottom: 10px;
 }
