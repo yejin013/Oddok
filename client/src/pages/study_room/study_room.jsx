@@ -38,14 +38,14 @@ function StudyRoom() {
     });
   };
 
-  const deleteSubscriber = (streamManager) => {
-    const index = subscribers.indexOf(streamManager, 0);
-    if (index > -1) {
-      subscribers.splice(index, 1);
-      setSubscribers(subscribers);
-    }
-    setCount((prev) => prev - 1);
-  };
+  // const deleteSubscriber = (streamManager) => {
+  //   const index = subscribers.indexOf(streamManager, 0);
+  //   if (index > -1) {
+  //     subscribers.splice(index, 1);
+  //     setSubscribers(subscribers);
+  //   }
+  //   setCount((prev) => prev - 1);
+  // };
 
   const toggleVideo = () => {
     publisher.publishVideo(!publisher.stream.videoActive);
@@ -62,6 +62,10 @@ function StudyRoom() {
     console.log("roominfo🙂", roomInfo);
     setSession(OV.initSession());
   }, []);
+
+  useEffect(() => {
+    console.log("😡", subscribers);
+  }, [subscribers]);
 
   // 2. 방 세션과 유저 세션 연결
   useEffect(() => {
@@ -92,7 +96,9 @@ function StudyRoom() {
       });
       // 2) 스트림 삭제
       session.on("streamDestroyed", (event) => {
-        deleteSubscriber(event.stream.streamManager);
+        // deleteSubscriber(event.stream.streamManager);
+        setSubscribers((prev) => prev.filter((subscriber) => subscriber !== event.stream.streamManager));
+        setCount((prev) => prev - 1);
       });
       session.on("exception", (exception) => {
         console.warn(exception);
