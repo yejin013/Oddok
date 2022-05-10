@@ -4,9 +4,11 @@ import com.oddok.server.common.errors.OpenviduServerException;
 import com.oddok.server.common.errors.SessionNotFoundException;
 import io.openvidu.java.client.*;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class SessionManager {
 
@@ -28,10 +30,9 @@ public class SessionManager {
         SessionProperties properties = new SessionProperties.Builder().build();
         try {
             Session session = openVidu.createSession(properties);
-            System.out.println("💘 세션 생성 : " + session);
+            log.info("session = {}", session);
             return session.getSessionId();
         } catch (OpenViduJavaClientException | OpenViduHttpException e) {
-            e.printStackTrace();
             throw new OpenviduServerException(e.getMessage(), e.getCause());
         }
     }
@@ -86,7 +87,7 @@ public class SessionManager {
         try {
             session.close();
         } catch (OpenViduJavaClientException | OpenViduHttpException e) {
-            e.printStackTrace();
+            throw new OpenviduServerException(e.getMessage(), e.getCause());
         }
     }
 
