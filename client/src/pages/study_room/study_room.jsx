@@ -30,11 +30,7 @@ function StudyRoom() {
   const isStudyRoom = true; // studyroom에 입장했을 때만 생기는 UI를 위한 변수
 
   const leaveRoom = () => {
-    if (session) {
-      session.disconnect();
-    }
-    setSubscribers([]);
-    setCount(1);
+    session.disconnect();
     history.push({
       pathname: "/",
     });
