@@ -10,8 +10,7 @@ import styles from "./search.module.css";
 function Search({ location }) {
   const history = useHistory();
   const titleRef = useRef();
-  const [searchedTitle, setSearchedTitle] = useState(undefined);
-  const [searchedHashtag, setSearchedHashtag] = useState(undefined);
+  const [searched, setSearched] = useState({ title: undefined, hashtag: undefined });
 
   // localStorage에 저장되어있는 검색기록을 업데이트한다.
   const updateSearchHistory = (item) => {
@@ -24,38 +23,30 @@ function Search({ location }) {
   // 타이틀 입력으로 검색
   const searchTitleHandler = (e) => {
     e.preventDefault();
-    setSearchedTitle(titleRef.current.value);
+    setSearched({ title: titleRef.current.value, hashtag: "" });
     updateSearchHistory({ key: new Date(), text: titleRef.current.value }); // 최근 검색어 추가
-    setSearchedHashtag(undefined);
   };
 
   // 인기 해시태그 클릭으로 검색
   const searchHashtagHandler = (e) => {
     titleRef.current.value = "";
-    setSearchedHashtag(e.target.value);
-    setSearchedTitle(undefined);
+    setSearched({ title: "", hashtag: e.target.value });
   };
 
   // 검색기록으로 타이틀 검색
   const searchKeywordHandler = (text) => {
-    setSearchedTitle(text);
-    setSearchedHashtag(undefined);
+    setSearched({ title: text, hashtag: "" });
   };
 
   useEffect(() => {
-    if (searchedTitle) {
+    if (searched.title || searched.hashtag) {
+      const search = searched.title ? `?title=${searched.title}` : `?hashtag=${searched.hashtag}`;
       history.push({
         pathname: "/search",
-        search: `?title=${searchedTitle}`,
+        search,
       });
     }
-    if (searchedHashtag) {
-      history.push({
-        pathname: "/search",
-        search: `?hashtag=${searchedHashtag}`,
-      });
-    }
-  }, [searchedTitle, searchedHashtag]);
+  }, [history, searched]);
 
   return (
     <div>
@@ -68,13 +59,12 @@ function Search({ location }) {
         </div>
         {!location.search ? (
           <SearchBrowse
-            searchKeywordHandler={searchKeywordHandler}
             searchHashtagHandler={searchHashtagHandler}
-            setSearchedTitle={setSearchedTitle}
-            setSearchedHashtag={setSearchedHashtag}
+            searchKeywordHandler={searchKeywordHandler}
+            setSearched={setSearched}
           />
         ) : (
-          <SearchResult searchedTitle={searchedTitle} searchedHashtag={searchedHashtag} />
+          <SearchResult />
         )}
       </div>
     </div>

@@ -15,7 +15,7 @@ function SearchResult() {
 
   return (
     <div className={styles.container}>
-      <h2>&ldquo;{searchedKeyword?.title || searchedKeyword?.hashtag}&rdquo; 검색 결과</h2>
+      <h2>&ldquo;{searchedKeyword?.title || `#${searchedKeyword?.hashtag}`}&rdquo; 검색 결과</h2>
       {
         // TODO 검색결과별 인기 해시태그 필터 추가
         // <h3>태그 필터</h3>
