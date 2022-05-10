@@ -31,12 +31,10 @@
 .container h2 {
   font-size: 1.5rem;
   margin-top: 0;
-  margin-bottom: 50px;
 }
 
 .container h3 {
   font-size: 1rem;
-  margin-top: 0;
 }
 
 .head {
@@ -46,8 +44,13 @@
   font-weight: 600;
 }
 
-.head div {
+.search_history button {
   font-size: 0.875rem;
+  padding: 0;
+}
+
+.search_history button:hover {
+  color: rgba(200, 200, 200);
 }
 
 .content li {
