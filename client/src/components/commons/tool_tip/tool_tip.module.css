@@ -6,7 +6,6 @@
   font-size: 0.875rem;
   padding: 12px;
   width: fit-content;
-  z-index: 10;
 }
 
 .tooltip::before {

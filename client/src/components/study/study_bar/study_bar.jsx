@@ -20,7 +20,7 @@ function StudyBar({
   isMuted,
   clickChatBtn,
   onClickplanBtn,
-  leaveRoom,
+  onClickLeaveBtn,
 }) {
   return (
     <section className={styles.bar}>
@@ -73,7 +73,7 @@ function StudyBar({
           </button>
         </li>
         <li className={styles.door_button}>
-          <button type="button" onClick={leaveRoom}>
+          <button type="button" onClick={onClickLeaveBtn}>
             <Door />
           </button>
         </li>
