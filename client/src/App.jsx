@@ -5,6 +5,7 @@ import JoinRoom from "./pages/join_room";
 import MainHome from "./pages/main_home/main_home";
 import Search from "./pages/search/search";
 import StudyRoom from "./pages/study_room/study_room";
+import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
   return (
@@ -12,9 +13,10 @@ function App() {
       <Switch>
         <Route exact path="/" component={MainHome} />
         <Route path="/search" component={Search} />
-        <Route path="/create" component={CreateRoom} />
-        <Route exact path="/studyroom" component={JoinRoom} />
+        <Route path="/studyroom/create" component={CreateRoom} />
+        <Route exact path="/studyroom/:id/setting" component={JoinRoom} />
         <Route path="/studyroom/:id" component={StudyRoom} />
+        <Route path="*" component={NotFoundPage} />
       </Switch>
     </BrowserRouter>
   );

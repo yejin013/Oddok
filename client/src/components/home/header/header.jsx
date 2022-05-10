@@ -16,7 +16,7 @@ function Header(props) {
 
   const goToCreateRoom = () => {
     history.push({
-      pathname: "/create",
+      pathname: "/studyroom/create",
     });
   };
 

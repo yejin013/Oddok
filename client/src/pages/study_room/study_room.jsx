@@ -1,39 +1,44 @@
-import React, { useState, useEffect } from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import React, { useState, useEffect, useReducer } from "react";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import { OpenVidu } from "openvidu-browser";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useResetRecoilState } from "recoil";
 import { roomInfoState } from "../../recoil/studyroom_state";
+import { leaveStudyRoom } from "../../api/study-room-api";
 import StudyBar from "../../components/study/study_bar/study_bar";
 import UserVideo from "../../components/study/user_video/user_video";
 import SettingSideBar from "../../components/study/setting_side_bar/setting_side_bar";
 import ChatBar from "../../components/study/chat_bar/chat_bar";
-import styles from "./study_room.module.css";
 import PlanSidebar from "../../components/study/plan_sidebar/plan_sidebar";
 import SettingSection from "../../components/study/setting_section/setting_section";
+import ErrorModal from "../../components/commons/ErrorModal/ErrorModal";
+import styles from "./study_room.module.css";
 
 function StudyRoom() {
   const history = useHistory();
   const location = useLocation();
+  const { id } = useParams();
   const OV = new OpenVidu();
   const [session, setSession] = useState();
   const [publisher, setPublisher] = useState();
   const [subscribers, setSubscribers] = useState([]);
   const [count, setCount] = useState(1);
-
-  const [isSettingOpen, setIsSettingOpen] = useState(false); // 사이드바 토글하기 위한 state
-  const [isChatOpen, setIsChatOpen] = useState(false);
-  const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
-
-  const [isPlanOpen, setisPlanOpen] = useState(false);
+  const resetRoomInfo = useResetRecoilState(roomInfoState);
+  const [sideBarState, setSideBarState] = useState({ setting: false, chatting: false, plan: false });
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [isSidebar, setisSidebar] = useState(false);
   const displayType = isSidebar ? styles.decrease : "";
   const isStudyRoom = true;
+  const [isLeaveOpen, setIsLeaveOpen] = useState(false);
 
-  const leaveRoom = () => {
-    session.disconnect();
-    setSubscribers([]);
-    setCount(1);
+  const clickLeaveBtn = () => {
+    setIsLeaveOpen(true);
+  };
+
+  const leaveRoom = async () => {
+    await leaveStudyRoom(id);
+    await session.disconnect();
+    resetRoomInfo();
     history.push({
       pathname: "/",
     });
@@ -58,7 +63,9 @@ function StudyRoom() {
 
   // 1. 유저 세션 생성
   useEffect(() => {
-    console.log("roominfo🙂", roomInfo);
+    if (!location.state) {
+      history.push(`/studyroom/${id}/setting`);
+    }
     setSession(OV.initSession());
   }, []);
 
@@ -66,7 +73,6 @@ function StudyRoom() {
   useEffect(() => {
     if (session) {
       (async () => {
-        console.log("🙂", location.state.token);
         await session.connect(location.state.token);
         const devices = await OV.getDevices();
         const videoDevices = devices.filter((device) => device.kind === "videoinput");
@@ -110,66 +116,54 @@ function StudyRoom() {
   };
 
   const clickSettingBtn = () => {
-    setIsSettingOpen((prev) => !prev);
-
-    if (isPlanOpen) {
-      setisPlanOpen(false);
-    }
-    if (isChatOpen) {
-      setIsChatOpen(false);
-    }
+    setSideBarState({ ...sideBarState, setting: !sideBarState.setting, chatting: false, plan: false });
   };
 
   const clickChatBtn = () => {
-    setIsChatOpen((prev) => !prev);
-
-    if (isSettingOpen) {
-      setIsSettingOpen(false);
-    }
-    if (isPlanOpen) {
-      setisPlanOpen(false);
-    }
+    setSideBarState({ ...sideBarState, setting: false, chatting: !sideBarState.chatting, plan: false });
   };
 
   const clickPlanBtn = () => {
-    setisPlanOpen((prev) => !prev);
-    setisSidebar((prev) => !prev);
-
-    if (isChatOpen) {
-      setIsChatOpen(false);
-    }
-    if (isSettingOpen) {
-      setIsSettingOpen(false);
-    }
+    setSideBarState({ ...sideBarState, setting: false, chatting: false, plan: !sideBarState.plan });
   };
 
   return (
     <div className={styles.room}>
       <div className={styles.setting}>{isDetailOpen && <SettingSection clickSettingBtn={clickDetailBtn} />}</div>
       <div className={styles.video_container}>
-        {isSettingOpen && <SettingSideBar roomInfo={roomInfo} session={session} clickDetailBtn={clickDetailBtn} />}
+        {sideBarState.setting && (
+          <SettingSideBar roomInfo={roomInfo} session={session} clickDetailBtn={clickDetailBtn} />
+        )}
         <ul className={`${styles.videos} ${displayType}`}>
           {publisher && <UserVideo count={count} publisher={publisher} />}
           {subscribers && subscribers.map((subscriber) => <UserVideo count={count} subscriber={subscriber} />)}
         </ul>
-        {isPlanOpen && (
+        {sideBarState.plan && (
           <div className={styles.plan_bar}>
             <PlanSidebar isStudyRoom={isStudyRoom} />
           </div>
         )}
-        <ChatBar session={session} isChatOpen={isChatOpen} />
+        <ChatBar session={session} isChatOpen={sideBarState.chatting} />
       </div>
       <div className={styles.bar}>
         <StudyBar
-          roomName={roomInfo && roomInfo.name}
+          roomName={roomInfo.name}
           clickSettingBtn={clickSettingBtn}
           toggleVideo={toggleVideo}
           toggleAudio={toggleAudio}
           clickChatBtn={clickChatBtn}
-          leaveRoom={leaveRoom}
           onClickplanBtn={clickPlanBtn}
+          onClickLeaveBtn={clickLeaveBtn}
+          leaveRoom={leaveRoom}
         />
       </div>
+      {isLeaveOpen && (
+        <ErrorModal
+          message="정말 나가시겠습니까?"
+          onConfirm={() => setIsLeaveOpen(false)}
+          onAction={{ text: "진짜 나가기", action: leaveRoom }}
+        />
+      )}
     </div>
   );
 }
