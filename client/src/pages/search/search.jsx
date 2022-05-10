@@ -67,7 +67,12 @@ function Search({ location }) {
           </form>
         </div>
         {!location.search ? (
-          <SearchBrowse searchKeywordHandler={searchKeywordHandler} searchHashtagHandler={searchHashtagHandler} />
+          <SearchBrowse
+            searchKeywordHandler={searchKeywordHandler}
+            searchHashtagHandler={searchHashtagHandler}
+            setSearchedTitle={setSearchedTitle}
+            setSearchedHashtag={setSearchedHashtag}
+          />
         ) : (
           <SearchResult searchedTitle={searchedTitle} searchedHashtag={searchedHashtag} />
         )}
