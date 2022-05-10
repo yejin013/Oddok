@@ -24,8 +24,11 @@ function UserVideo({ count, publisher, subscriber }) {
       case 3:
       case 4:
         return styles.multi;
+      case 5:
+      case 6:
+        return styles.maxium;
       default:
-        return styles.multi;
+        throw new Error("제한 인원을 넘었습니다");
     }
   };
 

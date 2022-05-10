@@ -107,4 +107,15 @@ public class ControllerErrorAdvice {
         return new ErrorResponse("사용자가 이미 개설한 방이 있습니다.");
     }
 
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(ProfileNotFoundException.class)
+    public ErrorResponse handleUserProfileNotFoundException() {
+        return new ErrorResponse("사용자의 프로필이 존재하지 않습니다.");
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ProfileAlreadyExistsException.class)
+    public ErrorResponse handleUserProfileAlreadyExistsException() {
+        return new ErrorResponse("사용자의 프로필이 이미 존재합니다.");
+    }
 }

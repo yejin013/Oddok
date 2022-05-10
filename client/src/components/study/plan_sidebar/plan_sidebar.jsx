@@ -14,6 +14,7 @@ function PlanSidebar({ isStudyRoom }) {
   const setSecond = useSetRecoilState(secondState);
   const setStartTime = useSetRecoilState(startTimeState);
   const setEndTime = useSetRecoilState(endTimeState);
+  const isPlanBar = true; // UI위한 변수
 
   const formRef = useRef();
   const inputRef = useRef();
@@ -75,7 +76,7 @@ function PlanSidebar({ isStudyRoom }) {
         />
       </div>
       <form ref={formRef} className={styles.form} onSubmit={submitPlan}>
-        <Input ref={inputRef} />
+        <Input ref={inputRef} isPlanBar={isPlanBar} />
       </form>
     </aside>
   );

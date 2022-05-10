@@ -2,7 +2,7 @@ import React, { useState, useEffect, useReducer } from "react";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import { OpenVidu } from "openvidu-browser";
 import { useRecoilState, useResetRecoilState } from "recoil";
-import { roomInfoState } from "../../recoil/studyroom_state";
+import { roomInfoState, videoState, audioState } from "../../recoil/studyroom_state";
 import { leaveStudyRoom } from "../../api/study-room-api";
 import StudyBar from "../../components/study/study_bar/study_bar";
 import UserVideo from "../../components/study/user_video/user_video";
@@ -22,13 +22,13 @@ function StudyRoom() {
   const [publisher, setPublisher] = useState();
   const [subscribers, setSubscribers] = useState([]);
   const [count, setCount] = useState(1);
+  const [isPlaying, setIsPlaying] = useRecoilState(videoState);
+  const [isMuted, setIsMuted] = useRecoilState(audioState);
+  const isStudyRoom = true; // studyroom에 입장했을 때만 생기는 UI를 위한 변수
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
   const resetRoomInfo = useResetRecoilState(roomInfoState);
   const [sideBarState, setSideBarState] = useState({ setting: false, chatting: false, plan: false });
   const [isDetailOpen, setIsDetailOpen] = useState(false);
-  const [isSidebar, setisSidebar] = useState(false);
-  const displayType = isSidebar ? styles.decrease : "";
-  const isStudyRoom = true;
   const [isLeaveOpen, setIsLeaveOpen] = useState(false);
 
   const clickLeaveBtn = () => {
@@ -44,21 +44,14 @@ function StudyRoom() {
     });
   };
 
-  const deleteSubscriber = (streamManager) => {
-    const index = subscribers.indexOf(streamManager, 0);
-    if (index > -1) {
-      subscribers.splice(index, 1);
-      setSubscribers(subscribers);
-    }
-    setCount((prev) => prev - 1);
-  };
-
   const toggleVideo = () => {
     publisher.publishVideo(!publisher.stream.videoActive);
+    setIsPlaying((prev) => !prev);
   };
 
   const toggleAudio = () => {
     publisher.publishAudio(!publisher.stream.audioActive);
+    setIsMuted((prev) => !prev);
   };
 
   // 1. 유저 세션 생성
@@ -79,8 +72,8 @@ function StudyRoom() {
         const localUser = OV.initPublisher(undefined, {
           audioSource: undefined,
           videoSource: videoDevices[0].label ? videoDevices.deviceId : undefined,
-          publishAudio: true,
-          publishVideo: true,
+          publishAudio: isMuted,
+          publishVideo: isPlaying,
           frameRate: 30,
           mirror: false,
         });
@@ -97,7 +90,8 @@ function StudyRoom() {
       });
       // 2) 스트림 삭제
       session.on("streamDestroyed", (event) => {
-        deleteSubscriber(event.stream.streamManager);
+        setSubscribers((prev) => prev.filter((subscriber) => subscriber !== event.stream.streamManager));
+        setCount((prev) => prev - 1);
       });
       session.on("exception", (exception) => {
         console.warn(exception);
@@ -132,18 +126,22 @@ function StudyRoom() {
       <div className={styles.setting}>{isDetailOpen && <SettingSection clickSettingBtn={clickDetailBtn} />}</div>
       <div className={styles.video_container}>
         {sideBarState.setting && (
-          <SettingSideBar roomInfo={roomInfo} session={session} clickDetailBtn={clickDetailBtn} />
+          <div className={styles.side_bar}>
+            <SettingSideBar roomInfo={roomInfo} session={session} clickDetailBtn={clickDetailBtn} />
+          </div>
         )}
-        <ul className={`${styles.videos} ${displayType}`}>
+        <ul className={styles.videos}>
           {publisher && <UserVideo count={count} publisher={publisher} />}
           {subscribers && subscribers.map((subscriber) => <UserVideo count={count} subscriber={subscriber} />)}
         </ul>
         {sideBarState.plan && (
-          <div className={styles.plan_bar}>
+          <div className={styles.side_bar}>
             <PlanSidebar isStudyRoom={isStudyRoom} />
           </div>
         )}
-        <ChatBar session={session} isChatOpen={sideBarState.chatting} />
+        <div className={`${styles.side_bar} ${!sideBarState.chatting && styles.hide}`}>
+          <ChatBar session={session} />
+        </div>
       </div>
       <div className={styles.bar}>
         <StudyBar
@@ -151,10 +149,11 @@ function StudyRoom() {
           clickSettingBtn={clickSettingBtn}
           toggleVideo={toggleVideo}
           toggleAudio={toggleAudio}
+          isPlaying={isPlaying}
+          isMuted={isMuted}
           clickChatBtn={clickChatBtn}
           onClickplanBtn={clickPlanBtn}
           onClickLeaveBtn={clickLeaveBtn}
-          leaveRoom={leaveRoom}
         />
       </div>
       {isLeaveOpen && (

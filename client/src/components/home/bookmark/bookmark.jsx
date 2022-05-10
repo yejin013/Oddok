@@ -22,9 +22,6 @@ function Bookmark({ showBookmark }) {
 
   useEffect(() => {
     // if(유저가 로그인했다면)
-    // if (!bookmark) {
-    //   return;
-    // }
     showBookmark();
   }, []);
 

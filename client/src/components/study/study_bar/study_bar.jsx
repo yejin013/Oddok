@@ -3,6 +3,8 @@ import styles from "./study_bar.module.css";
 import { ReactComponent as Setting } from "../../../assets/icons/setting.svg";
 import { ReactComponent as Music } from "../../../assets/icons/music.svg";
 import { ReactComponent as VideoOn } from "../../../assets/icons/video.svg";
+import { ReactComponent as VideoOff } from "../../../assets/icons/camera-video-off.svg";
+import { ReactComponent as MicOn } from "../../../assets/icons/mic.svg";
 import { ReactComponent as MicOff } from "../../../assets/icons/mic_off.svg";
 import { ReactComponent as Chat } from "../../../assets/icons/chat.svg";
 import { ReactComponent as Member } from "../../../assets/icons/person.svg";
@@ -14,6 +16,8 @@ function StudyBar({
   clickSettingBtn,
   toggleVideo,
   toggleAudio,
+  isPlaying,
+  isMuted,
   clickChatBtn,
   onClickplanBtn,
   onClickLeaveBtn,
@@ -37,14 +41,26 @@ function StudyBar({
       </div>
       <ul className={styles.buttons}>
         <li className={styles.video_button}>
-          <button type="button" onClick={toggleVideo}>
-            <VideoOn />
-          </button>
+          {isPlaying ? (
+            <button type="button" onClick={toggleVideo}>
+              <VideoOn />
+            </button>
+          ) : (
+            <button type="button" onClick={toggleVideo}>
+              <VideoOff />
+            </button>
+          )}
         </li>
         <li className={styles.audio_button}>
-          <button type="button" onClick={toggleAudio}>
-            <MicOff />
-          </button>
+          {isMuted ? (
+            <button type="button" onClick={toggleAudio}>
+              <MicOn />
+            </button>
+          ) : (
+            <button type="button" onClick={toggleAudio}>
+              <MicOff />
+            </button>
+          )}
         </li>
         <li className={styles.chat_button}>
           <button type="button" onClick={clickChatBtn}>

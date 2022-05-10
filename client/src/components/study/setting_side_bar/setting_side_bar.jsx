@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { useRecoilValue } from "recoil";
 import { userState } from "../../../recoil/user_state";
 import { ReactComponent as Hashtag } from "../../../assets/icons/hashtag.svg";

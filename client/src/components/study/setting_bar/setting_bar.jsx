@@ -5,10 +5,21 @@ import { selectedPlanState } from "../../../recoil/plan_state";
 import { ReactComponent as Setting } from "../../../assets/icons/setting.svg";
 import { ReactComponent as Music } from "../../../assets/icons/music.svg";
 import { ReactComponent as VideoOn } from "../../../assets/icons/video.svg";
+import { ReactComponent as VideoOff } from "../../../assets/icons/camera-video-off.svg";
+import { ReactComponent as MicOn } from "../../../assets/icons/mic.svg";
 import { ReactComponent as MicOff } from "../../../assets/icons/mic_off.svg";
 import { ReactComponent as GoalOpen } from "../../../assets/icons/down.svg";
 
-function SettingBar({ title, goToStudyRoom, stopOrStartVideo, stopOrStartAudio, clickSettingBtn, onClickplanBtn }) {
+function SettingBar({
+  title,
+  goToStudyRoom,
+  toggleVideo,
+  toggleAudio,
+  clickSettingBtn,
+  onClickplanBtn,
+  isPlaying,
+  isMuted,
+}) {
   const selectedPlan = useRecoilValue(selectedPlanState);
 
   return (
@@ -33,14 +44,26 @@ function SettingBar({ title, goToStudyRoom, stopOrStartVideo, stopOrStartAudio, 
       </div>
       <ul className={styles.buttons}>
         <li className={styles.video_button}>
-          <button type="button" onClick={stopOrStartVideo}>
-            <VideoOn />
-          </button>
+          {isPlaying ? (
+            <button type="button" onClick={toggleVideo}>
+              <VideoOn />
+            </button>
+          ) : (
+            <button type="button" onClick={toggleVideo}>
+              <VideoOff />
+            </button>
+          )}
         </li>
         <li className={styles.audio_button}>
-          <button type="button" onClick={stopOrStartAudio}>
-            <MicOff />
-          </button>
+          {isMuted ? (
+            <button type="button" onClick={toggleAudio}>
+              <MicOn />
+            </button>
+          ) : (
+            <button type="button" onClick={toggleAudio}>
+              <MicOff />
+            </button>
+          )}
         </li>
         <li>
           <button type="button" className={styles.start_button} onClick={goToStudyRoom} disabled={!title}>

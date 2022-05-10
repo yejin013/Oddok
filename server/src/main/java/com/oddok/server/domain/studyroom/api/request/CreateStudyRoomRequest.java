@@ -1,5 +1,6 @@
 package com.oddok.server.domain.studyroom.api.request;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -11,7 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 public class CreateStudyRoomRequest {
 
-    @NotBlank
     private String name;
 
     @NotBlank
