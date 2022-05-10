@@ -5,10 +5,10 @@ import lombok.Getter;
 
 @Getter
 public class UpdateTokenResponse {
-    private final String token;
+    private final String accessToken;
 
     @Builder
     public UpdateTokenResponse(String token) {
-        this.token = token;
+        this.accessToken = token;
     }
 }

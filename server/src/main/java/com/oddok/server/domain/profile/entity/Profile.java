@@ -29,18 +29,22 @@ public class Profile {
     @Column(name = "d_day")
     private LocalDate dday;
 
+    @Column(name = "d_day_infomation")
+    private String ddayInfo;
+
     @Builder
-    public Profile(User user, String goal, Integer targetTime, LocalDate dday) {
+    public Profile(User user, String goal, Integer targetTime, LocalDate dday, String ddayInfo) {
         this.user = user;
         this.goal = goal;
         this.targetTime = targetTime;
         this.dday = dday;
+        this.ddayInfo = ddayInfo;
     }
 
-    public Profile update(String goal, Integer targetTime, LocalDate dday) {
+    public void update(String goal, Integer targetTime, LocalDate dday, String ddayInfo) {
         this.goal = goal;
         this.targetTime = targetTime;
         this.dday = dday;
-        return this;
+        this.ddayInfo = ddayInfo;
     }
 }

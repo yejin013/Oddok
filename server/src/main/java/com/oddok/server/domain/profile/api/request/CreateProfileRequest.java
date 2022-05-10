@@ -12,4 +12,6 @@ public class CreateProfileRequest {
     private Integer targetTime;
 
     private LocalDate dday;
+
+    private String ddayInfo;
 }
