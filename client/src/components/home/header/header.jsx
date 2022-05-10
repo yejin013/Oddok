@@ -12,6 +12,7 @@ function Header(props) {
     history.push({
       pathname: "/search",
     });
+    window.location.reload();
   };
 
   const goToCreateRoom = () => {
