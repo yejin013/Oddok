@@ -6,7 +6,7 @@ import { roomInfoState } from "../recoil/studyroom_state";
 import { createStudyRoom, joinStudyRoom } from "../api/study-room-api";
 import { getTestUser } from "../api/getTestUser";
 import useAsync from "../hooks/useAsync";
-import SettingRoom from "./settting_room/setting_room";
+import SettingRoom from "./setting_room/setting_room";
 import Loading from "../components/study/Loading/Loading";
 import ErrorModal from "../components/commons/ErrorModal/ErrorModal";
 
