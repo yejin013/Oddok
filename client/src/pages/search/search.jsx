@@ -1,10 +1,12 @@
 /* eslint-disable react/jsx-boolean-value */
 import React, { useState, useRef } from "react";
+import { useSetRecoilState } from "recoil";
 import Header from "../../components/home/header/header";
 import Input from "../../components/commons/Input/input";
 import HashtagButton from "../../components/commons/hashtag_button/hashtag_button";
 import StudyRoomList from "../../components/home/studyroom_list/studyroom_list";
-
+import { getBookmark } from "../../api/study-room-api";
+import { bookmarkState } from "../../recoil/bookmark-state";
 import styles from "./search.module.css";
 
 const hashtags = [
@@ -29,6 +31,7 @@ function Search() {
   const titleRef = useRef();
   const [searchedTitle, setSearchedTitle] = useState(undefined);
   const [searchedHashtag, setSearchedHashtag] = useState(undefined);
+  const setBookmark = useSetRecoilState(bookmarkState);
 
   const searchTitleHandler = (e) => {
     e.preventDefault();
@@ -40,6 +43,12 @@ function Search() {
     titleRef.current.value = "";
     setSearchedHashtag(e.target.value);
     setSearchedTitle(undefined);
+  };
+
+  const showBookmark = async () => {
+    await getBookmark()
+      .then((response) => setBookmark(response))
+      .catch((error) => console.log("get bookmark error", error));
   };
 
   return (
@@ -62,7 +71,7 @@ function Search() {
         {(searchedTitle || searchedHashtag) && <h3>&ldquo;{searchedTitle || searchedHashtag}&rdquo; 검색 결과💭</h3>}
       </div>
       <div className={styles.search_list}>
-        <StudyRoomList searchedTitle={searchedTitle} searchedHashtag={searchedHashtag} />
+        <StudyRoomList searchedTitle={searchedTitle} searchedHashtag={searchedHashtag} showBookmark={showBookmark} />
       </div>
     </div>
   );

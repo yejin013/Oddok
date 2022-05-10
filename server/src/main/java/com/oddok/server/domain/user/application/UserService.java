@@ -24,10 +24,10 @@ public class UserService {
     //TODO: 현재는 임의의 사용자 3명 저장
     @Transactional
     public Long createUser() {
-        User maker1 = new User("maker@kakao.com");
+        User maker1 = new User("maker@kakao.com", "maker");
         User savedUser = userRepository.save(maker1);
-        userRepository.save(new User("user1@kakao.com"));
-        userRepository.save(new User("user2@kakao.com"));
+        userRepository.save(new User("user1@kakao.com", "user1"));
+        userRepository.save(new User("user2@kakao.com", "user2"));
         return savedUser.getId();
 
     }

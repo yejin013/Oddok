@@ -3,10 +3,9 @@ import { getStudyRoomList } from "../../../api/study-room-api";
 import TabMenu from "../tab_menu/tab_menu";
 import CardGrid from "../card_grid/card_grid";
 import Dropdown from "../../commons/dropdown/dropdown";
-
 import styles from "./studyroom_list.module.css";
 
-function StudyRoomList({ searchedTitle, searchedHashtag }) {
+function StudyRoomList({ searchedTitle, searchedHashtag, showBookmark }) {
   const [currentPage, setCurrentPage] = useState(0);
   const [currentCategory, setCurrentCategory] = useState(undefined);
   const [filterOpt, setFilterOpt] = useState(undefined);
@@ -79,8 +78,11 @@ function StudyRoomList({ searchedTitle, searchedHashtag }) {
         <TabMenu setCurrentCategory={setCurrentCategory} />
       </div>
       <div className={styles.studyroom_list}>
-        {loadedRooms.length > 0 ? (
-          <CardGrid rooms={loadedRooms} />
+        {loadedRooms ? (
+          <CardGrid //
+            rooms={loadedRooms}
+            showBookmark={showBookmark}
+          />
         ) : (
           <p style={{ color: "white" }}>스터디룸이 없어요!🥲</p>
         )}

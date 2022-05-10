@@ -1,6 +1,7 @@
 .container {
   width: 75%;
   margin: 0 auto;
+  padding: 6em 0;
   max-width: 1296px;
   color: white;
   display: flex;

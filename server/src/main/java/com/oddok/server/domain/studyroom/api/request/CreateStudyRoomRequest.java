@@ -1,39 +1,43 @@
 package com.oddok.server.domain.studyroom.api.request;
 
 import lombok.*;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
 public class CreateStudyRoomRequest {
 
-    @NotBlank(message = "방 이름이 없습니다.")
+    @NotBlank
     private String name;
 
+    @NotBlank
     private String category;
 
-    private List<String> hashtags;
-
-    /*
     private String image;
 
-    private Integer targetTime;
-
-    private Integer limitUsers;
-    */
-
+    @NotNull
     private Boolean isPublic;
 
     private String password;
-/*
+
+    private Integer targetTime;
+
     private String rule;
 
-    private LocalDateTime startAt;
+    private Boolean isMicOn;
 
-    private LocalDateTime endAt;
-*/
+    private Boolean isCamOn;
+
+    private Integer currentUsers;
+
+    private Integer limitUsers;
+
+    private LocalDate endAt;
+
+    private List<String> hashtags;
+
 }

@@ -44,8 +44,9 @@ public class User {
     private LocalDateTime updateAt;
 
     @Builder
-    public User(String email) {
+    public User(String email, String nickname) {
         this.email = email;
+        this.nickname = nickname;
         this.createAt = LocalDateTime.now();
         this.updateAt = LocalDateTime.now();
     }
