@@ -29,7 +29,6 @@ public class ProfileController {
     public ResponseEntity<CreateProfileResponse> create(@RequestHeader String userId, @RequestBody @Valid CreateProfileRequest createProfileRequest) {
         ProfileDto profileDto = dtoMapper.fromCreateRequest(createProfileRequest, Long.parseLong(userId));
         ProfileDto response = profileService.create(profileDto);
-        System.out.println(profileDto.getDday());
         return ResponseEntity.ok(dtoMapper.toCreateResponse(response));
     }
 
