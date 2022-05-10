@@ -118,4 +118,10 @@ public class ControllerErrorAdvice {
     public ErrorResponse handleUserProfileAlreadyExistsException() {
         return new ErrorResponse("사용자의 프로필이 이미 존재합니다.");
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(TokenValidFailedException.class)
+    public ErrorResponse handlerTokenValidFailedException() {
+        return new ErrorResponse("토큰이 유효하지 않습니다.");
+    }
 }
