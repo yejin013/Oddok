@@ -7,18 +7,18 @@ import HashtagButton from "../../components/commons/hashtag_button/hashtag_butto
 import StudyRoomList from "../../components/home/studyroom_list/studyroom_list";
 import styles from "./search.module.css";
 
-const HISTORY = ["공시생", "공시", "공무원", "5급"];
-
 function Search() {
   const titleRef = useRef();
   const [searchedTitle, setSearchedTitle] = useState(undefined);
   const [searchedHashtag, setSearchedHashtag] = useState(undefined);
   const [isSearched, setIsSearched] = useState(false);
   const [popularHashtags, setPopularHashtags] = useState([]);
+  const [searchHistory, setSearchHistory] = useState([]);
 
   const searchTitleHandler = (e) => {
     e.preventDefault();
     setSearchedTitle(titleRef.current.value);
+    setSearchHistory((prev) => [...prev, titleRef.current.value]);
     setSearchedHashtag(undefined);
     setIsSearched(true);
   };
@@ -30,11 +30,23 @@ function Search() {
     setIsSearched(true);
   };
 
-  useEffect(async () => {
-    const response = await getPopluarHashtag();
-    setPopularHashtags(response.data.hashtags);
-    console.log(response.data.hashtags);
+  useEffect(() => {
+    (async () => {
+      const response = await getPopluarHashtag();
+      setPopularHashtags(response.data.hashtags);
+      console.log(response.data.hashtags);
+    })();
+    const keywords = JSON.parse(localStorage.getItem("keywords"));
+    if (keywords) {
+      setSearchHistory(keywords);
+    }
+    console.log(keywords);
   }, []);
+
+  useEffect(() => {
+    console.log("😡", searchHistory);
+    localStorage.setItem("keywords", JSON.stringify(searchHistory));
+  }, [searchHistory]);
 
   return (
     <div>
@@ -67,12 +79,13 @@ function Search() {
               <div>전체 삭제</div>
             </div>
             <div className={styles.content}>
-              {HISTORY.map((history) => (
-                <li>
-                  {history}
-                  <div>X</div>
-                </li>
-              ))}
+              {searchHistory.length > 0 &&
+                searchHistory.map((history) => (
+                  <li>
+                    {history}
+                    <div>X</div>
+                  </li>
+                ))}
             </div>
           </div>
         ) : (
