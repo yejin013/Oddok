@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable react/jsx-boolean-value */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
@@ -48,6 +49,13 @@ function Search() {
     localStorage.setItem("keywords", JSON.stringify(searchHistory));
   }, [searchHistory]);
 
+  // 검색기록으로 검색하기
+  const searchKeywordHandler = (text) => {
+    setSearchedTitle(text);
+    setSearchedHashtag(undefined);
+    setIsSearched(true);
+  };
+
   // 검색기록 전체 삭제
   const removeAllHandler = () => {
     setSearchHistory([]);
@@ -94,7 +102,7 @@ function Search() {
               {searchHistory.length > 0 &&
                 searchHistory.map((keyword) => (
                   <li key={keyword.key}>
-                    {keyword.text}
+                    <span onClick={() => searchKeywordHandler(keyword.text)}>{keyword.text}</span>
                     <button type="button" onClick={() => removeItemHandler(keyword.key)}>
                       X
                     </button>
