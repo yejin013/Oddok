@@ -25,7 +25,7 @@ public class BatchScheduler {
     private JobLauncher jobLauncher;
     private BatchConfig batchConfig;
 
-    @Scheduled(cron = "0 0 9 * * 7") // 일요일 아침 9시 정각 0초
+    @Scheduled(cron = "0 0 12 1 1 ?") // 매년 1월 1일 12시 정각 0초
     public void runJob() {
         // job parameter 설정
         Map<String, JobParameter> confMap = new HashMap<>();
