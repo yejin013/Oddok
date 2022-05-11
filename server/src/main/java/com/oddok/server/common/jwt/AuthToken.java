@@ -34,7 +34,7 @@ public class AuthToken {
         return Jwts.builder()
                 .setSubject(socialId)
                 .claim(AUTHORITIES_KEY, role)
-                .signWith(SignatureAlgorithm.HS256, key)
+                .signWith(key, SignatureAlgorithm.HS256)
                 .setExpiration(expiry)
                 .compact();
     }
@@ -45,10 +45,10 @@ public class AuthToken {
 
     public Claims getTokenClaims() {
         try {
-            return Jwts.parser()
+            return Jwts.parserBuilder()
                     .setSigningKey(key)
-                    .parseClaimsJws(token)
-                    .getBody();
+                    .build()
+                    .parseClaimsJws(token).getBody();
         } catch (SecurityException e) {
             log.info("Invalid JWT signature.");
         } catch (MalformedJwtException e) {
