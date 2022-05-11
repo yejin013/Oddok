@@ -13,10 +13,13 @@ public class GetProfileResponse {
 
     private final LocalDate dday;
 
+    private final String ddayInfo;
+
     @Builder
-    public GetProfileResponse(String goal, Integer targetTime, LocalDate dday) {
+    public GetProfileResponse(String goal, Integer targetTime, LocalDate dday, String ddayInfo) {
         this.goal = goal;
         this.targetTime = targetTime;
         this.dday = dday;
+        this.ddayInfo = ddayInfo;
     }
 }

@@ -13,38 +13,45 @@ import lombok.*;
 public class StudyRoomDto {
     private Long id;
 
-    private String name;
+    private final String name;
 
-    private Category category;
+    private final Category category;
 
-    private Long userId;
+    private final Long userId;
 
-    private String sessionId;
+    private final String sessionId;
 
-    private String image;
+    private final String image;
 
-    private Boolean isPublic;
+    private final Boolean isPublic;
 
-    private String password;
+    private final String password;
 
-    private Integer targetTime;
+    private final Integer targetTime;
 
-    private String rule;
+    private final String rule;
 
-    private Boolean isMicOn;
+    private final Boolean isMicOn;
 
-    private Boolean isCamOn;
+    private final Boolean isCamOn;
 
-    private Integer currentUsers;
+    private final String bgm;
 
-    private Integer limitUsers;
+    private final Integer currentUsers;
 
-    private LocalDate endAt;
+    private final Integer limitUsers;
 
-    private Set<String> hashtags;
+    private final LocalDate endAt;
+
+    private final Set<String> hashtags;
 
     @Builder
-    public StudyRoomDto(Long id, String name, Category category, Long userId, String sessionId, String image, Boolean isPublic, String password, Integer targetTime, String rule, Boolean isMicOn, Boolean isCamOn, Integer currentUsers, Integer limitUsers, LocalDate endAt, Set<String> hashtags) {
+    public StudyRoomDto(Long id, String name, Category category,
+                        Long userId, String sessionId, String image,
+                        Boolean isPublic, String password, Integer targetTime,
+                        String rule, Boolean isMicOn, Boolean isCamOn,
+                        String bgm, Integer currentUsers, Integer limitUsers,
+                        LocalDate endAt, Set<String> hashtags) {
         this.id = id;
         this.name = name;
         this.category = category;
@@ -57,6 +64,7 @@ public class StudyRoomDto {
         this.rule = rule;
         this.isMicOn = isMicOn;
         this.isCamOn = isCamOn;
+        this.bgm = bgm;
         this.currentUsers = currentUsers;
         this.limitUsers = limitUsers;
         this.endAt = endAt;
@@ -64,7 +72,12 @@ public class StudyRoomDto {
     }
 
     @Builder
-    public StudyRoomDto(String name, Category category, Long userId, String sessionId, String image, Boolean isPublic, String password, Integer targetTime, String rule, Boolean isMicOn, Boolean isCamOn, Integer currentUsers, Integer limitUsers, LocalDate endAt, Set<String> hashtags) {
+    public StudyRoomDto(String name, Category category, Long userId,
+                        String sessionId, String image, Boolean isPublic,
+                        String password, Integer targetTime, String rule,
+                        Boolean isMicOn, Boolean isCamOn, String bgm,
+                        Integer currentUsers, Integer limitUsers, LocalDate endAt,
+                        Set<String> hashtags) {
         this.name = name;
         this.category = category;
         this.userId = userId;
@@ -76,6 +89,7 @@ public class StudyRoomDto {
         this.rule = rule;
         this.isMicOn = isMicOn;
         this.isCamOn = isCamOn;
+        this.bgm = bgm;
         this.currentUsers = currentUsers;
         this.limitUsers = limitUsers;
         this.endAt = endAt;

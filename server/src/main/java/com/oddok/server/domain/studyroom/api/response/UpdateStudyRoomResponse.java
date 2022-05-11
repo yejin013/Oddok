@@ -9,39 +9,41 @@ import java.util.List;
 
 @Getter
 public class UpdateStudyRoomResponse {
-    private String name;
+    private final String name;
 
-    private String category;
+    private final String category;
 
-    private List<String> hashtags;
+    private final List<String> hashtags;
 
-    private Long userId;
+    private final Long userId;
 
-    private String image;
+    private final String image;
 
-    private Boolean isPublic;
+    private final Boolean isPublic;
 
-    private String password;
+    private final String password;
 
-    private Integer targetTime;
+    private final Integer targetTime;
 
-    private String rule;
+    private final String rule;
 
-    private Boolean isMicOn;
+    private final Boolean isMicOn;
 
-    private Boolean isCamOn;
+    private final Boolean isCamOn;
 
-    private Integer currentUsers;
+    private final String bgm;
 
-    private Integer limitUsers;
+    private final Integer currentUsers;
 
-    private LocalDate endAt;
+    private final Integer limitUsers;
+
+    private final LocalDate endAt;
 
     @Builder
     public UpdateStudyRoomResponse(String name, String category, List<String> hashtags, Long userId,
                                    String image, String password, Boolean isPublic, Integer targetTime,
-                                   String rule, Boolean isMicOn, Boolean isCamOn, Integer currentUsers,
-                                   Integer limitUsers, LocalDate endAt) {
+                                   String rule, Boolean isMicOn, Boolean isCamOn, String bgm,
+                                   Integer currentUsers, Integer limitUsers, LocalDate endAt) {
         this.name = name;
         this.category = category;
         this.hashtags = hashtags;
@@ -53,6 +55,7 @@ public class UpdateStudyRoomResponse {
         this.rule = rule;
         this.isMicOn = isMicOn;
         this.isCamOn = isCamOn;
+        this.bgm = bgm;
         this.currentUsers = currentUsers;
         this.limitUsers = limitUsers;
         this.endAt = endAt;

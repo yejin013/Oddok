@@ -14,10 +14,13 @@ public class UpdateProfileResponse {
 
     private final LocalDate dday;
 
+    private final String ddayInfo;
+
     @Builder
-    public UpdateProfileResponse(String goal, Integer targetTime, LocalDate dday) {
+    public UpdateProfileResponse(String goal, Integer targetTime, LocalDate dday, String ddayInfo) {
         this.goal = goal;
         this.targetTime = targetTime;
         this.dday = dday;
+        this.ddayInfo = ddayInfo;
     }
 }

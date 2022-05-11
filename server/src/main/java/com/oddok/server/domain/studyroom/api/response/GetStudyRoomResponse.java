@@ -10,34 +10,37 @@ import java.util.List;
 
 @Getter
 public class GetStudyRoomResponse {
-    private String name;
+    private final String name;
 
-    private Category category;
+    private final Category category;
 
-    private List<String> hashtags;
+    private final List<String> hashtags;
 
-    private String image;
+    private final String image;
 
-    private Boolean isPublic;
+    private final Boolean isPublic;
 
-    private Integer targetTime;
+    private final Integer targetTime;
 
-    private String rule;
+    private final String rule;
 
-    private Boolean isMicOn;
+    private final Boolean isMicOn;
 
-    private Boolean isCamOn;
+    private final Boolean isCamOn;
 
-    private Integer currentUsers;
+    private final String bgm;
 
-    private Integer limitUsers;
+    private final Integer currentUsers;
 
-    private LocalDate endAt;
+    private final Integer limitUsers;
+
+    private final LocalDate endAt;
 
     @Builder
     public GetStudyRoomResponse(String name, Category category, List<String> hashtags, String image,
                                 Boolean isPublic, Integer targetTime, String rule, Boolean isMicOn,
-                                Boolean isCamOn, Integer currentUsers, Integer limitUsers, LocalDate endAt) {
+                                Boolean isCamOn, Integer currentUsers, String bgm,
+                                Integer limitUsers, LocalDate endAt) {
         this.name = name;
         this.category = category;
         this.hashtags = hashtags;
@@ -47,6 +50,7 @@ public class GetStudyRoomResponse {
         this.rule = rule;
         this.isMicOn = isMicOn;
         this.isCamOn = isCamOn;
+        this.bgm = bgm;
         this.currentUsers = currentUsers;
         this.limitUsers = limitUsers;
         this.endAt = endAt;

@@ -32,6 +32,8 @@ public class CreateStudyRoomRequest {
 
     private Boolean isCamOn;
 
+    private String bgm;
+
     private Integer currentUsers;
 
     private Integer limitUsers;

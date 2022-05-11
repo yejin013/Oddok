@@ -52,6 +52,9 @@ public class StudyRoom {
     @Column(name = "is_cam_on")
     private Boolean isCamOn;
 
+    @Column(name = "bgm")
+    private String bgm;
+
     @Column(name = "current_users")
     private Integer currentUsers;
 
@@ -88,9 +91,9 @@ public class StudyRoom {
 
     @Builder
     public StudyRoom(String name, String category, User user,
-                     String image, Boolean isPublic,
-                     String password, Integer targetTime, String rule,
-                     Boolean isMicOn, Boolean isCamOn, Integer limitUsers,
+                     String image, Boolean isPublic, String password,
+                     Integer targetTime, String rule, Boolean isMicOn,
+                     Boolean isCamOn, String bgm, Integer limitUsers,
                      LocalDate endAt) {
         this.category = Category.valueOf(category);
         this.name = Objects.requireNonNullElseGet(name, this::getDefaultNameToCreate);
@@ -102,6 +105,7 @@ public class StudyRoom {
         this.rule = rule;
         this.isMicOn = isMicOn;
         this.isCamOn = isCamOn;
+        this.bgm = bgm;
         this.limitUsers = limitUsers;
         this.endAt = endAt;
         this.createAt = LocalDateTime.now();
@@ -124,6 +128,7 @@ public class StudyRoom {
         this.rule = studyRoomDto.getRule();
         this.isMicOn = studyRoomDto.getIsMicOn();
         this.isCamOn = studyRoomDto.getIsCamOn();
+        this.bgm = studyRoomDto.getBgm();
         this.limitUsers = studyRoomDto.getLimitUsers();
         this.endAt = studyRoomDto.getEndAt();
 
