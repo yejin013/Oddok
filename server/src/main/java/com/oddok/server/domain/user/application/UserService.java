@@ -33,6 +33,13 @@ public class UserService {
         User savedUser = userRepository.save(maker1);
         userRepository.save(new User("user1@kakao.com", "user1", Role.USER));
         userRepository.save(new User("user2@kakao.com", "user2", Role.USER));
+        userRepository.save(new User("user3@kakao.com", "user3", Role.USER));
+        userRepository.save(new User("user4@kakao.com", "user4", Role.USER));
+        userRepository.save(new User("user5@kakao.com", "user5", Role.USER));
+        userRepository.save(new User("user6@kakao.com", "user6", Role.USER));
+        userRepository.save(new User("user7@kakao.com", "user7", Role.USER));
+        userRepository.save(new User("user8@kakao.com", "user8", Role.USER));
+        userRepository.save(new User("user9@kakao.com", "user9", Role.USER));
         return savedUser.getId();
 
     }

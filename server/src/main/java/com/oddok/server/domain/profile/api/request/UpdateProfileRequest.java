@@ -12,4 +12,6 @@ public class UpdateProfileRequest {
     private Integer targetTime;
 
     private LocalDate dday;
+
+    private String ddayInfo;
 }

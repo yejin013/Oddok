@@ -49,7 +49,7 @@ public class ProfileService {
         User user = findUser(profileDto.getUserId());
         Profile profile = profileRepository.findByUser(user)
                 .orElseThrow(() -> new ProfileNotFoundException(user.getId()));
-        profile.update(profileDto.getGoal(), profileDto.getTargetTime(), profileDto.getDday());
+        profile.update(profileDto.getGoal(), profileDto.getTargetTime(), profileDto.getDday(), profileDto.getDdayInfo());
         return profileMapper.toDto(profile);
     }
 

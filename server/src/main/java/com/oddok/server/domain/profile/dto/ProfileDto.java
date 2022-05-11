@@ -9,19 +9,22 @@ import java.time.LocalDate;
 @Getter
 public class ProfileDto {
 
-    private Long userId;
+    private final Long userId;
 
-    private String goal;
+    private final String goal;
 
-    private Integer targetTime;
+    private final Integer targetTime;
 
-    private LocalDate dday;
+    private final LocalDate dday;
+
+    private final String ddayInfo;
 
     @Builder
-    public ProfileDto(Long userId, String goal, Integer targetTime, LocalDate dday) {
+    public ProfileDto(Long userId, String goal, Integer targetTime, LocalDate dday, String ddayInfo) {
         this.userId = userId;
         this.goal = goal;
         this.targetTime = targetTime;
         this.dday = dday;
+        this.ddayInfo = ddayInfo;
     }
 }

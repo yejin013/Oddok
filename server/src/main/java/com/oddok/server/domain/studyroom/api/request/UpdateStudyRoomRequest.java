@@ -33,6 +33,8 @@ public class UpdateStudyRoomRequest {
 
     private Boolean isCamOn;
 
+    private String bgm;
+
     private Integer limitUsers;
 
     private LocalDate endAt;
