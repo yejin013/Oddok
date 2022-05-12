@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { userState } from "../recoil/user_state";
-import { roomInfoState } from "../recoil/studyroom_state";
-import { getStudyRoom, joinStudyRoom } from "../api/study-room-api";
-import useAsync from "../hooks/useAsync";
+import { userState } from "@recoil/user_state";
+import { roomInfoState } from "@recoil/studyroom_state";
+import { getStudyRoom, joinStudyRoom } from "@api/study-room-api";
+import useAsync from "@hooks/useAsync";
+import { Loading } from "@components/study";
+import { ErrorModal } from "@components/commons";
 import SettingRoom from "./setting_room/setting_room";
-import Loading from "../components/study/Loading/Loading";
-import ErrorModal from "../components/commons/ErrorModal/ErrorModal";
 
 function JoinRoom() {
   const history = useHistory();

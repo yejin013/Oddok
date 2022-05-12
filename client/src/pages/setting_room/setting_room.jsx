@@ -1,12 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useRecoilValue, useRecoilState } from "recoil";
-import { videoState, audioState, roomInfoState, roomTitleState } from "../../recoil/studyroom_state";
-import { planState } from "../../recoil/plan_state";
-import SettingBar from "../../components/study/setting_bar/setting_bar";
-import SettingSection from "../../components/study/setting_section/setting_section";
-import ToolTip from "../../components/commons/tool_tip/tool_tip";
-import TotalTime from "../../components/study/total_time/total_time";
-import PlanSidebar from "../../components/study/plan_sidebar/plan_sidebar";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { videoState, audioState, roomInfoState, roomTitleState } from "@recoil/studyroom_state";
+import { planState } from "@recoil/plan_state";
+import { ToolTip } from "@components/commons";
+import { SettingBar, SettingSection, TotalTime, PlanSidebar } from "@components/study";
 import styles from "./setting_room.module.css";
 
 function SettingRoom({ goToStudyRoom }) {

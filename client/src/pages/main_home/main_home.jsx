@@ -1,13 +1,10 @@
 import React, { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
-import Bookmark from "../../components/home/bookmark/bookmark";
-import Footer from "../../components/home/footer/footer";
-import Header from "../../components/home/header/header";
-import StudyRoomList from "../../components/home/studyroom_list/studyroom_list";
+import { bookmarkState } from "@recoil/bookmark-state";
+import { getBookmark } from "@api/study-room-api";
+import { getTestUser } from "@api/getTestUser";
+import { Bookmark, Footer, Header, StudyRoomList } from "@components/home";
 import styles from "./main_home.module.css";
-import { getBookmark } from "../../api/study-room-api";
-import { bookmarkState } from "../../recoil/bookmark-state";
-import { getTestUser } from "../../api/getTestUser";
 
 function MainHome(props) {
   const setBookmark = useSetRecoilState(bookmarkState);

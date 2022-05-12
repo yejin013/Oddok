@@ -1,12 +1,10 @@
 /* eslint-disable react/jsx-boolean-value */
 import React, { useState, useRef } from "react";
 import { useSetRecoilState } from "recoil";
-import Header from "../../components/home/header/header";
-import Input from "../../components/commons/Input/input";
-import HashtagButton from "../../components/commons/hashtag_button/hashtag_button";
-import StudyRoomList from "../../components/home/studyroom_list/studyroom_list";
-import { getBookmark } from "../../api/study-room-api";
-import { bookmarkState } from "../../recoil/bookmark-state";
+import { bookmarkState } from "@recoil/bookmark-state";
+import { getBookmark } from "@api/study-room-api";
+import { Input, HashtagButton } from "@components/commons";
+import { Header, StudyRoomList } from "@components/home";
 import styles from "./search.module.css";
 
 const hashtags = [

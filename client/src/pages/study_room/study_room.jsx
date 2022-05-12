@@ -1,16 +1,11 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import { OpenVidu } from "openvidu-browser";
 import { useRecoilState, useResetRecoilState } from "recoil";
-import { roomInfoState, videoState, audioState } from "../../recoil/studyroom_state";
-import { leaveStudyRoom } from "../../api/study-room-api";
-import StudyBar from "../../components/study/study_bar/study_bar";
-import UserVideo from "../../components/study/user_video/user_video";
-import SettingSideBar from "../../components/study/setting_side_bar/setting_side_bar";
-import ChatBar from "../../components/study/chat_bar/chat_bar";
-import PlanSidebar from "../../components/study/plan_sidebar/plan_sidebar";
-import SettingSection from "../../components/study/setting_section/setting_section";
-import ErrorModal from "../../components/commons/ErrorModal/ErrorModal";
+import { roomInfoState, videoState, audioState } from "@recoil/studyroom_state";
+import { leaveStudyRoom } from "@api/study-room-api";
+import { StudyBar, UserVideo, SettingSideBar, ChatSideBar, PlanSidebar, SettingSection } from "@components/study";
+import { ErrorModal } from "@components/commons";
 import styles from "./study_room.module.css";
 
 function StudyRoom() {
@@ -140,7 +135,7 @@ function StudyRoom() {
           </div>
         )}
         <div className={`${styles.side_bar} ${!sideBarState.chatting && styles.hide}`}>
-          <ChatBar session={session} />
+          <ChatSideBar session={session} />
         </div>
       </div>
       <div className={styles.bar}>
