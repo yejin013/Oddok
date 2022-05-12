@@ -1,0 +1,15 @@
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+.container button {
+  background-color: gray;
+  padding: 0.8rem 1rem;
+  margin: 1rem;
+  border-radius: 4px;
+}

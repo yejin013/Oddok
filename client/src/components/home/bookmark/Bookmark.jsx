@@ -2,11 +2,11 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import UserCount from "@components/commons/UserCount";
+import UserCount from "@components/commons/UserCount/UserCount";
 import { bookmarkState } from "@recoil/bookmark-state";
 import { Thumbnail } from "@icons";
 import UserList from "../UserList/UserList";
-import styles from "./bookmark.module.css";
+import styles from "./Bookmark.module.css";
 
 function Bookmark({ showBookmark }) {
   const bookmark = useRecoilValue(bookmarkState);
@@ -22,9 +22,6 @@ function Bookmark({ showBookmark }) {
 
   useEffect(() => {
     // if(유저가 로그인했다면)
-    // if (!bookmark) {
-    //   return;
-    // }
     showBookmark();
   }, []);
 

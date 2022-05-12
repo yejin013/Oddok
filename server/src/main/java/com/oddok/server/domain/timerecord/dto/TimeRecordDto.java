@@ -7,12 +7,14 @@ import java.time.LocalDateTime;
 
 @Getter
 public class TimeRecordDto {
+    private final Long id;
     private final LocalDateTime startTime;
     private final LocalDateTime endTime;
     private final String subject;
 
     @Builder
-    public TimeRecordDto(LocalDateTime startTime, LocalDateTime endTime, String subject) {
+    public TimeRecordDto(Long id, LocalDateTime startTime, LocalDateTime endTime, String subject) {
+        this.id = id;
         this.startTime = startTime;
         this.endTime = endTime;
         this.subject = subject;

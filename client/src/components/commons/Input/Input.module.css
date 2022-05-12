@@ -1,0 +1,38 @@
+.container {
+  display: flex;
+  position: relative;
+}
+
+.container input,
+.container div {
+  display: block;
+}
+
+.container input {
+  border: 1px solid #ffffff1a;
+  border-radius: 4px;
+  background-color: #212529;
+  color: #ffffff;
+  font-size: inherit;
+  padding: 0.8125em 1em;
+  width: 100%;
+}
+
+.container input:focus {
+  outline: none;
+  border: 1px solid #bf7d8a;
+}
+.container.invalid input {
+  border: 1px solid #dc3545;
+}
+
+/*
+.container input::placeholder {
+}
+*/
+
+.button {
+  position: absolute;
+  top: 33%;
+  left: 85%;
+}

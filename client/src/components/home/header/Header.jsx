@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Search, Profile } from "@icons";
-import styles from "./header.module.css";
+import styles from "./Header.module.css";
 
 function Header(props) {
   const history = useHistory();
@@ -15,7 +15,7 @@ function Header(props) {
 
   const goToCreateRoom = () => {
     history.push({
-      pathname: "/create",
+      pathname: "/studyroom/create",
     });
   };
 

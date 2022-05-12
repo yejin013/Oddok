@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { getStudyRoomList } from "@api/study-room-api";
-import Dropdown from "@components/commons/Dropdown";
+import { Dropdown } from "@components/commons";
 import TabMenu from "../TabMenu/TabMenu";
 import CardGrid from "../CardGrid/CardGrid";
-import styles from "./studyroom_list.module.css";
+import styles from "./StudyRoomList.module.css";
 
 function StudyRoomList({ searchedTitle, searchedHashtag, showBookmark }) {
   const [currentPage, setCurrentPage] = useState(0);

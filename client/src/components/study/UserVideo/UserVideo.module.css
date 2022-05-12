@@ -1,0 +1,33 @@
+.video {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.video.one {
+  width: 100%;
+  height: 100%;
+}
+
+.video.two {
+  width: 50%;
+  height: 100%;
+}
+
+.video.multi {
+  width: 50%;
+  height: 50%;
+}
+
+.video.maxium {
+  width: 30%;
+  height: 50%;
+}
+
+.user_video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transform: rotateY(180deg);
+}

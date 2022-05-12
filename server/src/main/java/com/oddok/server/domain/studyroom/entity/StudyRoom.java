@@ -74,12 +74,16 @@ public class StudyRoom {
         this.sessionId = sessionId;
     }
 
-    public void deleteSession(){
+    public void deleteSession() {
         this.sessionId = null;
     }
 
-    public void setDefaultName(){
-        this.name = category.getValue()+" "+id+"호실";
+    public String getDefaultNameToCreate() {
+        return category.getValue() + " n호실";
+    }
+
+    public String getDefaultNameToUpdate() {
+        return category.getValue() + " " + id + "호실";
     }
 
     @Builder
@@ -88,8 +92,8 @@ public class StudyRoom {
                      String password, Integer targetTime, String rule,
                      Boolean isMicOn, Boolean isCamOn, Integer limitUsers,
                      LocalDate endAt) {
-        this.name = name;
         this.category = Category.valueOf(category);
+        this.name = Objects.requireNonNullElseGet(name, this::getDefaultNameToCreate);
         this.user = user;
         this.image = image;
         this.isPublic = isPublic;
@@ -106,8 +110,8 @@ public class StudyRoom {
     }
 
     public void update(StudyRoomDto studyRoomDto) {
-        this.name = studyRoomDto.getName();
         this.category = studyRoomDto.getCategory();
+        this.name = Objects.requireNonNullElseGet(studyRoomDto.getName(), this::getDefaultNameToUpdate);
         this.image = studyRoomDto.getImage();
         this.isPublic = studyRoomDto.getIsPublic();
 
@@ -148,8 +152,8 @@ public class StudyRoom {
         this.currentUsers++;
     }
 
-    public int decreaseCurrentUsers() {
-        return --this.currentUsers;
+    public void decreaseCurrentUsers() {
+        this.currentUsers--;
     }
 
 }

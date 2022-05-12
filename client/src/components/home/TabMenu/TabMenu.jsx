@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import TabMenuItem from "./TabMenuItem/TabMenuItem";
-import styles from "./tab_menu.module.css";
+import TabMenuItem from "./TabMenuItem";
+import styles from "./TabMenu.module.css";
 
 const items = [
   { value: undefined, name: "전체" },

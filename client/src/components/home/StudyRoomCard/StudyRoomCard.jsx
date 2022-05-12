@@ -1,13 +1,11 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from "react";
 import { useRecoilState } from "recoil";
 import { bookmarkState } from "@recoil/bookmark-state";
 import { addBookmark, deleteBookmark } from "@api/study-room-api";
-import UserCount from "@components/commons/UserCount";
+import { UserCount } from "@components/commons";
 import { Lock, Unlock, BookMark, BookMarkHeart } from "@icons";
 import Thumbnail from "./thumbnail";
-import styles from "./studyroom_card.module.css";
+import styles from "./StudyRoomCard.module.css";
 
 function StudyRoomCard({ roomData, showBookmark }) {
   const [bookmark, setBookmark] = useRecoilState(bookmarkState);

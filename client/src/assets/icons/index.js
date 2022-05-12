@@ -1,4 +1,6 @@
 import { ReactComponent as VideoOn } from "./video.svg";
+import { ReactComponent as VideoOff } from "./camera-video-off.svg";
+import { ReactComponent as MicOn } from "./mic.svg";
 import { ReactComponent as MicOff } from "./mic_off.svg";
 import { ReactComponent as Setting } from "./setting.svg";
 import { ReactComponent as Music } from "./music.svg";
@@ -23,9 +25,12 @@ import { ReactComponent as ArrowDown } from "./chevron-down.svg";
 import { ReactComponent as Cancel } from "./x-circle-fill.svg";
 import { ReactComponent as Person } from "./person-fill.svg";
 import { ReactComponent as Plus } from "./plus.svg";
+import { ReactComponent as SendButton } from "./send-button.svg";
 
 export {
   VideoOn,
+  VideoOff,
+  MicOn,
   MicOff,
   Setting,
   Music,
@@ -50,4 +55,5 @@ export {
   Cancel,
   Person,
   Plus,
+  SendButton,
 };

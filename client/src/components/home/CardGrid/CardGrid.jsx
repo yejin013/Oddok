@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import StudyRoomCard from "../StudyRoomCard/StudyRoomCard";
-import styles from "./card_grid.module.css";
+import styles from "./CardGrid.module.css";
 
 function CardGrid({ rooms, showBookmark }) {
   // 디자인 테스트용
