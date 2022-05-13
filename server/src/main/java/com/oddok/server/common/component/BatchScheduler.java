@@ -1,6 +1,8 @@
 package com.oddok.server.common.component;
 
 import com.oddok.server.common.config.BatchConfig;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.JobParameter;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersInvalidException;
@@ -15,12 +17,12 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
+@RequiredArgsConstructor
 @Component
 public class BatchScheduler {
 
-    @Autowired
     private JobLauncher jobLauncher;
-    @Autowired
     private BatchConfig batchConfig;
 
     @Scheduled(cron = "0 0 12 1 1 ?") // 매년 1월 1일 12시 정각 0초
@@ -33,8 +35,8 @@ public class BatchScheduler {
         try {
             jobLauncher.run(batchConfig.job(), jobParameters);
         } catch (JobExecutionAlreadyRunningException | JobInstanceAlreadyCompleteException
-            | JobParametersInvalidException | JobRestartException e) {
-            System.out.println(e.getMessage());
+                | JobParametersInvalidException | JobRestartException e) {
+            log.error("batch job error = {}", e.getMessage());
         }
     }
 }

@@ -40,7 +40,7 @@ public class StudyRoomService {
     @Transactional
     public StudyRoomDto createStudyRoom(StudyRoomDto studyRoomDto) {
         User user = findUser(studyRoomDto.getUserId());
-        if (studyRoomRepository.findByUser(user).isPresent()) { // 사용자는 하나의 스터디룸만 개설할 수 있습니다.
+        if (studyRoomRepository.existsByUser(user)) { // 사용자는 하나의 스터디룸만 개설할 수 있습니다.
             throw new UserAlreadyPublishStudyRoomException(user.getId());
         }
         StudyRoom studyRoom = studyRoomMapper.toEntity(studyRoomDto, user);
@@ -100,7 +100,7 @@ public class StudyRoomService {
     @Transactional
     public void deleteStudyRoom(Long id) {
         StudyRoom studyRoom = findStudyRoom(id);
-        if (studyRoom.getSessionId() == null) {
+        if (studyRoom.getSessionId() != null) { // 세션이 살아있으면 세션 삭제
             sessionManager.deleteSession(studyRoom.getSessionId());
         }
         studyRoomRepository.delete(studyRoom);
