@@ -1,0 +1,8 @@
+.box {
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  margin: 0 10px;
+}
