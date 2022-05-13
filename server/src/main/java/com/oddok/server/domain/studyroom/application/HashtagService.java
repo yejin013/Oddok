@@ -14,8 +14,8 @@ public class HashtagService {
 
     private final HashtagQueryRepository hashtagQueryRepository;
 
-    public List<String> findTop15Hashtags() {
-        return hashtagQueryRepository.findTop15Hashtags();
+    public List<String> findTop15Hashtags(String name) {
+        return hashtagQueryRepository.findTop15Hashtags(name);
     }
 
 }
