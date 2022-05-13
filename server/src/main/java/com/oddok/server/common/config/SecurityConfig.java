@@ -38,6 +38,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 //                .and()
+//                .logout()
+//                .logoutUrl("/logout")
+//                .and()
+//                .oauth2Login()
+//                .authorizationEndpoint()
+//                .and()
+//                .redirectionEndpoint()
+//                .baseUri("/*/oauth2/code/*")
+//                .and()
 //                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }
