@@ -1,0 +1,13 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.header button svg {
+  width: 8px;
+  margin: 0 4px;
+}
+
+.header div span {
+  margin: 0 2px;
+}
