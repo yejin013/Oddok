@@ -1,31 +1,39 @@
 import React, { useState } from "react";
 import Picker from "react-datepicker";
 import ko from "date-fns/locale/ko";
+import { addDays, subDays } from "date-fns";
 import { ArrowLeft, ArrowRight } from "@icons";
 import CustomInput from "./CustomInput";
 import "react-datepicker/dist/react-datepicker.css";
 import styles from "./DatePicker.module.css";
 
 function DatePicker() {
-  const [startDate, setStartDate] = useState(new Date());
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const prevDay = () => {
+    setCurrentDate(subDays(currentDate, 1));
+  };
+  const nextDay = () => {
+    setCurrentDate(addDays(currentDate, 1));
+  };
+
   return (
     <div className={styles.box}>
-      <div className={styles.icon}>
+      <button type="button" className={styles.icon} onClick={prevDay}>
         <ArrowLeft />
-      </div>
+      </button>
       <Picker
         locale={ko}
         dateFormat="yyyy/MM/dd"
-        selected={startDate} //
-        onChange={(date) => setStartDate(date)}
+        selected={currentDate} //
+        onChange={(date) => setCurrentDate(date)}
         minDate={new Date()}
         showPopperArrow={false}
         popperPlacement="auto"
         customInput={<CustomInput />}
       />
-      <div className={styles.icon}>
+      <button type="button" className={styles.icon} onClick={nextDay}>
         <ArrowRight />
-      </div>
+      </button>
     </div>
   );
 }
