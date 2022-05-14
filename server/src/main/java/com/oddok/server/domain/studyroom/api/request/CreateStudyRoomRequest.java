@@ -38,6 +38,7 @@ public class CreateStudyRoomRequest {
 
     private Integer limitUsers;
 
+    @NotNull
     private LocalDate endAt;
 
     private List<String> hashtags;

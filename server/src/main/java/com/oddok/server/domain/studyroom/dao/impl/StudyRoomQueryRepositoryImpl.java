@@ -32,7 +32,7 @@ public class StudyRoomQueryRepositoryImpl implements StudyRoomQueryRepository {
                                                      Pageable pageable) {
         LocalDate now = LocalDate.now();
         JPAQuery<StudyRoom> query = queryFactory.selectFrom(studyRoom)
-                .where(studyRoom.endAt.isNull().or(studyRoom.endAt.after(now)),
+                .where(studyRoom.endAt.eq(now).or(studyRoom.endAt.after(now)),
                         eqIsPublic(isPublic),
                         eqCategory(category),
                         containsName(name))
@@ -48,7 +48,7 @@ public class StudyRoomQueryRepositoryImpl implements StudyRoomQueryRepository {
         JPAQuery<StudyRoom> query = queryFactory.selectFrom(studyRoom)
                 .innerJoin(studyRoomHashtag)
                 .on(studyRoom.eq(studyRoomHashtag.studyRoom))
-                .where(studyRoom.endAt.isNull().or(studyRoom.endAt.after(now)),
+                .where(studyRoom.endAt.eq(now).or(studyRoom.endAt.after(now)),
                         eqIsPublic(isPublic),
                         eqCategory(category),
                         studyRoomHashtag.hashtag.eq(hashtag))
@@ -58,11 +58,11 @@ public class StudyRoomQueryRepositoryImpl implements StudyRoomQueryRepository {
         return query.fetch();
     }
 
-    public Optional<StudyRoom> findByIdAndEndAtIsNullOrAfter(Long id) {
+    public Optional<StudyRoom> findByIdAndEndAtIsEqualOrAfter(Long id) {
 
         LocalDate now = LocalDate.now();
         JPAQuery<StudyRoom> query = queryFactory.selectFrom(studyRoom)
-                .where(studyRoom.endAt.isNull().or(studyRoom.endAt.after(now)),
+                .where(studyRoom.endAt.eq(now).or(studyRoom.endAt.after(now)),
                         studyRoom.id.eq(id));
         return Optional.ofNullable(query.fetchOne());
     }

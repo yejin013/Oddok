@@ -98,8 +98,8 @@ public class StudyRoomService {
         return studyRoomMapper.toDto(studyRoom);
     }
 
-    public List<StudyRoomDto> getAllStudyRoom() {
-        return studyRoomMapper.toDtoList(studyRoomRepository.findAllByEndAtLessThan(LocalDate.now()));
+    public List<StudyRoomDto> getAllStudyRoomForDelete() {
+        return studyRoomMapper.toDtoList(studyRoomRepository.findAllByEndAtIsBefore(LocalDate.now()));
     }
 
     @Transactional

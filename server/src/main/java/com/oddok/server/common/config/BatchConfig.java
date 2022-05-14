@@ -32,7 +32,7 @@ public class BatchConfig {
     @Bean
     public Step step() {
         return stepBuilderFactory.get("step").tasklet((contribution, chunkContext) -> {
-            List<StudyRoomDto> studyRoomDtos = studyRoomService.getAllStudyRoom();
+            List<StudyRoomDto> studyRoomDtos = studyRoomService.getAllStudyRoomForDelete();
 
             for(StudyRoomDto studyRoomDto : studyRoomDtos) {
                 studyRoomService.deleteStudyRoom(studyRoomDto.getId());

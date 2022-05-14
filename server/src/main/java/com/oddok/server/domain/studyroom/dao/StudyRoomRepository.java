@@ -13,5 +13,5 @@ import java.util.Optional;
 public interface StudyRoomRepository extends JpaRepository<StudyRoom, Long> {
     Optional<StudyRoom> findByUser(User user);
     boolean existsByUser(User user);
-    List<StudyRoom> findAllByEndAtLessThan(LocalDate endAt);
+    List<StudyRoom> findAllByEndAtIsBefore(LocalDate endAt);
 }
