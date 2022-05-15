@@ -13,6 +13,12 @@ function Header(props) {
     });
   };
 
+  const goToMypage = () => {
+    history.push({
+      pathname: "/mypage",
+    });
+  };
+
   const goToCreateRoom = () => {
     history.push({
       pathname: "/studyroom/create",
@@ -35,7 +41,7 @@ function Header(props) {
           </button>
         </li>
         <li>
-          <button type="button" className={styles.mypage}>
+          <button type="button" className={styles.mypage} onClick={goToMypage}>
             마이페이지
           </button>
         </li>
