@@ -94,7 +94,7 @@ class StudyRoomServiceTest {
 
         //when
         given(userRepository.findById(any())).willReturn(Optional.ofNullable(studyRoom.getUser()));
-        given(studyRoomRepository.findByUser(any())).willReturn(Optional.ofNullable(studyRoom));
+        given(studyRoomRepository.existsByUser(any())).willReturn(true);
 
         //then
         assertThrows(UserAlreadyPublishStudyRoomException.class, () -> studyRoomService.createStudyRoom(studyRoomDto));
