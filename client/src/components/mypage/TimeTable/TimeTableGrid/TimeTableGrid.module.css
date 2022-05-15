@@ -1,0 +1,13 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  border-top: 1px solid var(--gray600);
+  border-left: 1px solid var(--gray600);
+  background-color: var(--gray900);
+}
+
+.gridcell {
+  border-right: 1px solid var(--gray600);
+  border-bottom: 1px solid var(--gray600);
+  height: 25px;
+}
