@@ -56,15 +56,17 @@ public class StudyRoomQueryRepositoryImpl implements StudyRoomQueryRepository {
         return query.fetch();
     }
 
-    private BooleanExpression notEnd() {
-        return studyRoom.endAt.goe(LocalDate.now());
-    }
 
     public Optional<StudyRoom> findByIdAndEndAtIsEqualOrAfter(Long id) {
         JPAQuery<StudyRoom> query = queryFactory.selectFrom(studyRoom)
                 .where(notEnd(),
                         studyRoom.id.eq(id));
         return Optional.ofNullable(query.fetchOne());
+    }
+
+    private BooleanExpression notEnd() {
+        LocalDate now = LocalDate.now();
+        return studyRoom.endAt.after(now).or(studyRoom.endAt.eq(now));
     }
 
     private OrderSpecifier<?> studyRoomSort(Pageable pageable) {
