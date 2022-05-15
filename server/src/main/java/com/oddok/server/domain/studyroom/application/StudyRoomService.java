@@ -14,6 +14,7 @@ import com.oddok.server.domain.user.dao.UserRepository;
 import com.oddok.server.domain.user.entity.User;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -95,6 +96,10 @@ public class StudyRoomService {
         studyRoom.update(requestDto);
         mapStudyRoomAndHashtags(studyRoom, requestDto.getHashtags());
         return studyRoomMapper.toDto(studyRoom);
+    }
+
+    public List<StudyRoomDto> getAllStudyRoomForDelete() {
+        return studyRoomMapper.toDtoList(studyRoomRepository.findAllByEndAtIsBefore(LocalDate.now()));
     }
 
     @Transactional

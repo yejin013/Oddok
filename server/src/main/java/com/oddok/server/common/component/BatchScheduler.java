@@ -18,14 +18,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-@RequiredArgsConstructor
 @Component
 public class BatchScheduler {
 
+    @Autowired
     private JobLauncher jobLauncher;
+    @Autowired
     private BatchConfig batchConfig;
 
-    @Scheduled(cron = "0 0 12 1 1 ?") // 매년 1월 1일 12시 정각 0초
+    @Scheduled(cron = "0 0 0 * * *") // 매일 0시 정각 0초
     public void runJob() {
         // job parameter 설정
         Map<String, JobParameter> confMap = new HashMap<>();

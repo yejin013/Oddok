@@ -30,9 +30,8 @@ public class StudyRoomQueryRepositoryImpl implements StudyRoomQueryRepository {
 
     public List<StudyRoom> findAllBySearchConditions(Boolean isPublic, String category, String name,
                                                      Pageable pageable) {
-        LocalDate now = LocalDate.now();
         JPAQuery<StudyRoom> query = queryFactory.selectFrom(studyRoom)
-                .where(studyRoom.endAt.isNull().or(studyRoom.endAt.after(now)),
+                .where(notEnd(),
                         eqIsPublic(isPublic),
                         eqCategory(category),
                         containsName(name))
@@ -44,11 +43,10 @@ public class StudyRoomQueryRepositoryImpl implements StudyRoomQueryRepository {
 
     public List<StudyRoom> findAllByHashtag(Boolean isPublic, String category, Hashtag hashtag,
                                                      Pageable pageable) {
-        LocalDate now = LocalDate.now();
         JPAQuery<StudyRoom> query = queryFactory.selectFrom(studyRoom)
                 .innerJoin(studyRoomHashtag)
                 .on(studyRoom.eq(studyRoomHashtag.studyRoom))
-                .where(studyRoom.endAt.isNull().or(studyRoom.endAt.after(now)),
+                .where(notEnd(),
                         eqIsPublic(isPublic),
                         eqCategory(category),
                         studyRoomHashtag.hashtag.eq(hashtag))
@@ -58,13 +56,17 @@ public class StudyRoomQueryRepositoryImpl implements StudyRoomQueryRepository {
         return query.fetch();
     }
 
-    public Optional<StudyRoom> findByIdAndEndAtIsNullOrAfter(Long id) {
 
-        LocalDate now = LocalDate.now();
+    public Optional<StudyRoom> findByIdAndEndAtIsEqualOrAfter(Long id) {
         JPAQuery<StudyRoom> query = queryFactory.selectFrom(studyRoom)
-                .where(studyRoom.endAt.isNull().or(studyRoom.endAt.after(now)),
+                .where(notEnd(),
                         studyRoom.id.eq(id));
         return Optional.ofNullable(query.fetchOne());
+    }
+
+    private BooleanExpression notEnd() {
+        LocalDate now = LocalDate.now();
+        return studyRoom.endAt.after(now).or(studyRoom.endAt.eq(now));
     }
 
     private OrderSpecifier<?> studyRoomSort(Pageable pageable) {
