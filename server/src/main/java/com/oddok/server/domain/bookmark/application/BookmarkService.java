@@ -10,7 +10,6 @@ import com.oddok.server.domain.participant.dto.ParticipantDto;
 import com.oddok.server.domain.bookmark.mapper.BookmarkMapper;
 import com.oddok.server.domain.participant.mapper.ParticipantMapper;
 import com.oddok.server.domain.studyroom.dao.StudyRoomRepository;
-import com.oddok.server.domain.studyroom.dao.querydsl.StudyRoomQueryRepository;
 import com.oddok.server.domain.studyroom.entity.StudyRoom;
 import com.oddok.server.domain.user.dao.UserRepository;
 import com.oddok.server.domain.user.entity.User;
@@ -30,7 +29,6 @@ public class BookmarkService {
     private final BookmarkRepository bookmarkRepository;
     private final UserRepository userRepository;
     private final StudyRoomRepository studyRoomRepository;
-    private final StudyRoomQueryRepository studyRoomQueryRepository;
     private final ParticipantRepository participantRepository;
 
     /**
@@ -94,7 +92,7 @@ public class BookmarkService {
      * 스터디룸 정보 검색
      */
     private StudyRoom findStudyRoom(Long studyRoomId) {
-        return studyRoomQueryRepository.findByIdAndEndAtIsEqualOrAfter(studyRoomId)
+        return studyRoomRepository.findById(studyRoomId)
                 .orElseThrow(() -> new StudyRoomNotFoundException(studyRoomId));
     }
 }

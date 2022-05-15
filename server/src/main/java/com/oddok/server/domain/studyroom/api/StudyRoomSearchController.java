@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/hashtag")
+@RequestMapping("/search")
 @RequiredArgsConstructor
-public class HashtagController {
+public class StudyRoomSearchController {
 
     private final HashtagService hashtagService;
 

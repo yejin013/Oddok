@@ -20,15 +20,13 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Order;
-import org.springframework.stereotype.Repository;
 
-@Repository
 @RequiredArgsConstructor
 public class StudyRoomQueryRepositoryImpl implements StudyRoomQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<StudyRoom> findAllBySearchConditions(Boolean isPublic, String category, String name,
+    public List<StudyRoom> findAllByIsPublicAndCategoryAndName(Boolean isPublic, String category, String name,
                                                      Pageable pageable) {
         JPAQuery<StudyRoom> query = queryFactory.selectFrom(studyRoom)
                 .where(notEnd(),
@@ -41,7 +39,7 @@ public class StudyRoomQueryRepositoryImpl implements StudyRoomQueryRepository {
         return query.fetch();
     }
 
-    public List<StudyRoom> findAllByHashtag(Boolean isPublic, String category, Hashtag hashtag,
+    public List<StudyRoom> findAllByIsPublicAndCategoryAndHashtags(Boolean isPublic, String category, Hashtag hashtag,
                                                      Pageable pageable) {
         JPAQuery<StudyRoom> query = queryFactory.selectFrom(studyRoom)
                 .innerJoin(studyRoomHashtag)
@@ -54,14 +52,6 @@ public class StudyRoomQueryRepositoryImpl implements StudyRoomQueryRepository {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize());
         return query.fetch();
-    }
-
-
-    public Optional<StudyRoom> findByIdAndEndAtIsEqualOrAfter(Long id) {
-        JPAQuery<StudyRoom> query = queryFactory.selectFrom(studyRoom)
-                .where(notEnd(),
-                        studyRoom.id.eq(id));
-        return Optional.ofNullable(query.fetchOne());
     }
 
     private BooleanExpression notEnd() {

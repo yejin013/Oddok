@@ -15,7 +15,6 @@ import com.oddok.server.domain.user.entity.User;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import lombok.RequiredArgsConstructor;
