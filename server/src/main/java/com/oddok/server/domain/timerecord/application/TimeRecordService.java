@@ -52,8 +52,9 @@ public class TimeRecordService {
      */
     public List<TimeRecordDto> get(Long userId, String date) {
         User user = findUser(userId);
-        LocalDateTime startDatetime = LocalDateTime.of(LocalDate.parse(date), LocalTime.of(0,0,0)); // 오늘 00:00:00
-        LocalDateTime endDatetime = LocalDateTime.of(LocalDate.parse(date), LocalTime.of(23,59,59)); // 오늘 23:59:59
+        LocalDate day = LocalDate.parse(date);
+        LocalDateTime startDatetime = day.atStartOfDay(); // 오늘 00:00:00
+        LocalDateTime endDatetime = day.atTime(23, 59, 59); // 오늘 23:59:59
         List<TimeRecord> timeRecords = timeRecordRepository.findAllByUserAndStartTimeBetween(user, startDatetime, endDatetime);
         return timeRecordMapper.toDto(timeRecords);
     }
