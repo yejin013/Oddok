@@ -25,12 +25,13 @@ public class StudyRoomSearchService {
 
     private final StudyRoomMapper studyRoomMapper = Mappers.getMapper(StudyRoomMapper.class);
 
+    // 해시태그 없이 스터디방 제목, 공개여부, 카테고리를 통해 스터디룸 리스트를 조회합니다. 페이징이 적용됩니다.
     public List<StudyRoomDto> getStudyRoomsBySearchConditions(String name, Boolean isPublic, String category, Pageable pageable) {
         List<StudyRoom> studyRooms = studyRoomQueryRepository.search(name, isPublic, category, pageable);
         return studyRoomMapper.toDtoList(studyRooms);
     }
 
-
+    // 해시태그가 포함 된 검색의 경우, 해시태그 이름으로 해시태그를 조회한 결과를 포함하여 스터디룸을 검색합니다. 페이징이 적용됩니다.
     public List<StudyRoomDto> getStudyRoomsBySearchConditions(String name, String hashtagName, Boolean isPublic, String category, Pageable pageable) {
         List<StudyRoom> studyRooms = new ArrayList<>();
         Optional<Hashtag> hashtag = hashtagRepository.findByName(hashtagName);
