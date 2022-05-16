@@ -48,6 +48,10 @@
   font-size: var(--text-sm);
 }
 
+.text_field {
+  height: 90px;
+}
+
 .my_goal_box {
   display: flex;
   align-items: center;

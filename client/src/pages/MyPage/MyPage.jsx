@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Header, Footer } from "@components/home";
 import { SideNavBar, DatePicker, TimeTable, TimeRecordList } from "@components/mypage";
 import { Textarea } from "@components/commons";
-import { getTimeRecordList } from "@api/mypage-api";
+import { getProfile, getTimeRecordList } from "@api/mypage-api";
 import useAsync from "@hooks/useAsync";
 import getColor from "src/utils/getColor";
 import getTimeDiff from "src/utils/getTimeDiff";
@@ -52,7 +52,8 @@ import styles from "./MyPage.module.css";
 // ];
 
 function MyPage() {
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(0, 10));
+  const { data: profileData } = useAsync(getProfile, { onError: (error) => console.error(error) }, [], false);
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [timeRecordData, setTimeRecordData] = useState();
   const [totalStudyTime, setTotalStudyTime] = useState();
 
@@ -72,7 +73,6 @@ function MyPage() {
     });
     setTimeRecordData(array);
     setTotalStudyTime(total);
-    console.log(total);
   };
 
   useEffect(() => {
@@ -97,24 +97,40 @@ function MyPage() {
               <div>
                 <div className={styles.sub_heading}>디데이</div>
                 <div className={styles.my_goal_box}>
-                  <div className={styles.bold}>D - DAY</div>
+                  <div className={styles.bold}>
+                    {profileData?.dday
+                      ? `D - ${Math.floor((new Date(profileData.dday) - new Date()) / 1000 / 60 / 60 / 24)}`
+                      : "D - DAY"}
+                  </div>
                   <div>
-                    <div>날짜를 추가하세요.</div>
-                    <div>0000.00.00</div>
+                    <div>{profileData?.ddayInfo ? profileData.ddayInfo : "날짜를 추가하세요."}</div>
+                    <div>
+                      {profileData?.dday
+                        ? `${new Date(profileData.dday).getFullYear()}. ${
+                            new Date(profileData.dday).getMonth() + 1
+                          }. ${new Date(profileData.dday).getDate()}`
+                        : "0000. 00. 00"}
+                    </div>
                   </div>
                 </div>
               </div>
               <div>
                 <div className={styles.sub_heading}>공부시간</div>
                 <div className={styles.my_goal_box}>
-                  <div className={styles.bold}>몇 시간</div>
+                  <div className={styles.bold}>
+                    {profileData?.targetTime ? `${profileData?.targetTime} 시간` : "몇 시간"}
+                  </div>
                   <div>/하루</div>
                 </div>
               </div>
               <div className={styles.text_box}>
                 <div className={styles.sub_heading}>목표</div>
-                <div>
-                  <Textarea placeholder="수정 버튼을 눌러 내 목표 또는 각오를 적어주세요." disabled />
+                <div className={styles.text_field}>
+                  <Textarea
+                    placeholder="수정 버튼을 눌러 내 목표 또는 각오를 적어주세요."
+                    defaultValue={profileData?.goal}
+                    disabled
+                  />
                 </div>
               </div>
             </div>
@@ -134,7 +150,7 @@ function MyPage() {
                   <div className={styles.content}>
                     <div className={styles.total_time}>
                       {`${Math.floor(totalStudyTime / 1000 / 60 / 60)}시간 
-                      ${(totalStudyTime / 1000 / 60) % 60}분 
+                      ${Math.floor((totalStudyTime / 1000 / 60) % 60)}분 
                       ${(totalStudyTime / 1000) % 60}초`}
                     </div>
                     <div className={styles.subject_list}>
