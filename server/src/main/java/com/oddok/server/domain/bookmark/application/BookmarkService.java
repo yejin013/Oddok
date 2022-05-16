@@ -18,6 +18,7 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -92,7 +93,7 @@ public class BookmarkService {
      * 스터디룸 정보 검색
      */
     private StudyRoom findStudyRoom(Long studyRoomId) {
-        return studyRoomRepository.findById(studyRoomId)
+        return studyRoomRepository.findByIdAndEndAtIsGreaterThanEqual(studyRoomId, LocalDate.now())
                 .orElseThrow(() -> new StudyRoomNotFoundException(studyRoomId));
     }
 }
