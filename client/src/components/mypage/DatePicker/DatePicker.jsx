@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Picker from "react-datepicker";
 import ko from "date-fns/locale/ko";
 import { addDays, subDays } from "date-fns";
@@ -9,14 +9,19 @@ import "react-datepicker/dist/react-datepicker.css";
 import "./customstyle.css";
 import styles from "./DatePicker.module.css";
 
-function DatePicker() {
+function DatePicker({ setSelectedDate }) {
   const [currentDate, setCurrentDate] = useState(new Date());
+
   const prevDay = () => {
     setCurrentDate(subDays(currentDate, 1));
   };
   const nextDay = () => {
     setCurrentDate(addDays(currentDate, 1));
   };
+
+  useEffect(() => {
+    setSelectedDate(currentDate.toISOString().slice(0, 10));
+  }, [currentDate]);
 
   return (
     <div className={styles.box}>

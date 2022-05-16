@@ -2,69 +2,78 @@ import React, { useState, useEffect } from "react";
 import { Header, Footer } from "@components/home";
 import { SideNavBar, DatePicker, TimeTable, TimeRecordList } from "@components/mypage";
 import { Textarea } from "@components/commons";
+import { getTimeRecordList } from "@api/mypage-api";
+import useAsync from "@hooks/useAsync";
 import getColor from "src/utils/getColor";
 import getTimeDiff from "src/utils/getTimeDiff";
 import styles from "./MyPage.module.css";
 
-const TIME_RECORD_DATA = [
-  {
-    startTime: new Date("2022-05-16T05:30:11"),
-    endTime: new Date("2022-05-16T06:43:11"),
-    subject: "과목1",
-  },
-  {
-    startTime: new Date("2022-05-14T07:23:11"),
-    endTime: new Date("2022-05-14T11:10:11"),
-    subject: "과목2",
-  },
-  {
-    startTime: new Date("2022-05-14T11:10:11"),
-    endTime: new Date("2022-05-14T13:00:11"),
-    subject: "과목3",
-  },
-  {
-    startTime: new Date("2022-05-14T14:12:11"),
-    endTime: new Date("2022-05-14T15:35:11"),
-    subject: "과목4",
-  },
-  {
-    startTime: new Date("2022-05-14T15:36:11"),
-    endTime: new Date("2022-05-14T17:11:11"),
-    subject: "과목5",
-  },
-  {
-    startTime: new Date("2022-05-14T17:13:11"),
-    endTime: new Date("2022-05-14T18:10:11"),
-    subject: "과목6",
-  },
-  {
-    startTime: new Date("2022-05-14T20:00:11"),
-    endTime: new Date("2022-05-14T21:10:11"),
-    subject: "과목7",
-  },
-  {
-    startTime: new Date("2022-05-14T22:00:11"),
-    endTime: new Date("2022-05-14T23:00:11"),
-    subject: "과목8",
-  },
-];
+// const TIME_RECORD_DATA = [
+//   {
+//     startTime: new Date("2022-05-16T05:30:11"),
+//     endTime: new Date("2022-05-16T06:43:11"),
+//     subject: "과목1",
+//   },
+//   {
+//     startTime: new Date("2022-05-14T07:23:11"),
+//     endTime: new Date("2022-05-14T11:10:11"),
+//     subject: "과목2",
+//   },
+//   {
+//     startTime: new Date("2022-05-14T11:10:11"),
+//     endTime: new Date("2022-05-14T13:00:11"),
+//     subject: "과목3",
+//   },
+//   {
+//     startTime: new Date("2022-05-14T14:12:11"),
+//     endTime: new Date("2022-05-14T15:35:11"),
+//     subject: "과목4",
+//   },
+//   {
+//     startTime: new Date("2022-05-14T15:36:11"),
+//     endTime: new Date("2022-05-14T17:11:11"),
+//     subject: "과목5",
+//   },
+//   {
+//     startTime: new Date("2022-05-14T17:13:11"),
+//     endTime: new Date("2022-05-14T18:10:11"),
+//     subject: "과목6",
+//   },
+//   {
+//     startTime: new Date("2022-05-14T20:00:11"),
+//     endTime: new Date("2022-05-14T21:10:11"),
+//     subject: "과목7",
+//   },
+//   {
+//     startTime: new Date("2022-05-14T22:00:11"),
+//     endTime: new Date("2022-05-14T23:00:11"),
+//     subject: "과목8",
+//   },
+// ];
 
 function MyPage() {
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(0, 10));
   const [timeRecordData, setTimeRecordData] = useState();
+
+  const fetchTimeRecordData = async (date) => {
+    const response = await getTimeRecordList(date);
+    const array = response.map((data, i) => ({
+      ...data,
+      startTime: new Date(data.startTime),
+      endTime: new Date(data.endTime),
+      color: getColor(i),
+      studyTime: getTimeDiff(new Date(data.startTime), new Date(data.endTime)),
+    }));
+    setTimeRecordData(array);
+  };
+
   useEffect(() => {
-    let sum = 0;
-    const newArray = TIME_RECORD_DATA.map((data, i) => {
-      sum += getTimeDiff(data.startTime, data.endTime);
-      return {
-        ...data,
-        startTime: new Date(data.startTime),
-        endTime: new Date(data.endTime),
-        color: getColor(i),
-        studyTime: getTimeDiff(data.startTime, data.endTime),
-      };
-    });
-    setTimeRecordData(newArray);
-  }, []);
+    try {
+      fetchTimeRecordData(selectedDate);
+    } catch (error) {
+      console.error(error);
+    }
+  }, [selectedDate]);
 
   return (
     <div>
@@ -109,7 +118,7 @@ function MyPage() {
                 <div className={styles.date_box}>
                   <div className={styles.sub_heading}>날짜</div>
                   <div className={styles.content}>
-                    <DatePicker />
+                    <DatePicker setSelectedDate={setSelectedDate} />
                   </div>
                 </div>
                 <div className={styles.study_time_box}>
