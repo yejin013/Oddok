@@ -8,8 +8,5 @@ import org.mapstruct.Mapping;
 
 @Mapper
 public interface AuthMapper {
-
-    @Mapping(source = "accessToken", target = "token")
-    TokenDto fromAuthRequest(AuthRequest request);
     AuthResponse toAuthResponse(TokensDto dto);
 }
