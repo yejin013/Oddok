@@ -14,4 +14,5 @@ public interface StudyRoomRepository extends JpaRepository<StudyRoom, Long> {
     Optional<StudyRoom> findByUser(User user);
     boolean existsByUser(User user);
     List<StudyRoom> findAllByEndAtIsBefore(LocalDate endAt);
+    Optional<StudyRoom> findByIdAndEndAtIsGreaterThanEqual(Long id, LocalDate endAt);
 }

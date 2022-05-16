@@ -4,7 +4,6 @@ import static com.oddok.server.domain.studyroom.entity.QStudyRoom.studyRoom;
 import static com.oddok.server.domain.studyroom.entity.QStudyRoomHashtag.studyRoomHashtag;
 import static com.querydsl.core.types.Order.*;
 
-import com.oddok.server.domain.studyroom.dao.querydsl.StudyRoomQueryRepository;
 import com.oddok.server.domain.studyroom.entity.Category;
 import com.oddok.server.domain.studyroom.entity.Hashtag;
 import com.oddok.server.domain.studyroom.entity.StudyRoom;
@@ -15,68 +14,52 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Repository;
 
-@Repository
+@Slf4j
 @RequiredArgsConstructor
-public class StudyRoomQueryRepositoryImpl implements StudyRoomQueryRepository {
+@Repository
+public class StudyRoomQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<StudyRoom> findAllBySearchConditions(Boolean isPublic, String category, String name,
-                                                     Pageable pageable) {
+    public List<StudyRoom> search(String name, Boolean isPublic, String category,
+                                                                          Pageable pageable) {
         JPAQuery<StudyRoom> query = queryFactory.selectFrom(studyRoom)
-                .where(notEnd(),
+                .where(containsName(name),
                         eqIsPublic(isPublic),
                         eqCategory(category),
-                        containsName(name))
+                        notEnd())
                 .orderBy(studyRoomSort(pageable))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize());
         return query.fetch();
     }
 
-    public List<StudyRoom> findAllByHashtag(Boolean isPublic, String category, Hashtag hashtag,
-                                                     Pageable pageable) {
+    public List<StudyRoom> searchWithHashtag(String name, Hashtag hashtag, Boolean isPublic, String category,
+                                  Pageable pageable) {
         JPAQuery<StudyRoom> query = queryFactory.selectFrom(studyRoom)
-                .innerJoin(studyRoomHashtag)
+                .join(studyRoomHashtag)
                 .on(studyRoom.eq(studyRoomHashtag.studyRoom))
-                .where(notEnd(),
+                .where(containsName(name),
+                        studyRoomHashtag.hashtag.eq(hashtag),
                         eqIsPublic(isPublic),
                         eqCategory(category),
-                        studyRoomHashtag.hashtag.eq(hashtag))
+                        notEnd())
                 .orderBy(studyRoomSort(pageable))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize());
         return query.fetch();
-    }
-
-
-    public Optional<StudyRoom> findByIdAndEndAtIsEqualOrAfter(Long id) {
-        JPAQuery<StudyRoom> query = queryFactory.selectFrom(studyRoom)
-                .where(notEnd(),
-                        studyRoom.id.eq(id));
-        return Optional.ofNullable(query.fetchOne());
     }
 
     private BooleanExpression notEnd() {
         LocalDate now = LocalDate.now();
         return studyRoom.endAt.after(now).or(studyRoom.endAt.eq(now));
-    }
-
-    private OrderSpecifier<?> studyRoomSort(Pageable pageable) {
-        for (Order order : pageable.getSort()) {
-            if (order.getProperty().equals("currentUsers")) {
-                return new OrderSpecifier<>(DESC, studyRoom.currentUsers);
-            }
-            return new OrderSpecifier<>(DESC, studyRoom.createAt);
-        }
-        return new OrderSpecifier<>(DESC, studyRoom.createAt);
     }
 
     private BooleanExpression eqCategory(String category) {
@@ -98,6 +81,16 @@ public class StudyRoomQueryRepositoryImpl implements StudyRoomQueryRepository {
             return null;
         }
         return studyRoom.name.contains(name);
+    }
+
+    private OrderSpecifier<?> studyRoomSort(Pageable pageable) {
+        for (Order order : pageable.getSort()) {
+            if (order.getProperty().equals("currentUsers")) {
+                return new OrderSpecifier<>(DESC, studyRoom.currentUsers);
+            }
+            return new OrderSpecifier<>(DESC, studyRoom.createAt);
+        }
+        return new OrderSpecifier<>(DESC, studyRoom.createAt);
     }
 
 }
