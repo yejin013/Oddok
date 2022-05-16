@@ -53,12 +53,11 @@ public class TimeRecordController {
     /**
      * [GET] /time-record : 원하는 날짜의 시간표 조회 API
      * @param userId
-     * @param getTimeRecordByDayRequest : 원하는 날짜
      * @return List<GetTimeRecordResponse>
      */
     @GetMapping
-    public ResponseEntity<List<GetTimeRecordResponse>> get(@RequestHeader String userId, @RequestBody GetTimeRecordByDayRequest getTimeRecordByDayRequest) {
-        List<TimeRecordDto> timeRecordDtoList = timeRecordService.get(Long.parseLong(userId), getTimeRecordByDayRequest.getDay());
+    public ResponseEntity<List<GetTimeRecordResponse>> get(@RequestHeader String userId, @RequestParam("date") String date) {
+        List<TimeRecordDto> timeRecordDtoList = timeRecordService.get(Long.parseLong(userId), date);
         List<GetTimeRecordResponse> getTimeRecordResponses = timeRecordDtoMapper.toGetResponse(timeRecordDtoList);
         return ResponseEntity.ok(getTimeRecordResponses);
     }

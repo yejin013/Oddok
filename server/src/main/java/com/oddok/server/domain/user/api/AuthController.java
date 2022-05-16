@@ -1,6 +1,5 @@
 package com.oddok.server.domain.user.api;
 
-import com.oddok.server.domain.user.api.request.AuthRequest;
 import com.oddok.server.domain.user.api.response.AuthResponse;
 import com.oddok.server.domain.user.application.AuthService;
 import com.oddok.server.domain.user.dto.TokensDto;

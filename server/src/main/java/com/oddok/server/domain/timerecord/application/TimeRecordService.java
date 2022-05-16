@@ -41,8 +41,9 @@ public class TimeRecordService {
      */
     public List<TimeRecordDto> get(Long userId) {
         User user = findUser(userId);
-        LocalDateTime startDatetime = LocalDateTime.of(LocalDate.now(), LocalTime.of(0,0,0)); // 오늘 00:00:00
-        LocalDateTime endDatetime = LocalDateTime.of(LocalDate.now(), LocalTime.of(23,59,59)); // 오늘 23:59:59
+        LocalDate day = LocalDate.now();
+        LocalDateTime startDatetime = day.atStartOfDay(); // 오늘 00:00:00
+        LocalDateTime endDatetime = day.atTime(23, 59, 59); // 오늘 23:59:59
         List<TimeRecord> timeRecords = timeRecordRepository.findAllByUserAndStartTimeBetween(user, startDatetime, endDatetime);
         return timeRecordMapper.toDto(timeRecords);
     }
@@ -50,10 +51,11 @@ public class TimeRecordService {
     /**
      * 해당 날짜의 타임레코드 가져오기
      */
-    public List<TimeRecordDto> get(Long userId, LocalDate day) {
+    public List<TimeRecordDto> get(Long userId, String date) {
         User user = findUser(userId);
-        LocalDateTime startDatetime = LocalDateTime.of(day, LocalTime.of(0,0,0)); // 오늘 00:00:00
-        LocalDateTime endDatetime = LocalDateTime.of(day, LocalTime.of(23,59,59)); // 오늘 23:59:59
+        LocalDate day = LocalDate.parse(date);
+        LocalDateTime startDatetime = day.atStartOfDay(); // 오늘 00:00:00
+        LocalDateTime endDatetime = day.atTime(23, 59, 59); // 오늘 23:59:59
         List<TimeRecord> timeRecords = timeRecordRepository.findAllByUserAndStartTimeBetween(user, startDatetime, endDatetime);
         return timeRecordMapper.toDto(timeRecords);
     }
