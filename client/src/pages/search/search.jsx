@@ -1,75 +1,71 @@
 /* eslint-disable react/jsx-boolean-value */
-import React, { useState, useRef } from "react";
-import { useSetRecoilState } from "recoil";
-import { bookmarkState } from "@recoil/bookmark-state";
-import { getBookmark } from "@api/study-room-api";
-import { Input, HashtagButton } from "@components/commons";
-import { Header, StudyRoomList } from "@components/home";
+import React, { useState, useRef, useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import { Input } from "@components/commons";
+import { Header } from "@components/home";
+import SearchBrowse from "@components/search/SearchBrowse/SearchBrowse";
+import SearchResult from "@components/search/SearchResult/SearchResult";
 import styles from "./search.module.css";
 
-const hashtags = [
-  "교시제",
-  "여성전용",
-  "아침기상",
-  "컨셉",
-  "목표시간",
-  "자율",
-  "평일",
-  "주말",
-  "예치금",
-  "인증",
-  "해시태그는15개1",
-  "해시태그는15개2",
-  "해시태그는15개3",
-  "해시태그는15개4",
-  "해시태그는15개5",
-];
-
-function Search() {
+function Search({ location }) {
+  const history = useHistory();
   const titleRef = useRef();
-  const [searchedTitle, setSearchedTitle] = useState(undefined);
-  const [searchedHashtag, setSearchedHashtag] = useState(undefined);
-  const setBookmark = useSetRecoilState(bookmarkState);
+  const [searched, setSearched] = useState({ title: undefined, hashtag: undefined });
 
+  // localStorage에 저장되어있는 검색기록을 업데이트한다.
+  const updateSearchHistory = (item) => {
+    const keywords = JSON.parse(localStorage.getItem("keywords"));
+    if (keywords) {
+      localStorage.setItem("keywords", JSON.stringify([...keywords, item]));
+    }
+  };
+
+  // 타이틀 입력으로 검색
   const searchTitleHandler = (e) => {
     e.preventDefault();
-    setSearchedTitle(titleRef.current.value);
-    setSearchedHashtag(undefined);
+    setSearched({ title: titleRef.current.value, hashtag: "" });
+    updateSearchHistory({ key: new Date(), text: titleRef.current.value }); // 최근 검색어 추가
   };
 
+  // 인기 해시태그 클릭으로 검색
   const searchHashtagHandler = (e) => {
     titleRef.current.value = "";
-    setSearchedHashtag(e.target.value);
-    setSearchedTitle(undefined);
+    setSearched({ title: "", hashtag: e.target.value });
   };
 
-  const showBookmark = async () => {
-    await getBookmark()
-      .then((response) => setBookmark(response))
-      .catch((error) => console.log("get bookmark error", error));
+  // 검색기록으로 타이틀 검색
+  const searchKeywordHandler = (text) => {
+    setSearched({ title: text, hashtag: "" });
   };
+
+  useEffect(() => {
+    if (searched.title || searched.hashtag) {
+      const search = searched.title ? `?title=${searched.title}` : `?hashtag=${searched.hashtag}`;
+      history.push({
+        pathname: "/search",
+        search,
+      });
+    }
+  }, [history, searched]);
 
   return (
     <div>
       <Header />
-      <div className={styles.section}>
-        <div className={styles.search}>
-          <div className={styles.title_input}>
-            <form onSubmit={searchTitleHandler}>
-              <Input ref={titleRef} />
-            </form>
-          </div>
-          <h3>추천 태그</h3>
-          <div className={styles.hashtag_input}>
-            {hashtags.map((label) => (
-              <HashtagButton label={label} onToggle={searchHashtagHandler} checked={label === searchedHashtag} />
-            ))}
-          </div>
+      <div className={styles.container}>
+        <div className={styles.title_input}>
+          <form onSubmit={searchTitleHandler}>
+            <Input ref={titleRef} />
+          </form>
         </div>
-        {(searchedTitle || searchedHashtag) && <h3>&ldquo;{searchedTitle || searchedHashtag}&rdquo; 검색 결과💭</h3>}
-      </div>
-      <div className={styles.search_list}>
-        <StudyRoomList searchedTitle={searchedTitle} searchedHashtag={searchedHashtag} showBookmark={showBookmark} />
+        {!location.search ? (
+          <SearchBrowse
+            searchHashtagHandler={searchHashtagHandler}
+            searchKeywordHandler={searchKeywordHandler}
+            setSearched={setSearched}
+          />
+        ) : (
+          <SearchResult />
+        )}
       </div>
     </div>
   );

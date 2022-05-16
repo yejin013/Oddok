@@ -26,7 +26,10 @@ function MainHome(props) {
     <div className={styles.home}>
       <Header />
       <Bookmark showBookmark={showBookmark} />
-      <StudyRoomList showBookmark={showBookmark} />
+      <section className={styles.studyroom_list}>
+        <h2>STUDY ROOM</h2>
+        <StudyRoomList showBookmark={showBookmark} />
+      </section>
       <Footer />
     </div>
   );
