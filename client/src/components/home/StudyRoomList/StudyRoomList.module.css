@@ -1,8 +1,4 @@
 .container {
-  width: 75%;
-  margin: 0 auto;
-  padding: 6em 0;
-  max-width: 1296px;
   color: white;
   display: flex;
   flex-direction: column;
@@ -13,12 +9,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
-}
-
-.studyroom_head h2 {
-  font-size: 1.75rem;
-  font-weight: 600;
-  margin: 0px;
+  font-size: 0.75rem;
 }
 
 .studyroom_head .filter {
@@ -27,6 +18,7 @@
 
 .studyroom_head .filter > div:nth-child(1) {
   width: 150px;
+  margin-right: 12px;
 }
 
 .studyroom_head .filter > div:nth-child(2) {
@@ -34,7 +26,6 @@
 }
 
 .tab_menu {
-  margin-bottom: 43px;
 }
 
 .content {
