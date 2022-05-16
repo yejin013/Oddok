@@ -1,6 +1,5 @@
 package com.oddok.server.domain.user.mapper;
 
-import com.oddok.server.domain.user.api.request.AuthRequest;
 import com.oddok.server.domain.user.api.response.AuthResponse;
 import com.oddok.server.domain.user.dto.TokenDto;
 import com.oddok.server.domain.user.dto.TokensDto;
