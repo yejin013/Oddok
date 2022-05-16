@@ -54,17 +54,25 @@ import styles from "./MyPage.module.css";
 function MyPage() {
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(0, 10));
   const [timeRecordData, setTimeRecordData] = useState();
+  const [totalStudyTime, setTotalStudyTime] = useState();
 
   const fetchTimeRecordData = async (date) => {
     const response = await getTimeRecordList(date);
-    const array = response.map((data, i) => ({
-      ...data,
-      startTime: new Date(data.startTime),
-      endTime: new Date(data.endTime),
-      color: getColor(i),
-      studyTime: getTimeDiff(new Date(data.startTime), new Date(data.endTime)),
-    }));
+    let total = 0;
+    const array = response.map((data, i) => {
+      const diff = new Date(data.endTime) - new Date(data.startTime);
+      total += diff;
+      return {
+        ...data,
+        startTime: new Date(data.startTime),
+        endTime: new Date(data.endTime),
+        color: getColor(i),
+        studyTime: getTimeDiff(new Date(data.startTime), new Date(data.endTime)),
+      };
+    });
     setTimeRecordData(array);
+    setTotalStudyTime(total);
+    console.log(total);
   };
 
   useEffect(() => {
@@ -124,7 +132,11 @@ function MyPage() {
                 <div className={styles.study_time_box}>
                   <div className={styles.sub_heading}>과목</div>
                   <div className={styles.content}>
-                    <div className={styles.total_time}>00시간 00분 00초</div>
+                    <div className={styles.total_time}>
+                      {`${Math.floor(totalStudyTime / 1000 / 60 / 60)}시간 
+                      ${(totalStudyTime / 1000 / 60) % 60}분 
+                      ${(totalStudyTime / 1000) % 60}초`}
+                    </div>
                     <div className={styles.subject_list}>
                       <TimeRecordList list={timeRecordData} />
                     </div>
