@@ -1,10 +1,10 @@
 /* eslint-disable react/jsx-boolean-value */
 import React, { useState, useRef, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import Header from "../../components/home/header/header";
-import Input from "../../components/commons/Input/input";
-import SearchBrowse from "../../components/search/SearchBrowse/SearchBrowse";
-import SearchResult from "../../components/search/SearchResult/SearchResult";
+import { Input } from "@components/commons";
+import { Header } from "@components/home";
+import SearchBrowse from "@components/search/SearchBrowse/SearchBrowse";
+import SearchResult from "@components/search/SearchResult/SearchResult";
 import styles from "./search.module.css";
 
 function Search({ location }) {

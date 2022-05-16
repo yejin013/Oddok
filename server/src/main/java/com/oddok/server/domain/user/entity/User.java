@@ -6,10 +6,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
@@ -17,23 +14,14 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class User {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true, nullable = false, length = 255)
     private String email;
 
-    @Column(unique = true, length = 8)
+    @Column(length = 8)
     private String nickname;
-
-    @Column(length = 255)
-    private String goal;
-
-    @Column(name = "target_time")
-    private LocalDateTime targetTime;
-
-    @Column(name = "d_day")
-    private LocalDateTime dDay;
 
     @CreatedDate
     @Column(name = "create_at")
@@ -49,5 +37,10 @@ public class User {
         this.nickname = nickname;
         this.createAt = LocalDateTime.now();
         this.updateAt = LocalDateTime.now();
+    }
+
+    public User changeNickname(String nickname) {
+        this.nickname = nickname;
+        return this;
     }
 }

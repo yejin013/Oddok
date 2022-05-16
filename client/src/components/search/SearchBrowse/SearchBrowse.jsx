@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { getPopluarHashtag } from "../../../api/hashtag-api";
-import HashtagButton from "../../commons/hashtag_button/hashtag_button";
+import { getPopluarHashtag } from "@api/hashtag-api";
+import { HashtagButton } from "@components/commons";
 import styles from "./SearchBrowse.module.css";
 
 function SearchBrowse({ searchHashtagHandler, searchKeywordHandler, setSearched }) {

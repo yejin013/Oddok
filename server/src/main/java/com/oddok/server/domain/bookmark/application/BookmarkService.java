@@ -1,11 +1,10 @@
 package com.oddok.server.domain.bookmark.application;
 
-import com.oddok.server.common.errors.BookmarkNotFoundException;
 import com.oddok.server.common.errors.StudyRoomNotFoundException;
 import com.oddok.server.common.errors.UserNotFoundException;
 import com.oddok.server.domain.bookmark.dao.BookmarkRepository;
-import com.oddok.server.domain.participant.dao.ParticipantRepository;
 import com.oddok.server.domain.bookmark.dto.BookmarkDto;
+import com.oddok.server.domain.participant.dao.ParticipantRepository;
 import com.oddok.server.domain.bookmark.entity.Bookmark;
 import com.oddok.server.domain.participant.dto.ParticipantDto;
 import com.oddok.server.domain.bookmark.mapper.BookmarkMapper;
@@ -20,8 +19,6 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,13 +54,14 @@ public class BookmarkService {
 
     /**
      * 북마크 조회
+     * @return
      */
-    public BookmarkDto get(Long userId) {
+    public Optional<BookmarkDto> get(Long userId) {
         User user = findUser(userId);
         Optional<Bookmark> bookmark = bookmarkRepository.findByUser(user);
 
         if(bookmark.isEmpty())
-            return null;
+            return Optional.empty();
 
         StudyRoom studyRoom = bookmark.get().getStudyRoom();
 
@@ -73,7 +71,7 @@ public class BookmarkService {
         );
 
         BookmarkMapper bookmarkMapper = Mappers.getMapper(BookmarkMapper.class);
-        return bookmarkMapper.toDto(studyRoom, participants);
+        return Optional.of(bookmarkMapper.toDto(studyRoom, participants));
     }
 
     /**

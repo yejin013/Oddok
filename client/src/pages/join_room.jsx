@@ -1,41 +1,74 @@
 import React, { useEffect } from "react";
-import { useHistory } from "react-router-dom";
-import { useRecoilState } from "recoil";
-import { userState } from "../recoil/user_state";
-import { roomInfoState } from "../recoil/studyroom_state";
-import { getStudyRoom, joinStudyRoom } from "../api/study-room-api";
-import SettingRoom from "./settting_room/setting_room";
+import { useHistory, useParams } from "react-router-dom";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { userState } from "@recoil/user_state";
+import { roomInfoState } from "@recoil/studyroom_state";
+import { getStudyRoom, joinStudyRoom } from "@api/study-room-api";
+import useAsync from "@hooks/useAsync";
+import { Loading } from "@components/study";
+import { ErrorModal } from "@components/commons";
+import SettingRoom from "./setting_room/setting_room";
 
 function JoinRoom() {
   const history = useHistory();
+  const { id } = useParams();
   const [userInfo, setUserInfo] = useRecoilState(userState);
-  const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
+  const setRoomInfo = useSetRecoilState(roomInfoState);
+  const {
+    data: roomData,
+    error: getInfoError,
+    reset: getInfoErrorReset,
+  } = useAsync(() => getStudyRoom(id), { onError: (error) => console.log(error) }, [id], false);
+  const {
+    loading: isLoading,
+    error: joinError,
+    sendRequest: joinRoom,
+    reset: joinErrorReset,
+  } = useAsync(joinStudyRoom, {
+    onError: (error) => console.error(error),
+  });
 
   useEffect(() => {
-    // TODO 추후 삭제 (방 참여시 사용하기 위함)
-    const roomID = localStorage.getItem("roomID");
-    getStudyRoom(roomID).then((data) => {
-      setRoomInfo(data);
-    });
-
-    // TODO 방장 아이디와 일치할 경우 수정 권한 주기
-    // ✅ 방 정보의 방장아이디 이용!
-    setUserInfo({ ...userInfo, updateAllowed: false });
+    setUserInfo({ ...userInfo, updateAllowed: false }); // TODO 방장 아이디와 일치할 경우 수정 권한 주기
   }, []);
 
+  useEffect(() => {
+    if (roomData) {
+      setRoomInfo(roomData);
+    }
+  }, [roomData, setRoomInfo]);
+
   const goToStudyRoom = async () => {
-    // TODO roomInfo.id로 바꾸기
-    const roomID = localStorage.getItem("roomID");
-    const token = await joinStudyRoom(roomID);
+    const joinResponse = await joinRoom(id);
     history.push({
-      pathname: `/studyroom/${roomID}`,
+      pathname: `/studyroom/${id}`,
       state: {
-        token: token.token,
+        token: joinResponse.token,
       },
     });
   };
 
-  return <SettingRoom goToStudyRoom={goToStudyRoom} />;
+  const confirmError = () => {
+    if (getInfoError) {
+      getInfoErrorReset();
+      return;
+    }
+    if (joinError) joinErrorReset();
+  };
+
+  return (
+    <>
+      {isLoading && <Loading />}
+      {(getInfoError || joinError) && (
+        <ErrorModal
+          message={getInfoError?.data.message || joinError?.data.message}
+          onConfirm={confirmError}
+          onAction={{ text: "메인으로 돌아가기", action: () => history.push("/") }}
+        />
+      )}
+      <SettingRoom goToStudyRoom={goToStudyRoom} />
+    </>
+  );
 }
 
 export default JoinRoom;

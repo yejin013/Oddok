@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { StudyRoomList } from "@components/home";
 import parseQueryString from "../../../utils/parseQueryString";
-import StudyRoomList from "../../home/studyroom_list/studyroom_list";
 import styles from "./SearchResult.module.css";
 
 function SearchResult() {

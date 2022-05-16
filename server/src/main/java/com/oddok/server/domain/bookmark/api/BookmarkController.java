@@ -9,12 +9,16 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/bookmark")
 @RequiredArgsConstructor
 public class BookmarkController {
 
     private final BookmarkService bookmarkService;
+
+    private final BookmarkDtoMapper bookmarkDtoMapper = Mappers.getMapper(BookmarkDtoMapper.class);
 
     /**
      * 북마크 생성 및 변경
@@ -34,11 +38,9 @@ public class BookmarkController {
      * @return
      */
     @GetMapping
-    public ResponseEntity<GetBookmarkResponse> get(@RequestHeader String userId) {
-        BookmarkDto bookmarkDto = bookmarkService.get(Long.parseLong(userId));
-        BookmarkDtoMapper bookmarkDtoMapper = Mappers.getMapper(BookmarkDtoMapper.class);
-        GetBookmarkResponse bookmarkResponse = bookmarkDtoMapper.toGetResponse(bookmarkDto);
-        return ResponseEntity.ok(bookmarkResponse);
+    public ResponseEntity<Optional<GetBookmarkResponse>> get(@RequestHeader String userId) {
+        Optional<BookmarkDto> bookmarkDto = bookmarkService.get(Long.parseLong(userId));
+        return ResponseEntity.ok(bookmarkDto.map(bookmarkDtoMapper::toGetResponse));
     }
 
     @DeleteMapping
