@@ -4,10 +4,14 @@ import static com.oddok.server.domain.studyroom.entity.QHashtag.hashtag;
 import static com.oddok.server.domain.studyroom.entity.QStudyRoomHashtag.studyRoomHashtag;
 
 import com.oddok.server.domain.studyroom.dao.querydsl.HashtagQueryRepository;
+
+import com.oddok.server.domain.studyroom.entity.StudyRoom;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
+import java.util.Set;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -27,8 +31,7 @@ public class HashtagQueryRepositoryImpl implements HashtagQueryRepository {
             .orderBy(hashtag.count().desc())
             .limit(15);
     return query.fetch();
-  };
-
+  }
 
   private BooleanExpression containsName(String studyRoomName) {
     if (studyRoomName == null || studyRoomName.isBlank()) {
