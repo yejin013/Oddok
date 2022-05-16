@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./TimeRecordBlock.module.css";
 
-function TimeRecordBlock({ startH, startM, endH, endM }) {
+function TimeRecordBlock({ startH, startM, endH, endM, color }) {
   const [blocks, setBlocks] = useState([]); // {style}
 
   const calculateTop = (hour) => `${1 + hour * 25}px`; // border: 1px, 그리드셀 height: 25px
@@ -24,7 +24,7 @@ function TimeRecordBlock({ startH, startM, endH, endM }) {
     else {
       const array = [{ top: startTop, left: startLeft, width: subBorder(((60 - startM) / 60) * 100) }];
       for (let i = startH + 1; i < endH; i += 1) {
-        array.push({ top: calculateTop(parseInt(i, 10)) });
+        array.push({ top: calculateTop(parseInt(i, 10)), left: "1px", width: "calc(100% - 2px)" });
       }
       array.push({ top: endTop, right: endRight, width: subBorder((endM / 60) * 100) });
       setBlocks(array);
@@ -34,7 +34,7 @@ function TimeRecordBlock({ startH, startM, endH, endM }) {
   return (
     <div>
       {blocks.map((block) => (
-        <div className={styles.block} style={block} />
+        <div className={styles.block} style={{ ...block, backgroundColor: color }} />
       ))}
     </div>
   );

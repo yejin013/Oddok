@@ -4,8 +4,9 @@
   align-items: center;
 }
 
-.icon {
-  margin: 0 10px;
+.move_button {
+  margin: 0 12px;
+  padding: 8px;
   display: flex;
   justify-content: center;
 }
@@ -19,6 +20,7 @@
 }
 
 .date_picker {
+  width: 100%;
   position: relative;
 }
 

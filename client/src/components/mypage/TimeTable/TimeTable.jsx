@@ -3,12 +3,20 @@ import TimeTableGrid from "./TimeTableGrid/TimeTableGrid";
 import TimeRecordBlock from "./TimeRecordBlock/TimeRecordBlock";
 import styles from "./TimeTable.module.css";
 
-// {startTime, endTime, subject} 리스트
-function TimeTable({ startH, startM, endH, endM, isShow }) {
+// {startTime, endTime, subject, color} 리스트
+function TimeTable({ timeRecordList }) {
   return (
     <div className={styles.container}>
       <TimeTableGrid />
-      {isShow && <TimeRecordBlock startH={startH} startM={startM} endH={endH} endM={endM} />}
+      {timeRecordList?.map((record) => (
+        <TimeRecordBlock
+          startH={record.startTime.getHours()}
+          startM={record.startTime.getMinutes()}
+          endH={record.endTime.getHours()}
+          endM={record.endTime.getMinutes()}
+          color={record.color}
+        />
+      ))}
     </div>
   );
 }

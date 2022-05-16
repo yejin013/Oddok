@@ -1,6 +1,6 @@
 .item {
   display: flex;
-  margin: 8px 12px;
+  margin: 12px;
   color: var(--gray500);
   font-size: var(--text-sm);
 }

@@ -20,7 +20,7 @@ function DatePicker() {
 
   return (
     <div className={styles.box}>
-      <button type="button" className={styles.icon} onClick={prevDay}>
+      <button type="button" className={styles.move_button} onClick={prevDay}>
         <ArrowLeft />
       </button>
       <div className={styles.date_picker}>
@@ -42,7 +42,7 @@ function DatePicker() {
           }
         />
       </div>
-      <button type="button" className={styles.icon} onClick={nextDay}>
+      <button type="button" className={styles.move_button} onClick={nextDay}>
         <ArrowRight />
       </button>
     </div>
