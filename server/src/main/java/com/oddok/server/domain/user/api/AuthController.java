@@ -17,7 +17,7 @@ public class AuthController {
     private final AuthService authService;
     private final AuthMapper authMapper = Mappers.getMapper(AuthMapper.class);
 
-    @PostMapping
+    @GetMapping
     public ResponseEntity<AuthResponse> kakaoAuthRequest(@RequestParam("code") String code) {
         TokensDto tokensDto = authService.login(code);
         return ResponseEntity.ok(authMapper.toAuthResponse(tokensDto));
