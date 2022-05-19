@@ -1,0 +1,12 @@
+.add_button {
+  border: 1px solid #495057;
+  border-radius: 50%;
+  padding: 1em;
+  cursor: pointer;
+}
+
+.icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

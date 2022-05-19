@@ -1,0 +1,83 @@
+.header {
+  display: flex;
+  align-items: center;
+  padding: 1.5em 2.5em;
+  background-color: #101112;
+}
+
+.logo,
+.pages,
+.buttons {
+  flex: 1;
+  display: flex;
+}
+
+.logo {
+  text-decoration-line: none;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #dee2e6;
+}
+
+.pages {
+  justify-content: center;
+}
+
+.study_room,
+.mypage {
+  margin: 0 1em;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.mypage {
+  color: #6c757d;
+}
+
+.mypage:hover {
+  color: #ffffff;
+}
+
+.buttons {
+  justify-content: flex-end;
+  align-items: center;
+  position: relative;
+}
+
+.search,
+.profile,
+.study_button {
+  margin: 0 1em;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+}
+
+.nickname {
+  margin-left: 0.5em;
+  font-size: 0.8rem;
+}
+
+.info_buttons {
+  display: flex;
+  flex-direction: column;
+  background-color: #212529;
+  padding: 0.8em 1.8em;
+  position: absolute;
+  margin-top: 0.6em;
+}
+
+.button {
+  padding: 1em;
+  font-size: 0.7em;
+}
+
+.study_button {
+  padding: 0.9em 1.2em;
+  background-color: #cfa028;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border-radius: 4px;
+}

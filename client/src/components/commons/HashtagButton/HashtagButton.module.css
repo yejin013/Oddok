@@ -1,0 +1,35 @@
+.toggle_button {
+  cursor: pointer;
+}
+
+.toggle_button input {
+  display: none;
+}
+
+.content {
+  display: flex;
+  padding: 1em;
+  background-color: #212529;
+  color: #f8f9fa;
+  border-radius: 99px;
+}
+
+.icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 1em;
+  margin-right: 4px;
+}
+
+.cancel_icon {
+  display: flex;
+  align-items: center;
+  width: 1.25em;
+  height: 1.25em;
+  margin-left: 4px;
+}
+
+.toggle_button input:checked + div {
+  background-color: #bf7d8a;
+}

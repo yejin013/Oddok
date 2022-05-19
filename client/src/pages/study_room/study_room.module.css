@@ -1,0 +1,47 @@
+.room {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  background-color: #101112;
+}
+
+.setting {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+  background-color: #101112;
+}
+
+.video_container {
+  height: 90vh;
+  display: flex; /* 사이드바 있을 때 */
+}
+
+.videos {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row-reverse;
+  flex-wrap: wrap-reverse;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.side_bar {
+  flex: 1 1 25%;
+}
+
+.side_bar.hide {
+  display: none;
+}
+
+.bar {
+  height: 10vh;
+}

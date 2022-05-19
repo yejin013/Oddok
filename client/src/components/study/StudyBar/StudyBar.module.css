@@ -1,0 +1,58 @@
+.bar {
+  display: flex;
+  align-items: center;
+  height: 77px;
+  background-color: #101112;
+  color: #dee2e6;
+  padding: 0.2em 1.5em;
+}
+
+.info,
+.time,
+.buttons {
+  flex: 1;
+}
+
+.info,
+.buttons {
+  display: flex;
+  align-items: center;
+}
+
+.buttons {
+  justify-content: flex-end;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.video_button,
+.audio_button,
+.chat_button,
+.member_button,
+.door_button {
+  padding: 0.8em 1em;
+}
+
+.video_button,
+.audio_button,
+.chat_button,
+.member_button {
+  border-right: 1px solid #343a40;
+}
+
+.door_button {
+  padding-right: 0;
+}
+
+.music {
+  display: flex;
+  align-items: center;
+  margin-left: 1em;
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+.music_icon {
+  padding: 0.5em;
+}

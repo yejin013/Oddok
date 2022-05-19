@@ -1,0 +1,29 @@
+.bubble_box {
+  background-color: #343a40;
+  border-radius: 20px 20px 0px 20px;
+  padding: 12px;
+  margin-bottom: 8px;
+  margin-left: auto;
+  width: fit-content;
+  color: #ffffff;
+  font-size: 1rem;
+  line-height: 28px;
+}
+
+.bubble_box.left {
+  border-radius: 20px 20px 20px 0px;
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.bubble_info {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  color: #dee2e6;
+  font-size: 0.75rem;
+}
+
+.bubble_info.left {
+  justify-content: flex-start;
+}

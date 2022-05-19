@@ -1,0 +1,61 @@
+.bar {
+  display: flex;
+  align-items: center;
+  background-color: #101112;
+  color: #dee2e6;
+  height: 77px;
+  padding: 0.2em 1.5em;
+}
+
+.info,
+.goal,
+.buttons {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.goal {
+  justify-content: center;
+}
+
+.buttons {
+  justify-content: flex-end;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.video_button,
+.audio_button {
+  padding: 0.8em 1em;
+}
+
+.video_button {
+  border-right: 1px solid #343a40;
+}
+
+.start_button {
+  font-size: 1rem;
+  padding: 0.9em 5em;
+  width: 300px;
+  background-color: #bf7d8a;
+  color: white;
+  border-radius: 4px;
+}
+
+.start_button:disabled {
+  background-color: #343a40;
+}
+
+.music {
+  display: flex;
+  align-items: center;
+  margin-left: 0.8em;
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+.music_icon {
+  padding: 0.5em;
+}

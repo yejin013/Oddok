@@ -1,0 +1,97 @@
+.side_box {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding: 2.2em;
+  background-color: #101112;
+  color: #f8f9fa;
+}
+
+.side_box h1 {
+  margin: 0;
+  margin-bottom: 16px;
+  font-size: 2rem;
+}
+
+.info_item {
+  margin-bottom: 24px;
+}
+
+.hashtag {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.hashtag > div {
+  display: flex;
+  flex-direction: row;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 99px;
+  padding: 6px 10px;
+  font-size: 0.875rem;
+}
+
+.icon {
+  width: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 8px;
+}
+
+.info_item p {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.text_field {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  font-size: 0.875rem;
+  padding: 6px 10px;
+}
+
+.info_item.rule_field {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.text_field.text_area {
+  flex-grow: 1;
+}
+
+.bgm_field {
+  display: flex;
+  align-items: center;
+}
+
+.bgm_icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  margin-right: 8px;
+}
+
+/* 임시 버튼들 */
+.buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.button {
+  width: 100px;
+  padding: 4px;
+  border-radius: 4px;
+  background-color: #bf7d8a;
+  color: white;
+  font-size: 0.875rem;
+  cursor: pointer;
+}

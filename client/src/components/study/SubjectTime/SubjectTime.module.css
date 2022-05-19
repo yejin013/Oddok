@@ -1,0 +1,12 @@
+.subject_time {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.plan {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0 1em;
+}

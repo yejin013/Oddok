@@ -1,0 +1,51 @@
+.container {
+  position: relative;
+  color: #f8f9fa;
+  cursor: pointer;
+  font-size: inherit;
+}
+
+.container p {
+  margin: 0;
+}
+
+.select {
+  display: flex;
+  background-color: #212529;
+  border: 1px solid #ffffff1a;
+  border-radius: 4px;
+  width: 100%;
+  padding: 0.8125em 1em;
+}
+
+.icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+}
+
+.container ul {
+  display: none;
+}
+
+.container ul.active {
+  display: block;
+  position: absolute;
+  width: 100%;
+  background-color: #212529;
+  border: 1px solid #ffffff1a;
+  border-radius: 4px;
+  margin: 6px 0;
+  padding-left: 0;
+  z-index: 1;
+}
+
+.container ul li {
+  list-style: none;
+  padding: 0.8125em 1em;
+}
+
+.container ul li:hover {
+  background-color: #343a40;
+}
