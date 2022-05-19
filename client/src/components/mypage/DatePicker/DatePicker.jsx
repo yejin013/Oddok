@@ -13,7 +13,8 @@ function DatePicker({ setSelectedDate }) {
   const [currentDate, setCurrentDate] = useState(new Date());
 
   useEffect(() => {
-    setSelectedDate(currentDate.toISOString().slice(0, 10));
+    const offset = currentDate.getTimezoneOffset() * 60000;
+    setSelectedDate(new Date(currentDate.getTime() - offset).toISOString().slice(0, 10));
   }, [currentDate]);
 
   return (
