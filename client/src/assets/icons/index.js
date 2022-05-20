@@ -26,6 +26,8 @@ import { ReactComponent as Cancel } from "./x-circle-fill.svg";
 import { ReactComponent as Person } from "./person-fill.svg";
 import { ReactComponent as Plus } from "./plus.svg";
 import { ReactComponent as SendButton } from "./send-button.svg";
+import { ReactComponent as ArrowLeft } from "./arrow-left.svg";
+import { ReactComponent as ArrowRight } from "./arrow-right.svg";
 
 export {
   VideoOn,
@@ -56,4 +58,6 @@ export {
   Person,
   Plus,
   SendButton,
+  ArrowLeft,
+  ArrowRight,
 };

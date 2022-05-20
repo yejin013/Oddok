@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import axios from "axios";
 import axiosInstance from "./axios_config";
 

@@ -1,0 +1,23 @@
+.side_nav_bar ul {
+  display: flex;
+  flex-direction: column;
+  color: var(--gray500);
+}
+
+.nav_item {
+  gap: 10px;
+}
+
+.nav_item > li {
+  font-weight: var(--font-semibold);
+}
+
+.nav_sub_item {
+  margin: 10px 12px;
+  gap: 8px;
+}
+
+.nav_sub_item li {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+}
