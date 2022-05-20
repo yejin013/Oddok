@@ -14,7 +14,7 @@ function SettingSideBar({ clickDetailBtn }) {
     loading,
     error,
   } = useAsync(() => getStudyRoom(roomId), { onError: (e) => console.log(e) }, [roomId], false);
-  const { updateAllowed } = useRecoilValue(userState); // 이거에 따라 버튼 렌더링
+  const { updateAllowed } = useRecoilValue(userState);
   const [isPlay, setIsPlay] = useState(false);
 
   const toggleBgm = () => {
@@ -44,7 +44,7 @@ function SettingSideBar({ clickDetailBtn }) {
             <p>목표시간</p>
             <div className={styles.text_field}>{roomInfo?.targetTime}시간</div>
           </div>
-          <div className={`${styles.info_item} ${styles.rule_field}`}>
+          <div className={`${styles.info_item} ${styles.rule}`}>
             <p>스터디 규칙</p>
             <div className={`${styles.text_field} ${styles.text_area}`}>{roomInfo?.rule ? roomInfo.rule : "없음"}</div>
           </div>
@@ -58,11 +58,9 @@ function SettingSideBar({ clickDetailBtn }) {
             </div>
           </div>
           {updateAllowed && (
-            <div className={styles.buttons}>
-              <button className={styles.button} type="submit" onClick={clickDetailBtn}>
-                방 정보 수정
-              </button>
-            </div>
+            <button className={styles.button} type="submit" onClick={clickDetailBtn}>
+              방 정보 수정
+            </button>
           )}
         </>
       )}
