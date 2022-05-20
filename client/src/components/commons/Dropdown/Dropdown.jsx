@@ -2,12 +2,11 @@ import React, { useState } from "react";
 import { ArrowDown } from "@icons";
 import styles from "./Dropdown.module.css";
 
-function Dropdown({ options, onSelect, disabled, defaultValue }) {
+function Dropdown({ options, onSelect, defaultValue }) {
   const [isActive, setIsActive] = useState(false);
   const [selectedOpt, setSelectedOpt] = useState(defaultValue);
 
   const toggleMenu = (e) => {
-    if (disabled) return;
     setIsActive(!isActive);
   };
 
