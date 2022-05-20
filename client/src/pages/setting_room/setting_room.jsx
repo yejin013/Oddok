@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
+import { userState } from "@recoil/user_state";
 import { videoState, audioState, roomInfoState, roomTitleState } from "@recoil/studyroom_state";
 import { planState } from "@recoil/plan_state";
 import { ToolTip } from "@components/commons";
-import { SettingBar, SettingSection, TotalTime, PlanSidebar } from "@components/study";
+import { SettingBar, SettingSection, SettingSideBar, TotalTime, PlanSidebar } from "@components/study";
 import styles from "./setting_room.module.css";
 
 function SettingRoom({ goToStudyRoom }) {
@@ -11,6 +12,7 @@ function SettingRoom({ goToStudyRoom }) {
   const [isPlaying, setIsPlaying] = useRecoilState(videoState);
   const [isMuted, setIsMuted] = useRecoilState(audioState);
   const [clickedSettingBtn, setClickedSettingBtn] = useState(false);
+  const userInfo = useRecoilValue(userState);
   const roomInfo = useRecoilValue(roomInfoState);
   const roomTitle = useRecoilValue(roomTitleState);
   const [isPlanOpen, setisPlanOpen] = useState(false);
@@ -60,7 +62,8 @@ function SettingRoom({ goToStudyRoom }) {
 
   return (
     <div>
-      {clickedSettingBtn && <SettingSection clickSettingBtn={clickSettingBtn} />}
+      {clickedSettingBtn &&
+        (userInfo.updateAllowed ? <SettingSection clickSettingBtn={clickSettingBtn} /> : <SettingSideBar />)}
       <div className={`${styles.room} ${displayType}`}>
         <section className={styles.video_component}>
           <div className={styles.video_container}>

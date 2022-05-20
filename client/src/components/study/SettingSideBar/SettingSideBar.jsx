@@ -1,77 +1,70 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useRecoilValue } from "recoil";
+import { roomIdState } from "@recoil/studyroom_state";
 import { userState } from "@recoil/user_state";
-import { updateStudyRoom } from "@api/study-room-api";
+import { getStudyRoom } from "@api/study-room-api";
+import useAsync from "@hooks/useAsync";
 import { Hashtag, Play, Pause } from "@icons";
 import styles from "./SettingSideBar.module.css";
 
-function SettingSideBar({ session, roomInfo, clickDetailBtn }) {
-  const { updateAllowed } = useRecoilValue(userState);
-  const textRef = useRef();
-
+function SettingSideBar({ clickDetailBtn }) {
+  const roomId = useRecoilValue(roomIdState);
+  const {
+    data: roomInfo,
+    loading,
+    error,
+  } = useAsync(() => getStudyRoom(roomId), { onError: (e) => console.log(e) }, [roomId], false);
+  const { updateAllowed } = useRecoilValue(userState); // 이거에 따라 버튼 렌더링
   const [isPlay, setIsPlay] = useState(false);
 
   const toggleBgm = () => {
     setIsPlay((prev) => !prev);
   };
 
-  const submitHandler = async (e) => {
-    e.preventDefault();
-    const res = await updateStudyRoom(roomInfo.id, roomInfo);
-    console.log("수정정보", res);
-
-    // 수정된 정보 브로드캐스트하기
-    session
-      .signal({
-        data: JSON.stringify(roomInfo), // JSON stringify 해야됨!
-        to: [],
-        type: "updated-roominfo",
-      })
-      .then(() => console.log("데이터 잘 갔엉🙂👋"))
-      .catch((error) => console.error(error));
-  };
-
   return (
     <aside className={styles.side_box}>
-      <h1>{roomInfo.name}</h1>
-      <div className={styles.roomInfo_item}>
-        <div className={styles.hashtag}>
-          {roomInfo.hashtags.map((hashtag) => (
-            <div>
-              <div className={styles.icon}>
-                <Hashtag />
-              </div>
-              <div>{hashtag}</div>
+      {loading ? (
+        <div>로딩중....</div>
+      ) : (
+        <>
+          <h1>{roomInfo?.name}</h1>
+          <div className={styles.roomInfo_item}>
+            <div className={styles.hashtag}>
+              {roomInfo?.hashtags.map((hashtag) => (
+                <div>
+                  <div className={styles.icon}>
+                    <Hashtag />
+                  </div>
+                  <div>{hashtag}</div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </div>
-      <div className={styles.info_item}>
-        <p>목표시간</p>
-        <div className={styles.text_field}>{roomInfo.targetTime}시간</div>
-      </div>
-      <div className={`${styles.info_item} ${styles.rule_field}`}>
-        <p>스터디 규칙</p>
-        <div className={`${styles.text_field} ${styles.text_area}`}>{roomInfo.rule ? roomInfo.rule : "없음"}</div>
-      </div>
-      <div className={styles.info_item}>
-        <p>음악</p>
-        <div className={styles.bgm_field}>
-          <span className={styles.bgm_icon} onClick={toggleBgm}>
-            {isPlay ? <Pause /> : <Play />}
-          </span>
-          <span>소녀시대 - 힘내!</span>
-        </div>
-      </div>
-      {updateAllowed && (
-        <div className={styles.buttons}>
-          <button className={styles.button} type="button" onClick={clickDetailBtn}>
-            세부 설정
-          </button>
-          <button className={styles.button} type="submit" onClick={submitHandler}>
-            방 정보 수정
-          </button>
-        </div>
+          </div>
+          <div className={styles.info_item}>
+            <p>목표시간</p>
+            <div className={styles.text_field}>{roomInfo?.targetTime}시간</div>
+          </div>
+          <div className={`${styles.info_item} ${styles.rule_field}`}>
+            <p>스터디 규칙</p>
+            <div className={`${styles.text_field} ${styles.text_area}`}>{roomInfo?.rule ? roomInfo.rule : "없음"}</div>
+          </div>
+          <div className={styles.info_item}>
+            <p>음악</p>
+            <div className={styles.bgm_field}>
+              <span className={styles.bgm_icon} onClick={toggleBgm}>
+                {isPlay ? <Pause /> : <Play />}
+              </span>
+              <span>소녀시대 - 힘내!</span>
+            </div>
+          </div>
+          {updateAllowed && (
+            <div className={styles.buttons}>
+              <button className={styles.button} type="submit" onClick={clickDetailBtn}>
+                방 정보 수정
+              </button>
+            </div>
+          )}
+        </>
       )}
     </aside>
   );

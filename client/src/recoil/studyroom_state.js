@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import { atom, selector } from "recoil";
 
 export const videoState = atom({
@@ -11,10 +10,14 @@ export const audioState = atom({
   default: false,
 });
 
+export const roomIdState = atom({
+  key: "roomId",
+  default: 0,
+});
+
 export const roomInfoState = atom({
   key: "roomInfoState",
   default: {
-    id: 0,
     name: "",
     category: "",
     hashtags: [],

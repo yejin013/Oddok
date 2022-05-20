@@ -122,7 +122,7 @@ function StudyRoom() {
       <div className={styles.video_container}>
         {sideBarState.setting && (
           <div className={styles.side_bar}>
-            <SettingSideBar roomInfo={roomInfo} session={session} clickDetailBtn={clickDetailBtn} />
+            <SettingSideBar clickDetailBtn={clickDetailBtn} />
           </div>
         )}
         <ul className={styles.videos}>

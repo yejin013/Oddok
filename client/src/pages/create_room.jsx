@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { userState } from "@recoil/user_state";
-import { roomInfoState } from "@recoil/studyroom_state";
+import { roomIdState, roomInfoState } from "@recoil/studyroom_state";
 import { createStudyRoom, joinStudyRoom } from "@api/study-room-api";
 import useAsync from "@hooks/useAsync";
 import { Loading } from "@components/study";
@@ -11,6 +11,7 @@ import SettingRoom from "./setting_room/setting_room";
 
 function CreateRoom() {
   const history = useHistory();
+  const setRoomId = useSetRecoilState(roomIdState);
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
   const {
@@ -31,18 +32,14 @@ function CreateRoom() {
   });
 
   useEffect(() => {
-    // 스터디룸을 개설하는 유저에게 방 정보 업데이트 권한을 준다
+    // 스터디룸을 개설하는 유저에게 방 정보 업데이트 권한을 준다 (추후 삭제)
     setUserInfo({ ...userInfo, updateAllowed: true });
-
-    /* get testUser */
-    // getTestUser()
-    //   .then((users) => console.log(users))
-    //   .catch((e) => console.log(`get user error!: ${e}`));
   }, []);
 
   const goToStudyRoom = async () => {
     const createResponse = await createRequest(roomInfo);
     const joinResponse = await joinRequest(createResponse.id);
+    setRoomId(createResponse.id);
     history.push({
       pathname: `/studyroom/${createResponse.id}`,
       state: {
