@@ -45,8 +45,9 @@ const categories = [
 export const roomTitleState = selector({
   key: "roomTitleState",
   get: ({ get }) => {
-    const value = get(roomInfoState).category;
-    const title = categories.find((category) => category.value === value);
-    return title ? `${title.label} n호실` : undefined;
+    const roomInfo = get(roomInfoState);
+    const categoryLabel = categories.find((category) => category.value === roomInfo.category);
+    const title = categoryLabel ? `${categoryLabel.label} n호실` : undefined;
+    return roomInfo.name ? roomInfo.name : title;
   },
 });

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { userState } from "@recoil/user_state";
-import { videoState, audioState, roomInfoState, roomTitleState } from "@recoil/studyroom_state";
+import { videoState, audioState, roomTitleState } from "@recoil/studyroom_state";
 import { planState } from "@recoil/plan_state";
 import { ToolTip } from "@components/commons";
 import { SettingBar, SettingSection, SettingSideBar, TotalTime, PlanSidebar } from "@components/study";
@@ -13,7 +13,6 @@ function SettingRoom({ goToStudyRoom }) {
   const [isMuted, setIsMuted] = useRecoilState(audioState);
   const [clickedSettingBtn, setClickedSettingBtn] = useState(false);
   const userInfo = useRecoilValue(userState);
-  const roomInfo = useRecoilValue(roomInfoState);
   const roomTitle = useRecoilValue(roomTitleState);
   const [isPlanOpen, setisPlanOpen] = useState(false);
   const plan = useRecoilValue(planState);
@@ -63,7 +62,7 @@ function SettingRoom({ goToStudyRoom }) {
   return (
     <div>
       {clickedSettingBtn &&
-        (userInfo.updateAllowed ? <SettingSection clickSettingBtn={clickSettingBtn} /> : <SettingSideBar />)}
+        (userInfo.updateAllowed ? <SettingSection closeSettingSection={clickSettingBtn} /> : <SettingSideBar />)}
       <div className={`${styles.room} ${displayType}`}>
         <section className={styles.video_component}>
           <div className={styles.video_container}>
@@ -77,7 +76,7 @@ function SettingRoom({ goToStudyRoom }) {
           )}
         </section>
         <div className={styles.bar}>
-          {!roomInfo.category && (
+          {!roomTitle && (
             <div className={styles.setting_tooltip}>
               <ToolTip type="left" message="해시태그나 스터디 유형 설정은 여기에서!" />
             </div>
@@ -88,7 +87,7 @@ function SettingRoom({ goToStudyRoom }) {
             </div>
           )}
           <SettingBar
-            title={roomInfo.name || roomTitle || "방정보를 입력해주세요"}
+            title={roomTitle || "방정보를 입력해주세요"}
             goToStudyRoom={goToStudyRoom}
             toggleVideo={toggleVideo}
             toggleAudio={toggleAudio}
