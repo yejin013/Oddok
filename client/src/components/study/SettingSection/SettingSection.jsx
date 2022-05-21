@@ -103,11 +103,8 @@ function SettingSection({ closeSettingSection }) {
 
   const hashtagHandler = (e) => {
     const checkedHashtag = new Set(hashtags);
-    if (e.target.checked && !checkedHashtag.has(e.target.value)) {
-      checkedHashtag.add(e.target.value);
-    } else if (!e.target.checked && checkedHashtag.has(e.target.value)) {
-      checkedHashtag.delete(e.target.value);
-    }
+    if (e.target.checked) checkedHashtag.add(e.target.value);
+    else if (!e.target.checked) checkedHashtag.delete(e.target.value);
     setHashtags(checkedHashtag);
   };
 
@@ -196,7 +193,11 @@ function SettingSection({ closeSettingSection }) {
               <HashtagButton label={label} onDelete={() => deleteHandler(label)} checked />
             ))}
             {isHashtagInput && (
-              <InputButton onSubmit={(label) => newHashtagHandler(label)} onDelete={deleteHashtagInputHandler} />
+              <InputButton
+                onSubmit={(label) => newHashtagHandler(label)}
+                onBlur={(label) => newHashtagHandler(label)}
+                onDelete={deleteHashtagInputHandler}
+              />
             )}
             <AddButton onClick={addHashtagInputHandler} />
           </div>

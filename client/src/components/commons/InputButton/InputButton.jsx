@@ -1,8 +1,9 @@
+/* eslint-disable jsx-a11y/no-autofocus */
 import React, { useRef, useState, useEffect, forwardRef, useImperativeHandle } from "react";
 import { Hashtag, Cancel } from "@icons";
 import styles from "./InputButton.module.css";
 
-const InputButton = forwardRef(({ onSubmit, onDelete, disabled }, ref) => {
+const InputButton = forwardRef(({ onSubmit, onBlur, onDelete }, ref) => {
   const valueRef = useRef();
   const [value, setValue] = useState("사용자입력");
   const [width, setWidth] = useState();
@@ -27,7 +28,7 @@ const InputButton = forwardRef(({ onSubmit, onDelete, disabled }, ref) => {
           <Hashtag />
         </div>
         <span ref={valueRef}>{value}</span>
-        <input type="text" placeholder="사용자입력" style={{ width }} disabled={disabled} />
+        <input type="text" placeholder="사용자입력" style={{ width }} onBlur={() => onBlur(value)} autoFocus />
         <div className={styles.cancel_icon} onClick={onDelete}>
           <Cancel />
         </div>
