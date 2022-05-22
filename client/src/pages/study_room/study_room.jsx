@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import { OpenVidu } from "openvidu-browser";
-import { useRecoilState, useResetRecoilState } from "recoil";
-import { roomInfoState, videoState, audioState } from "@recoil/studyroom_state";
-import { leaveStudyRoom } from "@api/study-room-api";
+import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
+import { roomIdState, roomInfoState, videoState, audioState } from "@recoil/studyroom_state";
+import { updateStudyRoom, leaveStudyRoom } from "@api/study-room-api";
 import { StudyBar, UserVideo, SettingSideBar, ChatSideBar, PlanSidebar, SettingSection } from "@components/study";
 import { ErrorModal } from "@components/commons";
 import styles from "./study_room.module.css";
@@ -20,6 +20,7 @@ function StudyRoom() {
   const [isPlaying, setIsPlaying] = useRecoilState(videoState);
   const [isMuted, setIsMuted] = useRecoilState(audioState);
   const isStudyRoom = true; // studyroom에 입장했을 때만 생기는 UI를 위한 변수
+  const roomId = useRecoilValue(roomIdState);
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
   const resetRoomInfo = useResetRecoilState(roomInfoState);
   const [sideBarState, setSideBarState] = useState({ setting: false, chatting: false, plan: false });
@@ -116,9 +117,20 @@ function StudyRoom() {
     setSideBarState({ ...sideBarState, setting: false, chatting: false, plan: !sideBarState.plan });
   };
 
+  const updateRoomInfo = async (data) => {
+    try {
+      const response = await updateStudyRoom(roomId, data);
+      setRoomInfo(response);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
     <div className={styles.room}>
-      <div className={styles.setting}>{isDetailOpen && <SettingSection clickSettingBtn={clickDetailBtn} />}</div>
+      <div className={styles.setting}>
+        {isDetailOpen && <SettingSection closeSettingSection={clickDetailBtn} onUpdate={updateRoomInfo} />}
+      </div>
       <div className={styles.video_container}>
         {sideBarState.setting && (
           <div className={styles.side_bar}>

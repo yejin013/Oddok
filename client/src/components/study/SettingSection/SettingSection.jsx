@@ -41,7 +41,7 @@ const ENDDATE_OPTIONS = [
   { value: new Date(new Date(2022, 11, 32) + 3240 * 10000).toISOString().split("T")[0], name: "2022.12.31" },
 ];
 
-function SettingSection({ closeSettingSection }) {
+function SettingSection({ closeSettingSection, onUpdate }) {
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
   const roomTitle = useRecoilValue(roomTitleState);
   const titleRef = useRef();
@@ -77,7 +77,7 @@ function SettingSection({ closeSettingSection }) {
   };
 
   const clickSaveBtn = () => {
-    setRoomInfo({
+    const data = {
       ...roomInfo,
       name: titleRef.current.value
         ? titleRef.current.value.replace(/[\u{1F004}-\u{1F9E6}]|[\u{1F600}-\u{1F9D0}]/gu, "")
@@ -87,7 +87,15 @@ function SettingSection({ closeSettingSection }) {
       password: passwordInputRef.current.value,
       bgmlink: bgmlinkInputRef.current.value,
       rule: ruleInputRef.current.value,
-    });
+    };
+    // 방 정보 수정
+    if (onUpdate) {
+      onUpdate(data);
+      closeSettingSection();
+      return;
+    }
+    // 스터디룸 생성시 입력한 방 정보 저장
+    setRoomInfo(data);
     closeSettingSection();
   };
 
