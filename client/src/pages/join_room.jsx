@@ -31,7 +31,7 @@ function JoinRoom() {
 
   // TODO 방장일 경우 수정권한 주기
   useEffect(() => {
-    setUserInfo({ ...userInfo, updateAllowed: false });
+    setUserInfo({ ...userInfo, updateAllowed: true });
   }, []);
 
   useEffect(() => {
@@ -69,7 +69,7 @@ function JoinRoom() {
           onAction={{ text: "메인으로 돌아가기", action: () => history.push("/") }}
         />
       )}
-      <SettingRoom goToStudyRoom={goToStudyRoom} />
+      <SettingRoom roomId={id} goToStudyRoom={goToStudyRoom} />
     </>
   );
 }

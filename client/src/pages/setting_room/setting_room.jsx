@@ -1,19 +1,21 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { userState } from "@recoil/user_state";
-import { videoState, audioState, roomTitleState } from "@recoil/studyroom_state";
+import { videoState, audioState, roomTitleState, roomInfoState } from "@recoil/studyroom_state";
 import { planState } from "@recoil/plan_state";
+import { updateStudyRoom } from "@api/study-room-api";
 import { ToolTip } from "@components/commons";
 import { SettingBar, SettingForm, SettingSideBar, TotalTime, PlanSidebar } from "@components/study";
 import styles from "./setting_room.module.css";
 
-function SettingRoom({ goToStudyRoom }) {
+function SettingRoom({ roomId, goToStudyRoom }) {
   const videoRef = useRef();
   const [isPlaying, setIsPlaying] = useRecoilState(videoState);
   const [isMuted, setIsMuted] = useRecoilState(audioState);
   const [clickedSettingBtn, setClickedSettingBtn] = useState(false);
   const userInfo = useRecoilValue(userState);
   const roomTitle = useRecoilValue(roomTitleState);
+  const setRoomInfo = useSetRecoilState(roomInfoState);
   const [isPlanOpen, setisPlanOpen] = useState(false);
   const plan = useRecoilValue(planState);
   const displayType = clickedSettingBtn ? styles.hide : "";
@@ -59,9 +61,23 @@ function SettingRoom({ goToStudyRoom }) {
     setisPlanOpen((prev) => !prev);
   };
 
+  const updateRoomInfo = async (data) => {
+    try {
+      const response = await updateStudyRoom(roomId, data);
+      setRoomInfo(response);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
     <div>
-      {clickedSettingBtn && (userInfo.updateAllowed ? <SettingForm onClose={clickSettingBtn} /> : <SettingSideBar />)}
+      {clickedSettingBtn &&
+        (userInfo.updateAllowed ? (
+          <SettingForm onClose={clickSettingBtn} onUpdate={updateRoomInfo} />
+        ) : (
+          <SettingSideBar />
+        ))}
       <div className={`${styles.room} ${displayType}`}>
         <section className={styles.video_component}>
           <div className={styles.video_container}>
