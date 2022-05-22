@@ -4,7 +4,7 @@ import { OpenVidu } from "openvidu-browser";
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import { roomIdState, roomInfoState, videoState, audioState } from "@recoil/studyroom_state";
 import { updateStudyRoom, leaveStudyRoom } from "@api/study-room-api";
-import { StudyBar, UserVideo, SettingSideBar, ChatSideBar, PlanSidebar, SettingSection } from "@components/study";
+import { StudyBar, UserVideo, SettingSideBar, ChatSideBar, PlanSidebar, SettingForm } from "@components/study";
 import { ErrorModal } from "@components/commons";
 import styles from "./study_room.module.css";
 
@@ -129,7 +129,7 @@ function StudyRoom() {
   return (
     <div className={styles.room}>
       <div className={styles.setting}>
-        {isDetailOpen && <SettingSection closeSettingSection={clickDetailBtn} onUpdate={updateRoomInfo} />}
+        {isDetailOpen && <SettingForm onClose={clickDetailBtn} onUpdate={updateRoomInfo} />}
       </div>
       <div className={styles.video_container}>
         {sideBarState.setting && (

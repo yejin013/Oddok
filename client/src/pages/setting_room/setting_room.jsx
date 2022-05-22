@@ -4,7 +4,7 @@ import { userState } from "@recoil/user_state";
 import { videoState, audioState, roomTitleState } from "@recoil/studyroom_state";
 import { planState } from "@recoil/plan_state";
 import { ToolTip } from "@components/commons";
-import { SettingBar, SettingSection, SettingSideBar, TotalTime, PlanSidebar } from "@components/study";
+import { SettingBar, SettingForm, SettingSideBar, TotalTime, PlanSidebar } from "@components/study";
 import styles from "./setting_room.module.css";
 
 function SettingRoom({ goToStudyRoom }) {
@@ -61,8 +61,7 @@ function SettingRoom({ goToStudyRoom }) {
 
   return (
     <div>
-      {clickedSettingBtn &&
-        (userInfo.updateAllowed ? <SettingSection closeSettingSection={clickSettingBtn} /> : <SettingSideBar />)}
+      {clickedSettingBtn && (userInfo.updateAllowed ? <SettingForm onClose={clickSettingBtn} /> : <SettingSideBar />)}
       <div className={`${styles.room} ${displayType}`}>
         <section className={styles.video_component}>
           <div className={styles.video_container}>

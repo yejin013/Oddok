@@ -41,7 +41,7 @@ const ENDDATE_OPTIONS = [
   { value: new Date(new Date(2022, 11, 32) + 3240 * 10000).toISOString().split("T")[0], name: "2022.12.31" },
 ];
 
-function SettingSection({ closeSettingSection, onUpdate }) {
+function SettingForm({ onClose, onUpdate }) {
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
   const roomTitle = useRecoilValue(roomTitleState);
   const titleRef = useRef();
@@ -91,12 +91,12 @@ function SettingSection({ closeSettingSection, onUpdate }) {
     // 방 정보 수정
     if (onUpdate) {
       onUpdate(data);
-      closeSettingSection();
+      onClose();
       return;
     }
     // 스터디룸 생성시 입력한 방 정보 저장
     setRoomInfo(data);
-    closeSettingSection();
+    onClose();
   };
 
   const categoryHandler = (value) => {
@@ -291,4 +291,4 @@ function SettingSection({ closeSettingSection, onUpdate }) {
   );
 }
 
-export default SettingSection;
+export default SettingForm;
