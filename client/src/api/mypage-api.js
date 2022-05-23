@@ -14,3 +14,11 @@ export const getTimeRecordList = async (date) => {
   });
   return response;
 };
+
+export const getMyRoom = async () => {
+  const id = localStorage.getItem("userId");
+  const response = await axiosInstance({
+    url: `/study-room/user/${id}`,
+  });
+  return response;
+};

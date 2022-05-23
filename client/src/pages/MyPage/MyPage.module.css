@@ -68,8 +68,7 @@
 
 .study_history .contents {
   display: flex;
-  gap: 96px;
-  justify-content: center;
+  justify-content: space-around;
 }
 
 .box {
@@ -98,6 +97,15 @@
 
 .subject_list {
   width: 100%;
+}
+
+.no_content {
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray600);
+  font-size: var(--text-xs);
 }
 
 .account .contents {
