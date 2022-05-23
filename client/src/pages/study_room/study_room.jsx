@@ -94,7 +94,6 @@ function StudyRoom() {
       });
       // 3) 방장이 방 정보를 수정했을 때
       session.on("signal:updated-roominfo", (event) => {
-        console.log("데이터 잘 왔엉🙂👋");
         const data = JSON.parse(event.data);
         setRoomInfo(data);
       });
@@ -120,7 +119,11 @@ function StudyRoom() {
   const updateRoomInfo = async (data) => {
     try {
       const response = await updateStudyRoom(roomId, data);
-      setRoomInfo(response);
+      session.signal({
+        data: JSON.stringify(response),
+        to: [],
+        type: "updated-roominfo",
+      });
     } catch (e) {
       console.error(e);
     }
