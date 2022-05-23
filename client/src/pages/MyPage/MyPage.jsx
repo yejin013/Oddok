@@ -135,6 +135,21 @@ function MyPage() {
               />
             </div>
           </section>
+          <section className={styles.account}>
+            <div className={styles.heading}>계정</div>
+            <div className={styles.contents}>
+              <div>
+                <div className={styles.sub_heading}>닉네임</div>
+                <div className={styles.nickname}>뿌링뿌링</div>
+              </div>
+              <div>
+                <div className={styles.sub_heading}>위험구역</div>
+                <button type="button" className={styles.delete_btn}>
+                  계정 삭제
+                </button>
+              </div>
+            </div>
+          </section>
         </div>
       </div>
       <Footer />

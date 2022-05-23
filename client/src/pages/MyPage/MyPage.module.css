@@ -99,3 +99,24 @@
 .subject_list {
   width: 100%;
 }
+
+.account .contents {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.nickname {
+  font-size: var(--text-xl);
+  font-weight: var(--font-medium);
+  margin: 28px 16px;
+}
+
+.delete_btn {
+  background-color: var(--gray900);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  padding: 12px;
+  color: var(--gray600);
+  margin: 22px 53px;
+}
