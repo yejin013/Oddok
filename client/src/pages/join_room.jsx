@@ -3,7 +3,7 @@ import { useHistory, useParams } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { userState } from "@recoil/user_state";
 import { roomIdState, roomInfoState } from "@recoil/studyroom_state";
-import { getStudyRoom, joinStudyRoom } from "@api/study-room-api";
+import { getStudyRoom, joinStudyRoom, updateStudyRoom } from "@api/study-room-api";
 import useAsync from "@hooks/useAsync";
 import { Loading } from "@components/study";
 import { ErrorModal } from "@components/commons";
@@ -31,7 +31,7 @@ function JoinRoom() {
 
   // TODO 방장일 경우 수정권한 주기
   useEffect(() => {
-    setUserInfo({ ...userInfo, updateAllowed: true });
+    setUserInfo({ ...userInfo, updateAllowed: false });
   }, []);
 
   useEffect(() => {
@@ -59,6 +59,15 @@ function JoinRoom() {
     if (joinError) joinErrorReset();
   };
 
+  const updateRoomInfo = async (data) => {
+    try {
+      const response = await updateStudyRoom(id, data);
+      setRoomInfo(response);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
     <>
       {isLoading && <Loading />}
@@ -69,7 +78,7 @@ function JoinRoom() {
           onAction={{ text: "메인으로 돌아가기", action: () => history.push("/") }}
         />
       )}
-      <SettingRoom roomId={id} goToStudyRoom={goToStudyRoom} />
+      <SettingRoom goToStudyRoom={goToStudyRoom} updateRoomInfo={updateRoomInfo} />
     </>
   );
 }
