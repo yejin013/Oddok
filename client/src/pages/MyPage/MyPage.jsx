@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Header, Footer } from "@components/home";
-import { SideNavBar, DatePicker, TimeTable, TimeRecordList } from "@components/mypage";
+import { SideNavBar, DatePicker, TimeTable, TimeRecordList, MyRoom } from "@components/mypage";
 import { Textarea } from "@components/commons";
 import { getProfile, getTimeRecordList } from "@api/mypage-api";
 import useAsync from "@hooks/useAsync";
@@ -120,6 +120,19 @@ function MyPage() {
                 <div className={styles.sub_heading}>시간표</div>
                 <TimeTable timeRecordList={timeRecordData} />
               </div>
+            </div>
+          </section>
+          <section className={styles.my_room}>
+            <div className={styles.heading}>생성 스터디룸</div>
+            <div className={styles.sub_heading}>생성한 스터디룸</div>
+            <div className={styles.contents}>
+              <MyRoom
+                roomData={{
+                  name: "공시생 1호실",
+                  hashtags: ["해시태그1", "해시태그2", "해시태그3"],
+                  endAt: "2022-12-31",
+                }}
+              />
             </div>
           </section>
         </div>
