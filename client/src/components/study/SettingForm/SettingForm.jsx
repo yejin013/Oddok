@@ -42,7 +42,8 @@ const ENDDATE_OPTIONS = [
 ];
 
 function SettingForm({ onClose, onUpdate }) {
-  const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
+  const [roomInfoAtom, setRoomInfoAtom] = useRecoilState(roomInfoState);
+  const [roomInfo, setRoomInfo] = useState(roomInfoAtom);
   const roomTitle = useRecoilValue(roomTitleState);
   const titleRef = useRef();
   const [hashtags, setHashtags] = useState(new Set());
@@ -95,7 +96,7 @@ function SettingForm({ onClose, onUpdate }) {
       return;
     }
     // 스터디룸 생성시 입력한 방 정보 저장
-    setRoomInfo(data);
+    setRoomInfoAtom(data);
     onClose();
   };
 
