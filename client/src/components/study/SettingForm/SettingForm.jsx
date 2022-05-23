@@ -202,11 +202,7 @@ function SettingForm({ onClose, onUpdate }) {
               <HashtagButton label={label} onDelete={() => deleteHandler(label)} checked />
             ))}
             {isHashtagInput && (
-              <InputButton
-                onSubmit={(label) => newHashtagHandler(label)}
-                onBlur={(label) => newHashtagHandler(label)}
-                onDelete={deleteHashtagInputHandler}
-              />
+              <InputButton onSubmit={(label) => newHashtagHandler(label)} onDelete={deleteHashtagInputHandler} />
             )}
             <AddButton onClick={addHashtagInputHandler} />
           </div>

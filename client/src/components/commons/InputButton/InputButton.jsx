@@ -3,7 +3,7 @@ import React, { useRef, useState, useEffect, forwardRef, useImperativeHandle } f
 import { Hashtag, Cancel } from "@icons";
 import styles from "./InputButton.module.css";
 
-const InputButton = forwardRef(({ onSubmit, onBlur, onDelete }, ref) => {
+const InputButton = forwardRef(({ onSubmit, onDelete }, ref) => {
   const valueRef = useRef();
   const [value, setValue] = useState("사용자입력");
   const [width, setWidth] = useState();
@@ -28,7 +28,7 @@ const InputButton = forwardRef(({ onSubmit, onBlur, onDelete }, ref) => {
           <Hashtag />
         </div>
         <span ref={valueRef}>{value}</span>
-        <input type="text" placeholder="사용자입력" style={{ width }} onBlur={() => onBlur(value)} autoFocus />
+        <input type="text" placeholder="사용자입력" style={{ width }} onBlur={() => onSubmit(value)} autoFocus />
         <div className={styles.cancel_icon} onClick={onDelete}>
           <Cancel />
         </div>
