@@ -16,7 +16,6 @@ function SettingRoom({ goToStudyRoom, updateRoomInfo }) {
   const roomTitle = useRecoilValue(roomTitleState);
   const [isPlanOpen, setisPlanOpen] = useState(false);
   const plan = useRecoilValue(planState);
-  const displayType = clickedSettingBtn ? styles.hide : "";
 
   useEffect(() => {
     const getVideoandAudio = async () => {
@@ -61,20 +60,22 @@ function SettingRoom({ goToStudyRoom, updateRoomInfo }) {
 
   return (
     <div>
-      {clickedSettingBtn &&
-        (userInfo.updateAllowed ? (
-          <SettingForm onClose={clickSettingBtn} onUpdate={updateRoomInfo} />
-        ) : (
-          <SettingSideBar />
-        ))}
-      <div className={`${styles.room} ${displayType}`}>
+      {clickedSettingBtn && userInfo.updateAllowed && (
+        <SettingForm onClose={clickSettingBtn} onUpdate={updateRoomInfo} />
+      )}
+      <div className={`${styles.room}`}>
         <section className={styles.video_component}>
+          {clickedSettingBtn && !userInfo.updateAllowed && (
+            <div className={styles.side_bar}>
+              <SettingSideBar />
+            </div>
+          )}
           <div className={styles.video_container}>
             <video className={styles.video} ref={videoRef} autoPlay />
             <TotalTime />
           </div>
           {isPlanOpen && (
-            <div className={styles.plan_bar}>
+            <div className={styles.side_bar}>
               <PlanSidebar />
             </div>
           )}
