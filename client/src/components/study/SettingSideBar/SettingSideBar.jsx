@@ -1,34 +1,17 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { useRecoilValue } from "recoil";
+import { roomInfoState } from "@recoil/studyroom_state";
 import { userState } from "@recoil/user_state";
-import { updateStudyRoom } from "@api/study-room-api";
 import { Hashtag, Play, Pause } from "@icons";
 import styles from "./SettingSideBar.module.css";
 
-function SettingSideBar({ session, roomInfo, clickDetailBtn }) {
+function SettingSideBar({ clickDetailBtn }) {
+  const roomInfo = useRecoilValue(roomInfoState);
   const { updateAllowed } = useRecoilValue(userState);
-  const textRef = useRef();
-
   const [isPlay, setIsPlay] = useState(false);
 
   const toggleBgm = () => {
     setIsPlay((prev) => !prev);
-  };
-
-  const submitHandler = async (e) => {
-    e.preventDefault();
-    const res = await updateStudyRoom(roomInfo.id, roomInfo);
-    console.log("수정정보", res);
-
-    // 수정된 정보 브로드캐스트하기
-    session
-      .signal({
-        data: JSON.stringify(roomInfo), // JSON stringify 해야됨!
-        to: [],
-        type: "updated-roominfo",
-      })
-      .then(() => console.log("데이터 잘 갔엉🙂👋"))
-      .catch((error) => console.error(error));
   };
 
   return (
@@ -50,7 +33,7 @@ function SettingSideBar({ session, roomInfo, clickDetailBtn }) {
         <p>목표시간</p>
         <div className={styles.text_field}>{roomInfo.targetTime}시간</div>
       </div>
-      <div className={`${styles.info_item} ${styles.rule_field}`}>
+      <div className={`${styles.info_item} ${styles.rule}`}>
         <p>스터디 규칙</p>
         <div className={`${styles.text_field} ${styles.text_area}`}>{roomInfo.rule ? roomInfo.rule : "없음"}</div>
       </div>
@@ -64,14 +47,9 @@ function SettingSideBar({ session, roomInfo, clickDetailBtn }) {
         </div>
       </div>
       {updateAllowed && (
-        <div className={styles.buttons}>
-          <button className={styles.button} type="button" onClick={clickDetailBtn}>
-            세부 설정
-          </button>
-          <button className={styles.button} type="submit" onClick={submitHandler}>
-            방 정보 수정
-          </button>
-        </div>
+        <button className={styles.button} type="submit" onClick={clickDetailBtn}>
+          방 정보 수정
+        </button>
       )}
     </aside>
   );
