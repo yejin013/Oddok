@@ -9,4 +9,4 @@ export { default as Thumbnail } from "./Thumbnail/Thumbnail";
 export { default as ToggleButton } from "./ToggleButton/ToggleButton";
 export { default as ToolTip } from "./ToolTip/ToolTip";
 export { default as UserCount } from "./UserCount/UserCount";
-export { default as ErrorModal } from "./ErrorModal/ErrorModal";
+export { default as Modal } from "./Modal/Modal";
