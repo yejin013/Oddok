@@ -11,8 +11,9 @@
 .overlay {
   position: fixed;
   top: 20vh;
-  left: calc(50% - 260px);
-  width: 520px;
+  left: 50%;
+  transform: translate(-50%);
+  max-width: 680px;
   z-index: 100;
   overflow: hidden;
   display: flex;
@@ -88,7 +89,8 @@
 
 @media (max-width: 768px) {
   .overlay {
-    left: calc(50% - 180px);
     width: 360px;
+    left: 50%;
+    transform: translate(-50%);
   }
 }

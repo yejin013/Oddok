@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { Close } from "@icons";
 import styles from "./Modal.module.css";
 
-function ErrorModal({ title, content, onConfirm, onAction, onSubAction }) {
+function Modal({ title, content, onConfirm, onAction, onSubAction }) {
   return (
     <>
       {createPortal(<div className={styles.backdrop} />, document.getElementById("backdrop-root"))}
@@ -33,4 +33,4 @@ function ErrorModal({ title, content, onConfirm, onAction, onSubAction }) {
   );
 }
 
-export default ErrorModal;
+export default Modal;
