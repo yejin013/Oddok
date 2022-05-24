@@ -6,6 +6,7 @@ export { default as HashtagButton } from "./HashtagButton/HashtagButton";
 export { default as Input } from "./Input/Input";
 export { default as InputButton } from "./InputButton/InputButton";
 export { default as Modal } from "./Modal/Modal";
+export { default as NicknameEditModal } from "./Modal/NicknameEditModal";
 export { default as RadioButton } from "./RadioButton/RadioButton";
 export { default as Textarea } from "./Textarea/Textarea";
 export { default as Thumbnail } from "./Thumbnail/Thumbnail";
