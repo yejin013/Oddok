@@ -31,11 +31,11 @@ function SettingSideBar({ clickDetailBtn }) {
       </div>
       <div className={styles.info_item}>
         <p>목표시간</p>
-        <div className={styles.text_field}>{roomInfo?.targetTime}시간</div>
+        <div className={styles.text_field}>{roomInfo.targetTime}시간</div>
       </div>
       <div className={`${styles.info_item} ${styles.rule}`}>
         <p>스터디 규칙</p>
-        <div className={`${styles.text_field} ${styles.text_area}`}>{roomInfo?.rule ? roomInfo.rule : "없음"}</div>
+        <div className={`${styles.text_field} ${styles.text_area}`}>{roomInfo.rule ? roomInfo.rule : "없음"}</div>
       </div>
       <div className={styles.info_item}>
         <p>음악</p>
