@@ -9,13 +9,13 @@ function MyRoom({ roomData }) {
         <Thumbnail />
       </div>
       <div className={styles.info_box}>
-        <div className={styles.title}>{roomData.name}</div>
-        <div>
+        <p className={styles.title}>{roomData.name}</p>
+        <p>
           {roomData.hashtags.map((hashtag) => (
             <span>#{hashtag} </span>
           ))}
-        </div>
-        <div>{roomData.endAt} 까지</div>
+        </p>
+        <p>{roomData.endAt} 까지</p>
       </div>
     </div>
   );
