@@ -6,7 +6,7 @@ import { roomInfoState } from "@recoil/studyroom_state";
 import { createStudyRoom, joinStudyRoom } from "@api/study-room-api";
 import useAsync from "@hooks/useAsync";
 import { Loading } from "@components/study";
-import { ErrorModal } from "@components/commons";
+import { Modal } from "@components/commons";
 import SettingRoom from "./setting_room/setting_room";
 
 function CreateRoom() {
@@ -63,8 +63,9 @@ function CreateRoom() {
     <>
       {(createLoading || joinLoading) && <Loading />}
       {(createError || joinError) && (
-        <ErrorModal
-          message={createError?.data.message || joinError?.data.message}
+        <Modal
+          title="ERROR⚠️"
+          content={createError?.data.message || joinError?.data.message}
           onConfirm={onConfirm}
           onAction={{ text: "메인으로 돌아가기", action: () => history.push("/") }}
         />
