@@ -3,10 +3,10 @@ import Picker from "react-datepicker";
 import ko from "date-fns/locale/ko";
 import { addDays, subDays } from "date-fns";
 import { ArrowLeft, ArrowRight } from "@icons";
+import { CalendarHeader } from "@components/commons";
 import CustomInput from "./CustomInput";
-import CustomHeader from "./CustomHeader";
 import "react-datepicker/dist/react-datepicker.css";
-import "./customstyle.css";
+import "../../../assets/styles/calendar_style.css";
 import styles from "./DatePicker.module.css";
 
 function DatePicker({ setSelectedDate }) {
@@ -32,12 +32,10 @@ function DatePicker({ setSelectedDate }) {
           showPopperArrow={false}
           popperPlacement="auto"
           customInput={<CustomInput />}
-          renderCustomHeader={CustomHeader}
+          renderCustomHeader={CalendarHeader}
           dayClassName={(date) =>
-            (addDays(date, 1) < new Date() ? styles.day_disabled : undefined) ||
-            (addDays(date, 1) > new Date() && date.getDate() === currentDate.getDate()
-              ? styles.day_selected
-              : styles.day_default)
+            (addDays(date, 1) < new Date() ? "day_disabled" : undefined) ||
+            (addDays(date, 1) > new Date() && date.getDate() === currentDate.getDate() ? "day_selected" : "day_default")
           }
         />
       </div>

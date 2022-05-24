@@ -23,26 +23,3 @@
   width: 100%;
   position: relative;
 }
-
-.day_default {
-  color: white;
-}
-.day_default:hover {
-  background-color: var(--primary-light);
-}
-
-.day_disabled {
-  color: var(--gray600);
-}
-.day_disabled:hover {
-  background-color: transparent;
-}
-
-.day_selected {
-  color: white;
-  background-color: var(--primary);
-}
-
-.day_selected:hover {
-  background-color: var(--primary-light);
-}
