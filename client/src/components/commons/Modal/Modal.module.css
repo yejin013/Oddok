@@ -17,7 +17,6 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
   background-color: var(--gray900);
   border-radius: 6px;
   box-shadow: 0px 10px 20px rgba(32, 37, 38, 0.1), 0px 20px 50px rgba(32, 37, 38, 0.1);
@@ -52,6 +51,7 @@
   margin: 24px;
   color: var(--gray600);
   font-size: var(--text-sm);
+  font-weight: var(--font-medium);
 }
 
 .overlay footer {
