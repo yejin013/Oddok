@@ -2,9 +2,8 @@ import React from "react";
 import { useRecoilState } from "recoil";
 import { bookmarkState } from "@recoil/bookmark-state";
 import { addBookmark, deleteBookmark } from "@api/study-room-api";
-import { UserCount } from "@components/commons";
+import { Thumbnail, UserCount } from "@components/commons";
 import { Lock, Unlock, BookMark, BookMarkHeart } from "@icons";
-import Thumbnail from "./thumbnail";
 import styles from "./StudyRoomCard.module.css";
 
 function StudyRoomCard({ roomData, showBookmark }) {

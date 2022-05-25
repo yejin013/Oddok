@@ -5,6 +5,7 @@ export { default as Input } from "./Input/Input";
 export { default as InputButton } from "./InputButton/InputButton";
 export { default as RadioButton } from "./RadioButton/RadioButton";
 export { default as Textarea } from "./Textarea/Textarea";
+export { default as Thumbnail } from "./Thumbnail/Thumbnail";
 export { default as ToggleButton } from "./ToggleButton/ToggleButton";
 export { default as ToolTip } from "./ToolTip/ToolTip";
 export { default as UserCount } from "./UserCount/UserCount";

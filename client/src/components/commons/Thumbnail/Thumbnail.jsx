@@ -1,7 +1,6 @@
 import React from "react";
-import { ReactComponent as ThumbnailImage } from "../../../assets/icons/thumbnail.svg";
-
-import styles from "./thumbnail.module.css";
+import { Thumbnail as ThumbnailImage } from "@icons";
+import styles from "./Thumbnail.module.css";
 
 function Thumbnail() {
   return (

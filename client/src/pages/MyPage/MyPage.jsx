@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Header, Footer } from "@components/home";
-import { SideNavBar, DatePicker, TimeTable, TimeRecordList } from "@components/mypage";
+import { SideNavBar, DatePicker, TimeTable, TimeRecordList, MyRoom } from "@components/mypage";
 import { Textarea } from "@components/commons";
-import { getProfile, getTimeRecordList } from "@api/mypage-api";
+import { getProfile, getTimeRecordList, getMyRoom } from "@api/mypage-api";
 import useAsync from "@hooks/useAsync";
 import getColor from "src/utils/getColor";
 import getTimeDiff from "src/utils/getTimeDiff";
@@ -10,6 +10,7 @@ import styles from "./MyPage.module.css";
 
 function MyPage() {
   const { data: profileData } = useAsync(getProfile, { onError: (error) => console.error(error) }, [], false);
+  const { data: myRoomData, loading } = useAsync(getMyRoom, { onError: (error) => console.error(error) }, [], false);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(0, 10));
   const [timeRecordData, setTimeRecordData] = useState();
   const [totalStudyTime, setTotalStudyTime] = useState();
@@ -116,9 +117,32 @@ function MyPage() {
                   </div>
                 </div>
               </div>
-              <div className={styles.timetable}>
+              <div>
                 <div className={styles.sub_heading}>시간표</div>
                 <TimeTable timeRecordList={timeRecordData} />
+              </div>
+            </div>
+          </section>
+          <section>
+            <div className={styles.heading}>생성 스터디룸</div>
+            <div className={styles.sub_heading}>생성한 스터디룸</div>
+            <div className={styles.contents}>
+              {!loading &&
+                (myRoomData ? <MyRoom roomData={myRoomData} /> : <div className={styles.no_content}>없습니다.</div>)}
+            </div>
+          </section>
+          <section className={styles.account}>
+            <div className={styles.heading}>계정</div>
+            <div className={styles.contents}>
+              <div>
+                <div className={styles.sub_heading}>닉네임</div>
+                <div className={styles.nickname}>뿌링뿌링</div>
+              </div>
+              <div>
+                <div className={styles.sub_heading}>위험구역</div>
+                <button type="button" className={styles.delete_btn}>
+                  계정 삭제
+                </button>
               </div>
             </div>
           </section>
