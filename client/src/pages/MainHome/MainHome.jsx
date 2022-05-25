@@ -3,10 +3,10 @@ import { useSetRecoilState } from "recoil";
 import { bookmarkState } from "@recoil/bookmark-state";
 import { getBookmark } from "@api/bookmark-api";
 import { getTestUser } from "@api/getTestUser";
-import { Bookmark, Footer, Header, StudyRoomList } from "@components/home";
+import { Bookmark, Footer, Header, StudyRoomList, TotalParticipant } from "@components/home";
 import styles from "./MainHome.module.css";
 
-function MainHome(props) {
+function MainHome() {
   const setBookmark = useSetRecoilState(bookmarkState);
 
   useEffect(() => {
@@ -25,6 +25,7 @@ function MainHome(props) {
   return (
     <div className={styles.home}>
       <Header />
+      <TotalParticipant />
       <Bookmark showBookmark={showBookmark} />
       <section className={styles.studyroom_list}>
         <h2>STUDY ROOM</h2>

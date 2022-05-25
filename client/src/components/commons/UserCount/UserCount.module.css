@@ -1,27 +1,27 @@
-.bookmark_user {
+.big {
   width: 2em;
   height: 2em;
   margin-right: 0.5em;
 }
 
-.plus.bookmark_user {
+.plus.big {
   width: 1.5em;
   height: 2.5em;
 }
 
-.user {
+.small {
   display: flex;
   width: 1em;
   height: 1em;
 }
 
-.plus.user {
+.plus.small {
   width: 0.7em;
   height: 1.3em;
 }
 
 .count {
   display: flex;
-  color: #efc457;
+  color: var(--primary-light);
   gap: 8px;
 }

@@ -7,6 +7,7 @@ import { bookmarkState } from "@recoil/bookmark-state";
 import { Thumbnail } from "@icons";
 import UserList from "../UserList/UserList";
 import styles from "./Bookmark.module.css";
+import { TotalParticipant } from "..";
 
 function Bookmark({ showBookmark }) {
   const bookmark = useRecoilValue(bookmarkState);
@@ -53,7 +54,7 @@ function Bookmark({ showBookmark }) {
   return (
     <div className={styles.bookmark}>
       {!bookmark ? (
-        <h1 style={{ color: "white", textAlign: "center" }}>🔖북마크를 추가해주세요🔖</h1>
+        <TotalParticipant />
       ) : (
         <div>
           <div className={styles.count_info}>
