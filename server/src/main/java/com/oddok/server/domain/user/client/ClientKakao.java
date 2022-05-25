@@ -5,8 +5,6 @@ import com.oddok.server.domain.user.entity.Role;
 import com.oddok.server.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -17,19 +15,19 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class ClientKakao {
 
     public User getUserData(String accessToken) {
-        KakaoUserDto kakaoUserDto = WebClient.create().get()
+        KakaoUserDto userData = WebClient.create().get()
                 .uri("https://kapi.kakao.com/v2/user/me")
-                .accept(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_FORM_URLENCODED)
                 .headers(h -> h.setBearerAuth(accessToken))
                 .retrieve()
                 .bodyToMono(KakaoUserDto.class)
                 .block();
 
-        log.info("kakaoUser = {}",kakaoUserDto);
+        log.info("kakaoUser = {}",userData);
 
         return User.builder()
-                .email(kakaoUserDto.getKakaoAccount().getEmail())
-                .nickname(kakaoUserDto.getProperties().getNickname())
+                .email(userData.getKakaoAccount().getEmail())
+                .nickname(userData.getProperties().getNickname())
                 .role(Role.USER)
                 .build();
     }
