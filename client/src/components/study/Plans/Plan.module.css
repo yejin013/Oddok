@@ -1,7 +1,7 @@
 .list {
   display: flex;
   align-items: center;
-  background-color: #212529;
+  background-color: var(--gray900);
   margin-bottom: 0.4em;
   padding: 0.3em;
   border-radius: 4px;
@@ -32,7 +32,7 @@
   position: absolute;
   right: 1.5%;
   padding: 0.5em 1em;
-  background-color: #212529;
+  background-color: var(--gray900);
 }
 
 .edit_button,
@@ -44,5 +44,5 @@
 
 .edit_button {
   padding-bottom: 1em;
-  border-bottom: 0.25px solid #343a40;
+  border-bottom: 0.25px solid var(--gray800);
 }

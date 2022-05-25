@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { bookmarkState } from "@recoil/bookmark-state";
 import { getBookmark } from "@api/bookmark-api";
 import { getTestUser } from "@api/getTestUser";
-import { getTotalParticipant } from "@api/participant-api";
 import { Bookmark, Footer, Header, StudyRoomList, TotalParticipant } from "@components/home";
 import styles from "./MainHome.module.css";
 
@@ -17,18 +16,14 @@ function MainHome() {
       .catch((error) => console.log("get user error", error));
   }, []);
 
-  useEffect(() => {
-    // if (로그인을 안했다면)
-    getTotalParticipant()
-      .then((response) => console.log(response))
-      .catch((error) => console.log(error.response));
-  }, []);
-
   const showBookmark = async () => {
     await getBookmark()
-      .then((response) => setBookmark("전체참여자수", response))
+      .then((response) => setBookmark(response))
       .catch((error) => console.log("get bookmark error", error));
   };
+
+  // 로그인 안했을 때
+  // 전체 참여자수 컴포넌트 추가
 
   return (
     <div className={styles.home}>

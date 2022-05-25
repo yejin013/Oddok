@@ -1,6 +1,6 @@
 .container {
   position: relative;
-  color: #f8f9fa;
+  color: var(--gray100);
   cursor: pointer;
   font-size: inherit;
 }
@@ -11,7 +11,7 @@
 
 .select {
   display: flex;
-  background-color: #212529;
+  background-color: var(--gray900);
   border: 1px solid #ffffff1a;
   border-radius: 4px;
   width: 100%;
@@ -33,7 +33,7 @@
   display: block;
   position: absolute;
   width: 100%;
-  background-color: #212529;
+  background-color: var(--gray900);
   border: 1px solid #ffffff1a;
   border-radius: 4px;
   margin: 6px 0;
@@ -47,5 +47,5 @@
 }
 
 .container ul li:hover {
-  background-color: #343a40;
+  background-color: var(--gray800);
 }

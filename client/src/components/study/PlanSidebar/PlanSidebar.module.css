@@ -1,5 +1,5 @@
 .plan_bar {
-  background-color: #101112;
+  background-color: var(--gray950);
   color: white;
   width: 100%;
   height: 100%;
