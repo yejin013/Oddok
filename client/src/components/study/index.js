@@ -1,5 +1,4 @@
 export { default as ChatSideBar } from "./ChatSideBar/ChatSideBar";
-export { default as Loading } from "./Loading/Loading";
 export { default as Plan } from "./Plans/Plans";
 export { default as PlanSidebar } from "./PlanSidebar/PlanSidebar";
 export { default as SettingBar } from "./SettingBar/SettingBar";

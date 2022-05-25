@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useRecoilValue } from "recoil";
-import { roomInfoState } from "@recoil/studyroom_state";
-import { userState } from "@recoil/user_state";
+import { roomInfoState } from "@recoil/studyroom-state";
+import { userState } from "@recoil/user-state";
 import { Hashtag, Play, Pause } from "@icons";
 import styles from "./SettingSideBar.module.css";
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { selectedPlanState } from "@recoil/plan_state";
+import { selectedPlanState } from "@recoil/plan-state";
 import {
   hourState,
   minuteState,
@@ -10,8 +10,8 @@ import {
   totalSecondState,
   startTimeState,
   endTimeState,
-} from "@recoil/timer_state";
-import { saveTime } from "@api/study-room-api";
+} from "@recoil/timer-state";
+import { saveTime } from "@api/time-record-api";
 import { Play, Pause, GoalOpen } from "@icons";
 import styles from "./SubjectTime.module.css";
 

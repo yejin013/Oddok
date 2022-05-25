@@ -1,7 +1,7 @@
 import React from "react";
 import { useRecoilState } from "recoil";
 import { bookmarkState } from "@recoil/bookmark-state";
-import { addBookmark, deleteBookmark } from "@api/study-room-api";
+import { addBookmark, deleteBookmark } from "@api/bookmark-api";
 import { Thumbnail, UserCount } from "@components/commons";
 import { Lock, Unlock, BookMark, BookMarkHeart } from "@icons";
 import styles from "./StudyRoomCard.module.css";

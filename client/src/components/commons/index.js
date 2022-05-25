@@ -3,6 +3,7 @@ export { default as Dropdown } from "./Dropdown/Dropdown";
 export { default as HashtagButton } from "./HashtagButton/HashtagButton";
 export { default as Input } from "./Input/Input";
 export { default as InputButton } from "./InputButton/InputButton";
+export { default as Loading } from "./Loading/Loading";
 export { default as RadioButton } from "./RadioButton/RadioButton";
 export { default as Textarea } from "./Textarea/Textarea";
 export { default as Thumbnail } from "./Thumbnail/Thumbnail";

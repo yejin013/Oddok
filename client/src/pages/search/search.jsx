@@ -5,7 +5,7 @@ import { Input } from "@components/commons";
 import { Header } from "@components/home";
 import SearchBrowse from "@components/search/SearchBrowse/SearchBrowse";
 import SearchResult from "@components/search/SearchResult/SearchResult";
-import styles from "./search.module.css";
+import styles from "./Search.module.css";
 
 function Search({ location }) {
   const history = useHistory();

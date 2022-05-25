@@ -1,11 +1,11 @@
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import CreateRoom from "@pages/create_room";
-import JoinRoom from "@pages/join_room";
-import MainHome from "@pages/main_home/main_home";
-import Search from "@pages/search/search";
+import CreateRoom from "@pages/CreateRoom";
+import JoinRoom from "@pages/JoinRoom";
+import MainHome from "@pages/MainHome/MainHome";
+import Search from "@pages/Search/Search";
 import MyPage from "@pages/MyPage/MyPage";
-import StudyRoom from "@pages/study_room/study_room";
+import StudyRoom from "@pages/StudyRoom/StudyRoom";
 import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
