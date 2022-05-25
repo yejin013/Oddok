@@ -4,10 +4,20 @@
   margin-right: 0.5em;
 }
 
+.plus.bookmark_user {
+  width: 1.5em;
+  height: 2.5em;
+}
+
 .user {
   display: flex;
   width: 1em;
   height: 1em;
+}
+
+.plus.user {
+  width: 0.7em;
+  height: 1.3em;
 }
 
 .count {
