@@ -60,10 +60,12 @@ function SettingRoom({ goToStudyRoom, updateRoomInfo }) {
 
   return (
     <div>
-      {clickedSettingBtn && userInfo.updateAllowed && (
-        <SettingForm onClose={clickSettingBtn} onUpdate={updateRoomInfo} />
-      )}
-      <div className={`${styles.room}`}>
+      <div className={styles.setting}>
+        {clickedSettingBtn && userInfo.updateAllowed && (
+          <SettingForm onClose={clickSettingBtn} onUpdate={updateRoomInfo} />
+        )}
+      </div>
+      <div className={styles.room}>
         <section className={styles.video_component}>
           {clickedSettingBtn && !userInfo.updateAllowed && (
             <div className={styles.side_bar}>

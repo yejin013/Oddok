@@ -6,8 +6,13 @@
   background-color: var(--gray950);
 }
 
-.room.hide {
-  display: none;
+.setting {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+  background-color: var(--gray950);
 }
 
 .video_component {
