@@ -47,7 +47,7 @@ function Bookmark({ showBookmark }) {
   // 비밀번호 확인
   const goToStudyRoom = () => {
     history.push({
-      pathname: "/studyroom",
+      pathname: `/studyroom/${bookmark.id}/setting`,
     });
   };
 

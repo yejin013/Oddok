@@ -10,7 +10,7 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use((config) => {
   // const userId = localStorage.getItem("userId");
-  const userId = "1";
+  const userId = "2";
   if (userId) {
     config.headers.userId = userId;
   }

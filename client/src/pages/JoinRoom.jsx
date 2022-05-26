@@ -6,7 +6,7 @@ import { roomIdState, roomInfoState } from "@recoil/studyroom-state";
 import { getStudyRoom, joinStudyRoom, updateStudyRoom } from "@api/study-room-api";
 import useAsync from "@hooks/useAsync";
 import { Loading, ErrorModal } from "@components/commons";
-import SettingRoom from "./SettingRoom/SettingRoom";
+import { SettingRoom } from "@components/study";
 
 function JoinRoom() {
   const history = useHistory();

@@ -34,7 +34,8 @@ function StudyRoomCard({ roomData, showBookmark }) {
         <div className={styles.thumbnail_box}>
           <Thumbnail />
           {!(bookmark && roomData.id === bookmark.id) ? (
-            <div
+            <button
+              type="button"
               className={styles.bookmark_icon}
               onClick={(event) => {
                 event.preventDefault();
@@ -42,11 +43,11 @@ function StudyRoomCard({ roomData, showBookmark }) {
               }}
             >
               <BookMark />
-            </div>
+            </button>
           ) : (
-            <div className={styles.bookmark_icon} onClick={cancelBookmark}>
+            <button type="button" className={styles.bookmark_icon} onClick={cancelBookmark}>
               <BookMarkHeart />
-            </div>
+            </button>
           )}
           <div className={styles.user_count}>
             <UserCount number={roomData.currentUsers} />
