@@ -12,11 +12,11 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RequiredArgsConstructor
 public class ClientKakao {
 
-    public User getUserData(String accessToken) {
+    public User getUserData(String kakaoAccessToken) {
         KakaoUserDto userData = WebClient.create().get()
                 .uri("https://kapi.kakao.com/v2/user/me")
                 .accept(MediaType.APPLICATION_JSON)
-                .headers(h -> h.setBearerAuth(accessToken))
+                .headers(h -> h.setBearerAuth(kakaoAccessToken))
                 .retrieve()
                 .bodyToMono(KakaoUserDto.class)
                 .block();
