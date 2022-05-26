@@ -18,8 +18,8 @@ public class AuthController {
     private final AuthMapper authMapper = Mappers.getMapper(AuthMapper.class);
 
     @GetMapping
-    public ResponseEntity<AuthResponse> kakaoAuthRequest(@RequestParam("code") String code) {
-        TokensDto tokensDto = authService.login(code);
+    public ResponseEntity<AuthResponse> kakaoAuthRequest(@RequestParam("token") String kakaoAccessToken) {
+        TokensDto tokensDto = authService.login(kakaoAccessToken);
         return ResponseEntity.ok(authMapper.toAuthResponse(tokensDto));
     }
 }
