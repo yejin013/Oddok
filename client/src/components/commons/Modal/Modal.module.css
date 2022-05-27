@@ -1,0 +1,97 @@
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 10;
+  background: #10111280;
+}
+
+.overlay {
+  position: fixed;
+  top: 20vh;
+  left: 50%;
+  transform: translate(-50%);
+  min-width: 520px;
+  max-width: 680px;
+  z-index: 100;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--gray900);
+  border-radius: 6px;
+  box-shadow: 0px 10px 20px rgba(32, 37, 38, 0.1), 0px 20px 50px rgba(32, 37, 38, 0.1);
+}
+
+.overlay header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  color: var(--gray100);
+  font-size: var(--text-xl);
+  font-weight: var(--font-medium);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.icon {
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+}
+
+.icon path {
+  fill: var(--gray600);
+}
+
+.icon:hover path {
+  fill: var(--gray500);
+}
+
+.content {
+  margin: 24px;
+  color: var(--gray600);
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+}
+
+.overlay footer {
+  margin: 24px;
+  display: flex;
+  justify-content: end;
+  gap: 12px;
+}
+
+.overlay footer button {
+  font-size: var(--text-base);
+  font-weight: var(--font-medium);
+}
+
+.main_btn {
+  padding: 10px 16px;
+  border: 1px solid #cfa028;
+  border-radius: 3px;
+  background-color: var(--primary);
+  color: var(--gray950);
+}
+
+.main_btn:hover {
+  background-color: #e9b636;
+}
+
+.sub_btn {
+  color: var(--gray600);
+}
+
+.sub_btn:hover {
+  color: var(--gray500);
+}
+
+@media (max-width: 768px) {
+  .overlay {
+    width: 360px;
+    left: 50%;
+    transform: translate(-50%);
+  }
+}

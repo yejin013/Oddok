@@ -28,6 +28,7 @@ import { ReactComponent as Plus } from "./plus.svg";
 import { ReactComponent as SendButton } from "./send-button.svg";
 import { ReactComponent as ArrowLeft } from "./arrow-left.svg";
 import { ReactComponent as ArrowRight } from "./arrow-right.svg";
+import { ReactComponent as Close } from "./x.svg";
 
 export {
   VideoOn,
@@ -60,4 +61,5 @@ export {
   SendButton,
   ArrowLeft,
   ArrowRight,
+  Close,
 };

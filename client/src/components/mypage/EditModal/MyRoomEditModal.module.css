@@ -1,0 +1,17 @@
+.box > p {
+  margin: 0;
+  margin-bottom: 8px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  color: var(--gray100);
+  font-weight: var(--font-normal);
+}
+
+.buttons {
+  padding: 12px 0;
+  display: flex;
+  gap: 12px;
+}

@@ -8,6 +8,7 @@
   background-color: #212529;
   width: 140px;
   padding: 3px 10px;
+  flex-shrink: 0;
 }
 
 .info_box {
@@ -19,9 +20,16 @@
 
 .info_box > p {
   margin: 0;
+  color: var(--gray300);
+  min-width: 240px;
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .title {
+  color: var(--gray100);
   font-weight: var(--font-medium);
   font-size: var(--text-xl);
 }

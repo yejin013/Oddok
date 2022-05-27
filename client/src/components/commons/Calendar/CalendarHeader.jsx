@@ -1,8 +1,8 @@
 import React from "react";
 import { ArrowLeft, ArrowRight } from "@icons";
-import styles from "./CustomHeader.module.css";
+import styles from "./CalendarHeader.module.css";
 
-function CustomHeader({ date, decreaseMonth, increaseMonth, prevMonthButtonDisabled, nextMonthButtonDisabled }) {
+function CalendarHeader({ date, decreaseMonth, increaseMonth, prevMonthButtonDisabled, nextMonthButtonDisabled }) {
   return (
     <header className={styles.header}>
       <button type="button" onClick={decreaseMonth} disabled={prevMonthButtonDisabled}>
@@ -19,4 +19,4 @@ function CustomHeader({ date, decreaseMonth, increaseMonth, prevMonthButtonDisab
   );
 }
 
-export default CustomHeader;
+export default CalendarHeader;
