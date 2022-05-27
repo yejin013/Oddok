@@ -22,3 +22,21 @@ export const getMyRoom = async () => {
   });
   return response;
 };
+
+export const createProfile = async (data) => {
+  const response = await axiosInstance({
+    url: "/profile",
+    method: "POST",
+    data,
+  });
+  return response;
+};
+
+export const updateProfile = async (data) => {
+  const response = await axiosInstance({
+    url: "/profile",
+    method: "PUT",
+    data,
+  });
+  return response;
+};

@@ -2,9 +2,16 @@
 import React, { forwardRef } from "react";
 import styles from "./Textarea.module.css";
 
-const Textarea = forwardRef(({ placeholder, content, disabled, defaultValue }, ref) => {
+const Textarea = forwardRef(({ placeholder, content, disabled, onChange, value }, ref) => {
   return (
-    <textarea className={styles.box} ref={ref} placeholder={placeholder} disabled={disabled} value={defaultValue}>
+    <textarea
+      className={styles.box}
+      ref={ref}
+      placeholder={placeholder}
+      disabled={disabled}
+      onChange={onChange}
+      value={value}
+    >
       {content}
     </textarea>
   );

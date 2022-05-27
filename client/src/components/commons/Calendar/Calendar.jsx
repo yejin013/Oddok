@@ -7,14 +7,20 @@ import CalendarHeader from "./CalendarHeader";
 import "react-datepicker/dist/react-datepicker.css";
 import "../../../assets/styles/calendar_style.css";
 
-function Calendar() {
-  const [currentDate, setCurrentDate] = useState(new Date());
+function Calendar({ onChange, defaultDate }) {
+  const [currentDate, setCurrentDate] = useState(defaultDate || new Date());
+
+  const changeDate = (date) => {
+    setCurrentDate(date);
+    onChange(date);
+  };
+
   return (
     <Picker
       locale={ko}
       dateFormat="yyyy. MM. dd"
       selected={currentDate}
-      onChange={(date) => setCurrentDate(date)}
+      onChange={changeDate}
       minDate={new Date()}
       showPopperArrow={false}
       popperPlacement="auto"

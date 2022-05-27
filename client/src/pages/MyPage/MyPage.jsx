@@ -18,8 +18,14 @@ import getTimeDiff from "src/utils/getTimeDiff";
 import styles from "./MyPage.module.css";
 
 function MyPage() {
-  const { data: profileData } = useAsync(getProfile, { onError: (error) => console.error(error) }, [], false);
-  const { data: myRoomData, loading } = useAsync(getMyRoom, { onError: (error) => console.error(error) }, [], false);
+  const {
+    data: profileData, //
+    setData: updateProfileData,
+  } = useAsync(getProfile, { onError: (error) => console.error(error) }, [], false);
+  const {
+    data: myRoomData, //
+    setData: updateRoomData,
+  } = useAsync(getMyRoom, { onError: (error) => console.error(error) }, [], false);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(0, 10));
   const [timeRecordData, setTimeRecordData] = useState();
   const [totalStudyTime, setTotalStudyTime] = useState();
@@ -57,8 +63,10 @@ function MyPage() {
 
   return (
     <div>
-      {(isModalOpen === "edit-mygoal" && <MyGoalEditModal onClose={closeModal} />) ||
-        (isModalOpen === "edit-myroom" && <MyRoomEditModal onClose={closeModal} />) ||
+      {(isModalOpen === "edit-mygoal" && (
+        <MyGoalEditModal profileData={profileData} onClose={closeModal} onUpdate={updateProfileData} />
+      )) ||
+        (isModalOpen === "edit-myroom" && <MyRoomEditModal onClose={closeModal} onUpdate={updateRoomData} />) ||
         (isModalOpen === "edit-nickname" && <NicknameEditModal onClose={closeModal} />)}
       <Header />
       <div className={styles.mypage}>
@@ -106,7 +114,7 @@ function MyPage() {
                 <div className={styles.text_field}>
                   <Textarea
                     placeholder="수정 버튼을 눌러 내 목표 또는 각오를 적어주세요."
-                    defaultValue={profileData?.goal}
+                    value={profileData?.goal}
                     disabled
                   />
                 </div>
@@ -150,8 +158,7 @@ function MyPage() {
             </div>
             <div className={styles.sub_heading}>생성한 스터디룸</div>
             <div className={styles.contents}>
-              {!loading &&
-                (myRoomData ? <MyRoom roomData={myRoomData} /> : <div className={styles.no_content}>없습니다.</div>)}
+              {myRoomData ? <MyRoom roomData={myRoomData} /> : <div className={styles.no_content}>없습니다.</div>}
             </div>
           </section>
           <section className={styles.account}>
