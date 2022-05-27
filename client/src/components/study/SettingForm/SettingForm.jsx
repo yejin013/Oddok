@@ -41,9 +41,9 @@ const ENDDATE_OPTIONS = [
   { value: new Date(new Date(2022, 11, 32) + 3240 * 10000).toISOString().split("T")[0], name: "2022.12.31" },
 ];
 
-function SettingForm({ onClose, onUpdate }) {
+function SettingForm({ roomData, onClose, onUpdate }) {
   const [roomInfoAtom, setRoomInfoAtom] = useRecoilState(roomInfoState);
-  const [roomInfo, setRoomInfo] = useState(roomInfoAtom);
+  const [roomInfo, setRoomInfo] = useState(roomData || roomInfoAtom);
   const roomTitle = useRecoilValue(roomTitleState);
   const titleRef = useRef();
   const [hashtags, setHashtags] = useState(new Set());

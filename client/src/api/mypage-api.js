@@ -40,3 +40,11 @@ export const updateProfile = async (data) => {
   });
   return response;
 };
+
+export const deleteStudyRoom = async (roomId) => {
+  const response = await axiosInstance({
+    url: `/study-room/${roomId}`,
+    method: "DELETE",
+  });
+  return response;
+};
