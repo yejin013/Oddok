@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import { atom, selector } from "recoil";
 
 export const videoState = atom({
@@ -11,10 +10,14 @@ export const audioState = atom({
   default: false,
 });
 
+export const roomIdState = atom({
+  key: "roomId",
+  default: 0,
+});
+
 export const roomInfoState = atom({
   key: "roomInfoState",
   default: {
-    id: 0,
     name: "",
     category: "",
     hashtags: [],
@@ -42,8 +45,9 @@ const categories = [
 export const roomTitleState = selector({
   key: "roomTitleState",
   get: ({ get }) => {
-    const value = get(roomInfoState).category;
-    const title = categories.find((category) => category.value === value);
-    return title ? `${title.label} n호실` : undefined;
+    const roomInfo = get(roomInfoState);
+    const categoryLabel = categories.find((category) => category.value === roomInfo.category);
+    const title = categoryLabel ? `${categoryLabel.label} n호실` : undefined;
+    return roomInfo.name ? roomInfo.name : title;
   },
 });

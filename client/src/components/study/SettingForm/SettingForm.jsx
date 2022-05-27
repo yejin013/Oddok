@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { userState } from "@recoil/user_state";
 import { roomInfoState, roomTitleState } from "@recoil/studyroom_state";
 import {
   RadioButton,
@@ -16,7 +15,7 @@ import { VideoOn, MicOff } from "@icons";
 import Image from "./image";
 import styles from "./SettingSection.module.css";
 
-const categories = [
+const CATEGORIES = [
   { value: "OFFICIAL", label: "공무원 준비" },
   { value: "SCHOOL", label: "수능/내신 준비" },
   { value: "CERTIFICATE", label: "자격증 준비" },
@@ -24,8 +23,8 @@ const categories = [
   { value: "PERSONAL", label: "개인 학습" },
   { value: "ETC", label: "일반" },
 ];
-const hashtags = ["교시제", "여성전용", "아침기상", "컨셉", "목표시간", "자율", "평일", "주말", "예치금", "인증"];
-const userLimitOptions = [
+const HASHTAGS = ["교시제", "여성전용", "아침기상", "컨셉", "목표시간", "자율", "평일", "주말", "예치금", "인증"];
+const USERLIMIT_OPTIONS = [
   { value: 6, name: "6명" },
   { value: 5, name: "5명" },
   { value: 4, name: "4명" },
@@ -33,25 +32,22 @@ const userLimitOptions = [
   { value: 2, name: "2명" },
   { value: 1, name: "1명" },
 ];
-const targetTimeOptions = [
+const TARGETTIME_OPTIONS = [
   { value: 10, name: "10시간" },
   { value: 9, name: "9시간" },
   { value: 8, name: "8시간" },
 ];
-const periodOptions = [
+const ENDDATE_OPTIONS = [
   { value: new Date(new Date(2022, 11, 32) + 3240 * 10000).toISOString().split("T")[0], name: "2022.12.31" },
 ];
 
-function SettingSection({ clickSettingBtn }) {
-  // 수정 권한에 따라 disabled 처리
-  const userInfo = useRecoilValue(userState);
-  const [disabled, setDisabled] = useState(!userInfo.updateAllowed);
-  const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
+function SettingForm({ onClose, onUpdate }) {
+  const [roomInfoAtom, setRoomInfoAtom] = useRecoilState(roomInfoState);
+  const [roomInfo, setRoomInfo] = useState(roomInfoAtom);
   const roomTitle = useRecoilValue(roomTitleState);
-
   const titleRef = useRef();
-  const [hashtag, setHashtag] = useState([]);
-  const [newHashtag, setNewHashtag] = useState([]);
+  const [hashtags, setHashtags] = useState(new Set());
+  const [newHashtags, setNewHashtags] = useState([]);
   const passwordInputRef = useRef();
   const bgmlinkInputRef = useRef();
   const ruleInputRef = useRef();
@@ -61,9 +57,10 @@ function SettingSection({ clickSettingBtn }) {
     passwordInputRef.current.value = roomInfo.password ? roomInfo.password : "";
     bgmlinkInputRef.current.value = roomInfo.bgmlink ? roomInfo.bgmlink : "";
     ruleInputRef.current.value = roomInfo.rule ? roomInfo.rule : "";
-    if (roomInfo.hashtags) {
-      const set = new Set(hashtags);
-      setNewHashtag(roomInfo.hashtags.filter((tag) => !set.has(tag)));
+    if (roomInfo.hashtags.length) {
+      const set = new Set(HASHTAGS);
+      setHashtags(new Set(roomInfo.hashtags.filter((e) => set.has(e)))); // set
+      setNewHashtags(roomInfo.hashtags.filter((e) => !set.has(e))); // array
     }
   }, []);
 
@@ -71,7 +68,6 @@ function SettingSection({ clickSettingBtn }) {
   const [isCategorySelected, setIsCategorySelected] = useState(roomInfo.category);
   const [isUserLimitSelected, setIsUserLimitSelected] = useState(roomInfo.limitUsers);
 
-  // for password validation
   const [isInvalidPassword, setIsInvalidPassword] = useState(false);
 
   const [isClickedDetail, setIsClickedDetail] = useState(false);
@@ -81,43 +77,44 @@ function SettingSection({ clickSettingBtn }) {
     setIsClickedDetail((prev) => !prev);
   };
 
-  const clickSaveBtn = (e) => {
-    e.preventDefault();
-    if (userInfo.updateAllowed) {
-      setRoomInfo({
-        ...roomInfo,
-        name: titleRef.current.value
-          ? titleRef.current.value.replace(/[\u{1F004}-\u{1F9E6}]|[\u{1F600}-\u{1F9D0}]/gu, "")
-          : "",
-        hashtags: Array.from(hashtag).concat(newHashtag), // hashtag set to array
-        isPublic: !passwordInputRef.current.value,
-        password: passwordInputRef.current.value,
-        bgmlink: bgmlinkInputRef.current.value,
-        rule: ruleInputRef.current.value,
-        startAt: new Date().toISOString(),
-      });
+  const clickSaveBtn = () => {
+    const data = {
+      ...roomInfo,
+      name: titleRef.current.value
+        ? titleRef.current.value.replace(/[\u{1F004}-\u{1F9E6}]|[\u{1F600}-\u{1F9D0}]/gu, "")
+        : "",
+      hashtags: Array.from(hashtags).concat(newHashtags), // hashtag set to array
+      isPublic: !passwordInputRef.current.value,
+      password: passwordInputRef.current.value,
+      bgmlink: bgmlinkInputRef.current.value,
+      rule: ruleInputRef.current.value,
+    };
+    // 방 정보 수정
+    if (onUpdate) {
+      onUpdate(data);
+      onClose();
+      return;
     }
-    clickSettingBtn();
+    // 스터디룸 생성시 입력한 방 정보 저장
+    setRoomInfoAtom(data);
+    onClose();
   };
 
-  const categoryHandler = (category) => {
+  const categoryHandler = (value) => {
     setIsCategorySelected(true);
-    setRoomInfo({ ...roomInfo, category: category.value });
+    setRoomInfo((prev) => ({ ...prev, category: value }));
   };
 
   const userLimitHandler = (value) => {
     setIsUserLimitSelected(true);
-    setRoomInfo({ ...roomInfo, limitUsers: value });
+    setRoomInfo((prev) => ({ ...prev, limitUsers: value }));
   };
 
   const hashtagHandler = (e) => {
-    const checkedHashtag = new Set(hashtag);
-    if (e.target.checked && !checkedHashtag.has(e.target.value)) {
-      checkedHashtag.add(e.target.value);
-    } else if (!e.target.checked && checkedHashtag.has(e.target.value)) {
-      checkedHashtag.delete(e.target.value);
-    }
-    setHashtag(checkedHashtag);
+    const checkedHashtag = new Set(hashtags);
+    if (e.target.checked) checkedHashtag.add(e.target.value);
+    else if (!e.target.checked) checkedHashtag.delete(e.target.value);
+    setHashtags(checkedHashtag);
   };
 
   const addHashtagInputHandler = () => {
@@ -130,37 +127,21 @@ function SettingSection({ clickSettingBtn }) {
 
   const newHashtagHandler = (label) => {
     setIsHashtagInput(false);
-    const userInput = new Set(newHashtag);
+    const userInput = new Set(newHashtags);
     userInput.add(label);
-    setNewHashtag(Array.from(userInput));
+    setNewHashtags(Array.from(userInput));
   };
 
   const deleteHandler = (label) => {
-    setNewHashtag((prev) => prev.filter((item) => item !== label));
-  };
-
-  const audioRuleHandler = (e) => {
-    if (e.target.checked && !roomInfo.isMicOn) {
-      setRoomInfo({ ...roomInfo, isMicOn: e.target.checked });
-    } else if (!e.target.checked && roomInfo.isMicOn) {
-      setRoomInfo({ ...roomInfo, isMicOn: e.target.checked });
-    }
-  };
-
-  const videoRuleHandler = (e) => {
-    if (e.target.checked && !roomInfo.isCamOn) {
-      setRoomInfo({ ...roomInfo, isCamOn: e.target.checked });
-    } else if (!e.target.checked && roomInfo.isCamOn) {
-      setRoomInfo({ ...roomInfo, isCamOn: e.target.checked });
-    }
+    setNewHashtags((prev) => prev.filter((item) => item !== label));
   };
 
   const targetTimeHandler = (value) => {
-    setRoomInfo({ ...roomInfo, targetTime: value });
+    setRoomInfo((prev) => ({ ...prev, targetTime: value }));
   };
 
-  const periodHandler = (value) => {
-    setRoomInfo({ ...roomInfo, endAt: value });
+  const endDateHandler = (value) => {
+    setRoomInfo((prev) => ({ ...prev, endAt: value }));
   };
 
   // 비밀번호 입력시 숫자인지 체크
@@ -174,6 +155,14 @@ function SettingSection({ clickSettingBtn }) {
     setIsInvalidPassword(false);
   };
 
+  const videoRuleHandler = (e) => {
+    setRoomInfo((prev) => ({ ...prev, isCamOn: e.target.checked }));
+  };
+
+  const audioRuleHandler = (e) => {
+    setRoomInfo((prev) => ({ ...prev, isMicOn: e.target.checked }));
+  };
+
   return (
     <section className={styles.container}>
       <div className={styles.default_box}>
@@ -181,16 +170,15 @@ function SettingSection({ clickSettingBtn }) {
           <p className={styles.heading}>스터디 목표는 무엇인가요?</p>
           <p className={styles.sub_heading}>목표를 설정하면 방을 빠르고 쉽게 설정할 수 있어요.</p>
           <div className={styles.category}>
-            {categories.map((c) => (
+            {CATEGORIES.map((c) => (
               <div key={c.value} className={styles.category_item}>
                 <RadioButton
                   label={c.label}
                   group="category"
                   onChange={() => {
-                    categoryHandler(c);
+                    categoryHandler(c.value);
                   }}
-                  disabled={disabled}
-                  checked={c.value === roomInfo.category && "checked"}
+                  checked={c.value === roomInfo.category}
                 />
               </div>
             ))}
@@ -198,39 +186,20 @@ function SettingSection({ clickSettingBtn }) {
         </div>
         <div className={styles.roominfo_item}>
           <p className={styles.label}>스터디 명 *</p>
-          <Input
-            placeholder={roomInfo.name || roomTitle || "목표를 설정하거나, 직접 입력해주세요"}
-            ref={titleRef}
-            disabled={disabled}
-          />
+          <Input placeholder={roomTitle || "목표를 설정하거나, 직접 입력해주세요"} ref={titleRef} />
         </div>
         <div className={styles.roominfo_item}>
           <p className={styles.label}>인원 수 *</p>
-          <Dropdown
-            options={userLimitOptions}
-            onSelect={userLimitHandler}
-            disabled={disabled}
-            defaultValue={`${roomInfo.limitUsers}명`}
-          />
+          <Dropdown options={USERLIMIT_OPTIONS} onSelect={userLimitHandler} defaultValue={`${roomInfo.limitUsers}명`} />
         </div>
         <div className={styles.roominfo_item}>
           <p className={styles.label}>해시태그</p>
           <div className={styles.hashtag_item}>
-            {hashtags.map((label) => (
-              <HashtagButton
-                label={label}
-                onToggle={hashtagHandler}
-                disabled={disabled}
-                checked={roomInfo.hashtags.find((tag) => tag === label) && "checked"}
-              />
+            {HASHTAGS.map((label) => (
+              <HashtagButton label={label} onToggle={hashtagHandler} checked={hashtags.has(label)} />
             ))}
-            {newHashtag.map((label) => (
-              <HashtagButton
-                label={label}
-                onDelete={() => deleteHandler(label)}
-                disabled={disabled}
-                checked="checked"
-              />
+            {newHashtags.map((label) => (
+              <HashtagButton label={label} onDelete={() => deleteHandler(label)} checked />
             ))}
             {isHashtagInput && (
               <InputButton onSubmit={(label) => newHashtagHandler(label)} onDelete={deleteHashtagInputHandler} />
@@ -256,20 +225,14 @@ function SettingSection({ clickSettingBtn }) {
             <div>
               <p className={styles.label}>목표시간</p>
               <Dropdown
-                options={targetTimeOptions}
+                options={TARGETTIME_OPTIONS}
                 onSelect={targetTimeHandler}
-                disabled={disabled}
                 defaultValue={`${roomInfo.targetTime}시간`}
               />
             </div>
             <div>
               <p className={styles.label}> 스터디 기간</p>
-              <Dropdown
-                options={periodOptions}
-                onSelect={periodHandler}
-                disabled={disabled}
-                defaultValue={`${roomInfo.endAt}`}
-              />
+              <Dropdown options={ENDDATE_OPTIONS} onSelect={endDateHandler} defaultValue={roomInfo.endAt} />
             </div>
             <div>
               <p className={styles.label}>비밀번호</p>
@@ -279,7 +242,6 @@ function SettingSection({ clickSettingBtn }) {
                 maxLength="4"
                 onChange={validPasswordHandler}
                 isInvalid={isInvalidPassword}
-                disabled={disabled}
               />
               <p className={`${styles.invalid_message} ${isInvalidPassword ? "" : styles.hide}`}>
                 비밀번호는 숫자 4자리 입니다.
@@ -292,15 +254,13 @@ function SettingSection({ clickSettingBtn }) {
                   icon={<VideoOn />}
                   label="카메라 ON"
                   onToggle={videoRuleHandler}
-                  disabled={disabled}
-                  checked={roomInfo.isCamOn && "checked"}
+                  checked={roomInfo.isCamOn}
                 />
                 <ToggleButton
                   icon={<MicOff />}
                   label="마이크 OFF"
                   onToggle={audioRuleHandler}
-                  disabled={disabled}
-                  checked={roomInfo.isMicOn && "checked"}
+                  checked={roomInfo.isMicOn}
                 />
               </div>
             </div>
@@ -308,16 +268,16 @@ function SettingSection({ clickSettingBtn }) {
         </div>
         <div className={styles.roominfo_item}>
           <p className={styles.label}>노래</p>
-          <Input placeholder="유튜브 링크를 입력해주세요." ref={bgmlinkInputRef} disabled={disabled} />
+          <Input placeholder="유튜브 링크를 입력해주세요." ref={bgmlinkInputRef} />
         </div>
         <div className={styles.roominfo_item}>
           <p className={styles.label}>스터디 규칙</p>
-          <Textarea placeholder="스터디 규칙은 여기에 작성해주세요." ref={ruleInputRef} disabled={disabled} />
+          <Textarea placeholder="스터디 규칙은 여기에 작성해주세요." ref={ruleInputRef} />
         </div>
       </div>
       <div className={styles.save_button}>
         <button
-          type="submit"
+          type="button"
           onClick={clickSaveBtn}
           disabled={!(isCategorySelected && isUserLimitSelected && !isInvalidPassword)}
         >
@@ -328,4 +288,4 @@ function SettingSection({ clickSettingBtn }) {
   );
 }
 
-export default SettingSection;
+export default SettingForm;

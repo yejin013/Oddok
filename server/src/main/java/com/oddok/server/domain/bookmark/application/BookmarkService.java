@@ -10,7 +10,6 @@ import com.oddok.server.domain.participant.dto.ParticipantDto;
 import com.oddok.server.domain.bookmark.mapper.BookmarkMapper;
 import com.oddok.server.domain.participant.mapper.ParticipantMapper;
 import com.oddok.server.domain.studyroom.dao.StudyRoomRepository;
-import com.oddok.server.domain.studyroom.dao.querydsl.StudyRoomQueryRepository;
 import com.oddok.server.domain.studyroom.entity.StudyRoom;
 import com.oddok.server.domain.user.dao.UserRepository;
 import com.oddok.server.domain.user.entity.User;
@@ -19,6 +18,7 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +30,6 @@ public class BookmarkService {
     private final BookmarkRepository bookmarkRepository;
     private final UserRepository userRepository;
     private final StudyRoomRepository studyRoomRepository;
-    private final StudyRoomQueryRepository studyRoomQueryRepository;
     private final ParticipantRepository participantRepository;
 
     /**
@@ -94,7 +93,7 @@ public class BookmarkService {
      * 스터디룸 정보 검색
      */
     private StudyRoom findStudyRoom(Long studyRoomId) {
-        return studyRoomQueryRepository.findByIdAndEndAtIsNullOrAfter(studyRoomId)
+        return studyRoomRepository.findByIdAndEndAtIsGreaterThanEqual(studyRoomId, LocalDate.now())
                 .orElseThrow(() -> new StudyRoomNotFoundException(studyRoomId));
     }
 }

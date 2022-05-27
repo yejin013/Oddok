@@ -1,7 +1,7 @@
 package com.oddok.server.common.config;
 
-import com.oddok.server.domain.timerecord.application.TimeRecordService;
-import com.oddok.server.domain.timerecord.dto.TimeRecordDto;
+import com.oddok.server.domain.studyroom.application.StudyRoomService;
+import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -22,7 +22,7 @@ public class BatchConfig {
     @Autowired
     public StepBuilderFactory stepBuilderFactory;
     @Autowired
-    private TimeRecordService timeRecordService;
+    private StudyRoomService studyRoomService;
 
     @Bean
     public Job job() {
@@ -32,10 +32,10 @@ public class BatchConfig {
     @Bean
     public Step step() {
         return stepBuilderFactory.get("step").tasklet((contribution, chunkContext) -> {
-            List<TimeRecordDto> timeRecords = timeRecordService.get();
+            List<StudyRoomDto> studyRoomDtos = studyRoomService.getAllStudyRoomForDelete();
 
-            for(TimeRecordDto timeRecord : timeRecords) {
-                timeRecordService.delete(timeRecord.getId());
+            for(StudyRoomDto studyRoomDto : studyRoomDtos) {
+                studyRoomService.deleteStudyRoom(studyRoomDto.getId());
             }
 
             return RepeatStatus.FINISHED;

@@ -43,6 +43,6 @@
   transform: rotateY(180deg);
 }
 
-.plan_bar {
+.side_bar {
   flex: 1 1 25%;
 }

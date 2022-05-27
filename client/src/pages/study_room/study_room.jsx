@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import { OpenVidu } from "openvidu-browser";
-import { useRecoilState, useResetRecoilState } from "recoil";
-import { roomInfoState, videoState, audioState } from "@recoil/studyroom_state";
-import { leaveStudyRoom } from "@api/study-room-api";
-import { StudyBar, UserVideo, SettingSideBar, ChatSideBar, PlanSidebar, SettingSection } from "@components/study";
+import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
+import { roomIdState, roomInfoState, videoState, audioState } from "@recoil/studyroom_state";
+import { updateStudyRoom, leaveStudyRoom } from "@api/study-room-api";
+import { StudyBar, UserVideo, SettingSideBar, ChatSideBar, PlanSidebar, SettingForm } from "@components/study";
 import { Modal } from "@components/commons";
 import styles from "./study_room.module.css";
 
@@ -20,6 +20,7 @@ function StudyRoom() {
   const [isPlaying, setIsPlaying] = useRecoilState(videoState);
   const [isMuted, setIsMuted] = useRecoilState(audioState);
   const isStudyRoom = true; // studyroom에 입장했을 때만 생기는 UI를 위한 변수
+  const roomId = useRecoilValue(roomIdState);
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
   const resetRoomInfo = useResetRecoilState(roomInfoState);
   const [sideBarState, setSideBarState] = useState({ setting: false, chatting: false, plan: false });
@@ -93,7 +94,6 @@ function StudyRoom() {
       });
       // 3) 방장이 방 정보를 수정했을 때
       session.on("signal:updated-roominfo", (event) => {
-        console.log("데이터 잘 왔엉🙂👋");
         const data = JSON.parse(event.data);
         setRoomInfo(data);
       });
@@ -116,13 +116,28 @@ function StudyRoom() {
     setSideBarState({ ...sideBarState, setting: false, chatting: false, plan: !sideBarState.plan });
   };
 
+  const updateRoomInfo = async (data) => {
+    try {
+      const response = await updateStudyRoom(roomId, data);
+      session.signal({
+        data: JSON.stringify(response),
+        to: [],
+        type: "updated-roominfo",
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
     <div className={styles.room}>
-      <div className={styles.setting}>{isDetailOpen && <SettingSection clickSettingBtn={clickDetailBtn} />}</div>
+      <div className={styles.setting}>
+        {isDetailOpen && <SettingForm onClose={clickDetailBtn} onUpdate={updateRoomInfo} />}
+      </div>
       <div className={styles.video_container}>
         {sideBarState.setting && (
           <div className={styles.side_bar}>
-            <SettingSideBar roomInfo={roomInfo} session={session} clickDetailBtn={clickDetailBtn} />
+            <SettingSideBar clickDetailBtn={clickDetailBtn} />
           </div>
         )}
         <ul className={styles.videos}>

@@ -12,10 +12,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HashtagService {
 
-    private final HashtagQueryRepository hashtagQueryRepository;
+    private final HashtagQueryRepository hashtagRepository;
 
-    public List<String> findTop15Hashtags() {
-        return hashtagQueryRepository.findTop15Hashtags();
+    // 검색을 위한 해시태그 상위 15개 가져오는 메소드
+    public List<String> findTop15Hashtags(String name) {
+        return hashtagRepository.findTop15HashtagNamesByStudyRoomName(name);
     }
 
 }
