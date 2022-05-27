@@ -2,7 +2,7 @@ import React from "react";
 import { Modal, Calendar, Input, Dropdown, Textarea } from "@components/commons";
 import styles from "./MyGoalEditModal.module.css";
 
-function MyGoalEditModal() {
+function MyGoalEditModal({ onClose }) {
   const content = (
     <div className={styles.box}>
       <div className={styles.item}>
@@ -31,7 +31,7 @@ function MyGoalEditModal() {
       </div>
     </div>
   );
-  return <Modal title="목표 수정" content={content} onAction={{ text: "확인" }} />;
+  return <Modal title="목표 수정" content={content} onClose={onClose} onAction={{ text: "확인" }} />;
 }
 
 export default MyGoalEditModal;

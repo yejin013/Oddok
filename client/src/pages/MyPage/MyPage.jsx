@@ -1,7 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Header, Footer } from "@components/home";
-import { SideNavBar, DatePicker, TimeTable, TimeRecordList, MyRoom } from "@components/mypage";
-import { Textarea } from "@components/commons";
+import {
+  SideNavBar,
+  DatePicker,
+  TimeTable,
+  TimeRecordList,
+  MyRoom,
+  EditButton,
+  MyGoalEditModal,
+  MyRoomEditModal,
+} from "@components/mypage";
+import { Textarea, NicknameEditModal } from "@components/commons";
 import { getProfile, getTimeRecordList, getMyRoom } from "@api/mypage-api";
 import useAsync from "@hooks/useAsync";
 import getColor from "src/utils/getColor";
@@ -14,6 +23,7 @@ function MyPage() {
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(0, 10));
   const [timeRecordData, setTimeRecordData] = useState();
   const [totalStudyTime, setTotalStudyTime] = useState();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const fetchTimeRecordData = async (date) => {
     const response = await getTimeRecordList(date);
@@ -41,8 +51,15 @@ function MyPage() {
     }
   }, [selectedDate]);
 
+  const renderEditModal = (type) => setIsModalOpen(type);
+
+  const closeModal = () => setIsModalOpen(false);
+
   return (
     <div>
+      {(isModalOpen === "edit-mygoal" && <MyGoalEditModal onClose={closeModal} />) ||
+        (isModalOpen === "edit-myroom" && <MyRoomEditModal onClose={closeModal} />) ||
+        (isModalOpen === "edit-nickname" && <NicknameEditModal onClose={closeModal} />)}
       <Header />
       <div className={styles.mypage}>
         <aside className={styles.side_nav_bar}>
@@ -50,7 +67,10 @@ function MyPage() {
         </aside>
         <div className={styles.container}>
           <section className={styles.my_goal}>
-            <div className={styles.heading}>내 목표</div>
+            <div className={styles.heading}>
+              <div>내 목표</div>
+              <EditButton onClick={() => renderEditModal("edit-mygoal")} />
+            </div>
             <div className={styles.contents}>
               <div>
                 <div className={styles.sub_heading}>디데이</div>
@@ -124,7 +144,10 @@ function MyPage() {
             </div>
           </section>
           <section>
-            <div className={styles.heading}>생성 스터디룸</div>
+            <div className={styles.heading}>
+              <div>생성 스터디룸</div>
+              <EditButton onClick={() => renderEditModal("edit-myroom")} />
+            </div>
             <div className={styles.sub_heading}>생성한 스터디룸</div>
             <div className={styles.contents}>
               {!loading &&
@@ -132,7 +155,10 @@ function MyPage() {
             </div>
           </section>
           <section className={styles.account}>
-            <div className={styles.heading}>계정</div>
+            <div className={styles.heading}>
+              <div>계정</div>
+              <EditButton onClick={() => renderEditModal("edit-nickname")} />
+            </div>
             <div className={styles.contents}>
               <div>
                 <div className={styles.sub_heading}>닉네임</div>

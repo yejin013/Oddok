@@ -4,7 +4,7 @@ import { MyRoom } from "@components/mypage";
 import EditButton from "../EditButton/EditButton";
 import styles from "./MyRoomEditModal.module.css";
 
-function MyRoomEditModal({ roomData }) {
+function MyRoomEditModal({ roomData, onClose }) {
   const data = {
     name: "공시생 1호실",
     hashtags: ["해시태그1개", "해시태그2개", "해시태그3개", "gogogogogo", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"],
@@ -24,7 +24,7 @@ function MyRoomEditModal({ roomData }) {
       </div>
     </div>
   );
-  return <Modal title="스터디룸 수정" content={content} onAction={{ text: "확인" }} />;
+  return <Modal title="스터디룸 수정" content={content} onClose={onClose} onAction={{ text: "확인" }} />;
 }
 
 export default MyRoomEditModal;
