@@ -7,6 +7,7 @@ import { bookmarkState } from "@recoil/bookmark-state";
 import { Thumbnail } from "@icons";
 import UserList from "../UserList/UserList";
 import styles from "./Bookmark.module.css";
+import { TotalParticipant } from "..";
 
 function Bookmark({ showBookmark }) {
   const bookmark = useRecoilValue(bookmarkState);
@@ -46,14 +47,14 @@ function Bookmark({ showBookmark }) {
   // 비밀번호 확인
   const goToStudyRoom = () => {
     history.push({
-      pathname: "/studyroom",
+      pathname: `/studyroom/${bookmark.id}/setting`,
     });
   };
 
   return (
     <div className={styles.bookmark}>
       {!bookmark ? (
-        <h1 style={{ color: "white", textAlign: "center" }}>🔖북마크를 추가해주세요🔖</h1>
+        <TotalParticipant />
       ) : (
         <div>
           <div className={styles.count_info}>
@@ -76,7 +77,7 @@ function Bookmark({ showBookmark }) {
                 <h3 className={styles.name}>{bookmark.name}</h3>
                 <p className={styles.detail_box}>
                   <span className={styles.title}>해시태그</span>
-                  {bookmark.hashtags.length !== 0 ? (
+                  {bookmark?.hashtags.length !== 0 ? (
                     bookmark.hashtags.map((hashtag) => <span className={styles.content}>#{hashtag} </span>)
                   ) : (
                     <span className={styles.content}>없음</span>

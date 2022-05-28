@@ -5,4 +5,5 @@ export { default as Header } from "./Header/Header";
 export { default as StudyRoomCard } from "./StudyRoomCard/StudyRoomCard";
 export { default as StudyRoomList } from "./StudyRoomList/StudyRoomList";
 export { default as TabMenu } from "./TabMenu/TabMenu";
+export { default as TotalParticipant } from "./TotalParticipant/TotalParticipant";
 export { default as UserList } from "./UserList/UserList";

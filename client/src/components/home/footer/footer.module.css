@@ -1,7 +1,7 @@
 .footer {
   margin-top: 1em;
-  background-color: #000000;
-  color: #dee2e6;
+  background-color: black;
+  color: var(--gray300);
 }
 
 .info {

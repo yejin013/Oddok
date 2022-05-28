@@ -7,7 +7,7 @@
 
 body {
   margin: 0;
-  background-color: #101112;
+  background-color: var(--gray950);
 }
 
 button {

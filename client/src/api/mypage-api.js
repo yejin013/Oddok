@@ -1,4 +1,4 @@
-import axiosInstance from "./axios_config";
+import axiosInstance from "./axios-config";
 
 export const getProfile = async () => {
   const response = await axiosInstance({

@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import { OpenVidu } from "openvidu-browser";
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
-import { roomIdState, roomInfoState, videoState, audioState } from "@recoil/studyroom_state";
+import { roomIdState, roomInfoState, videoState, audioState } from "@recoil/studyroom-state";
 import { updateStudyRoom, leaveStudyRoom } from "@api/study-room-api";
 import { StudyBar, UserVideo, SettingSideBar, ChatSideBar, PlanSidebar, SettingForm } from "@components/study";
 import { Modal } from "@components/commons";
-import styles from "./study_room.module.css";
+import styles from "./StudyRoom.module.css";
 
 function StudyRoom() {
   const history = useHistory();

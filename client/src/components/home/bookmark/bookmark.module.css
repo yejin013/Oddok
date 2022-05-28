@@ -11,7 +11,7 @@
 .count_info {
   display: flex;
   padding: 2em 12em;
-  background-color: #101112;
+  background-color: var(--gray950);
 }
 
 .count_box {
@@ -36,7 +36,8 @@
   padding: 0.7em 6em;
   font-weight: 700;
   border-radius: 4px;
-  background-color: #cfa028;
+  color: var(--gray950);
+  background-color: var(--primary);
 }
 
 .info {
@@ -60,7 +61,7 @@
 
 .thumbnail {
   margin-right: 1em;
-  background-color: #212529;
+  background-color: var(--gray900);
 }
 
 .room_info {
@@ -82,12 +83,12 @@
   margin-right: 0.5em;
   font-weight: 500;
   font-size: 0.9rem;
-  color: #dee2e6;
+  color: var(--gray300);
 }
 
 .content {
   font-size: 0.9rem;
-  color: #adb5bd;
+  color: var(--gray500);
 }
 
 .rule {
@@ -98,7 +99,7 @@
   flex: 1 1 15%;
   font-weight: 500;
   font-size: 0.9rem;
-  color: #dee2e6;
+  color: var(--gray300);
 }
 
 .rule_content {
@@ -110,5 +111,5 @@
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   font-size: 0.9rem;
-  color: #adb5bd;
+  color: var(--gray500);
 }

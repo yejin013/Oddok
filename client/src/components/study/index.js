@@ -1,9 +1,9 @@
 export { default as ChatSideBar } from "./ChatSideBar/ChatSideBar";
-export { default as Loading } from "./Loading/Loading";
 export { default as Plan } from "./Plans/Plans";
 export { default as PlanSidebar } from "./PlanSidebar/PlanSidebar";
 export { default as SettingBar } from "./SettingBar/SettingBar";
 export { default as SettingForm } from "./SettingForm/SettingForm";
+export { default as SettingRoom } from "./SettingRoom/SettingRoom";
 export { default as SettingSideBar } from "./SettingSideBar/SettingSideBar";
 export { default as StudyBar } from "./StudyBar/StudyBar";
 export { default as SubjectTime } from "./SubjectTime/SubjectTime";

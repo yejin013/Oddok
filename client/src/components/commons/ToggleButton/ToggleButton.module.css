@@ -9,8 +9,8 @@
 .content {
   display: flex;
   padding: 1em;
-  background-color: #212529;
-  color: #f8f9fa;
+  background-color: var(--gray900);
+  color: var(--gray100);
   border-radius: 99px;
 }
 
@@ -23,5 +23,6 @@
 }
 
 .toggle_button input:checked + div {
-  background-color: #bf7d8a;
+  color: var(--gray950);
+  background-color: var(--primary);
 }

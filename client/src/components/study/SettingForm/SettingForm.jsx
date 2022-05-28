@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { roomInfoState, roomTitleState } from "@recoil/studyroom_state";
+import { roomInfoState, roomTitleState } from "@recoil/studyroom-state";
 import {
   RadioButton,
   HashtagButton,

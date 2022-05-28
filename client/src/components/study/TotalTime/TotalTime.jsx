@@ -1,6 +1,6 @@
 import React from "react";
 import { useRecoilValue } from "recoil";
-import { totalHourState, totalMinuteState, totalSecondState } from "@recoil/timer_state";
+import { totalHourState, totalMinuteState, totalSecondState } from "@recoil/timer-state";
 import styles from "./TotalTime.module.css";
 
 function TotalTime(props) {
