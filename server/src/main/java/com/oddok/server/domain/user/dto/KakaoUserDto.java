@@ -1,28 +1,38 @@
 package com.oddok.server.domain.user.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 
 @Getter
-@Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class KakaoUserDto {
     private final Long id;
     private final Properties properties;
     private final KakaoAccount kakaoAccount;
 
-    @ToString
-    @Getter
-    @Builder
-    public static class Properties {
-        private final String nickname;
+    @JsonCreator
+    public KakaoUserDto(
+            @JsonProperty(value = "id") Long id,
+            @JsonProperty(value = "properties") Properties properties,
+            @JsonProperty(value = "kakao_account") KakaoAccount kakaoAccount) {
+        this.id = id;
+        this.properties = properties;
+        this.kakaoAccount = kakaoAccount;
     }
 
-    @ToString
-    @Getter
-    @Builder
-    public static class KakaoAccount {
-        private final String email;
-        private final String gender;
+    @Data
+    @NoArgsConstructor
+    public static class Properties {
+        private String nickname;
     }
+
+    @Data
+    @NoArgsConstructor
+    public static class KakaoAccount {
+        private String email;
+        private String gender;
+    }
+
 }

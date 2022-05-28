@@ -24,8 +24,8 @@ public class AuthService {
     private final AuthTokenProvider authTokenProvider;
 
     @Transactional
-    public TokensDto login(String code) {
-        User kakaoUser = clientKakao.getUserData(code);
+    public TokensDto login(String kakaoAccessToken) {
+        User kakaoUser = clientKakao.getUserData(kakaoAccessToken);
 
         String userEmail = kakaoUser.getEmail();
         Optional<User> user = userRepository.findByEmail(userEmail);

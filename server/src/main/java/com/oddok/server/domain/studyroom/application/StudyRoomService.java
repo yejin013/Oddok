@@ -40,14 +40,10 @@ public class StudyRoomService {
     @Transactional
     public StudyRoomDto createStudyRoom(StudyRoomDto studyRoomDto) {
         User user = findUser(studyRoomDto.getUserId());
-        if (studyRoomRepository.existsByUser(user)) { // 사용자는 하나의 스터디룸만 개설할 수 있습니다.
-            throw new UserAlreadyPublishStudyRoomException(user.getId());
-        }
+        checkUserIsAlreadyPublisher(user);
         StudyRoom studyRoom = studyRoomMapper.toEntity(studyRoomDto, user);
         studyRoom = studyRoomRepository.save(studyRoom);
-        if (studyRoomDto.getName() == null) {
-            studyRoom.update(studyRoomDto);
-        }
+        setDefaultName(studyRoomDto, studyRoom);
         mapStudyRoomAndHashtags(studyRoom, studyRoomDto.getHashtags());
         return studyRoomMapper.toDto(studyRoom);
     }
@@ -61,19 +57,31 @@ public class StudyRoomService {
     public String userJoinStudyRoom(Long userId, Long id) {
         User user = findUser(userId);
         StudyRoom studyRoom = findStudyRoom(id);
-        if (studyRoom.getEndAt().isBefore(LocalDate.now())) { // 기간이 지난 스터디룸에는 참여할 수 없다.
-            throw new StudyRoomEndException(id);
-        }
-        if (participantRepository.findByUser(user).isPresent()) { // 사용자는 두 개 이상의 스터디룸에 참여할 수 없다.
-            throw new UserAlreadyJoinedStudyRoom();
-        }
-        if (studyRoom.getCurrentUsers() >= studyRoom.getLimitUsers()) { // 정원이 찬 스터디룸에는 참여할 수 없다.
-            throw new StudyRoomIsFullException(id);
-        }
+        checkStudyRoomEnd(id, studyRoom);
+        checkUserAlreadyJoined(user);
+        checkStudyRoomFull(id, studyRoom);
         String sessionId = getSession(studyRoom);
         String token = sessionManager.getToken(sessionId);
         createParticipant(studyRoom, user);
         return token;
+    }
+
+    private void checkStudyRoomFull(Long id, StudyRoom studyRoom) {
+        if (studyRoom.getCurrentUsers() >= studyRoom.getLimitUsers()) { // 정원이 찬 스터디룸에는 참여할 수 없다.
+            throw new StudyRoomIsFullException(id);
+        }
+    }
+
+    private void checkUserAlreadyJoined(User user) {
+        if (participantRepository.findByUser(user).isPresent()) { // 사용자는 두 개 이상의 스터디룸에 참여할 수 없다.
+            throw new UserAlreadyJoinedStudyRoom();
+        }
+    }
+
+    private void checkStudyRoomEnd(Long id, StudyRoom studyRoom) {
+        if (studyRoom.getEndAt().isBefore(LocalDate.now())) { // 기간이 지난 스터디룸에는 참여할 수 없다.
+            throw new StudyRoomEndException(id);
+        }
     }
 
     /**
@@ -115,19 +123,10 @@ public class StudyRoomService {
      */
     @Transactional
     public void userLeaveStudyRoom(Long userId, Long studyRoomId) {
-        User user = findUser(userId);
         StudyRoom studyRoom = findStudyRoom(studyRoomId);
-        Participant participant = participantRepository.findByUser(user)
-                .orElseThrow(() -> new UserNotParticipatingException(userId, studyRoomId));
-        if (!participant.getStudyRoom().equals(studyRoom)) {
-            throw new UserNotParticipatingException(userId, studyRoomId);
-        }
-        participantRepository.delete(participant);
+        deleteUserFromParticipant(userId, studyRoom);
         studyRoom.decreaseCurrentUsers();
-        if (studyRoom.getCurrentUsers() == 0) { // 모두 나갔으면 세션삭제
-            sessionManager.deleteSession(studyRoom.getSessionId());
-            studyRoom.deleteSession();
-        }
+        checkAllUserExit(studyRoom);
     }
 
     public void checkPassword(Long id, String password) {
@@ -145,6 +144,36 @@ public class StudyRoomService {
         Long publisherId = findStudyRoom(studyRoomId).getUser().getId();
         if (!publisherId.equals(userId)) {
             throw new UserNotPublisherException(userId);
+        }
+    }
+
+    private void deleteUserFromParticipant(Long userId, StudyRoom studyRoom) {
+        User user = findUser(userId);
+        Participant participant = participantRepository.findByUser(user)
+                .orElseThrow(() -> new UserNotParticipatingException(userId, studyRoom.getId()));
+        if (!participant.getStudyRoom().equals(studyRoom)) {
+            throw new UserNotParticipatingException(userId, studyRoom.getId());
+        }
+        participantRepository.delete(participant);
+    }
+
+    private void checkAllUserExit(StudyRoom studyRoom) {
+        if (studyRoom.getCurrentUsers() == 0) { // 모두 나갔으면 세션삭제
+            sessionManager.deleteSession(studyRoom.getSessionId());
+            studyRoom.deleteSession();
+        }
+    }
+
+    private void setDefaultName(StudyRoomDto studyRoomDto, StudyRoom studyRoom) {
+        if (studyRoomDto.getName() == null) {
+            studyRoom.update(studyRoomDto);
+        }
+    }
+
+    // 사용자는 하나의 스터디룸만 개설할 수 있습니다.
+    private void checkUserIsAlreadyPublisher(User user) {
+        if (studyRoomRepository.existsByUser(user)) {
+            throw new UserAlreadyPublishStudyRoomException(user.getId());
         }
     }
 

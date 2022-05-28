@@ -5,7 +5,7 @@ import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import { roomIdState, roomInfoState, videoState, audioState } from "@recoil/studyroom-state";
 import { updateStudyRoom, leaveStudyRoom } from "@api/study-room-api";
 import { StudyBar, UserVideo, SettingSideBar, ChatSideBar, PlanSidebar, SettingForm } from "@components/study";
-import { ErrorModal } from "@components/commons";
+import { Modal } from "@components/commons";
 import styles from "./StudyRoom.module.css";
 
 function StudyRoom() {
@@ -167,10 +167,12 @@ function StudyRoom() {
         />
       </div>
       {isLeaveOpen && (
-        <ErrorModal
-          message="정말 나가시겠습니까?"
+        <Modal
+          title="스터디 종료"
+          content="정말 나가시겠습니까?"
           onConfirm={() => setIsLeaveOpen(false)}
-          onAction={{ text: "진짜 나가기", action: leaveRoom }}
+          onSubAction={{ text: "보지 않고 나가기", action: leaveRoom }}
+          onAction={{ text: "타임랩스와 시간표 확인" }}
         />
       )}
     </div>
