@@ -158,7 +158,7 @@ public class StudyRoomController {
      * @param pageable 페이징
      * @return 검색 결과 스터디룸 리스트
      */
-    @GetMapping("/search")
+    @GetMapping
     public ResponseEntity<List<GetStudyRoomListEntityResponse>> get(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String hashtag,
