@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Header, Footer } from "@components/home";
+import { Layout } from "@components/layout";
 import { SideNavBar, DatePicker, TimeTable, TimeRecordList, MyRoom } from "@components/mypage";
 import { Textarea } from "@components/commons";
 import { getProfile, getTimeRecordList, getMyRoom } from "@api/mypage-api";
@@ -42,8 +42,7 @@ function MyPage() {
   }, [selectedDate]);
 
   return (
-    <div>
-      <Header />
+    <Layout>
       <div className={styles.mypage}>
         <aside className={styles.side_nav_bar}>
           <SideNavBar />
@@ -148,8 +147,7 @@ function MyPage() {
           </section>
         </div>
       </div>
-      <Footer />
-    </div>
+    </Layout>
   );
 }
 
