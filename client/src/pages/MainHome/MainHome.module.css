@@ -1,7 +1,7 @@
-.studyroom_list {
-  width: 74%;
-  margin: 5rem auto;
-  max-width: 1296px;
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
 }
 .studyroom_list h2 {
   color: white;
