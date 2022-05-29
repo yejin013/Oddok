@@ -6,8 +6,10 @@ import com.oddok.server.domain.timerecord.api.response.GetTimeRecordResponse;
 import com.oddok.server.domain.timerecord.application.TimeRecordService;
 import com.oddok.server.domain.timerecord.dto.TimeRecordDto;
 import com.oddok.server.domain.timerecord.mapper.TimeRecordDtoMapper;
+import com.oddok.server.domain.user.entity.User;
 import org.mapstruct.factory.Mappers;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -29,13 +31,12 @@ public class TimeRecordController {
 
     /**
      * [POST] /time-record : 시간 기록 API
-     * @param userId
      * @param createTimeRecordRequest
      */
     @PostMapping
-    public void create(@RequestHeader String userId, @RequestBody @Valid CreateTimeRecordRequest createTimeRecordRequest) {
+    public void create(@AuthenticationPrincipal User user, @RequestBody @Valid CreateTimeRecordRequest createTimeRecordRequest) {
         TimeRecordDto requestDto = timeRecordDtoMapper.fromCreateRequest(createTimeRecordRequest);
-        timeRecordService.create(Long.parseLong(userId), requestDto);
+        timeRecordService.create(user.getId(), requestDto);
     }
 
     /**
