@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { planState, selectedPlanState } from "@recoil/plan_state";
-import { hourState, minuteState, secondState, startTimeState, endTimeState } from "@recoil/timer_state";
+import { planState, selectedPlanState } from "@recoil/plan-state";
+import { hourState, minuteState, secondState, startTimeState, endTimeState } from "@recoil/timer-state";
 import { Input } from "@components/commons";
 import Plans from "../Plans/Plans";
 import styles from "./PlanSidebar.module.css";

@@ -1,7 +1,7 @@
 import React from "react";
 import { useRecoilState } from "recoil";
 import { bookmarkState } from "@recoil/bookmark-state";
-import { addBookmark, deleteBookmark } from "@api/study-room-api";
+import { addBookmark, deleteBookmark } from "@api/bookmark-api";
 import { Thumbnail, UserCount } from "@components/commons";
 import { Lock, Unlock, BookMark, BookMarkHeart } from "@icons";
 import styles from "./StudyRoomCard.module.css";
@@ -34,7 +34,8 @@ function StudyRoomCard({ roomData, showBookmark }) {
         <div className={styles.thumbnail_box}>
           <Thumbnail />
           {!(bookmark && roomData.id === bookmark.id) ? (
-            <div
+            <button
+              type="button"
               className={styles.bookmark_icon}
               onClick={(event) => {
                 event.preventDefault();
@@ -42,11 +43,11 @@ function StudyRoomCard({ roomData, showBookmark }) {
               }}
             >
               <BookMark />
-            </div>
+            </button>
           ) : (
-            <div className={styles.bookmark_icon} onClick={cancelBookmark}>
+            <button type="button" className={styles.bookmark_icon} onClick={cancelBookmark}>
               <BookMarkHeart />
-            </div>
+            </button>
           )}
           <div className={styles.user_count}>
             <UserCount number={roomData.currentUsers} />

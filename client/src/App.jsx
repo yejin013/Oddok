@@ -1,24 +1,38 @@
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import CreateRoom from "@pages/create_room";
-import JoinRoom from "@pages/join_room";
-import MainHome from "@pages/main_home/main_home";
-import Search from "@pages/search/search";
+import CreateRoom from "@pages/CreateRoom";
+import JoinRoom from "@pages/JoinRoom";
+import MainHome from "@pages/MainHome/MainHome";
+import Search from "@pages/Search/Search";
 import MyPage from "@pages/MyPage/MyPage";
-import StudyRoom from "@pages/study_room/study_room";
-import NotFoundPage from "./pages/NotFoundPage";
+import StudyRoom from "@pages/StudyRoom/StudyRoom";
+import NotFoundPage from "@pages/NotFoundPage/NotFoundPage";
 
 function App() {
   return (
     <BrowserRouter>
       <Switch>
-        <Route exact path="/" component={MainHome} />
-        <Route path="/search" component={Search} />
-        <Route path="/mypage" component={MyPage} />
-        <Route path="/studyroom/create" component={CreateRoom} />
-        <Route exact path="/studyroom/:id/setting" component={JoinRoom} />
-        <Route path="/studyroom/:id" component={StudyRoom} />
-        <Route path="*" component={NotFoundPage} />
+        <Route exact path="/">
+          <MainHome />
+        </Route>
+        <Route path="/search">
+          <Search />
+        </Route>
+        <Route path="/mypage">
+          <MyPage />
+        </Route>
+        <Route path="/studyroom/create">
+          <CreateRoom />
+        </Route>
+        <Route exact path="/studyroom/:id">
+          <StudyRoom />
+        </Route>
+        <Route path="/studyroom/:id/setting">
+          <JoinRoom />
+        </Route>
+        <Route path="*">
+          <NotFoundPage />
+        </Route>
       </Switch>
     </BrowserRouter>
   );

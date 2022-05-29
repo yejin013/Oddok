@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   padding: 1.5em 2.5em;
-  background-color: #101112;
+  background-color: var(--gray950);
 }
 
 .logo,
@@ -16,7 +16,7 @@
   text-decoration-line: none;
   font-size: 1.5rem;
   font-weight: bold;
-  color: #dee2e6;
+  color: var(--gray300);
 }
 
 .pages {
@@ -31,11 +31,11 @@
 }
 
 .mypage {
-  color: #6c757d;
+  color: var(--gray600);
 }
 
 .mypage:hover {
-  color: #ffffff;
+  color: white;
 }
 
 .buttons {
@@ -63,7 +63,7 @@
 .info_buttons {
   display: flex;
   flex-direction: column;
-  background-color: #212529;
+  background-color: var(--gray900);
   padding: 0.8em 1.8em;
   position: absolute;
   margin-top: 0.6em;
@@ -76,7 +76,8 @@
 
 .study_button {
   padding: 0.9em 1.2em;
-  background-color: #cfa028;
+  color: var(--gray950);
+  background-color: var(--primary);
   font-size: 0.8rem;
   font-weight: 500;
   border-radius: 4px;

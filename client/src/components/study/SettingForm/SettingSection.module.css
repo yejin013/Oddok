@@ -3,7 +3,7 @@
   height: 100vh;
   max-width: 1296px;
   margin: 100px auto;
-  color: #f8f9fa;
+  color: var(--gray100);
   font-weight: 500;
 }
 
@@ -17,7 +17,7 @@
 .sub_heading {
   margin: 0;
   margin-bottom: 1.5em;
-  color: #6c757d;
+  color: var(--gray600);
   font-size: 1.25em;
 }
 
@@ -41,7 +41,7 @@
   gap: 24px;
   padding-bottom: 3em;
   margin-bottom: 1em;
-  border-bottom: 1px solid #212529;
+  border-bottom: 1px solid var(--gray900);
 }
 
 .category_item {
@@ -62,7 +62,7 @@
 
 .detail_button button {
   margin: 3em auto;
-  color: #6c757d;
+  color: var(--gray600);
   font-size: 0.875rem;
   font-weight: 700;
 }
@@ -72,18 +72,19 @@
 }
 
 .save_button button {
-  background-color: #bf7d8a;
+  background-color: var(--primary);
   border-radius: 4px;
-  color: #f8f9fa;
+  color: var(--gray950);
   font-size: 0.875rem;
+  font-weight: 600;
   margin-bottom: 100px;
   padding: 16px;
   width: 100%;
 }
 
 .save_button button:disabled {
-  background-color: #212529;
-  color: #6c757d;
+  background-color: var(--gray900);
+  color: var(--gray600);
 }
 
 .detail {
@@ -114,7 +115,7 @@
 
 .invalid_message {
   margin: 0;
-  color: #dc3545;
+  color: var(--red);
   font-weight: 400;
   font-size: 0.875rem;
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import { useRecoilValue } from "recoil";
-import { selectedPlanState } from "@recoil/plan_state";
+import { selectedPlanState } from "@recoil/plan-state";
 import { Setting, Music, VideoOn, VideoOff, MicOn, MicOff, GoalOpen } from "@icons";
 import styles from "./SettingBar.module.css";
 

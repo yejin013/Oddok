@@ -1,5 +1,5 @@
 .bubble_box {
-  background-color: #343a40;
+  background-color: var(--gray800);
   border-radius: 20px 20px 0px 20px;
   padding: 12px;
   margin-bottom: 8px;
@@ -20,7 +20,7 @@
   display: flex;
   justify-content: flex-end;
   gap: 8px;
-  color: #dee2e6;
+  color: var(--gray300);
   font-size: 0.75rem;
 }
 

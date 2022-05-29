@@ -1,7 +1,7 @@
 .box {
   border: 1px solid #ffffff1a;
   border-radius: 4px;
-  background-color: #212529;
+  background-color: var(--gray900);
   color: #ffffff;
   padding: 1em;
   width: 100%;
@@ -11,5 +11,5 @@
 
 .box:focus {
   outline: none;
-  border: 1px solid #bf7d8a;
+  border: 1px solid var(--primary);
 }

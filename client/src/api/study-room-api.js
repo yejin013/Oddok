@@ -1,5 +1,5 @@
 import axios from "axios";
-import axiosInstance from "./axios_config";
+import axiosInstance from "./axios-config";
 
 export const createStudyRoom = async (roomInfo) => {
   const response = await axiosInstance({
@@ -33,15 +33,6 @@ export const updateStudyRoom = async (roomId, newRoomInfo) => {
   return response;
 };
 
-export const saveTime = async (timeInfo) => {
-  const response = await axiosInstance.post("/time-record", {
-    startTime: timeInfo.startTime,
-    endTime: timeInfo.endTime,
-    subject: timeInfo.subject,
-  });
-  return response;
-};
-
 export const leaveStudyRoom = async (roomId) => {
   const response = await axiosInstance({
     url: `/study-room/leave/${roomId}`,
@@ -54,19 +45,4 @@ export const getStudyRoomList = async (page, sort, isPublic, category, name, has
     params: { page, sort, isPublic, category, name, hashtag },
   });
   return response.data;
-};
-
-export const getBookmark = async () => {
-  const response = await axiosInstance.get("/bookmark");
-  return response;
-};
-
-export const addBookmark = async (roomId) => {
-  const response = await axiosInstance.post(`/bookmark/${roomId}`);
-  return response;
-};
-
-export const deleteBookmark = async () => {
-  const response = await axiosInstance.delete("/bookmark");
-  return response;
 };

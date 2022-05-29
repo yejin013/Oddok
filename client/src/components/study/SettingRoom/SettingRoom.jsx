@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { userState } from "@recoil/user_state";
-import { videoState, audioState, roomTitleState } from "@recoil/studyroom_state";
-import { planState } from "@recoil/plan_state";
+import { userState } from "@recoil/user-state";
+import { videoState, audioState, roomTitleState } from "@recoil/studyroom-state";
+import { planState } from "@recoil/plan-state";
 import { ToolTip } from "@components/commons";
 import { SettingBar, SettingForm, SettingSideBar, TotalTime, PlanSidebar } from "@components/study";
-import styles from "./setting_room.module.css";
+import styles from "./SettingRoom.module.css";
 
 function SettingRoom({ goToStudyRoom, updateRoomInfo }) {
   const videoRef = useRef();
@@ -60,10 +60,12 @@ function SettingRoom({ goToStudyRoom, updateRoomInfo }) {
 
   return (
     <div>
-      {clickedSettingBtn && userInfo.updateAllowed && (
-        <SettingForm onClose={clickSettingBtn} onUpdate={updateRoomInfo} />
-      )}
-      <div className={`${styles.room}`}>
+      <div className={styles.setting}>
+        {clickedSettingBtn && userInfo.updateAllowed && (
+          <SettingForm onClose={clickSettingBtn} onUpdate={updateRoomInfo} />
+        )}
+      </div>
+      <div className={styles.room}>
         <section className={styles.video_component}>
           {clickedSettingBtn && !userInfo.updateAllowed && (
             <div className={styles.side_bar}>

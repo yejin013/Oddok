@@ -4,7 +4,7 @@
   align-items: center;
   padding: 14px 18px;
   gap: 10px;
-  color: #6c757d;
+  color: var(--gray600);
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
