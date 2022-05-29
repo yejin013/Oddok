@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { createProfile, updateProfile } from "@api/mypage-api";
 import { Modal, Calendar, Input, Dropdown, Textarea } from "@components/commons";
 import styles from "./MyGoalEditModal.module.css";
@@ -23,31 +23,26 @@ function MyGoalEditModal({ profileData, onClose, onUpdate }) {
   };
 
   const edit = async () => {
-    console.log(inputData);
     try {
       if (profileData) {
         const response = await updateProfile(inputData);
         onUpdate(response);
         return;
       }
+      const response = await createProfile(inputData);
+      onUpdate(response);
     } catch (e) {
       console.error(e);
     }
-    const response = await createProfile(inputData);
-    onUpdate(response);
   };
-
-  useEffect(() => {
-    console.log(inputData);
-  }, []);
 
   const content = (
     <div className={styles.box}>
       <div className={styles.item}>
         <p>디데이</p>
         <div className={styles.dday}>
-          <Calendar onChange={selectDate} defaultDate={inputData && new Date(inputData.dday)} />
-          <Input onChange={inputDdayInfo} value={inputData?.ddayInfo} />
+          <Calendar onChange={selectDate} defaultDate={inputData?.dday && new Date(inputData.dday)} />
+          <Input onChange={inputDdayInfo} value={inputData?.ddayInfo || ""} />
         </div>
       </div>
       <div className={styles.item}>
@@ -59,14 +54,14 @@ function MyGoalEditModal({ profileData, onClose, onUpdate }) {
               { value: 7, name: "7시간" },
             ]}
             onSelect={selectTargetTime}
-            defaultValue={inputData && `${inputData.targetTime}시간`}
+            defaultValue={inputData?.targetTime && `${inputData.targetTime}시간`}
           />
         </div>
       </div>
       <div className={styles.item}>
         <p>목표</p>
         <div>
-          <Textarea onChange={inputGoal} value={inputData?.goal} />
+          <Textarea onChange={inputGoal} value={inputData?.goal || ""} />
         </div>
       </div>
     </div>
