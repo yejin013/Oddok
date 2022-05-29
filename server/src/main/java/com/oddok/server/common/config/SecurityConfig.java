@@ -36,17 +36,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-//                .and()
-//                .logout()
-//                .logoutUrl("/logout")
-//                .and()
-//                .oauth2Login()
-//                .authorizationEndpoint()
-//                .and()
-//                .redirectionEndpoint()
-//                .baseUri("/*/oauth2/code/*")
-//                .and()
-//                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .logout()
+                .logoutUrl("/logout")
+                .and()
+                .oauth2Login()
+                .authorizationEndpoint()
+                .and()
+                .redirectionEndpoint()
+                .baseUri("/*/oauth2/code/*");
+
+        http
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }

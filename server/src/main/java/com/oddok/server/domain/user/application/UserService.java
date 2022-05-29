@@ -22,8 +22,6 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    private final AuthTokenProvider authTokenProvider;
-
     private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
     //TODO: 현재는 임의의 사용자 3명 저장
@@ -42,18 +40,6 @@ public class UserService {
         userRepository.save(new User("user9@kakao.com", "user9", Role.USER));
         return savedUser.getId();
 
-    }
-
-    @Transactional
-    public TokenDto refresh(Long userId, String refreshToken) {
-        User user = findUser(userId);
-        if(!refreshToken.equals(user.getRefreshToken()) || !authTokenProvider.isValidToken(refreshToken)) {
-            throw new TokenValidFailedException();
-        }
-        AuthToken appToken = authTokenProvider.createUserAccessToken(user.getEmail());
-        return TokenDto.builder()
-                .token(appToken.getToken())
-                .build();
     }
 
     @Transactional

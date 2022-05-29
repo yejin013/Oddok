@@ -20,15 +20,7 @@ import javax.validation.Valid;
 public class UserController {
 
     private final UserService userService;
-
     private final UserDtoMapper userDtoMapper = Mappers.getMapper(UserDtoMapper.class);
-
-    @PostMapping("/refresh")
-    public ResponseEntity<UpdateTokenResponse> refreshAccessToken(@RequestHeader String userId,
-                                                                  @RequestBody @Valid RefreshTokenRequest refreshTokenRequest) {
-        TokenDto tokenDto = userService.refresh(Long.parseLong(userId), refreshTokenRequest.getRefreshToken());
-        return ResponseEntity.ok(userDtoMapper.toTokenResponse(tokenDto));
-    }
 
     @PutMapping("/nickname")
     public ResponseEntity<ChangeNicknameResponse> changeNickname(@RequestHeader String userId,

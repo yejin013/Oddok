@@ -11,6 +11,4 @@ public interface UserDtoMapper {
 
     ChangeNicknameResponse toChangeNicknameResponse(UserDto dto);
 
-    UpdateTokenResponse toTokenResponse(TokenDto dto);
-
 }
