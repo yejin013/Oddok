@@ -25,7 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // TODO: ROLE 지정
         http.httpBasic().disable()
                 .authorizeRequests()
-//                .antMatchers("/auth/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/auth").permitAll()
                 .antMatchers(HttpMethod.GET, "/study-room").permitAll()
                 .anyRequest().permitAll()
                 .and()

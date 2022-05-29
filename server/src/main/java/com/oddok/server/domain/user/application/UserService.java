@@ -1,11 +1,7 @@
 package com.oddok.server.domain.user.application;
 
-import com.oddok.server.common.errors.TokenValidFailedException;
 import com.oddok.server.common.errors.UserNotFoundException;
-import com.oddok.server.common.jwt.AuthToken;
-import com.oddok.server.common.jwt.AuthTokenProvider;
 import com.oddok.server.domain.user.dao.UserRepository;
-import com.oddok.server.domain.user.dto.TokenDto;
 import com.oddok.server.domain.user.dto.UserDto;
 import com.oddok.server.domain.user.entity.Role;
 import com.oddok.server.domain.user.entity.User;
