@@ -35,6 +35,7 @@ public class TimeRecordController {
      */
     @PostMapping
     public void create(@AuthenticationPrincipal User user, @RequestBody @Valid CreateTimeRecordRequest createTimeRecordRequest) {
+        System.out.println(user);
         TimeRecordDto requestDto = timeRecordDtoMapper.fromCreateRequest(createTimeRecordRequest);
         timeRecordService.create(user.getId(), requestDto);
     }
