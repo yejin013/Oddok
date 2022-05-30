@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { createProfile, updateProfile } from "@api/mypage-api";
 import { Modal, Calendar, Input, Dropdown, Textarea } from "@components/commons";
+import { TARGET_TIME_OPTIONS } from "@utils/constants/options";
 import styles from "./MyGoalEditModal.module.css";
 
 function MyGoalEditModal({ profileData, onClose, onUpdate }) {
@@ -49,10 +50,7 @@ function MyGoalEditModal({ profileData, onClose, onUpdate }) {
         <p>공부시간</p>
         <div>
           <Dropdown
-            options={[
-              { value: 6, name: "6시간" },
-              { value: 7, name: "7시간" },
-            ]}
+            options={TARGET_TIME_OPTIONS}
             onSelect={selectTargetTime}
             defaultValue={inputData?.targetTime && `${inputData.targetTime}시간`}
           />

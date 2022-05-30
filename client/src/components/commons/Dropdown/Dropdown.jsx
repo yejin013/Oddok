@@ -11,8 +11,8 @@ function Dropdown({ options, onSelect, defaultValue }) {
     setIsActive((prev) => !prev);
   };
 
-  const clickOption = (name, value) => {
-    setSelectedOpt(name);
+  const clickOption = (label, value) => {
+    setSelectedOpt(label);
     onSelect(value);
     setIsActive(false);
   };
@@ -32,15 +32,15 @@ function Dropdown({ options, onSelect, defaultValue }) {
   return (
     <div ref={insideRef} className={styles.container}>
       <div className={styles.select} onClick={toggleMenu}>
-        <p className={styles.selected_opt}>{selectedOpt || options[0].name}</p>
+        <p className={styles.selected_opt}>{selectedOpt || options[0].label}</p>
         <div className={styles.icon}>
           <ArrowDown />
         </div>
       </div>
       <ul className={`${isActive ? styles.active : ""}`}>
         {options.map((option) => (
-          <li key={option.value} className={styles.opt} onClick={() => clickOption(option.name, option.value)}>
-            {option.name}
+          <li key={option.value} className={styles.opt} onClick={() => clickOption(option.label, option.value)}>
+            {option.label}
           </li>
         ))}
       </ul>

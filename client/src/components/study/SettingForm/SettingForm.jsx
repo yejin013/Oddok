@@ -10,36 +10,12 @@ import {
   Dropdown,
   Input,
   Textarea,
+  Calendar,
 } from "@components/commons";
 import { VideoOn, MicOff } from "@icons";
+import { CATEGORY_OPTIONS, TARGET_TIME_OPTIONS, HASHTAG_OPTIONS, USERLIMIT_OPTIONS } from "@utils/constants/options";
 import Image from "./image";
 import styles from "./SettingSection.module.css";
-
-const CATEGORIES = [
-  { value: "OFFICIAL", label: "공무원 준비" },
-  { value: "SCHOOL", label: "수능/내신 준비" },
-  { value: "CERTIFICATE", label: "자격증 준비" },
-  { value: "EMPLOYEE", label: "취업 준비" },
-  { value: "PERSONAL", label: "개인 학습" },
-  { value: "ETC", label: "일반" },
-];
-const HASHTAGS = ["교시제", "여성전용", "아침기상", "컨셉", "목표시간", "자율", "평일", "주말", "예치금", "인증"];
-const USERLIMIT_OPTIONS = [
-  { value: 6, name: "6명" },
-  { value: 5, name: "5명" },
-  { value: 4, name: "4명" },
-  { value: 3, name: "3명" },
-  { value: 2, name: "2명" },
-  { value: 1, name: "1명" },
-];
-const TARGETTIME_OPTIONS = [
-  { value: 10, name: "10시간" },
-  { value: 9, name: "9시간" },
-  { value: 8, name: "8시간" },
-];
-const ENDDATE_OPTIONS = [
-  { value: new Date(new Date(2022, 11, 32) + 3240 * 10000).toISOString().split("T")[0], name: "2022.12.31" },
-];
 
 function SettingForm({ roomData, onClose, onUpdate }) {
   const [roomInfoAtom, setRoomInfoAtom] = useRecoilState(roomInfoState);
@@ -58,7 +34,7 @@ function SettingForm({ roomData, onClose, onUpdate }) {
     bgmlinkInputRef.current.value = roomInfo.bgmlink ? roomInfo.bgmlink : "";
     ruleInputRef.current.value = roomInfo.rule ? roomInfo.rule : "";
     if (roomInfo.hashtags.length) {
-      const set = new Set(HASHTAGS);
+      const set = new Set(HASHTAG_OPTIONS);
       setHashtags(new Set(roomInfo.hashtags.filter((e) => set.has(e)))); // set
       setNewHashtags(roomInfo.hashtags.filter((e) => !set.has(e))); // array
     }
@@ -140,8 +116,8 @@ function SettingForm({ roomData, onClose, onUpdate }) {
     setRoomInfo((prev) => ({ ...prev, targetTime: value }));
   };
 
-  const endDateHandler = (value) => {
-    setRoomInfo((prev) => ({ ...prev, endAt: value }));
+  const endDateHandler = (date) => {
+    setRoomInfo((prev) => ({ ...prev, endAt: date }));
   };
 
   // 비밀번호 입력시 숫자인지 체크
@@ -170,7 +146,7 @@ function SettingForm({ roomData, onClose, onUpdate }) {
           <p className={styles.heading}>스터디 목표는 무엇인가요?</p>
           <p className={styles.sub_heading}>목표를 설정하면 방을 빠르고 쉽게 설정할 수 있어요.</p>
           <div className={styles.category}>
-            {CATEGORIES.map((c) => (
+            {CATEGORY_OPTIONS.map((c) => (
               <div key={c.value} className={styles.category_item}>
                 <RadioButton
                   label={c.label}
@@ -195,7 +171,7 @@ function SettingForm({ roomData, onClose, onUpdate }) {
         <div className={styles.roominfo_item}>
           <p className={styles.label}>해시태그</p>
           <div className={styles.hashtag_item}>
-            {HASHTAGS.map((label) => (
+            {HASHTAG_OPTIONS.map((label) => (
               <HashtagButton label={label} onToggle={hashtagHandler} checked={hashtags.has(label)} />
             ))}
             {newHashtags.map((label) => (
@@ -225,14 +201,14 @@ function SettingForm({ roomData, onClose, onUpdate }) {
             <div>
               <p className={styles.label}>목표시간</p>
               <Dropdown
-                options={TARGETTIME_OPTIONS}
+                options={TARGET_TIME_OPTIONS}
                 onSelect={targetTimeHandler}
                 defaultValue={`${roomInfo.targetTime}시간`}
               />
             </div>
             <div>
               <p className={styles.label}> 스터디 기간</p>
-              <Dropdown options={ENDDATE_OPTIONS} onSelect={endDateHandler} defaultValue={roomInfo.endAt} />
+              <Calendar onChange={endDateHandler} />
             </div>
             <div>
               <p className={styles.label}>비밀번호</p>
