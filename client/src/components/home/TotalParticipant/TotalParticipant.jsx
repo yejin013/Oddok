@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { UserCount } from "@components/commons";
 import { getTotalParticipant } from "@api/participant-api";
+import { Plus } from "@icons";
 import styles from "./TotalParticipant.module.css";
 
 function TotalParticipant() {
@@ -15,11 +16,12 @@ function TotalParticipant() {
   }, []);
 
   // 버튼 누르면 로그인 페이지 이동
-
   return (
     <div className={styles.participant}>
       <div className={styles.count_box}>
-        <UserCount number={totalParticipant} isTotalUser={isTotalUser} />
+        <div className={styles.count_icon}>
+          <UserCount number={totalParticipant} />
+        </div>
         <p className={styles.count}>{totalParticipant}명이 ODDOK에서 공부 중이에요</p>
       </div>
       <div className={styles.button_box}>
