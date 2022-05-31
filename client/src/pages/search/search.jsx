@@ -1,13 +1,12 @@
 /* eslint-disable react/jsx-boolean-value */
 import React, { useState, useRef, useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import { Layout } from "@components/layout";
 import { Input } from "@components/commons";
-import { Header } from "@components/home";
-import SearchBrowse from "@components/search/SearchBrowse/SearchBrowse";
-import SearchResult from "@components/search/SearchResult/SearchResult";
+import { SearchBrowse, SearchResult } from "@components/search";
 import styles from "./Search.module.css";
 
-function Search({ location }) {
+function Search() {
   const history = useHistory();
   const titleRef = useRef();
   const [searched, setSearched] = useState({ title: undefined, hashtag: undefined });
@@ -49,25 +48,22 @@ function Search({ location }) {
   }, [history, searched]);
 
   return (
-    <div>
-      <Header />
-      <div className={styles.container}>
-        <div className={styles.title_input}>
-          <form onSubmit={searchTitleHandler}>
-            <Input ref={titleRef} />
-          </form>
-        </div>
-        {!location.search ? (
-          <SearchBrowse
-            searchHashtagHandler={searchHashtagHandler}
-            searchKeywordHandler={searchKeywordHandler}
-            setSearched={setSearched}
-          />
-        ) : (
-          <SearchResult />
-        )}
+    <Layout>
+      <div className={styles.title_input}>
+        <form onSubmit={searchTitleHandler}>
+          <Input ref={titleRef} />
+        </form>
       </div>
-    </div>
+      {!history.location.search ? (
+        <SearchBrowse
+          searchHashtagHandler={searchHashtagHandler}
+          searchKeywordHandler={searchKeywordHandler}
+          setSearched={setSearched}
+        />
+      ) : (
+        <SearchResult />
+      )}
+    </Layout>
   );
 }
 
