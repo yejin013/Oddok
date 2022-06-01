@@ -3,9 +3,32 @@
   height: 100vh;
   max-width: 1320px;
   padding: 0 100px;
-  margin: 100px auto;
+  margin: 70px auto;
   color: var(--gray100);
   font-weight: 500;
+}
+
+.close_btn {
+  display: flex;
+  justify-content: end;
+}
+
+.close_btn button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 36px;
+  color: var(--gray800);
+}
+
+.close_btn button:hover {
+  color: var(--gray700);
+}
+
+.close_btn span {
+  color: var(--gray500);
+  font-size: 0.75rem;
 }
 
 .heading {
@@ -134,9 +157,9 @@
   height: 120px;
 }
 
-@media screen and (max-height: 1000px) {
+@media screen and (max-width: 1600px) {
   .container {
-    margin: 60px auto;
+    margin: 30px auto;
   }
   .save_button button {
     margin-bottom: 40px;

@@ -12,7 +12,7 @@ import {
   Textarea,
   Calendar,
 } from "@components/commons";
-import { VideoOn, MicOff } from "@icons";
+import { VideoOn, MicOff, Cancel } from "@icons";
 import { CATEGORY_OPTIONS, TARGET_TIME_OPTIONS, HASHTAG_OPTIONS, USERLIMIT_OPTIONS } from "@utils/constants/options";
 import Image from "./image";
 import styles from "./SettingForm.module.css";
@@ -141,6 +141,12 @@ function SettingForm({ roomData, onClose, onUpdate }) {
 
   return (
     <section className={styles.container}>
+      <div className={styles.close_btn}>
+        <button type="button" onClick={onClose}>
+          <Cancel />
+          <span>닫기</span>
+        </button>
+      </div>
       <div className={styles.default_box}>
         <div className={styles.roominfo_item}>
           <p className={styles.heading}>스터디 목표는 무엇인가요?</p>
