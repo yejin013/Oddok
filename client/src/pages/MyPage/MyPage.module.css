@@ -1,9 +1,5 @@
 .mypage {
-  color: white;
-  max-width: 1140px;
   display: flex;
-  width: 75%;
-  margin: 70px auto;
   gap: 90px;
 }
 

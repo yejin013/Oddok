@@ -27,6 +27,11 @@
   align-items: baseline;
 }
 
+.count_icon {
+  height: 16px;
+  gap: 6px;
+}
+
 .user_count span {
   font-size: 0.75rem;
   color: var(--gray300);

@@ -59,7 +59,9 @@ function Bookmark({ showBookmark }) {
         <div>
           <div className={styles.count_info}>
             <div className={styles.count_box}>
-              <UserCount number={bookmark.currentUsers} isBookmarkUser={isBookmarkUser} />
+              <div className={styles.count_icon}>
+                <UserCount number={bookmark.currentUsers} />
+              </div>
               <p className={styles.count}>스터디원 {bookmark.currentUsers}명이 공부 중이에요</p>
             </div>
             <div className={styles.button_box}>

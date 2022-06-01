@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { getProfile, getTimeRecordList, getMyRoom } from "@api/mypage-api";
 import { updateStudyRoom } from "@api/study-room-api";
-import { Header, Footer } from "@components/home";
 import {
   SideNavBar,
   DatePicker,
@@ -13,7 +13,7 @@ import {
 } from "@components/mypage";
 import { Textarea, NicknameEditModal } from "@components/commons";
 import { SettingForm } from "@components/study";
-import { getProfile, getTimeRecordList, getMyRoom } from "@api/mypage-api";
+import { Layout } from "@components/layout";
 import useAsync from "@hooks/useAsync";
 import getColor from "src/utils/getColor";
 import getTimeDiff from "src/utils/getTimeDiff";
@@ -97,8 +97,7 @@ function MyPage() {
           onUpdate={updateRoom}
         />
       ) : (
-        <>
-          <Header />
+        <Layout>
           <div className={styles.mypage}>
             <aside className={styles.side_nav_bar}>
               <SideNavBar />
@@ -211,8 +210,7 @@ function MyPage() {
               </section>
             </div>
           </div>
-          <Footer />
-        </>
+        </Layout>
       )}
     </div>
   );

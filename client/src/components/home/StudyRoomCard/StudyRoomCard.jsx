@@ -50,7 +50,9 @@ function StudyRoomCard({ roomData, showBookmark }) {
             </button>
           )}
           <div className={styles.user_count}>
-            <UserCount number={roomData.currentUsers} />
+            <div className={styles.count_icon}>
+              <UserCount number={roomData.currentUsers} />
+            </div>
             <span>/ {roomData.limitUsers}</span>
           </div>
         </div>

@@ -10,6 +10,8 @@ import java.util.List;
 
 @Getter
 public class GetStudyRoomResponse {
+    private final Long id;
+
     private final String name;
 
     private final Category category;
@@ -37,10 +39,11 @@ public class GetStudyRoomResponse {
     private final LocalDate endAt;
 
     @Builder
-    public GetStudyRoomResponse(String name, Category category, List<String> hashtags, String image,
+    public GetStudyRoomResponse(Long id, String name, Category category, List<String> hashtags, String image,
                                 Boolean isPublic, Integer targetTime, String rule, Boolean isMicOn,
                                 Boolean isCamOn, Integer currentUsers, String bgm,
                                 Integer limitUsers, LocalDate endAt) {
+        this.id = id;
         this.name = name;
         this.category = category;
         this.hashtags = hashtags;

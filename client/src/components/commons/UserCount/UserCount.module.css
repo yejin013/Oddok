@@ -1,4 +1,4 @@
-.big {
+/* .big {
   width: 2em;
   height: 2em;
   margin-right: 0.5em;
@@ -18,10 +18,24 @@
 .plus.small {
   width: 0.7em;
   height: 1.3em;
-}
+} */
 
 .count {
   display: flex;
+  flex-direction: row;
+  align-items: center;
   color: var(--primary);
-  gap: 8px;
+  gap: inherit;
+  height: inherit;
+}
+
+.person {
+  height: 100%;
+}
+
+.plus {
+  height: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
