@@ -14,7 +14,7 @@ function MyRoomEditModal({ roomData, onFormOpen, onClose, onUpdate }) {
   const deleteHandler = async () => {
     try {
       if (window.confirm("정말로 삭제하시겠습니까?")) {
-        await deleteStudyRoom(1);
+        await deleteStudyRoom(roomData.id);
         onUpdate();
         onClose();
       }

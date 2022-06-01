@@ -66,7 +66,7 @@ function MyPage() {
 
   const updateRoom = async (data) => {
     try {
-      const response = await updateStudyRoom(1, data); // TODO 방 id
+      const response = await updateStudyRoom(myRoomData.id, data);
       updateRoomData(response);
     } catch (e) {
       console.error(e);
