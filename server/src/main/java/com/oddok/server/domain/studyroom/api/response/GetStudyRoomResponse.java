@@ -16,6 +16,8 @@ public class GetStudyRoomResponse {
 
     private final Category category;
 
+    private final Long userId;
+
     private final List<String> hashtags;
 
     private final String image;
@@ -39,13 +41,14 @@ public class GetStudyRoomResponse {
     private final LocalDate endAt;
 
     @Builder
-    public GetStudyRoomResponse(Long id, String name, Category category, List<String> hashtags, String image,
+    public GetStudyRoomResponse(Long id, String name, Category category, Long userId, List<String> hashtags, String image,
                                 Boolean isPublic, Integer targetTime, String rule, Boolean isMicOn,
                                 Boolean isCamOn, Integer currentUsers, String bgm,
                                 Integer limitUsers, LocalDate endAt) {
         this.id = id;
         this.name = name;
         this.category = category;
+        this.userId = userId;
         this.hashtags = hashtags;
         this.image = image;
         this.isPublic = isPublic;
