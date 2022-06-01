@@ -1,7 +1,8 @@
 .container {
-  width: 67.5%;
+  width: 75%;
   height: 100vh;
-  max-width: 1296px;
+  max-width: 1320px;
+  padding: 0 100px;
   margin: 100px auto;
   color: var(--gray100);
   font-weight: 500;
@@ -103,11 +104,12 @@
   font-size: 0.875rem;
 }
 
-.detail_box > div {
-  flex: 1;
+.detail_box > div:nth-child(1) {
+  flex: 1 1 50%;
 }
 
 .detail_box > div:nth-child(2) {
+  flex: 1 1 50%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -126,6 +128,10 @@
 
 .image_box {
   margin-right: 24px;
+}
+
+.textarea {
+  height: 120px;
 }
 
 @media screen and (max-height: 1000px) {

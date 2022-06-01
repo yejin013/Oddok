@@ -58,7 +58,7 @@ function MyGoalEditModal({ profileData, onClose, onUpdate }) {
       </div>
       <div className={styles.item}>
         <p>목표</p>
-        <div>
+        <div className={styles.textarea}>
           <Textarea onChange={inputGoal} value={inputData?.goal || ""} />
         </div>
       </div>

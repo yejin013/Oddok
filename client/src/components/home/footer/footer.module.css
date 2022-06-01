@@ -5,8 +5,11 @@
 }
 
 .info {
+  width: 75%;
+  max-width: 1320px;
+  margin: 0 auto;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   padding: 1.5em 0;
 }
 
@@ -43,7 +46,7 @@
 }
 
 .contents {
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-weight: 500;
 }
 

@@ -15,7 +15,7 @@ import {
 import { VideoOn, MicOff } from "@icons";
 import { CATEGORY_OPTIONS, TARGET_TIME_OPTIONS, HASHTAG_OPTIONS, USERLIMIT_OPTIONS } from "@utils/constants/options";
 import Image from "./image";
-import styles from "./SettingSection.module.css";
+import styles from "./SettingForm.module.css";
 
 function SettingForm({ roomData, onClose, onUpdate }) {
   const [roomInfoAtom, setRoomInfoAtom] = useRecoilState(roomInfoState);
@@ -248,7 +248,9 @@ function SettingForm({ roomData, onClose, onUpdate }) {
         </div>
         <div className={styles.roominfo_item}>
           <p className={styles.label}>스터디 규칙</p>
-          <Textarea placeholder="스터디 규칙은 여기에 작성해주세요." ref={ruleInputRef} />
+          <div className={styles.textarea}>
+            <Textarea placeholder="스터디 규칙은 여기에 작성해주세요." ref={ruleInputRef} />
+          </div>
         </div>
       </div>
       <div className={styles.save_button}>
