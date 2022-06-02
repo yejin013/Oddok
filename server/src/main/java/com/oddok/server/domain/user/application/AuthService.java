@@ -1,5 +1,7 @@
 package com.oddok.server.domain.user.application;
 
+import com.oddok.server.common.errors.TokenValidFailedException;
+import com.oddok.server.common.errors.UserNotFoundException;
 import com.oddok.server.common.jwt.AuthToken;
 import com.oddok.server.common.jwt.AuthTokenProvider;
 import com.oddok.server.domain.user.client.ClientKakao;
@@ -45,4 +47,19 @@ public class AuthService {
                 .build();
     }
 
+    @Transactional
+    public TokenDto refresh(Long userId, String refreshToken) {
+        User user = findUser(userId);
+        if(!refreshToken.equals(user.getRefreshToken()) || !authTokenProvider.isValidToken(refreshToken)) {
+            throw new TokenValidFailedException();
+        }
+        AuthToken appToken = authTokenProvider.createUserAccessToken(user.getEmail());
+        return TokenDto.builder()
+                .token(appToken.getToken())
+                .build();
+    }
+
+    private User findUser(Long userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+    }
 }
