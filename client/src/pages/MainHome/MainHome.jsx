@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
 import { bookmarkState } from "@recoil/bookmark-state";
 import { getBookmark } from "@api/bookmark-api";
-import { getTestUser } from "@api/getTestUser";
+import { getTestUser } from "@api/get-test-user";
 import { Layout } from "@components/layout";
 import { Bookmark, StudyRoomList } from "@components/home";
 import styles from "./MainHome.module.css";
@@ -22,9 +22,6 @@ function MainHome() {
       .then((response) => setBookmark(response))
       .catch((error) => console.log("get bookmark error", error));
   };
-
-  // 로그인 안했을 때
-  // 전체 참여자수 컴포넌트 추가
 
   return (
     <Layout>
