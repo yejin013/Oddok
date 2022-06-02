@@ -1,12 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useRecoilValue } from "recoil";
+import { userState } from "@recoil/user-state";
 import { Input } from "@components/commons";
 import ChatBubble from "./ChatBubble";
 import styles from "./ChatSideBar.module.css";
 
 function ChatSideBar({ session }) {
   // 내 채팅인지 다른 유저의 채팅인지 구분하기 위한 임시 변수
-  const [myName, setMyName] = useState(`도비${Math.floor(Math.random() * 100000000)}`);
-
+  // const [myName, setMyName] = useState(`도비${Math.floor(Math.random() * 100000000)}`);
+  const user = useRecoilValue(userState);
   const inputRef = useRef();
   const chatBoxRef = useRef();
   const [bubbles, setBubbles] = useState([]);
@@ -41,7 +43,7 @@ function ChatSideBar({ session }) {
         data: JSON.stringify({
           content,
           time,
-          userName: myName,
+          userName: user.nickname,
         }),
         type: "chat",
       })
@@ -58,7 +60,7 @@ function ChatSideBar({ session }) {
             content={bubble.content}
             time={bubble.time}
             userName={bubble.userName}
-            isMine={bubble.userName === myName}
+            isMine={bubble.userName === user.nickname}
           />
         ))}
       </div>

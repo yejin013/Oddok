@@ -47,18 +47,18 @@
 .info {
   display: flex;
   background-color: black;
-  padding: 1em;
+  padding: 2em 1em;
   margin: 1em 0;
 }
 
 .detail {
-  flex: 1 1 70%;
+  flex: 1 1 75%;
   display: flex;
   gap: 1em;
 }
 
 .user_list {
-  flex: 1 1 30%;
+  flex: 1 1 25%;
   display: flex;
   flex-direction: column;
 }
