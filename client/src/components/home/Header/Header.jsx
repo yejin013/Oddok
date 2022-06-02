@@ -7,7 +7,6 @@ import styles from "./Header.module.css";
 
 function Header() {
   const history = useHistory();
-  const [isDropdown, setIsDropdown] = useState(false);
   const user = useRecoilValue(userState);
 
   const goToSearch = () => {
@@ -26,10 +25,6 @@ function Header() {
     history.push({
       pathname: "/studyroom/create",
     });
-  };
-
-  const clickProfileBtn = () => {
-    setIsDropdown((prev) => !prev);
   };
 
   return (
@@ -54,28 +49,12 @@ function Header() {
         <button type="button" className={styles.search} onClick={goToSearch}>
           <Search />
         </button>
-        <ul className={styles.my_info}>
-          <li>
-            <button type="button" className={styles.profile} onClick={clickProfileBtn}>
-              <Profile />
-              <span className={styles.nickname}>{user.nickname}</span>
-            </button>
-          </li>
-          {isDropdown && (
-            <ul className={styles.info_buttons}>
-              <li>
-                <button type="button" className={styles.button}>
-                  정보 수정
-                </button>
-              </li>
-              <li>
-                <button type="button" className={styles.button}>
-                  로그아웃
-                </button>
-              </li>
-            </ul>
-          )}
-        </ul>
+        <div className={styles.my_info}>
+          <button type="button" className={styles.profile}>
+            <Profile />
+            <span className={styles.nickname}>{user.nickname}</span>
+          </button>
+        </div>
         <button type="button" className={styles.study_button} onClick={goToCreateRoom}>
           + 새 스터디 만들기
         </button>
