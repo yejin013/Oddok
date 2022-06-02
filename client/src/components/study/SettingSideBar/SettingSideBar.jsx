@@ -8,11 +8,6 @@ import styles from "./SettingSideBar.module.css";
 function SettingSideBar({ clickDetailBtn }) {
   const roomInfo = useRecoilValue(roomInfoState);
   const { updateAllowed } = useRecoilValue(userState);
-  const [isPlay, setIsPlay] = useState(false);
-
-  const toggleBgm = () => {
-    setIsPlay((prev) => !prev);
-  };
 
   return (
     <aside className={styles.side_box}>
@@ -36,15 +31,6 @@ function SettingSideBar({ clickDetailBtn }) {
       <div className={`${styles.info_item} ${styles.rule}`}>
         <p>스터디 규칙</p>
         <div className={`${styles.text_field} ${styles.text_area}`}>{roomInfo.rule ? roomInfo.rule : "없음"}</div>
-      </div>
-      <div className={styles.info_item}>
-        <p>음악</p>
-        <div className={styles.bgm_field}>
-          <span className={styles.bgm_icon} onClick={toggleBgm}>
-            {isPlay ? <Pause /> : <Play />}
-          </span>
-          <span>소녀시대 - 힘내!</span>
-        </div>
       </div>
       {updateAllowed && (
         <button className={styles.button} type="submit" onClick={clickDetailBtn}>
