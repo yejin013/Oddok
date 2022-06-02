@@ -3,6 +3,7 @@ package com.oddok.server.domain.user.api;
 import com.oddok.server.domain.user.api.request.ChangeNicknameRequest;
 import com.oddok.server.domain.user.api.request.RefreshTokenRequest;
 import com.oddok.server.domain.user.api.response.ChangeNicknameResponse;
+import com.oddok.server.domain.user.api.response.GetNicknameResponse;
 import com.oddok.server.domain.user.api.response.GetUserResponse;
 import com.oddok.server.domain.user.api.response.UpdateTokenResponse;
 import com.oddok.server.domain.user.application.UserService;
@@ -25,18 +26,17 @@ public class UserController {
 
     private final UserDtoMapper userDtoMapper = Mappers.getMapper(UserDtoMapper.class);
 
-    @PostMapping("/refresh")
-    public ResponseEntity<UpdateTokenResponse> refreshAccessToken(@RequestHeader String userId,
-                                                                  @RequestBody @Valid RefreshTokenRequest refreshTokenRequest) {
-        TokenDto tokenDto = userService.refresh(Long.parseLong(userId), refreshTokenRequest.getRefreshToken());
-        return ResponseEntity.ok(userDtoMapper.toTokenResponse(tokenDto));
-    }
-
     @PutMapping("/nickname")
     public ResponseEntity<ChangeNicknameResponse> changeNickname(@RequestHeader String userId,
                                                                  @RequestBody @Valid ChangeNicknameRequest changeNicknameRequest) {
         return ResponseEntity.ok(userDtoMapper.toChangeNicknameResponse(
                 userService.changeNickname(Long.parseLong(userId), changeNicknameRequest.getNickname())));
+    }
+
+    @GetMapping("/nickname")
+    public ResponseEntity<GetNicknameResponse> getNickname(@RequestHeader String userId) {
+        return ResponseEntity.ok(userDtoMapper.toGetNicknameResponse(
+                userService.getUserInfo(Long.parseLong(userId))));
     }
 
     @GetMapping("/{id}")

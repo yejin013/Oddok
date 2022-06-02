@@ -1,10 +1,34 @@
 .container {
-  width: 67.5%;
+  width: 75%;
   height: 100vh;
-  max-width: 1296px;
-  margin: 100px auto;
+  max-width: 1320px;
+  padding: 0 100px;
+  margin: 70px auto;
   color: var(--gray100);
   font-weight: 500;
+}
+
+.close_btn {
+  display: flex;
+  justify-content: end;
+}
+
+.close_btn button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 36px;
+  color: var(--gray800);
+}
+
+.close_btn button:hover {
+  color: var(--gray700);
+}
+
+.close_btn span {
+  color: var(--gray500);
+  font-size: 0.75rem;
 }
 
 .heading {
@@ -103,11 +127,12 @@
   font-size: 0.875rem;
 }
 
-.detail_box > div {
-  flex: 1;
+.detail_box > div:nth-child(1) {
+  flex: 1 1 50%;
 }
 
 .detail_box > div:nth-child(2) {
+  flex: 1 1 50%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -128,9 +153,13 @@
   margin-right: 24px;
 }
 
-@media screen and (max-height: 1000px) {
+.textarea {
+  height: 120px;
+}
+
+@media screen and (max-width: 1600px) {
   .container {
-    margin: 60px auto;
+    margin: 30px auto;
   }
   .save_button button {
     margin-bottom: 40px;
