@@ -48,6 +48,9 @@ function PlanSidebar({ isStudyRoom }) {
       updated[index] = plan;
     }
     setPlans(updated);
+    if (selectedPlan.id === plan.id) {
+      setSelectedplan(plan);
+    }
   };
 
   const submitPlan = (event) => {
