@@ -1,6 +1,7 @@
 package com.oddok.server.domain.user.mapper;
 
 import com.oddok.server.domain.user.api.response.ChangeNicknameResponse;
+import com.oddok.server.domain.user.api.response.GetNicknameResponse;
 import com.oddok.server.domain.user.api.response.GetUserResponse;
 import com.oddok.server.domain.user.api.response.UpdateTokenResponse;
 import com.oddok.server.domain.user.dto.TokenDto;
@@ -12,8 +13,7 @@ public interface UserDtoMapper {
 
     ChangeNicknameResponse toChangeNicknameResponse(UserDto dto);
 
-    UpdateTokenResponse toTokenResponse(TokenDto dto);
-
     GetUserResponse toUserResponse(UserDto dto);
 
+    GetNicknameResponse toGetNicknameResponse(UserDto dto);
 }
