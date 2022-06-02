@@ -10,9 +10,9 @@
 
 .overlay {
   position: fixed;
-  top: 20vh;
+  top: 50%;
   left: 50%;
-  transform: translate(-50%);
+  transform: translate(-50%, -50%);
   min-width: 520px;
   max-width: 680px;
   z-index: 100;
@@ -92,6 +92,6 @@
   .overlay {
     width: 360px;
     left: 50%;
-    transform: translate(-50%);
+    transform: translate(-50%, -50%);
   }
 }

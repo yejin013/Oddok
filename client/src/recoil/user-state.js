@@ -3,5 +3,5 @@ import { atom } from "recoil";
 
 export const userState = atom({
   key: "userState",
-  default: { userId: "", updateAllowed: false },
+  default: { userId: null, nickname: null, updateAllowed: false },
 });

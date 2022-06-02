@@ -8,6 +8,8 @@ const reducer = (state, action) => {
       return { loading: false, data: action.data, error: null };
     case "ERROR":
       return { loading: false, data: null, error: action.error };
+    case "UPDATE":
+      return { loading: state.loading, data: action.data, error: state.error };
     default:
       return { loading: false, data: null, error: null };
   }
@@ -22,7 +24,7 @@ const reducer = (state, action) => {
  * - skip을 false로 지정시 자동 호출 (get 요청시 사용)
  * - sendRequest 직접 호출 가능
  */
-function useAsync(callback, { onError }, deps = [], skip = true) {
+function useAsync(requestFn, { onError }, deps = [], skip = true) {
   const [state, dispatch] = useReducer(reducer, {
     loading: false,
     data: null,
@@ -34,7 +36,7 @@ function useAsync(callback, { onError }, deps = [], skip = true) {
     async (...args) => {
       dispatch({ type: "LOADING" });
       try {
-        const data = await callback(...args);
+        const data = await requestFn(...args);
         dispatch({ type: "SUCCESS", data });
         return data;
       } catch (error) {
@@ -42,8 +44,12 @@ function useAsync(callback, { onError }, deps = [], skip = true) {
         dispatch({ type: "ERROR", error: error.response });
       }
     },
-    [callback],
+    [requestFn],
   );
+
+  const setData = async (newData) => {
+    dispatch({ type: "UPDATE", data: newData });
+  };
 
   const reset = () => {
     dispatch({});
@@ -54,7 +60,7 @@ function useAsync(callback, { onError }, deps = [], skip = true) {
     sendRequest();
   }, deps);
 
-  return { ...state, sendRequest, reset };
+  return { ...state, sendRequest, reset, setData };
 }
 
 export default useAsync;

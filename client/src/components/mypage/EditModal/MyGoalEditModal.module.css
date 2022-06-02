@@ -18,3 +18,7 @@
   flex-direction: column;
   gap: 8px;
 }
+
+.textarea {
+  height: 90px;
+}

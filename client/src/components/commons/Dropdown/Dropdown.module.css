@@ -39,6 +39,9 @@
   margin: 6px 0;
   padding-left: 0;
   z-index: 1;
+  max-height: 140px;
+  overflow: auto;
+  scrollbar-color: #d4aa70 #e4e4e4;
 }
 
 .container ul li {
@@ -48,4 +51,15 @@
 
 .container ul li:hover {
   background-color: var(--gray800);
+}
+
+.container ul::-webkit-scrollbar {
+  width: 10px;
+}
+.container ul::-webkit-scrollbar-track {
+  border-radius: 100px;
+}
+.container ul::-webkit-scrollbar-thumb {
+  background-color: var(--gray800);
+  border-radius: 100px;
 }
