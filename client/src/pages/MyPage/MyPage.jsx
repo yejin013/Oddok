@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { useRecoilValue } from "recoil";
+import { userState } from "@recoil/user-state";
 import { getProfile, getTimeRecordList, getMyRoom } from "@api/mypage-api";
 import { updateStudyRoom } from "@api/study-room-api";
 import {
@@ -33,6 +35,7 @@ function MyPage() {
   const [totalStudyTime, setTotalStudyTime] = useState();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const user = useRecoilValue(userState);
 
   const fetchTimeRecordData = async (date) => {
     const response = await getTimeRecordList(date);
@@ -198,7 +201,7 @@ function MyPage() {
                 <div className={styles.contents}>
                   <div>
                     <div className={styles.sub_heading}>닉네임</div>
-                    <div className={styles.nickname}>뿌링뿌링</div>
+                    <div className={styles.nickname}>{user.nickname}</div>
                   </div>
                   <div>
                     <div className={styles.sub_heading}>위험구역</div>

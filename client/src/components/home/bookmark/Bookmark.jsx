@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import { UserCount } from "@components/commons";
 import { bookmarkState } from "@recoil/bookmark-state";
+import { UserCount } from "@components/commons";
 import { Thumbnail } from "@icons";
 import UserList from "../UserList/UserList";
 import TotalParticipant from "../TotalParticipant/TotalParticipant";
