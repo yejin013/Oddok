@@ -4,6 +4,7 @@ import com.oddok.server.common.errors.TokenValidFailedException;
 import com.oddok.server.common.errors.UserNotFoundException;
 import com.oddok.server.common.jwt.AuthToken;
 import com.oddok.server.common.jwt.AuthTokenProvider;
+import com.oddok.server.domain.user.api.response.GetUserResponse;
 import com.oddok.server.domain.user.dao.UserRepository;
 import com.oddok.server.domain.user.dto.TokenDto;
 import com.oddok.server.domain.user.dto.UserDto;
@@ -60,6 +61,11 @@ public class UserService {
     public UserDto changeNickname(Long userId, String nickname) {
         User user = findUser(userId);
         user.changeNickname(nickname);
+        return userMapper.toDto(user);
+    }
+
+    public UserDto getUserInfo(Long userId) {
+        User user = findUser(userId);
         return userMapper.toDto(user);
     }
 
