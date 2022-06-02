@@ -1,8 +1,10 @@
 .header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 1.5em 2.5em;
   background-color: var(--gray950);
+  white-space: nowrap;
 }
 
 .logo,
@@ -12,7 +14,7 @@
   display: flex;
 }
 
-.logo {
+.logo a {
   text-decoration-line: none;
   font-size: 1.5rem;
   font-weight: bold;
@@ -48,6 +50,9 @@
 .profile,
 .study_button {
   margin: 0 1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .profile {

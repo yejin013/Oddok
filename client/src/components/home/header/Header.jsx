@@ -31,9 +31,10 @@ function Header(props) {
 
   return (
     <header className={styles.header}>
-      <a href="/" className={styles.logo}>
-        ODDOK
-      </a>
+      <div className={styles.logo}>
+        <a href="/">ODDOK</a>
+      </div>
+
       <ul className={styles.pages}>
         <li>
           <button type="button" className={styles.study_room}>

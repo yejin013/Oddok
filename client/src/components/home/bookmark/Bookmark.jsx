@@ -2,12 +2,12 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useRecoilValue } from "recoil";
-import UserCount from "@components/commons/UserCount/UserCount";
+import { UserCount } from "@components/commons";
 import { bookmarkState } from "@recoil/bookmark-state";
 import { Thumbnail } from "@icons";
 import UserList from "../UserList/UserList";
+import TotalParticipant from "../TotalParticipant/TotalParticipant";
 import styles from "./Bookmark.module.css";
-import { TotalParticipant } from "..";
 
 function Bookmark({ showBookmark }) {
   const bookmark = useRecoilValue(bookmarkState);
