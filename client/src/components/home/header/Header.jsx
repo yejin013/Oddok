@@ -1,11 +1,14 @@
 import React, { useState } from "react";
+import { useRecoilValue } from "recoil";
 import { useHistory } from "react-router-dom";
+import { userState } from "@recoil/user-state";
 import { Search, Profile } from "@icons";
 import styles from "./Header.module.css";
 
-function Header(props) {
+function Header() {
   const history = useHistory();
   const [isDropdown, setIsDropdown] = useState(false);
+  const user = useRecoilValue(userState);
 
   const goToSearch = () => {
     history.push({
@@ -54,7 +57,7 @@ function Header(props) {
           <li>
             <button type="button" className={styles.profile} onClick={clickProfileBtn}>
               <Profile />
-              <span className={styles.nickname}>뿌링뿌링</span>
+              <span className={styles.nickname}>{user.nickname}</span>
             </button>
           </li>
           {isDropdown && (

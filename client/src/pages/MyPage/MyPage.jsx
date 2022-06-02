@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useRecoilValue } from "recoil";
 import { Layout } from "@components/layout";
 import { SideNavBar, DatePicker, TimeTable, TimeRecordList, MyRoom } from "@components/mypage";
 import { Textarea } from "@components/commons";
 import { getProfile, getTimeRecordList, getMyRoom } from "@api/mypage-api";
+import { userState } from "@recoil/user-state";
 import useAsync from "@hooks/useAsync";
 import getColor from "src/utils/getColor";
 import getTimeDiff from "src/utils/getTimeDiff";
@@ -14,6 +16,7 @@ function MyPage() {
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(0, 10));
   const [timeRecordData, setTimeRecordData] = useState();
   const [totalStudyTime, setTotalStudyTime] = useState();
+  const user = useRecoilValue(userState);
 
   const fetchTimeRecordData = async (date) => {
     const response = await getTimeRecordList(date);
@@ -135,7 +138,7 @@ function MyPage() {
             <div className={styles.contents}>
               <div>
                 <div className={styles.sub_heading}>닉네임</div>
-                <div className={styles.nickname}>뿌링뿌링</div>
+                <div className={styles.nickname}>{user.nickname}</div>
               </div>
               <div>
                 <div className={styles.sub_heading}>위험구역</div>
