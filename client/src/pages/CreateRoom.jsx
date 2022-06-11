@@ -47,7 +47,7 @@ function CreateRoom() {
     });
   };
 
-  const onConfirm = () => {
+  const onClose = () => {
     if (createError) {
       createErrorReset();
       return;
@@ -62,7 +62,7 @@ function CreateRoom() {
         <Modal
           title="ERROR⚠️"
           content={createError?.data.message || joinError?.data.message}
-          onConfirm={onConfirm}
+          onClose={onClose}
           onAction={{ text: "메인으로 돌아가기", action: () => history.push("/") }}
         />
       )}
