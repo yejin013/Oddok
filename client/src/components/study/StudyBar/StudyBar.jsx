@@ -1,5 +1,5 @@
 import React from "react";
-import { Setting, Music, VideoOn, VideoOff, MicOn, MicOff, Chat, Member, Door } from "@icons";
+import { Setting, Music, VideoOn, VideoOff, MicOn, MicOff, Chat, Door } from "@icons";
 import SubjectTime from "../SubjectTime/SubjectTime";
 import styles from "./StudyBar.module.css";
 
@@ -57,11 +57,6 @@ function StudyBar({
         <li className={styles.chat_button}>
           <button type="button" onClick={clickChatBtn}>
             <Chat />
-          </button>
-        </li>
-        <li className={styles.member_button}>
-          <button type="button">
-            <Member />
           </button>
         </li>
         <li className={styles.door_button}>
