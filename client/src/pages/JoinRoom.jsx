@@ -50,7 +50,7 @@ function JoinRoom() {
     });
   };
 
-  const confirmError = () => {
+  const onClose = () => {
     if (getInfoError) {
       getInfoErrorReset();
       return;
@@ -74,7 +74,7 @@ function JoinRoom() {
         <Modal
           title="ERROR⚠️"
           content={getInfoError?.data.message || joinError?.data.message}
-          onConfirm={confirmError}
+          onClose={onClose}
           onAction={{ text: "메인으로 돌아가기", action: () => history.push("/") }}
         />
       )}
