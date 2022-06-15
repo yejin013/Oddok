@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.oddok.server.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
@@ -22,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -44,7 +46,7 @@ public class StudyRoomController {
      */
     @GetMapping(value = "/user-create")
     public String createBasic() {
-        return userService.createUser().toString();
+        return userService.createUser();
     }
 
     /**
@@ -53,9 +55,9 @@ public class StudyRoomController {
      * @return CreateStudyRoomResponse: 생성된 방 정보
      */
     @PostMapping
-    public ResponseEntity<CreateStudyRoomResponse> create(@RequestHeader String userId, @RequestBody @Valid CreateStudyRoomRequest createStudyRoomRequest) {
-        StudyRoomDto requestDto = dtoMapper.fromCreateRequest(createStudyRoomRequest, userId);
-        Long studyRoomId = studyRoomService.createStudyRoom(requestDto).getId();
+    public ResponseEntity<CreateStudyRoomResponse> create(@AuthenticationPrincipal User user, @RequestBody @Valid CreateStudyRoomRequest createStudyRoomRequest) {
+        StudyRoomDto requestDto = dtoMapper.fromCreateRequest(createStudyRoomRequest);
+        Long studyRoomId = studyRoomService.createStudyRoom(user, requestDto).getId();
         return ResponseEntity.ok(new CreateStudyRoomResponse(studyRoomId));
     }
 
@@ -65,10 +67,9 @@ public class StudyRoomController {
      * @return 수정된 방 정보
      */
     @PutMapping("/{id}")
-    public ResponseEntity<UpdateStudyRoomResponse> update(@PathVariable Long id, @RequestHeader String userId, @RequestBody @Valid UpdateStudyRoomRequest updateStudyRoomRequest) {
-        studyRoomService.checkPublisher(id, Long.parseLong(userId));
-        StudyRoomDto requestDto = dtoMapper.fromUpdateRequest(updateStudyRoomRequest, Long.parseLong(userId), id);
-        StudyRoomDto studyRoomDto = studyRoomService.updateStudyRoom(requestDto);
+    public ResponseEntity<UpdateStudyRoomResponse> update(@PathVariable Long id, @AuthenticationPrincipal User user, @RequestBody @Valid UpdateStudyRoomRequest updateStudyRoomRequest) {
+        StudyRoomDto requestDto = dtoMapper.fromUpdateRequest(updateStudyRoomRequest, id);
+        StudyRoomDto studyRoomDto = studyRoomService.updateStudyRoom(user, requestDto);
         return ResponseEntity.ok(dtoMapper.toUpdateResponse(studyRoomDto));
     }
 
@@ -79,9 +80,9 @@ public class StudyRoomController {
      * @return token
      */
     @GetMapping(value = "/join/{id}")
-    public ResponseEntity<TokenResponse> join(@PathVariable Long id, @RequestHeader String userId) {
-        log.info("join userId = {}, id = {}",userId,id);
-        String token = studyRoomService.userJoinStudyRoom(Long.parseLong(userId), id);
+    public ResponseEntity<TokenResponse> join(@PathVariable Long id, @AuthenticationPrincipal User user) {
+        log.info("join userId = {}, id = {}", user.getId(), id);
+        String token = studyRoomService.userJoinStudyRoom(id, user);
         TokenResponse tokenResponse = new TokenResponse(token);
         return ResponseEntity.ok(tokenResponse);
     }
@@ -113,25 +114,25 @@ public class StudyRoomController {
      * 스터디룸 나가기 요청
      *
      * @param id 나갈 스터디룸 식별자
-     * @param userId 요청한 사용자 식별자
+     * @param user 요청한 사용자 식별자
      * @return 퇴장 알림 메세지
      */
     @GetMapping("/leave/{id}")
-    public ResponseEntity leave(@PathVariable Long id, @RequestHeader String userId) {
-        studyRoomService.userLeaveStudyRoom(Long.parseLong(userId), id);
-        return ResponseEntity.ok(userId + "님이 " + id + "번 방에서 나갔습니다.");
+    public ResponseEntity leave(@PathVariable Long id, @AuthenticationPrincipal User user) {
+        studyRoomService.userLeaveStudyRoom(id, user);
+        return ResponseEntity.ok(user.getId() + "님이 " + id + "번 방에서 나갔습니다.");
     }
 
     /**
      * [DELETE] /study-room/{study-room-id} : 스터디방 삭제
      *
      * @param id     : 방 식별자
-     * @param userId : 요청한 사용자 식별자
+     * @param user : 요청한 사용자 식별자
      * @return 삭제 알림 메세지
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable Long id, @RequestHeader String userId) {
-        studyRoomService.checkPublisher(id, Long.parseLong(userId));
+    public ResponseEntity delete(@PathVariable Long id, @AuthenticationPrincipal User user) {
+        studyRoomService.checkPublisher(id, user);
         studyRoomService.deleteStudyRoom(id);
         return ResponseEntity.ok("삭제되었습니다.");
     }

@@ -3,7 +3,6 @@ package com.oddok.server.common.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oddok.server.common.jwt.JwtAuthenticationFilter;
 import com.oddok.server.common.jwt.JwtTokenProvider;
-import com.oddok.server.domain.user.entity.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsUtils;
 
 @RequiredArgsConstructor
 @Configuration
@@ -27,12 +27,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        // TODO: ROLE 지정
         http.httpBasic().disable()
                 .authorizeRequests()
+                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .antMatchers(HttpMethod.GET, "/auth").permitAll()
+                .antMatchers(HttpMethod.GET, "/study-room/user-create").permitAll()
                 .antMatchers(HttpMethod.GET, "/study-room").permitAll()
                 .anyRequest().authenticated()
+                .and()
+                .logout()
+                .logoutUrl("/auth/logout")
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
                 .and()
                 .headers()
                 .frameOptions().disable()

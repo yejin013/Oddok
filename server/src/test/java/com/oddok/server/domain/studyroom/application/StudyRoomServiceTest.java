@@ -75,7 +75,7 @@ class StudyRoomServiceTest {
         //when
         given(studyRoomRepository.save(any(StudyRoom.class))).willReturn(studyRoom);
         given(userRepository.findById(any())).willReturn(Optional.ofNullable(studyRoom.getUser()));
-        StudyRoomDto newStudyRoomDto = studyRoomService.createStudyRoom(studyRoomDto);
+        StudyRoomDto newStudyRoomDto = studyRoomService.createStudyRoom(user, studyRoomDto);
 
         //then
         for (String name : newStudyRoomDto.getHashtags()) {
@@ -95,7 +95,7 @@ class StudyRoomServiceTest {
         given(studyRoomRepository.existsByUser(any())).willReturn(true);
 
         //then
-        assertThrows(UserAlreadyPublishStudyRoomException.class, () -> studyRoomService.createStudyRoom(studyRoomDto));
+        assertThrows(UserAlreadyPublishStudyRoomException.class, () -> studyRoomService.createStudyRoom(user, studyRoomDto));
     }
 
 
@@ -114,7 +114,7 @@ class StudyRoomServiceTest {
 
         //when
         StudyRoomDto updateDto = createStudyRoomDto(newHastags);
-        StudyRoomDto updatedStudyRoomDto = studyRoomService.updateStudyRoom(updateDto);
+        StudyRoomDto updatedStudyRoomDto = studyRoomService.updateStudyRoom(user, updateDto);
 
         //then
         assertTrue(updatedStudyRoomDto.getHashtags().contains(newHashtag));
@@ -133,7 +133,7 @@ class StudyRoomServiceTest {
         given(sessionManager.createSession()).willReturn(sessionId);
 
         //when
-        studyRoomService.userJoinStudyRoom(userId, studyRoomId);
+        studyRoomService.userJoinStudyRoom(studyRoomId, user);
 
         //then
         assert(studyRoom.getSessionId()).equals(sessionId);
@@ -148,7 +148,7 @@ class StudyRoomServiceTest {
         given(participantRepository.findByUser(any())).willReturn(Optional.of(new Participant(studyRoom, user)));
 
         //when,then
-        assertThrows(UserAlreadyJoinedStudyRoom.class, () -> studyRoomService.userJoinStudyRoom(userId, studyRoomId));
+        assertThrows(UserAlreadyJoinedStudyRoom.class, () -> studyRoomService.userJoinStudyRoom(studyRoomId, user));
     }
 
     @Test
@@ -161,7 +161,7 @@ class StudyRoomServiceTest {
         given(participantRepository.findByUser(any())).willReturn(Optional.of(new Participant(studyRoom, user)));
 
         //when
-        studyRoomService.userLeaveStudyRoom(userId, studyRoomId);
+        studyRoomService.userLeaveStudyRoom(studyRoomId, user);
 
         //then
         assert(studyRoom.getCurrentUsers()).equals(0);
@@ -179,7 +179,7 @@ class StudyRoomServiceTest {
         given(participantRepository.findByUser(any())).willReturn(Optional.of(new Participant(studyRoom, user)));
 
         //when
-        studyRoomService.userLeaveStudyRoom(userId, studyRoomId);
+        studyRoomService.userLeaveStudyRoom(studyRoomId, user);
 
         //then
         assert(studyRoom.getCurrentUsers()).equals(1);

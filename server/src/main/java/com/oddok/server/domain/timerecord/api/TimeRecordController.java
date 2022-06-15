@@ -1,7 +1,6 @@
 package com.oddok.server.domain.timerecord.api;
 
 import com.oddok.server.domain.timerecord.api.request.CreateTimeRecordRequest;
-import com.oddok.server.domain.timerecord.api.request.GetTimeRecordByDayRequest;
 import com.oddok.server.domain.timerecord.api.response.GetTimeRecordResponse;
 import com.oddok.server.domain.timerecord.application.TimeRecordService;
 import com.oddok.server.domain.timerecord.dto.TimeRecordDto;
@@ -35,31 +34,28 @@ public class TimeRecordController {
      */
     @PostMapping
     public void create(@AuthenticationPrincipal User user, @RequestBody @Valid CreateTimeRecordRequest createTimeRecordRequest) {
-        System.out.println(user);
         TimeRecordDto requestDto = timeRecordDtoMapper.fromCreateRequest(createTimeRecordRequest);
-        timeRecordService.create(user.getId(), requestDto);
+        timeRecordService.create(user, requestDto);
     }
 
     /**
      * [GET] /time-record/today : 당일 시간표 조회 API
-     * @param userId
      * @return List<GetTimeRecordResponse>
      */
     @GetMapping("/today")
-    public ResponseEntity<List<GetTimeRecordResponse>> get(@RequestHeader String userId) {
-        List<TimeRecordDto> timeRecordDtoList = timeRecordService.get(Long.parseLong(userId));
+    public ResponseEntity<List<GetTimeRecordResponse>> get(@AuthenticationPrincipal User user) {
+        List<TimeRecordDto> timeRecordDtoList = timeRecordService.get(user);
         List<GetTimeRecordResponse> getTimeRecordResponse = timeRecordDtoMapper.toGetResponse(timeRecordDtoList);
         return ResponseEntity.ok(getTimeRecordResponse);
     }
 
     /**
      * [GET] /time-record : 원하는 날짜의 시간표 조회 API
-     * @param userId
      * @return List<GetTimeRecordResponse>
      */
     @GetMapping
-    public ResponseEntity<List<GetTimeRecordResponse>> get(@RequestHeader String userId, @RequestParam("date") String date) {
-        List<TimeRecordDto> timeRecordDtoList = timeRecordService.get(Long.parseLong(userId), date);
+    public ResponseEntity<List<GetTimeRecordResponse>> get(@AuthenticationPrincipal User user, @RequestParam("date") String date) {
+        List<TimeRecordDto> timeRecordDtoList = timeRecordService.get(user, date);
         List<GetTimeRecordResponse> getTimeRecordResponses = timeRecordDtoMapper.toGetResponse(timeRecordDtoList);
         return ResponseEntity.ok(getTimeRecordResponses);
     }

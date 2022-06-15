@@ -1,9 +1,5 @@
 .mypage {
-  color: white;
-  max-width: 1140px;
   display: flex;
-  width: 75%;
-  margin: 70px auto;
   gap: 90px;
 }
 
@@ -25,6 +21,9 @@
   font-weight: var(--font-semibold);
   font-size: var(--text-2xl);
   margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .sub_heading {

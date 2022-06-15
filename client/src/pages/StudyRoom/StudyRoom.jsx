@@ -170,9 +170,8 @@ function StudyRoom() {
         <Modal
           title="스터디 종료"
           content="정말 나가시겠습니까?"
-          onConfirm={() => setIsLeaveOpen(false)}
-          onSubAction={{ text: "보지 않고 나가기", action: leaveRoom }}
-          onAction={{ text: "타임랩스와 시간표 확인" }}
+          onClose={() => setIsLeaveOpen(false)}
+          onAction={{ text: "나가기", action: leaveRoom }}
         />
       )}
     </div>

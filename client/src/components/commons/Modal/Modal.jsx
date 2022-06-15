@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { Close } from "@icons";
 import styles from "./Modal.module.css";
 
-function Modal({ title, content, onConfirm, onAction, onSubAction }) {
+function Modal({ title, content, onClose, onAction, onSubAction }) {
   return (
     <>
       {createPortal(<div className={styles.backdrop} />, document.getElementById("backdrop-root"))}
@@ -11,7 +11,7 @@ function Modal({ title, content, onConfirm, onAction, onSubAction }) {
         <div className={styles.overlay}>
           <header>
             <div>{title}</div>
-            <div className={styles.icon} onClick={onConfirm}>
+            <div className={styles.icon} onClick={onClose}>
               <Close />
             </div>
           </header>

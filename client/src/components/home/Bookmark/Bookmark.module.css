@@ -10,7 +10,6 @@
 
 .count_info {
   display: flex;
-  padding: 2em 12em;
   background-color: var(--gray950);
 }
 
@@ -19,9 +18,14 @@
   padding-left: 1em;
 }
 
+.count_icon {
+  height: 44px;
+  gap: 12px;
+}
+
 .count {
   margin-top: 0.5em;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: 600;
 }
 
@@ -33,7 +37,7 @@
 }
 
 .button {
-  padding: 0.7em 6em;
+  padding: 1em 6em;
   font-weight: 700;
   border-radius: 4px;
   color: var(--gray950);
@@ -42,15 +46,15 @@
 
 .info {
   display: flex;
-  align-items: center;
-  padding: 1em 12em;
   background-color: black;
+  padding: 2em 1em;
+  margin: 1em 0;
 }
 
 .detail {
   flex: 1 1 75%;
   display: flex;
-  margin: 1em;
+  gap: 1em;
 }
 
 .user_list {
@@ -60,7 +64,6 @@
 }
 
 .thumbnail {
-  margin-right: 1em;
   background-color: var(--gray900);
 }
 

@@ -30,7 +30,6 @@ public class StudyRoomService {
 
     private final SessionManager sessionManager;
 
-    private final UserRepository userRepository;
     private final StudyRoomRepository studyRoomRepository;
     private final ParticipantRepository participantRepository;
     private final HashtagRepository hashtagRepository;
@@ -38,8 +37,7 @@ public class StudyRoomService {
     private final StudyRoomMapper studyRoomMapper = Mappers.getMapper(StudyRoomMapper.class);
 
     @Transactional
-    public StudyRoomDto createStudyRoom(StudyRoomDto studyRoomDto) {
-        User user = findUser(studyRoomDto.getUserId());
+    public StudyRoomDto createStudyRoom(User user, StudyRoomDto studyRoomDto) {
         checkUserIsAlreadyPublisher(user);
         StudyRoom studyRoom = studyRoomMapper.toEntity(studyRoomDto, user);
         studyRoom = studyRoomRepository.save(studyRoom);
@@ -54,8 +52,7 @@ public class StudyRoomService {
      * @return token
      */
     @Transactional
-    public String userJoinStudyRoom(Long userId, Long id) {
-        User user = findUser(userId);
+    public String userJoinStudyRoom(Long id, User user) {
         StudyRoom studyRoom = findStudyRoom(id);
         checkStudyRoomEnd(id, studyRoom);
         checkUserAlreadyJoined(user);
@@ -98,7 +95,7 @@ public class StudyRoomService {
      * 스터디룸을 수정합니다. 방장이 아닐 경우 수정할 수 없으므로 예외를 발생시킵니다.
      */
     @Transactional
-    public StudyRoomDto updateStudyRoom(StudyRoomDto requestDto) {
+    public StudyRoomDto updateStudyRoom(User user, StudyRoomDto requestDto) {
         StudyRoom studyRoom = findStudyRoom(requestDto.getId());
         studyRoom.update(requestDto);
         mapStudyRoomAndHashtags(studyRoom, requestDto.getHashtags());
@@ -122,9 +119,9 @@ public class StudyRoomService {
      * 사용자가 스터디룸을 나가는 과정 1. 참여자 테이블에서 삭제 2. 스터디룸의 참여자 수 1 감소 3. 참여자수가 0일 경우 세션 삭제
      */
     @Transactional
-    public void userLeaveStudyRoom(Long userId, Long studyRoomId) {
+    public void userLeaveStudyRoom(Long studyRoomId, User user) {
         StudyRoom studyRoom = findStudyRoom(studyRoomId);
-        deleteUserFromParticipant(userId, studyRoom);
+        deleteUserFromParticipant(user, studyRoom);
         studyRoom.decreaseCurrentUsers();
         checkAllUserExit(studyRoom);
     }
@@ -140,19 +137,18 @@ public class StudyRoomService {
         }
     }
 
-    public void checkPublisher(Long studyRoomId, Long userId) {
-        Long publisherId = findStudyRoom(studyRoomId).getUser().getId();
-        if (!publisherId.equals(userId)) {
-            throw new UserNotPublisherException(userId);
+    public void checkPublisher(Long studyRoomId, User user) {
+        User publisher = findStudyRoom(studyRoomId).getUser();
+        if (!publisher.equals(user)) {
+            throw new UserNotPublisherException(user.getId());
         }
     }
 
-    private void deleteUserFromParticipant(Long userId, StudyRoom studyRoom) {
-        User user = findUser(userId);
+    private void deleteUserFromParticipant(User user, StudyRoom studyRoom) {
         Participant participant = participantRepository.findByUser(user)
-                .orElseThrow(() -> new UserNotParticipatingException(userId, studyRoom.getId()));
+                .orElseThrow(() -> new UserNotParticipatingException(user.getId(), studyRoom.getId()));
         if (!participant.getStudyRoom().equals(studyRoom)) {
-            throw new UserNotParticipatingException(userId, studyRoom.getId());
+            throw new UserNotParticipatingException(user.getId(), studyRoom.getId());
         }
         participantRepository.delete(participant);
     }
@@ -203,9 +199,4 @@ public class StudyRoomService {
         return studyRoomRepository.findById(id)
                 .orElseThrow(() -> new StudyRoomNotFoundException(id));
     }
-
-    private User findUser(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
-    }
-
 }

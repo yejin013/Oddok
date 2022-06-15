@@ -1,0 +1,14 @@
+.wrap {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+}
+
+.inner {
+  width: 75%;
+  max-width: 1320px;
+  margin: 0 auto;
+  color: white;
+}

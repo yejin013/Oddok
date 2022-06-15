@@ -1,6 +1,7 @@
 package com.oddok.server.common.jwt;
 
 import com.oddok.server.domain.user.entity.Role;
+import com.oddok.server.domain.user.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -67,8 +68,8 @@ public class JwtTokenProvider {
      * @param role  사용자에게 허용할 권한
      * @return AccessToken
      */
-    public String createAccessToken(String userId, Role role) {
-        return generateToken(userId, role, Long.parseLong(accessTokenValidMilSecond));
+    public String createAccessToken(String userId, String email, Role role) {
+        return generateToken(userId, email, role, Long.parseLong(accessTokenValidMilSecond));
     }
 
     /**
@@ -78,8 +79,8 @@ public class JwtTokenProvider {
      * @param role  사용자에게 허용할 권한
      * @return AccessToken
      */
-    public String createRefreshToken(String userId, Role role) {
-        return generateToken(userId, role, Long.parseLong(refreshTokenValidMilSecond));
+    public String createRefreshToken(String userId, String email, Role role) {
+        return generateToken(userId, email, role, Long.parseLong(refreshTokenValidMilSecond));
     }
 
     /**
@@ -90,10 +91,11 @@ public class JwtTokenProvider {
      * @param tokenValidMilSecond 토큰 유효시간
      * @return AccessToken
      */
-    protected String generateToken(String userId, Role role, long tokenValidMilSecond) {
+    protected String generateToken(String userId, String email, Role role, long tokenValidMilSecond) {
         Date now = new Date();
         return Jwts.builder()
                 .claim("userId",userId)
+                .claim("email", email)
                 .claim("role", role)
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + tokenValidMilSecond))
@@ -143,7 +145,7 @@ public class JwtTokenProvider {
      * @return Spring Security 인증토큰
      */
     public Authentication getAuthentication(Claims claims) {
-        return new UsernamePasswordAuthenticationToken(this.getUserId(claims), "", getAuthorities(claims));
+        return new UsernamePasswordAuthenticationToken(new User(claims), "", getAuthorities(claims));
     }
 
     /**

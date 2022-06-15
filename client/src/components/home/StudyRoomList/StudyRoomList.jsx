@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { getStudyRoomList } from "@api/study-room-api";
 import { Dropdown } from "@components/commons";
+import { STUDY_FILTER_OPTIONS, STUDY_SORT_OPTIONS } from "@utils/constants/options";
 import TabMenu from "../TabMenu/TabMenu";
 import CardGrid from "../CardGrid/CardGrid";
 import styles from "./StudyRoomList.module.css";
@@ -60,20 +61,8 @@ function StudyRoomList({ searchedTitle, searchedHashtag, showBookmark }) {
           <TabMenu setCurrentCategory={setCurrentCategory} />
         </div>
         <div className={styles.filter}>
-          <Dropdown
-            options={[
-              { value: undefined, name: "전체" },
-              { value: true, name: "공개 스터디만" },
-            ]}
-            onSelect={filterRoomHandler}
-          />
-          <Dropdown
-            options={[
-              { value: undefined, name: "최신 순" },
-              { value: "currentUsers", name: "인기 순" },
-            ]}
-            onSelect={sortRoomHandler}
-          />
+          <Dropdown options={STUDY_FILTER_OPTIONS} onSelect={filterRoomHandler} />
+          <Dropdown options={STUDY_SORT_OPTIONS} onSelect={sortRoomHandler} />
         </div>
       </div>
       <div className={styles.studyroom_list}>

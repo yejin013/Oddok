@@ -10,5 +10,6 @@ import org.mapstruct.Mapping;
 @Mapper
 public interface AuthMapper {
     AuthResponse toAuthResponse(TokensDto dto);
+
     UpdateTokenResponse toTokenResponse(TokenDto dto);
 }

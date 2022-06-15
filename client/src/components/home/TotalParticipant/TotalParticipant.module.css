@@ -1,18 +1,23 @@
 .participant {
   display: flex;
-  padding: 2em 11.5em;
+  align-items: flex-end;
   color: white;
 }
 
 .count_box {
   flex: 1 1 70%;
-  padding-left: 1em;
+}
+
+.count_icon {
+  height: 48px;
+  gap: 12px;
+  display: flex;
 }
 
 .count {
   margin: 0;
   margin-top: 0.5em;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: 600;
 }
 
@@ -24,8 +29,8 @@
 }
 
 .button {
-  padding: 0.7em 4.5em;
-  font-size: 0.9rem;
+  padding: 0.7em 4.1em;
+  font-size: 1rem;
   font-weight: 700;
   border-radius: 4px;
   color: var(--gray950);

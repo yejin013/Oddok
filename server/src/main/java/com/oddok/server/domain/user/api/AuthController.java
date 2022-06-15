@@ -6,15 +6,14 @@ import com.oddok.server.domain.user.api.response.UpdateTokenResponse;
 import com.oddok.server.domain.user.application.AuthService;
 import com.oddok.server.domain.user.dto.TokenDto;
 import com.oddok.server.domain.user.dto.TokensDto;
+import com.oddok.server.domain.user.entity.User;
 import com.oddok.server.domain.user.mapper.AuthMapper;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -41,9 +40,9 @@ public class AuthController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<UpdateTokenResponse> refreshAccessToken(@RequestHeader String userId,
+    public ResponseEntity<UpdateTokenResponse> refreshAccessToken(@AuthenticationPrincipal User user,
                                                                   @RequestBody @Valid RefreshTokenRequest refreshTokenRequest) {
-        TokenDto tokenDto = authService.refresh(Long.parseLong(userId), refreshTokenRequest.getRefreshToken());
+        TokenDto tokenDto = authService.refresh(user, refreshTokenRequest.getRefreshToken());
         return ResponseEntity.ok(authMapper.toTokenResponse(tokenDto));
     }
 }
