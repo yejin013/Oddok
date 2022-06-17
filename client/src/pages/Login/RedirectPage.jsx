@@ -13,6 +13,7 @@ function RedirectPage() {
     loading: isLoading,
     error: loginError,
     sendRequest: userlogin,
+    reset: loginErrorReset,
   } = useAsync(login, { onError: (error) => console.log(error) });
 
   useEffect(() => {
@@ -37,6 +38,12 @@ function RedirectPage() {
       .catch((error) => console.error(error.response));
   }, [token]);
 
+  const onClose = () => {
+    if (loginError) {
+      loginErrorReset();
+    }
+  };
+
   return (
     <>
       {isLoading && <Loading />}
@@ -44,6 +51,7 @@ function RedirectPage() {
         <Modal
           title="로그인 실패"
           content="로그인에 실패하였습니다."
+          onClose={onClose}
           onAction={{ text: "로그인 다시 하기", action: () => history.push("/login") }}
         />
       )}
