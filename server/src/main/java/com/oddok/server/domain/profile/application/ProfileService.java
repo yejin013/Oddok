@@ -2,7 +2,6 @@ package com.oddok.server.domain.profile.application;
 
 import com.oddok.server.common.errors.ProfileAlreadyExistsException;
 import com.oddok.server.common.errors.ProfileNotFoundException;
-import com.oddok.server.common.errors.UserNotFoundException;
 import com.oddok.server.domain.profile.dao.ProfileRepository;
 import com.oddok.server.domain.profile.dto.ProfileDto;
 import com.oddok.server.domain.profile.entity.Profile;
@@ -22,14 +21,11 @@ import java.util.Optional;
 public class ProfileService {
 
     private final ProfileRepository profileRepository;
-    private final UserRepository userRepository;
 
     private final ProfileMapper profileMapper = Mappers.getMapper(ProfileMapper.class);
 
     @Transactional
-    public ProfileDto create(ProfileDto profileDto) {
-        User user = findUser(profileDto.getUserId());
-
+    public ProfileDto create(User user, ProfileDto profileDto) {
         if (profileRepository.findByUser(user).isPresent()){
             throw new ProfileAlreadyExistsException(user.getId());
         }
@@ -38,23 +34,16 @@ public class ProfileService {
         return profileMapper.toDto(profileRepository.save(profile));
     }
 
-    public Optional<ProfileDto> get(Long userId) {
-        User user = findUser(userId);
+    public Optional<ProfileDto> get(User user) {
         Optional<Profile> profile = profileRepository.findByUser(user);
         return profile.map(profileMapper::toDto);
     }
 
     @Transactional
-    public ProfileDto update(ProfileDto profileDto) {
-        User user = findUser(profileDto.getUserId());
+    public ProfileDto update(User user, ProfileDto profileDto) {
         Profile profile = profileRepository.findByUser(user)
                 .orElseThrow(() -> new ProfileNotFoundException(user.getId()));
         profile.update(profileDto.getGoal(), profileDto.getTargetTime(), profileDto.getDday(), profileDto.getDdayInfo());
         return profileMapper.toDto(profile);
-    }
-
-    private User findUser(Long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
     }
 }

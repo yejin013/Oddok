@@ -12,11 +12,9 @@ import org.mapstruct.Mapping;
 @Mapper
 public interface ProfileDtoMapper {
 
-    @Mapping(source = "userId", target = "userId")
-    ProfileDto fromCreateRequest(CreateProfileRequest request, Long userId);
+    ProfileDto fromCreateRequest(CreateProfileRequest request);
 
-    @Mapping(source = "userId", target = "userId")
-    ProfileDto fromUpdateRequest(UpdateProfileRequest request, Long userId);
+    ProfileDto fromUpdateRequest(UpdateProfileRequest request);
 
     CreateProfileResponse toCreateResponse(ProfileDto request);
 

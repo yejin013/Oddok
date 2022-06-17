@@ -1,13 +1,10 @@
 package com.oddok.server.domain.user.api;
 
 import com.oddok.server.domain.user.api.request.ChangeNicknameRequest;
-import com.oddok.server.domain.user.api.request.RefreshTokenRequest;
 import com.oddok.server.domain.user.api.response.ChangeNicknameResponse;
 import com.oddok.server.domain.user.api.response.GetNicknameResponse;
 import com.oddok.server.domain.user.api.response.GetUserResponse;
-import com.oddok.server.domain.user.api.response.UpdateTokenResponse;
 import com.oddok.server.domain.user.application.UserService;
-import com.oddok.server.domain.user.dto.TokenDto;
 import com.oddok.server.domain.user.dto.UserDto;
 import com.oddok.server.domain.user.mapper.UserDtoMapper;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +20,6 @@ import javax.validation.Valid;
 public class UserController {
 
     private final UserService userService;
-
     private final UserDtoMapper userDtoMapper = Mappers.getMapper(UserDtoMapper.class);
 
     @PutMapping("/nickname")

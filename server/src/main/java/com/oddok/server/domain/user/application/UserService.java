@@ -1,12 +1,8 @@
 package com.oddok.server.domain.user.application;
 
-import com.oddok.server.common.errors.TokenValidFailedException;
 import com.oddok.server.common.errors.UserNotFoundException;
-import com.oddok.server.common.jwt.AuthToken;
-import com.oddok.server.common.jwt.AuthTokenProvider;
-import com.oddok.server.domain.user.api.response.GetUserResponse;
+import com.oddok.server.common.jwt.JwtTokenProvider;
 import com.oddok.server.domain.user.dao.UserRepository;
-import com.oddok.server.domain.user.dto.TokenDto;
 import com.oddok.server.domain.user.dto.UserDto;
 import com.oddok.server.domain.user.entity.Role;
 import com.oddok.server.domain.user.entity.User;
@@ -22,14 +18,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final JwtTokenProvider authTokenProvider;
 
     private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
     //TODO: 현재는 임의의 사용자 3명 저장
     @Transactional
-    public Long createUser() {
+    public String createUser() {
         User maker1 = new User("maker@kakao.com", "maker", Role.USER);
         User savedUser = userRepository.save(maker1);
+        savedUser.updateRefreshToken(authTokenProvider.createRefreshToken(savedUser.getId().toString(), savedUser.getEmail(), savedUser.getRole()));
         userRepository.save(new User("user1@kakao.com", "user1", Role.USER));
         userRepository.save(new User("user2@kakao.com", "user2", Role.USER));
         userRepository.save(new User("user3@kakao.com", "user3", Role.USER));
@@ -39,7 +37,7 @@ public class UserService {
         userRepository.save(new User("user7@kakao.com", "user7", Role.USER));
         userRepository.save(new User("user8@kakao.com", "user8", Role.USER));
         userRepository.save(new User("user9@kakao.com", "user9", Role.USER));
-        return savedUser.getId();
+        return authTokenProvider.createAccessToken(savedUser.getId().toString(), savedUser.getEmail(), savedUser.getRole());
 
     }
 
