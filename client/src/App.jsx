@@ -3,10 +3,12 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import CreateRoom from "@pages/CreateRoom";
 import JoinRoom from "@pages/JoinRoom";
 import MainHome from "@pages/MainHome/MainHome";
+import Login from "@pages/Login/Login";
 import Search from "@pages/Search/Search";
 import MyPage from "@pages/MyPage/MyPage";
 import StudyRoom from "@pages/StudyRoom/StudyRoom";
 import NotFoundPage from "@pages/NotFoundPage/NotFoundPage";
+import RedirectPage from "@pages/Login/RedirectPage";
 
 function App() {
   return (
@@ -14,6 +16,12 @@ function App() {
       <Switch>
         <Route exact path="/">
           <MainHome />
+        </Route>
+        <Route exact path="/login">
+          <Login />
+        </Route>
+        <Route path="/login/oauth2/code/kakao">
+          <RedirectPage />
         </Route>
         <Route path="/search">
           <Search />
