@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import { getKakaoToken, login } from "@api/auth-api";
 import { Modal, Loading } from "@components/commons";
 import useAsync from "@hooks/useAsync";
+import axios from "axios";
 
 function RedirectPage() {
   const history = useHistory();
@@ -30,6 +31,7 @@ function RedirectPage() {
     if (!token) {
       return;
     }
+    // axios.defaults.withCredentials = true;
     userlogin(token)
       .then((response) => console.log("오똑토큰", response)) // 확인
       .catch((error) => console.error(error.response));

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { UserCount } from "@components/commons";
 import { getTotalParticipant } from "@api/participant-api";
-import { Plus } from "@icons";
 import styles from "./TotalParticipant.module.css";
 
 function TotalParticipant() {
+  const history = useHistory();
   const [totalParticipant, setTotalParticipant] = useState();
-  const isTotalUser = true; // UserCount style위한 변수
 
   useEffect(() => {
     // 로그인을 안함 or 로그인했는데 북마크가 없음
@@ -25,7 +25,13 @@ function TotalParticipant() {
         <p className={styles.count}>{totalParticipant}명이 ODDOK에서 공부 중이에요</p>
       </div>
       <div className={styles.button_box}>
-        <button className={styles.button} type="button">
+        <button
+          className={styles.button}
+          type="button"
+          onClick={() => {
+            history.push("/login");
+          }}
+        >
           ODDOK과 함께 스터디 시작하기
         </button>
       </div>
