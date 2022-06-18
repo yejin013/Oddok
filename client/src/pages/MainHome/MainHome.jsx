@@ -12,15 +12,20 @@ import styles from "./MainHome.module.css";
 function MainHome() {
   const setBookmark = useSetRecoilState(bookmarkState);
   const setUserState = useSetRecoilState(userState);
+  const isLogin = localStorage.getItem("isLogin");
 
   // get testUser
+  /*
   useEffect(() => {
     getTestUser()
       .then((users) => console.log("get user", users))
       .catch((error) => console.error("get user error", error));
   }, []);
-
+*/
   useEffect(async () => {
+    if (!isLogin) {
+      return;
+    }
     await getNickname()
       .then((response) => setUserState((prev) => ({ ...prev, nickname: response })))
       .catch((error) => console.error("get nickname error", error));

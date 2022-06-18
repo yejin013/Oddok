@@ -19,10 +19,12 @@ function Bookmark({ showBookmark }) {
     { nickname: "현재 스터디원", joinTime: "없음", isActive: false },
   ]);
   const history = useHistory();
-  const isBookmarkUser = true; // UserCount style위한 변수
+  const isLogin = localStorage.getItem("isLogin");
 
   useEffect(() => {
-    // if(유저가 로그인했다면)
+    if (!isLogin) {
+      return;
+    }
     showBookmark();
   }, []);
 

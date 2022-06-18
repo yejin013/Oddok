@@ -28,6 +28,7 @@ function RedirectPage() {
       .catch((error) => console.error(error));
   }, []);
 
+  /*
   useEffect(() => {
     if (!token) {
       return;
@@ -37,7 +38,7 @@ function RedirectPage() {
       .then((response) => console.log("오똑토큰", response)) // 확인
       .catch((error) => console.error(error.response));
   }, [token]);
-
+*/
   const onClose = () => {
     if (loginError) {
       loginErrorReset();
