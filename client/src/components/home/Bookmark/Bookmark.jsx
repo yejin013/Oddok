@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useRecoilValue } from "recoil";
+import { userState } from "@recoil/user-state";
 import { bookmarkState } from "@recoil/bookmark-state";
 import { UserCount } from "@components/commons";
 import { Thumbnail } from "@icons";
@@ -11,6 +12,7 @@ import styles from "./Bookmark.module.css";
 
 function Bookmark({ showBookmark }) {
   const bookmark = useRecoilValue(bookmarkState);
+  const user = useRecoilValue(userState);
   const [participants, setParticipants] = useState([
     { nickname: "현재 스터디원", joinTime: "없음", isActive: false },
     { nickname: "현재 스터디원", joinTime: "없음", isActive: false },
@@ -19,10 +21,9 @@ function Bookmark({ showBookmark }) {
     { nickname: "현재 스터디원", joinTime: "없음", isActive: false },
   ]);
   const history = useHistory();
-  const isLogin = localStorage.getItem("isLogin");
 
   useEffect(() => {
-    if (!isLogin) {
+    if (!user.isLogin) {
       return;
     }
     showBookmark();

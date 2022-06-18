@@ -7,7 +7,7 @@ const axiosInstance = axios.create({
     "Content-Type": "application/json",
   },
 });
-
+/*
 axiosInstance.interceptors.request.use((config) => {
   const userId = localStorage.getItem("userId");
   if (userId) {
@@ -15,7 +15,7 @@ axiosInstance.interceptors.request.use((config) => {
   }
   return config;
 });
-
+*/
 axiosInstance.interceptors.response.use(
   (res) => {
     console.log("🙂응답 성공", res);

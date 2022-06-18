@@ -66,7 +66,7 @@ function StudyRoomList({ searchedTitle, searchedHashtag, showBookmark }) {
         </div>
       </div>
       <div className={styles.studyroom_list}>
-        {loadedRooms ? (
+        {loadedRooms.length > 0 ? (
           <CardGrid //
             rooms={loadedRooms}
             showBookmark={showBookmark}

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { bookmarkState } from "@recoil/bookmark-state";
 import { userState } from "@recoil/user-state";
 import { getBookmark } from "@api/bookmark-api";
@@ -11,11 +11,10 @@ import styles from "./MainHome.module.css";
 
 function MainHome() {
   const setBookmark = useSetRecoilState(bookmarkState);
-  const setUserState = useSetRecoilState(userState);
-  const isLogin = localStorage.getItem("isLogin");
+  const [user, setUserState] = useRecoilState(userState);
 
-  // get testUser
   /*
+  // get testUser
   useEffect(() => {
     getTestUser()
       .then((users) => console.log("get user", users))
@@ -23,7 +22,7 @@ function MainHome() {
   }, []);
 */
   useEffect(async () => {
-    if (!isLogin) {
+    if (!user.isLogin) {
       return;
     }
     await getNickname()

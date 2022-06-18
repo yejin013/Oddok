@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useRecoilValue } from "recoil";
 import { useHistory } from "react-router-dom";
 import { userState } from "@recoil/user-state";
@@ -27,6 +27,12 @@ function Header() {
     });
   };
 
+  const goToLogin = () => {
+    history.push({
+      pathname: "/login",
+    });
+  };
+
   return (
     <header className={styles.header}>
       <div className={styles.logo}>
@@ -40,9 +46,15 @@ function Header() {
           </button>
         </li>
         <li>
-          <button type="button" className={styles.mypage} onClick={goToMypage}>
-            마이페이지
-          </button>
+          {!user.isLogin ? (
+            <button type="button" className={styles.mypage} onClick={goToLogin}>
+              마이페이지
+            </button>
+          ) : (
+            <button type="button" className={styles.mypage} onClick={goToMypage}>
+              마이페이지
+            </button>
+          )}
         </li>
       </ul>
       <div className={styles.buttons}>
@@ -55,9 +67,15 @@ function Header() {
             <span className={styles.nickname}>{user.nickname}</span>
           </button>
         </div>
-        <button type="button" className={styles.study_button} onClick={goToCreateRoom}>
-          + 새 스터디 만들기
-        </button>
+        {!user.isLogin ? (
+          <button type="button" className={styles.study_button} onClick={goToLogin}>
+            + 새 스터디 만들기
+          </button>
+        ) : (
+          <button type="button" className={styles.study_button} onClick={goToCreateRoom}>
+            + 새 스터디 만들기
+          </button>
+        )}
       </div>
     </header>
   );
