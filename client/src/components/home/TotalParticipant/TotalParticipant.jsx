@@ -17,7 +17,6 @@ function TotalParticipant() {
       .catch((error) => console.log("get total participant error", error));
   }, []);
 
-  // 버튼 누르면 로그인 페이지 이동
   return (
     <div className={styles.participant}>
       <div className={styles.count_box}>

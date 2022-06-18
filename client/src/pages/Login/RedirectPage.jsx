@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { getKakaoToken, login } from "@api/auth-api";
+import { useRecoilState } from "recoil";
+import { userState } from "@recoil/user-state";
 import { Modal, Loading } from "@components/commons";
 import useAsync from "@hooks/useAsync";
-import axios from "axios";
 
 function RedirectPage() {
-  const history = useHistory();
   const authCode = new URL(window.location.href).searchParams.get("code"); // 파라미터로 넘어온 인가코드를 가져옴
   const [token, setToken] = useState(null);
   const {
@@ -16,29 +16,35 @@ function RedirectPage() {
     reset: loginErrorReset,
   } = useAsync(login, { onError: (error) => console.log(error) });
 
+  const history = useHistory();
+  const [user, setUserState] = useRecoilState(userState);
+
   useEffect(() => {
     if (!authCode) {
       return;
     }
     getKakaoToken(authCode)
       .then((response) => {
-        console.log("카카오토큰", response); // 확인용
         setToken(response.data.access_token);
       })
       .catch((error) => console.error(error));
   }, []);
 
-  /*
   useEffect(() => {
     if (!token) {
       return;
     }
-    // axios.defaults.withCredentials = true;
     userlogin(token)
-      .then((response) => console.log("오똑토큰", response)) // 확인
-      .catch((error) => console.error(error.response));
+      .then(() => {
+        localStorage.setItem("isLogin", true); // 로그인상태 설정
+        setUserState({ ...user, isLogin: localStorage.getItem("isLogin") });
+        history.replace({
+          pathname: "/",
+        });
+      })
+      .catch((error) => console.error(error));
   }, [token]);
-*/
+
   const onClose = () => {
     if (loginError) {
       loginErrorReset();

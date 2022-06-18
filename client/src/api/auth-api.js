@@ -24,11 +24,18 @@ export const getKakaoToken = async (code) => {
 };
 
 export const login = async (token) => {
-  const response = await axios.get(`/auth?token=${token}`);
-  return response;
+  axios.defaults.withCredentials = true; // refreshToken을 쿠키로 받기 위해 설정
+  await axios
+    .get(`/auth?token=${token}`)
+    .then((response) => {
+      const accessToken = response.data.accessToken;
+      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`; // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
+      axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+    })
+    .catch((error) => console.error("login error", error));
 };
 
-export const getNewToken = async (token) => {
+export const getNewToken = async () => {
   const response = await axiosInstance.post("/user/refresh");
   return response;
 };

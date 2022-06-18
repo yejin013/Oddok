@@ -26,7 +26,7 @@ function MainHome() {
       return;
     }
     await getNickname()
-      .then((response) => setUserState((prev) => ({ ...prev, nickname: response })))
+      .then((response) => setUserState((prev) => ({ ...prev, nickname: response.nickname })))
       .catch((error) => console.error("get nickname error", error));
   }, []);
 
