@@ -23,12 +23,19 @@ const InputButton = forwardRef(({ onSubmit, onDelete }, ref) => {
 
   return (
     <form onSubmit={submitHandler}>
-      <label className={styles.content} onChange={inputHandler}>
+      <label className={styles.content}>
         <div className={styles.icon}>
           <Hashtag />
         </div>
         <span ref={valueRef}>{value}</span>
-        <input type="text" placeholder="사용자입력" style={{ width }} onBlur={() => onSubmit(value)} autoFocus />
+        <input
+          type="text"
+          placeholder="사용자입력"
+          style={{ width }}
+          onChange={inputHandler}
+          onBlur={() => onSubmit(value)}
+          autoFocus
+        />
         <div className={styles.cancel_icon} onClick={onDelete}>
           <Cancel />
         </div>
