@@ -22,7 +22,7 @@ function MainHome() {
   }, []);
 */
   useEffect(async () => {
-    if (!user.isLogin) {
+    if (!user.isLogin || user.nickname !== null) {
       return;
     }
     await getNickname()

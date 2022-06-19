@@ -31,7 +31,6 @@ function RedirectPage() {
       .catch((error) => console.error(error));
   }, []);
 
-  /*
   useEffect(() => {
     if (!token) {
       return;
@@ -46,7 +45,6 @@ function RedirectPage() {
       })
       .catch((error) => console.error(error));
   }, [token]);
-*/
 
   const onClose = () => {
     if (loginError) {
