@@ -69,14 +69,14 @@
   display: flex;
   flex-direction: column;
   background-color: var(--gray900);
-  padding: 0.8em 1.8em;
+  padding: 0.8em 1.5em;
   position: absolute;
   margin-top: 0.6em;
 }
 
 .button {
   padding: 1em;
-  font-size: 0.7em;
+  font-size: 0.8em;
 }
 
 .study_button {
