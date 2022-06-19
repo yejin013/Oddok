@@ -1,6 +1,5 @@
 package com.oddok.server.domain.user.api;
 
-import com.oddok.server.domain.user.api.request.RefreshTokenRequest;
 import com.oddok.server.domain.user.api.response.AuthResponse;
 import com.oddok.server.domain.user.api.response.UpdateTokenResponse;
 import com.oddok.server.domain.user.application.AuthService;
@@ -14,8 +13,9 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
@@ -25,6 +25,12 @@ public class AuthController {
     private final AuthService authService;
     private final AuthMapper authMapper = Mappers.getMapper(AuthMapper.class);
 
+    /**
+     * [GET] 카카오 소셜 로그인
+     * @param kakaoAccessToken
+     * @param response
+     * @return
+     */
     @GetMapping
     public ResponseEntity<AuthResponse> kakaoAuthRequest(@RequestParam("token") String kakaoAccessToken, HttpServletResponse response) {
         TokensDto tokensDto = authService.login(kakaoAccessToken);
@@ -39,10 +45,16 @@ public class AuthController {
         return ResponseEntity.ok(authMapper.toAuthResponse(tokensDto));
     }
 
-    @PostMapping("/refresh")
+    /**
+     * [GET] accessToken을 cookie에 저장되어 있는 refreshToken으로 갱신
+     * @param user
+     * @param refreshTokenCookie
+     * @return
+     */
+    @GetMapping("/refresh")
     public ResponseEntity<UpdateTokenResponse> refreshAccessToken(@AuthenticationPrincipal User user,
-                                                                  @RequestBody @Valid RefreshTokenRequest refreshTokenRequest) {
-        TokenDto tokenDto = authService.refresh(user, refreshTokenRequest.getRefreshToken());
+                                                                  @CookieValue(value = "refreshToken", required = true) Cookie refreshTokenCookie) {
+        TokenDto tokenDto = authService.refresh(user, refreshTokenCookie.getValue());
         return ResponseEntity.ok(authMapper.toTokenResponse(tokenDto));
     }
 }

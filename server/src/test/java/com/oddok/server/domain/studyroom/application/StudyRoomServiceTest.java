@@ -114,7 +114,7 @@ class StudyRoomServiceTest {
 
         //when
         StudyRoomDto updateDto = createStudyRoomDto(newHastags);
-        StudyRoomDto updatedStudyRoomDto = studyRoomService.updateStudyRoom(user, updateDto);
+        StudyRoomDto updatedStudyRoomDto = studyRoomService.updateStudyRoom(updateDto);
 
         //then
         assertTrue(updatedStudyRoomDto.getHashtags().contains(newHashtag));
