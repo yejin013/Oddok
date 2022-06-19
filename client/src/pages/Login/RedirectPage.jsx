@@ -25,11 +25,12 @@ function RedirectPage() {
     }
     getKakaoToken(authCode)
       .then((response) => {
+        console.log(response);
         setToken(response.data.access_token);
       })
       .catch((error) => console.error(error));
   }, []);
-
+  /*
   useEffect(() => {
     if (!token) {
       return;
@@ -44,7 +45,7 @@ function RedirectPage() {
       })
       .catch((error) => console.error(error));
   }, [token]);
-
+*/
   const onClose = () => {
     if (loginError) {
       loginErrorReset();
