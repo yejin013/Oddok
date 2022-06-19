@@ -177,10 +177,10 @@ function SettingForm({ roomData, onClose, onUpdate }) {
           <p className={styles.label}>해시태그</p>
           <div className={styles.hashtag_item}>
             {HASHTAG_OPTIONS.map((label) => (
-              <HashtagButton label={label} onToggle={hashtagHandler} checked={hashtags.has(label)} />
+              <HashtagButton key={label} label={label} onToggle={hashtagHandler} checked={hashtags.has(label)} />
             ))}
             {newHashtags.map((label) => (
-              <HashtagButton label={label} onDelete={() => deleteHandler(label)} checked />
+              <HashtagButton key={label} label={label} onDelete={() => deleteHandler(label)} checked />
             ))}
             {isHashtagInput && (
               <InputButton onSubmit={(label) => newHashtagHandler(label)} onDelete={deleteHashtagInputHandler} />
