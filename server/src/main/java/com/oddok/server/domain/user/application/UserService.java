@@ -2,6 +2,10 @@ package com.oddok.server.domain.user.application;
 
 import com.oddok.server.common.errors.UserNotFoundException;
 import com.oddok.server.common.jwt.JwtTokenProvider;
+import com.oddok.server.domain.studyroom.dao.StudyRoomRepository;
+import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
+import com.oddok.server.domain.studyroom.entity.StudyRoom;
+import com.oddok.server.domain.studyroom.mapper.StudyRoomMapper;
 import com.oddok.server.domain.user.dao.UserRepository;
 import com.oddok.server.domain.user.dto.UserDto;
 import com.oddok.server.domain.user.entity.Role;
@@ -12,15 +16,19 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class UserService {
 
     private final UserRepository userRepository;
+    private final StudyRoomRepository studyRoomRepository;
     private final JwtTokenProvider authTokenProvider;
 
     private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
+    private final StudyRoomMapper studyRoomMapper = Mappers.getMapper(StudyRoomMapper.class);
 
     //TODO: 현재는 임의의 사용자 3명 저장
     @Transactional
@@ -55,4 +63,16 @@ public class UserService {
     private User findUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
     }
+
+    /**
+     * 사용자가 개설한 스터디룸을 가져옵니다.
+     *
+     * @param user 사용자 식별자
+     * @return 개설한 스터디룸 (없을 경우 빈 객체)
+     */
+    public Optional<StudyRoomDto> loadMyStudyRoom(User user) {
+        Optional<StudyRoom> studyRoom = studyRoomRepository.findByUser(user);
+        return studyRoom.map(studyRoomMapper::toDto);
+    }
+
 }

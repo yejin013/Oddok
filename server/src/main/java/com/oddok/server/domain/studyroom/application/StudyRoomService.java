@@ -95,7 +95,7 @@ public class StudyRoomService {
      * 스터디룸을 수정합니다. 방장이 아닐 경우 수정할 수 없으므로 예외를 발생시킵니다.
      */
     @Transactional
-    public StudyRoomDto updateStudyRoom(User user, StudyRoomDto requestDto) {
+    public StudyRoomDto updateStudyRoom(StudyRoomDto requestDto) {
         StudyRoom studyRoom = findStudyRoom(requestDto.getId());
         studyRoom.update(requestDto);
         mapStudyRoomAndHashtags(studyRoom, requestDto.getHashtags());

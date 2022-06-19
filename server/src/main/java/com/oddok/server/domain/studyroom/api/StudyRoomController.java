@@ -39,7 +39,7 @@ public class StudyRoomController {
     private final StudyRoomSearchService studyRoomSearchService;
     private final UserService userService;
 
-    private final StudyRoomDtoMapper dtoMapper = Mappers.getMapper(StudyRoomDtoMapper.class);
+    private final StudyRoomDtoMapper studyRoomDtoMapper = Mappers.getMapper(StudyRoomDtoMapper.class);
 
     /**
      * [GET] /study-room/user-create : 회원 생성 이후 삭제할 API
@@ -56,7 +56,7 @@ public class StudyRoomController {
      */
     @PostMapping
     public ResponseEntity<CreateStudyRoomResponse> create(@AuthenticationPrincipal User user, @RequestBody @Valid CreateStudyRoomRequest createStudyRoomRequest) {
-        StudyRoomDto requestDto = dtoMapper.fromCreateRequest(createStudyRoomRequest);
+        StudyRoomDto requestDto = studyRoomDtoMapper.fromCreateRequest(createStudyRoomRequest);
         Long studyRoomId = studyRoomService.createStudyRoom(user, requestDto).getId();
         return ResponseEntity.ok(new CreateStudyRoomResponse(studyRoomId));
     }
@@ -67,10 +67,10 @@ public class StudyRoomController {
      * @return 수정된 방 정보
      */
     @PutMapping("/{id}")
-    public ResponseEntity<UpdateStudyRoomResponse> update(@PathVariable Long id, @AuthenticationPrincipal User user, @RequestBody @Valid UpdateStudyRoomRequest updateStudyRoomRequest) {
-        StudyRoomDto requestDto = dtoMapper.fromUpdateRequest(updateStudyRoomRequest, id);
-        StudyRoomDto studyRoomDto = studyRoomService.updateStudyRoom(user, requestDto);
-        return ResponseEntity.ok(dtoMapper.toUpdateResponse(studyRoomDto));
+    public ResponseEntity<UpdateStudyRoomResponse> update(@PathVariable Long id, @RequestBody @Valid UpdateStudyRoomRequest updateStudyRoomRequest) {
+        StudyRoomDto requestDto = studyRoomDtoMapper.fromUpdateRequest(updateStudyRoomRequest, id);
+        StudyRoomDto studyRoomDto = studyRoomService.updateStudyRoom(requestDto);
+        return ResponseEntity.ok(studyRoomDtoMapper.toUpdateResponse(studyRoomDto));
     }
 
     /**
@@ -96,7 +96,7 @@ public class StudyRoomController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<GetStudyRoomResponse> getDetail(@PathVariable Long id) {
         StudyRoomDto studyRoomDto = studyRoomInformationService.loadStudyRoom(id);
-        return ResponseEntity.ok(dtoMapper.toGetResponse(studyRoomDto));
+        return ResponseEntity.ok(studyRoomDtoMapper.toGetResponse(studyRoomDto));
     }
 
     /**
@@ -146,7 +146,7 @@ public class StudyRoomController {
     @GetMapping(value = "/user/{id}")
     public ResponseEntity<Optional<GetStudyRoomResponse>> getUserPublishedStudyRoom(@PathVariable Long id) {
         Optional<StudyRoomDto> studyRoomDto = studyRoomInformationService.loadStudyRoomByUser(id);
-        return ResponseEntity.ok(studyRoomDto.map(dtoMapper::toGetResponse));
+        return ResponseEntity.ok(studyRoomDto.map(studyRoomDtoMapper::toGetResponse));
     }
 
     /**
@@ -173,7 +173,7 @@ public class StudyRoomController {
         } else {
             studyRooms = studyRoomSearchService.getStudyRoomsBySearchConditions(name, hashtag, isPublic, category, pageable);
         }
-        return ResponseEntity.ok(studyRooms.stream().map(dtoMapper::toGetResponseList).collect(Collectors.toList()));
+        return ResponseEntity.ok(studyRooms.stream().map(studyRoomDtoMapper::toGetResponseList).collect(Collectors.toList()));
     }
 
 }

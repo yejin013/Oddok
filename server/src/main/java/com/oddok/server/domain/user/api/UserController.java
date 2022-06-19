@@ -1,7 +1,9 @@
 package com.oddok.server.domain.user.api;
 
+import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import com.oddok.server.domain.user.api.request.ChangeNicknameRequest;
 import com.oddok.server.domain.user.api.response.ChangeNicknameResponse;
+import com.oddok.server.domain.user.api.response.GetMyStudyRoomResponse;
 import com.oddok.server.domain.user.api.response.GetNicknameResponse;
 import com.oddok.server.domain.user.api.response.GetUserResponse;
 import com.oddok.server.domain.user.application.UserService;
@@ -15,6 +17,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
@@ -41,5 +44,11 @@ public class UserController {
     public ResponseEntity<GetUserResponse> get(@PathVariable("id") Long id) {
         UserDto userInfo = userService.getUserInfo(id);
         return ResponseEntity.ok(userDtoMapper.toUserResponse(userInfo));
+    }
+
+    @GetMapping("/my-study-room")
+    public ResponseEntity<Optional<GetMyStudyRoomResponse>> getMyStudyRoom(@AuthenticationPrincipal User user) {
+        Optional<StudyRoomDto> myStudyRoomDto = userService.loadMyStudyRoom(user);
+        return ResponseEntity.ok(myStudyRoomDto.map(userDtoMapper::toGetMyStudyRoomResponse));
     }
 }
