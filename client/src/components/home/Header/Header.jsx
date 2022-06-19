@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useRecoilValue } from "recoil";
 import { useHistory } from "react-router-dom";
 import { userState } from "@recoil/user-state";
@@ -9,13 +9,19 @@ function Header() {
   const history = useHistory();
   const user = useRecoilValue(userState);
 
+  const onClickStudyRoom = () => {
+    history.push({
+      pathname: "/",
+    });
+  };
+
   const goToSearch = () => {
     history.push({
       pathname: "/search",
     });
   };
 
-  const goToMypage = () => {
+  const onClickMypage = () => {
     history.push({
       pathname: "/mypage",
     });
@@ -41,7 +47,7 @@ function Header() {
 
       <ul className={styles.pages}>
         <li>
-          <button type="button" className={styles.study_room}>
+          <button type="button" className={styles.study_room} onClick={onClickStudyRoom}>
             스터디룸
           </button>
         </li>
@@ -51,7 +57,7 @@ function Header() {
               마이페이지
             </button>
           ) : (
-            <button type="button" className={styles.mypage} onClick={goToMypage}>
+            <button type="button" className={styles.mypage} onClick={onClickMypage}>
               마이페이지
             </button>
           )}
