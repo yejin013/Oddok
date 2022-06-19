@@ -12,9 +12,8 @@ import {
   Textarea,
   Calendar,
 } from "@components/commons";
-import { VideoOn, MicOff, Cancel } from "@icons";
+import { VideoOn, MicOff, Cancel, Thumbnail } from "@icons";
 import { CATEGORY_OPTIONS, TARGET_TIME_OPTIONS, HASHTAG_OPTIONS, USERLIMIT_OPTIONS } from "@utils/constants/options";
-import Image from "./image";
 import styles from "./SettingForm.module.css";
 
 function SettingForm({ roomData, onClose, onUpdate }) {
@@ -200,7 +199,7 @@ function SettingForm({ roomData, onClose, onUpdate }) {
           <div>
             <p className={styles.label}>스터디 이미지</p>
             <div className={styles.image_box}>
-              <Image />
+              <Thumbnail />
             </div>
           </div>
           <div>
