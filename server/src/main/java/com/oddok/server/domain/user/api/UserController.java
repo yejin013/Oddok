@@ -6,10 +6,12 @@ import com.oddok.server.domain.user.api.response.GetNicknameResponse;
 import com.oddok.server.domain.user.api.response.GetUserResponse;
 import com.oddok.server.domain.user.application.UserService;
 import com.oddok.server.domain.user.dto.UserDto;
+import com.oddok.server.domain.user.entity.User;
 import com.oddok.server.domain.user.mapper.UserDtoMapper;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -23,16 +25,16 @@ public class UserController {
     private final UserDtoMapper userDtoMapper = Mappers.getMapper(UserDtoMapper.class);
 
     @PutMapping("/nickname")
-    public ResponseEntity<ChangeNicknameResponse> changeNickname(@RequestHeader String userId,
+    public ResponseEntity<ChangeNicknameResponse> changeNickname(@AuthenticationPrincipal User user,
                                                                  @RequestBody @Valid ChangeNicknameRequest changeNicknameRequest) {
         return ResponseEntity.ok(userDtoMapper.toChangeNicknameResponse(
-                userService.changeNickname(Long.parseLong(userId), changeNicknameRequest.getNickname())));
+                userService.changeNickname(user, changeNicknameRequest.getNickname())));
     }
 
     @GetMapping("/nickname")
-    public ResponseEntity<GetNicknameResponse> getNickname(@RequestHeader String userId) {
+    public ResponseEntity<GetNicknameResponse> getNickname(@AuthenticationPrincipal User user) {
         return ResponseEntity.ok(userDtoMapper.toGetNicknameResponse(
-                userService.getUserInfo(Long.parseLong(userId))));
+                userService.getUserInfo(user.getId())));
     }
 
     @GetMapping("/{id}")

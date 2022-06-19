@@ -42,8 +42,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserDto changeNickname(Long userId, String nickname) {
-        User user = findUser(userId);
+    public UserDto changeNickname(User user, String nickname) {
         user.changeNickname(nickname);
         return userMapper.toDto(user);
     }
