@@ -12,7 +12,7 @@ import {
   Textarea,
   Calendar,
 } from "@components/commons";
-import { VideoOn, MicOff, Cancel, Thumbnail } from "@icons";
+import { VideoOn, VideoOff, MicOn, MicOff, Cancel, Thumbnail } from "@icons";
 import { CATEGORY_OPTIONS, TARGET_TIME_OPTIONS, HASHTAG_OPTIONS, USERLIMIT_OPTIONS } from "@utils/constants/options";
 import styles from "./SettingForm.module.css";
 
@@ -232,14 +232,14 @@ function SettingForm({ roomData, onClose, onUpdate }) {
               <p className={styles.label}>장치 규칙</p>
               <div className={styles.device_item}>
                 <ToggleButton
-                  icon={<VideoOn />}
-                  label="카메라 ON"
+                  icon={roomInfo.isCamOn ? <VideoOn /> : <VideoOff />}
+                  label={roomInfo.isCamOn ? "카메라 ON" : "카메라 OFF"}
                   onToggle={videoRuleHandler}
                   checked={roomInfo.isCamOn}
                 />
                 <ToggleButton
-                  icon={<MicOff />}
-                  label="마이크 OFF"
+                  icon={roomInfo.isMicOn ? <MicOn /> : <MicOff />}
+                  label={roomInfo.isMicOn ? "마이크 ON" : "마이크 OFF"}
                   onToggle={audioRuleHandler}
                   checked={roomInfo.isMicOn}
                 />
