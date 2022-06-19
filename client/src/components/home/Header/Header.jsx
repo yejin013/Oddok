@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useRecoilValue } from "recoil";
 import { useHistory } from "react-router-dom";
 import { userState } from "@recoil/user-state";
+import { logout } from "@api/auth-api";
 import { Search, Profile } from "@icons";
 import styles from "./Header.module.css";
 
@@ -16,15 +17,15 @@ function Header() {
     });
   };
 
-  const goToSearch = () => {
-    history.push({
-      pathname: "/search",
-    });
-  };
-
   const ClickMypage = () => {
     history.push({
       pathname: "/mypage",
+    });
+  };
+
+  const goToSearch = () => {
+    history.push({
+      pathname: "/search",
     });
   };
 
@@ -42,6 +43,18 @@ function Header() {
 
   const clickProfileBtn = () => {
     setIsDropdown((prev) => !prev);
+  };
+
+  const clickLogoutBtn = () => {
+    logout()
+      .then((response) => {
+        console.log("로그아웃", response); // 확인용
+        localStorage.setItem("isLogin", false);
+        history.push({
+          pathname: "/",
+        });
+      })
+      .catch((error) => console.error(error));
   };
 
   return (
@@ -79,10 +92,10 @@ function Header() {
               <span className={styles.nickname}>{user.nickname}</span>
             </button>
           </li>
-          {isDropdown && (
+          {user.isLogin && isDropdown && (
             <ul className={styles.info_buttons}>
               <li>
-                <button type="button" className={styles.button}>
+                <button type="button" className={styles.button} onClick={clickLogoutBtn}>
                   로그아웃
                 </button>
               </li>

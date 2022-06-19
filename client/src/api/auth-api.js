@@ -36,6 +36,11 @@ export const login = async (token) => {
 };
 
 export const getNewToken = async () => {
-  const response = await axiosInstance.post("/user/refresh");
+  const response = await axiosInstance.get("/user/refresh");
+  return response;
+};
+
+export const logout = async () => {
+  const response = await axiosInstance.get("/auth/logout");
   return response;
 };
