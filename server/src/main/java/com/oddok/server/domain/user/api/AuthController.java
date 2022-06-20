@@ -47,14 +47,13 @@ public class AuthController {
 
     /**
      * [GET] accessToken을 cookie에 저장되어 있는 refreshToken으로 갱신
-     * @param user
      * @param refreshTokenCookie
      * @return
      */
     @GetMapping("/refresh")
-    public ResponseEntity<UpdateTokenResponse> refreshAccessToken(@AuthenticationPrincipal User user,
-                                                                  @CookieValue(value = "refreshToken", required = true) Cookie refreshTokenCookie) {
-        TokenDto tokenDto = authService.refresh(user, refreshTokenCookie.getValue());
+    public ResponseEntity<UpdateTokenResponse> refreshAccessToken(
+            @CookieValue(value = "refreshToken", required = true) Cookie refreshTokenCookie) {
+        TokenDto tokenDto = authService.refresh(refreshTokenCookie.getValue());
         return ResponseEntity.ok(authMapper.toTokenResponse(tokenDto));
     }
 }

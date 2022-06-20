@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.httpBasic().disable()
                 .authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                .antMatchers(HttpMethod.GET, "/auth").permitAll()
+                .antMatchers(HttpMethod.GET, "/auth/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/study-room/user-create").permitAll()
                 .antMatchers(HttpMethod.GET, "/study-room").permitAll()
                 .antMatchers(HttpMethod.GET, "/participant/count").permitAll()
