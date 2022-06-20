@@ -9,7 +9,6 @@ import com.oddok.server.domain.studyroom.entity.Hashtag;
 import com.oddok.server.domain.participant.entity.Participant;
 import com.oddok.server.domain.studyroom.entity.StudyRoom;
 import com.oddok.server.domain.studyroom.mapper.StudyRoomMapper;
-import com.oddok.server.domain.user.dao.UserRepository;
 
 import com.oddok.server.domain.user.entity.User;
 
@@ -48,8 +47,8 @@ public class StudyRoomService {
     }
 
     /**
-     * userId의 사용자가 id 방에 참여합니다. 스터디룸 세션에 커넥션을 생성하고 토큰을 반환합니다. 스터디룸에 참여합니다.
-     *
+     * userId의 사용자가 id 방에 참여합니다.
+     * 스터디룸 세션에 커넥션을 생성하고 토큰을 반환합니다.
      * @return token
      */
     @Transactional
@@ -58,10 +57,21 @@ public class StudyRoomService {
         checkStudyRoomEnd(id, studyRoom);
         checkUserAlreadyJoined(user);
         checkStudyRoomFull(id, studyRoom);
-        String sessionId = getSession(studyRoom);
-        String token = sessionManager.getToken(sessionId);
+        String token = getConnectionToken(studyRoom);
         createParticipant(studyRoom, user);
         return token;
+    }
+
+    private String getConnectionToken(StudyRoom studyRoom) {
+        String sessionId = getSession(studyRoom);
+        Optional<String> token = sessionManager.getToken(sessionId);
+        if (token.isEmpty()) {
+            studyRoom.deleteSession();
+            sessionId = getSession(studyRoom);
+            studyRoom.createSession(sessionId);
+            token = sessionManager.getToken(sessionId);
+        }
+        return token.orElseThrow();
     }
 
     private void checkStudyRoomFull(Long id, StudyRoom studyRoom) {

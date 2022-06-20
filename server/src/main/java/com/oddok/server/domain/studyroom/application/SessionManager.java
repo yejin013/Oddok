@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Slf4j
 @Component
 public class SessionManager {
@@ -43,20 +45,20 @@ public class SessionManager {
      * @param sessionId String
      * @return token
      */
-    public String getToken(String sessionId) {
+    public Optional<String> getToken(String sessionId) {
         Session session = getSession(sessionId);
         ConnectionProperties connectionProperties = new ConnectionProperties.Builder()
                 .type(ConnectionType.WEBRTC)
                 .role(OpenViduRole.PUBLISHER)
                 .build();
         try {
-            return session.createConnection(connectionProperties).getToken();
+            return Optional.ofNullable(session.createConnection(connectionProperties).getToken());
         } catch (OpenViduJavaClientException e1) {
             throw new OpenviduServerException(e1.getMessage(), e1.getCause());
         } catch (OpenViduHttpException e2) {
-            // TODO: 세션 삭제 된 상태이면 재생성
-            if (404 == e2.getStatus()) { // 요청 직전에 방이 삭제 된 경우 세션이 삭제되었음을 알린다.
-                throw new SessionNotFoundException(sessionId);
+            if (404 == e2.getStatus()) { // 세션 삭제 된 상태이면 재생성 (Connection 모두 삭제 시 오픈비두에서 자동으로 Session 삭제 해버림)
+                log.error("openvidu session was removed = {}", sessionId);
+                return Optional.empty();
             } else {
                 throw new OpenviduServerException(e2.getMessage(), e2.getCause());
             }
