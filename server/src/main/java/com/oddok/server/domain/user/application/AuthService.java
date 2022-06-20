@@ -27,9 +27,8 @@ public class AuthService {
         User kakaoUser = clientKakao.getUserData(kakaoAccessToken);
 
         String userEmail = kakaoUser.getEmail();
-        User user = userRepository.findByEmail(userEmail).orElse(
-                userRepository.save(kakaoUser)
-        );
+
+        User user = userRepository.findByEmail(userEmail).orElseGet(() -> userRepository.save(kakaoUser));
 
         String accessToken = authTokenProvider.createAccessToken(user.getId().toString(), userEmail, user.getRole());
 
@@ -42,14 +41,10 @@ public class AuthService {
     }
 
     @Transactional
-    public TokenDto refresh(User user, String refreshToken) {
+    public TokenDto refresh(String refreshToken) {
         String refreshUserId = authTokenProvider.getUserId(authTokenProvider.getClaimsFromToken(refreshToken));
 
-        User findUser = findUser(user.getId());
-
-        if(!refreshToken.equals(findUser.getRefreshToken()) || !refreshUserId.equals(findUser.getId().toString())) {
-            throw new TokenValidFailedException();
-        }
+        User user = findUser(Long.parseLong(refreshUserId));
 
         String accessToken = authTokenProvider.createAccessToken(user.getId().toString(), user.getEmail(), user.getRole());
 
