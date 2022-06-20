@@ -43,7 +43,7 @@ function SettingBar({
               <VideoOn />
             </button>
           ) : (
-            <button type="button" onClick={toggleVideo}>
+            <button type="button" className={styles.off} onClick={toggleVideo}>
               <VideoOff />
             </button>
           )}
@@ -54,7 +54,7 @@ function SettingBar({
               <MicOn />
             </button>
           ) : (
-            <button type="button" onClick={toggleAudio}>
+            <button type="button" className={styles.off} onClick={toggleAudio}>
               <MicOff />
             </button>
           )}

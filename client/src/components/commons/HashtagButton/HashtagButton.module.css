@@ -34,7 +34,3 @@
   color: var(--gray950);
   background-color: var(--primary);
 }
-
-.toggle_button input:checked.icon {
-  color: var(--gray950);
-}

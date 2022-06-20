@@ -224,13 +224,13 @@ function SettingForm({ roomData, onClose, onUpdate }) {
                 onChange={validPasswordHandler}
                 isInvalid={isInvalidPassword}
               />
-              <p className={`${styles.invalid_message} ${isInvalidPassword ? "" : styles.hide}`}>
+              <p className={`${styles.invalid_message} ${!isInvalidPassword && styles.hide}`}>
                 비밀번호는 숫자 4자리 입니다.
               </p>
             </div>
             <div>
               <p className={styles.label}>장치 규칙</p>
-              <div className={styles.device_item}>
+              <div className={`${styles.device_item} ${roomInfo.isCamOn && styles.on}`}>
                 <ToggleButton
                   icon={roomInfo.isCamOn ? <VideoOn /> : <VideoOff />}
                   label={roomInfo.isCamOn ? "카메라 ON" : "카메라 OFF"}
