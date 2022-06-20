@@ -27,9 +27,8 @@ public class AuthService {
         User kakaoUser = clientKakao.getUserData(kakaoAccessToken);
 
         String userEmail = kakaoUser.getEmail();
-        User user = userRepository.findByEmail(userEmail).orElse(
-                userRepository.save(kakaoUser)
-        );
+
+        User user = userRepository.findByEmail(userEmail).orElseGet(() -> userRepository.save(kakaoUser));
 
         String accessToken = authTokenProvider.createAccessToken(user.getId().toString(), userEmail, user.getRole());
 
