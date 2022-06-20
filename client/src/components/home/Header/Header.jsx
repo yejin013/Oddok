@@ -40,14 +40,14 @@ function Header() {
       </div>
       <ul className={styles.pages}>
         <li>
-          <button type="button" className={history.location.pathname === "/" && styles.clicked} onClick={goToMain}>
+          <button type="button" className={history.location.pathname === "/" ? styles.clicked : ""} onClick={goToMain}>
             스터디룸
           </button>
         </li>
         <li>
           <button
             type="button"
-            className={history.location.pathname === "/mypage" && styles.clicked}
+            className={history.location.pathname === "/mypage" ? styles.clicked : ""}
             onClick={goToMypage}
           >
             마이페이지
