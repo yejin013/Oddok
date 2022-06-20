@@ -155,7 +155,7 @@ public class JwtTokenProvider {
      * @return UserId
      */
     public String getUserId(Claims claims) {
-        return claims.getSubject();
+        return (String) claims.get("userId");
     }
 
     /**
