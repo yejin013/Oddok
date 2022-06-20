@@ -53,7 +53,8 @@ class StudyRoomServiceTest {
 
     private final Long userId = 1L;
     private final Long studyRoomId = 1L;
-    private final String sessionId = "wss://localhost:4443?sessionId=ses_IJLBwb4IbG&token=tok_KtQQqCkgCbWtHw0e";
+    private final String sessionId = "wss://localhost:4443?sessionId=ses_IJLBwb4IbG";
+    private final String token = "wss://localhost:4443?sessionId=ses_IJLBwb4IbG&token=tok_KtQQqCkgCbWtHw0e";
     private final String newHashtag = "새로운 해시태그";
     private final String oldHashtag = "기존의 해시태그";
     private final String removedHashtag = "삭제될 해시태그";
@@ -62,7 +63,7 @@ class StudyRoomServiceTest {
     private StudyRoom studyRoom;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         user = createUser();
         studyRoom = createStudyRoom(user);
     }
@@ -130,32 +131,37 @@ class StudyRoomServiceTest {
         given(studyRoomRepository.findById(any())).willReturn(Optional.ofNullable(studyRoom));
         given(participantRepository.findByUser(any())).willReturn(Optional.empty());
         given(sessionManager.createSession()).willReturn(sessionId);
+        given(sessionManager.getToken(sessionId)).willReturn(Optional.of(token));
 
         //when
-        studyRoomService.userJoinStudyRoom(studyRoomId, user);
+        String token = studyRoomService.userJoinStudyRoom(studyRoomId, user);
 
         //then
-        assert(studyRoom.getSessionId()).equals(sessionId);
-        assert(studyRoom.getCurrentUsers()).equals(1);
+        assert (studyRoom.getSessionId()).equals(sessionId);
+        assert (studyRoom.getCurrentUsers()).equals(1);
     }
 
     @Test
-        void 스터디룸참여_사용자가_이미_스터디룸에_참여중이면_나가기() {
+    void 스터디룸참여_사용자가_이미_스터디룸에_참여중이면_나가기() {
         //given
+        studyRoom.createSession(sessionId);
+        given(studyRoomRepository.findById(studyRoomId)).willReturn(Optional.ofNullable(studyRoom));
         StudyRoom beforeStudyRoom = createStudyRoom(user);
         beforeStudyRoom.increaseCurrentUsers();
+        beforeStudyRoom.increaseCurrentUsers();
+        beforeStudyRoom.createSession(sessionId + "before");
         Participant participant = new Participant(beforeStudyRoom, user);
-        given(studyRoomRepository.findById(studyRoomId)).willReturn(Optional.ofNullable(studyRoom));
         given(participantRepository.findByUser(user)).willReturn(Optional.of(participant));
         given(studyRoomRepository.findById(participant.getId())).willReturn(Optional.ofNullable(beforeStudyRoom));
+        given(sessionManager.getToken(sessionId)).willReturn(Optional.of(token));
 
         //when
-        studyRoomService.userJoinStudyRoom(studyRoomId, user);
+        String getToken = studyRoomService.userJoinStudyRoom(studyRoomId, user);
 
         //then
-        assert(beforeStudyRoom.getCurrentUsers()).equals(0);
-        assert(studyRoom.getCurrentUsers()).equals(1);
-
+        assert (beforeStudyRoom.getCurrentUsers()).equals(1);
+        assert (studyRoom.getCurrentUsers()).equals(1);
+        assert (getToken).equals(token);
     }
 
     @Test
@@ -170,7 +176,7 @@ class StudyRoomServiceTest {
         studyRoomService.userLeaveStudyRoom(studyRoomId, user);
 
         //then
-        assert(studyRoom.getCurrentUsers()).equals(0);
+        assert (studyRoom.getCurrentUsers()).equals(0);
         assertNull(studyRoom.getSessionId());
     }
 
@@ -187,8 +193,8 @@ class StudyRoomServiceTest {
         studyRoomService.userLeaveStudyRoom(studyRoomId, user);
 
         //then
-        assert(studyRoom.getCurrentUsers()).equals(1);
-        assert(studyRoom.getSessionId()).equals(sessionId);
+        assert (studyRoom.getCurrentUsers()).equals(1);
+        assert (studyRoom.getSessionId()).equals(sessionId);
     }
 
     Set<String> createHastagNames() {
