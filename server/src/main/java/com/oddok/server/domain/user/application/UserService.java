@@ -7,6 +7,7 @@ import com.oddok.server.domain.studyroom.dto.StudyRoomDto;
 import com.oddok.server.domain.studyroom.entity.StudyRoom;
 import com.oddok.server.domain.studyroom.mapper.StudyRoomMapper;
 import com.oddok.server.domain.user.dao.UserRepository;
+import com.oddok.server.domain.user.dto.TokensDto;
 import com.oddok.server.domain.user.dto.UserDto;
 import com.oddok.server.domain.user.entity.Role;
 import com.oddok.server.domain.user.entity.User;
@@ -32,7 +33,7 @@ public class UserService {
 
     //TODO: 현재는 임의의 사용자 3명 저장
     @Transactional
-    public String createUser() {
+    public TokensDto createUser() {
         User maker1 = new User("maker@kakao.com", "maker", Role.USER);
         User savedUser = userRepository.save(maker1);
         savedUser.updateRefreshToken(authTokenProvider.createRefreshToken(savedUser.getId().toString(), savedUser.getEmail(), savedUser.getRole()));
@@ -45,8 +46,11 @@ public class UserService {
         userRepository.save(new User("user7@kakao.com", "user7", Role.USER));
         userRepository.save(new User("user8@kakao.com", "user8", Role.USER));
         userRepository.save(new User("user9@kakao.com", "user9", Role.USER));
-        return authTokenProvider.createAccessToken(savedUser.getId().toString(), savedUser.getEmail(), savedUser.getRole());
 
+        return TokensDto.builder()
+                .accessToken(authTokenProvider.createAccessToken(savedUser.getId().toString(), savedUser.getEmail(), savedUser.getRole()))
+                .refreshToken(savedUser.getRefreshToken())
+                .build();
     }
 
     @Transactional

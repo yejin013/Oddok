@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.oddok.server.domain.user.dto.TokensDto;
 import com.oddok.server.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,10 +23,12 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @Slf4j
@@ -45,8 +48,16 @@ public class StudyRoomController {
      * [GET] /study-room/user-create : 회원 생성 이후 삭제할 API
      */
     @GetMapping(value = "/user-create")
-    public String createBasic() {
-        return userService.createUser();
+    public String createBasic(HttpServletResponse response) {
+        TokensDto tokensDto = userService.createUser();
+        ResponseCookie cookie = ResponseCookie.from("refreshToken", tokensDto.getRefreshToken())
+                .maxAge(1209600000)
+                .path("/")
+                .secure(false)
+                .httpOnly(true)
+                .build();
+        response.setHeader("Set-Cookie", cookie.toString());
+        return tokensDto.getAccessToken();
     }
 
     /**
