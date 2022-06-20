@@ -15,6 +15,7 @@ import com.oddok.server.domain.user.entity.User;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import lombok.RequiredArgsConstructor;
@@ -69,10 +70,10 @@ public class StudyRoomService {
         }
     }
 
+    // 사용자가 기존에 참여중인 스터디룸이 있으면 퇴장시킨다.
     private void checkUserAlreadyJoined(User user) {
-        if (participantRepository.findByUser(user).isPresent()) { // 사용자는 두 개 이상의 스터디룸에 참여할 수 없다.
-            throw new UserAlreadyJoinedStudyRoom();
-        }
+        participantRepository.findByUser(user)
+                .ifPresent(participant -> userLeaveStudyRoom(participant.getStudyRoom().getId(), user));
     }
 
     private void checkStudyRoomEnd(Long id, StudyRoom studyRoom) {

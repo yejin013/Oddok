@@ -54,6 +54,7 @@ public class SessionManager {
         } catch (OpenViduJavaClientException e1) {
             throw new OpenviduServerException(e1.getMessage(), e1.getCause());
         } catch (OpenViduHttpException e2) {
+            // TODO: 세션 삭제 된 상태이면 재생성
             if (404 == e2.getStatus()) { // 요청 직전에 방이 삭제 된 경우 세션이 삭제되었음을 알린다.
                 throw new SessionNotFoundException(sessionId);
             } else {
