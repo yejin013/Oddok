@@ -29,18 +29,18 @@ export const login = async (token) => {
     .get(`/auth?token=${token}`)
     .then((response) => {
       const accessToken = response.data.accessToken;
-      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`; // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
+      // axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`; // API 요청하는 콜마다 헤더에 accessToken 담아 보내도록 설정
       axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
     })
     .catch((error) => console.error("login error", error));
 };
 
 export const getNewToken = async () => {
-  await axiosInstance
+  await axios
     .get("/auth/refresh")
     .then((response) => {
       const accessToken = response.data.accessToken;
-      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+      // axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
       axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
     })
     .catch((error) => console.error("silent refresh error", error));

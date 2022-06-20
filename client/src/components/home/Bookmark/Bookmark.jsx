@@ -1,5 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import React, { useEffect, useState } from "react";
+import axiosInstance from "@api/axios-config";
 import { useHistory } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { userState } from "@recoil/user-state";
@@ -21,13 +22,14 @@ function Bookmark({ showBookmark }) {
     { nickname: "현재 스터디원", joinTime: "없음", isActive: false },
   ]);
   const history = useHistory();
+  const axiosAuthorization = axiosInstance.defaults.headers.common["Authorization"];
 
   useEffect(() => {
-    if (!user.isLogin) {
+    if (!user.isLogin || !axiosAuthorization) {
       return;
     }
     showBookmark();
-  }, []);
+  }, [axiosAuthorization]);
 
   // 현재 참여 중인 유저리스트
   useEffect(() => {

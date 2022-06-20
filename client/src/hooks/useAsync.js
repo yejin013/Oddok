@@ -1,4 +1,8 @@
-import React, { useReducer, useEffect, useCallback } from "react";
+/* eslint-disable consistent-return */
+import { useReducer, useEffect, useCallback } from "react";
+import axiosInstance from "@api/axios-config";
+import { useRecoilValue } from "recoil";
+import { userState } from "@recoil/user-state";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -25,6 +29,8 @@ const reducer = (state, action) => {
  * - sendRequest 직접 호출 가능
  */
 function useAsync(requestFn, { onError }, deps = [], skip = true) {
+  const axiosAuthorization = axiosInstance.defaults.headers.common["Authorization"];
+  const user = useRecoilValue(userState);
   const [state, dispatch] = useReducer(reducer, {
     loading: false,
     data: null,
@@ -32,10 +38,12 @@ function useAsync(requestFn, { onError }, deps = [], skip = true) {
   });
 
   const sendRequest = useCallback(
-    // eslint-disable-next-line consistent-return
     async (...args) => {
       dispatch({ type: "LOADING" });
       try {
+        if (user.isLogin && !axiosAuthorization) {
+          return;
+        }
         const data = await requestFn(...args);
         dispatch({ type: "SUCCESS", data });
         return data;
@@ -44,7 +52,7 @@ function useAsync(requestFn, { onError }, deps = [], skip = true) {
         dispatch({ type: "ERROR", error: error.response });
       }
     },
-    [requestFn],
+    [requestFn, axiosAuthorization],
   );
 
   const setData = async (newData) => {
