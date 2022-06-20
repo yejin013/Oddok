@@ -9,6 +9,12 @@ function Header() {
   const history = useHistory();
   const user = useRecoilValue(userState);
 
+  const goToMain = () => {
+    history.push({
+      pathname: "/",
+    });
+  };
+
   const goToSearch = () => {
     history.push({
       pathname: "/search",
@@ -32,15 +38,18 @@ function Header() {
       <div className={styles.logo}>
         <a href="/">ODDOK</a>
       </div>
-
       <ul className={styles.pages}>
         <li>
-          <button type="button" className={styles.study_room}>
+          <button type="button" className={history.location.pathname === "/" && styles.clicked} onClick={goToMain}>
             스터디룸
           </button>
         </li>
         <li>
-          <button type="button" className={styles.mypage} onClick={goToMypage}>
+          <button
+            type="button"
+            className={history.location.pathname === "/mypage" && styles.clicked}
+            onClick={goToMypage}
+          >
             마이페이지
           </button>
         </li>
