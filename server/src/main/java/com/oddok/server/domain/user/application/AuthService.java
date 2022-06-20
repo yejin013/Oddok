@@ -42,14 +42,10 @@ public class AuthService {
     }
 
     @Transactional
-    public TokenDto refresh(User user, String refreshToken) {
+    public TokenDto refresh(String refreshToken) {
         String refreshUserId = authTokenProvider.getUserId(authTokenProvider.getClaimsFromToken(refreshToken));
 
-        User findUser = findUser(user.getId());
-
-        if(!refreshToken.equals(findUser.getRefreshToken()) || !refreshUserId.equals(findUser.getId().toString())) {
-            throw new TokenValidFailedException();
-        }
+        User user = findUser(Long.parseLong(refreshUserId));
 
         String accessToken = authTokenProvider.createAccessToken(user.getId().toString(), user.getEmail(), user.getRole());
 
