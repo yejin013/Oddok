@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useRecoilValue } from "recoil";
+import { userState } from "@recoil/user-state";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import CreateRoom from "@pages/CreateRoom";
 import JoinRoom from "@pages/JoinRoom";
@@ -9,8 +11,20 @@ import MyPage from "@pages/MyPage/MyPage";
 import StudyRoom from "@pages/StudyRoom/StudyRoom";
 import NotFoundPage from "@pages/NotFoundPage/NotFoundPage";
 import RedirectPage from "@pages/Login/RedirectPage";
+import { getNewToken } from "@api/auth-api";
 
 function App() {
+  const user = useRecoilValue(userState);
+
+  // 새로고침했을 때도 로그인 상태 계속 유지
+  useEffect(async () => {
+    console.log("로그인?", user.isLogin); // 확인용
+    if (!user.isLogin) {
+      return;
+    }
+    await getNewToken();
+  }, []);
+
   return (
     <BrowserRouter>
       <Switch>

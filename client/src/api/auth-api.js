@@ -36,8 +36,14 @@ export const login = async (token) => {
 };
 
 export const getNewToken = async () => {
-  const response = await axiosInstance.get("/user/refresh");
-  return response;
+  await axiosInstance
+    .get("/auth/refresh")
+    .then((response) => {
+      const accessToken = response.data.accessToken;
+      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+      axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+    })
+    .catch((error) => console.error("silent refresh error", error));
 };
 
 export const logout = async () => {
