@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Picker from "react-datepicker";
 import ko from "date-fns/locale/ko";
-import { addDays, subDays } from "date-fns";
+import { addDays, getDate, subDays } from "date-fns";
 import { ArrowLeft, ArrowRight } from "@icons";
 import { CalendarHeader } from "@components/commons";
 import CustomInput from "./CustomInput";
@@ -28,14 +28,13 @@ function DatePicker({ setSelectedDate }) {
           dateFormat="yyyy.MM.dd (E)"
           selected={currentDate}
           onChange={(date) => setCurrentDate(date)}
-          minDate={new Date()}
+          maxDate={new Date()}
           showPopperArrow={false}
           popperPlacement="auto"
           customInput={<CustomInput />}
           renderCustomHeader={CalendarHeader}
           dayClassName={(date) =>
-            (addDays(date, 1) < new Date() ? "day_disabled" : undefined) ||
-            (addDays(date, 1) > new Date() && date.getDate() === currentDate.getDate() ? "day_selected" : "day_default")
+            getDate(date) <= new Date() && getDate(date) === currentDate.getDate() ? "day_selected" : "day_default"
           }
         />
       </div>
