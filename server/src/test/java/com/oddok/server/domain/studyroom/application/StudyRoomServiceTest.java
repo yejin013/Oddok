@@ -53,7 +53,8 @@ class StudyRoomServiceTest {
 
     private final Long userId = 1L;
     private final Long studyRoomId = 1L;
-    private final String sessionId = "wss://localhost:4443?sessionId=ses_IJLBwb4IbG&token=tok_KtQQqCkgCbWtHw0e";
+    private final String sessionId = "wss://localhost:4443?sessionId=ses_IJLBwb4IbG";
+    private final String token = "wss://localhost:4443?sessionId=ses_IJLBwb4IbG&token=tok_KtQQqCkgCbWtHw0e";
     private final String newHashtag = "새로운 해시태그";
     private final String oldHashtag = "기존의 해시태그";
     private final String removedHashtag = "삭제될 해시태그";
@@ -62,9 +63,9 @@ class StudyRoomServiceTest {
     private StudyRoom studyRoom;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         user = createUser();
-        studyRoom = createStudyRoom();
+        studyRoom = createStudyRoom(user);
     }
 
     @Test
@@ -74,7 +75,7 @@ class StudyRoomServiceTest {
 
         //when
         given(studyRoomRepository.save(any(StudyRoom.class))).willReturn(studyRoom);
-        given(userRepository.findById(any())).willReturn(Optional.ofNullable(studyRoom.getUser()));
+        //given(userRepository.findById(any())).willReturn(Optional.ofNullable(studyRoom.getUser()));
         StudyRoomDto newStudyRoomDto = studyRoomService.createStudyRoom(user, studyRoomDto);
 
         //then
@@ -91,7 +92,7 @@ class StudyRoomServiceTest {
         StudyRoomDto studyRoomDto = studyRoomMapper.toDto(studyRoom);
 
         //when
-        given(userRepository.findById(any())).willReturn(Optional.ofNullable(studyRoom.getUser()));
+        //given(userRepository.findById(any())).willReturn(Optional.ofNullable(studyRoom.getUser()));
         given(studyRoomRepository.existsByUser(any())).willReturn(true);
 
         //then
@@ -127,28 +128,40 @@ class StudyRoomServiceTest {
     @Test
     void 스터디룸참여_처음일때_세션생성_참여인원증가_성공() {
         //given
-        given(userRepository.findById(any())).willReturn(Optional.ofNullable(user));
         given(studyRoomRepository.findById(any())).willReturn(Optional.ofNullable(studyRoom));
         given(participantRepository.findByUser(any())).willReturn(Optional.empty());
         given(sessionManager.createSession()).willReturn(sessionId);
+        given(sessionManager.getToken(sessionId)).willReturn(Optional.of(token));
 
         //when
-        studyRoomService.userJoinStudyRoom(studyRoomId, user);
+        String token = studyRoomService.userJoinStudyRoom(studyRoomId, user);
 
         //then
-        assert(studyRoom.getSessionId()).equals(sessionId);
-        assert(studyRoom.getCurrentUsers()).equals(1);
+        assert (studyRoom.getSessionId()).equals(sessionId);
+        assert (studyRoom.getCurrentUsers()).equals(1);
     }
 
     @Test
-    void 스터디룸참여_사용자가_이미_스터디룸에_참여중이면_예외처리() {
+    void 스터디룸참여_사용자가_이미_스터디룸에_참여중이면_나가기() {
         //given
-        given(userRepository.findById(any())).willReturn(Optional.ofNullable(user));
-        given(studyRoomRepository.findById(any())).willReturn(Optional.ofNullable(studyRoom));
-        given(participantRepository.findByUser(any())).willReturn(Optional.of(new Participant(studyRoom, user)));
+        studyRoom.createSession(sessionId);
+        given(studyRoomRepository.findById(studyRoomId)).willReturn(Optional.ofNullable(studyRoom));
+        StudyRoom beforeStudyRoom = createStudyRoom(user);
+        beforeStudyRoom.increaseCurrentUsers();
+        beforeStudyRoom.increaseCurrentUsers();
+        beforeStudyRoom.createSession(sessionId + "before");
+        Participant participant = new Participant(beforeStudyRoom, user);
+        given(participantRepository.findByUser(user)).willReturn(Optional.of(participant));
+        given(studyRoomRepository.findById(participant.getId())).willReturn(Optional.ofNullable(beforeStudyRoom));
+        given(sessionManager.getToken(sessionId)).willReturn(Optional.of(token));
 
-        //when,then
-        assertThrows(UserAlreadyJoinedStudyRoom.class, () -> studyRoomService.userJoinStudyRoom(studyRoomId, user));
+        //when
+        String getToken = studyRoomService.userJoinStudyRoom(studyRoomId, user);
+
+        //then
+        assert (beforeStudyRoom.getCurrentUsers()).equals(1);
+        assert (studyRoom.getCurrentUsers()).equals(1);
+        assert (getToken).equals(token);
     }
 
     @Test
@@ -156,7 +169,6 @@ class StudyRoomServiceTest {
         //given
         studyRoom.createSession(sessionId);
         studyRoom.increaseCurrentUsers();
-        given(userRepository.findById(any())).willReturn(Optional.ofNullable(user));
         given(studyRoomRepository.findById(any())).willReturn(Optional.ofNullable(studyRoom));
         given(participantRepository.findByUser(any())).willReturn(Optional.of(new Participant(studyRoom, user)));
 
@@ -164,7 +176,7 @@ class StudyRoomServiceTest {
         studyRoomService.userLeaveStudyRoom(studyRoomId, user);
 
         //then
-        assert(studyRoom.getCurrentUsers()).equals(0);
+        assert (studyRoom.getCurrentUsers()).equals(0);
         assertNull(studyRoom.getSessionId());
     }
 
@@ -174,7 +186,6 @@ class StudyRoomServiceTest {
         studyRoom.createSession(sessionId);
         studyRoom.increaseCurrentUsers();
         studyRoom.increaseCurrentUsers();
-        given(userRepository.findById(any())).willReturn(Optional.ofNullable(user));
         given(studyRoomRepository.findById(any())).willReturn(Optional.ofNullable(studyRoom));
         given(participantRepository.findByUser(any())).willReturn(Optional.of(new Participant(studyRoom, user)));
 
@@ -182,8 +193,8 @@ class StudyRoomServiceTest {
         studyRoomService.userLeaveStudyRoom(studyRoomId, user);
 
         //then
-        assert(studyRoom.getCurrentUsers()).equals(1);
-        assert(studyRoom.getSessionId()).equals(sessionId);
+        assert (studyRoom.getCurrentUsers()).equals(1);
+        assert (studyRoom.getSessionId()).equals(sessionId);
     }
 
     Set<String> createHastagNames() {
@@ -206,7 +217,6 @@ class StudyRoomServiceTest {
                 .rule("뽀모도로로 진행합니다.")
                 .isMicOn(false)
                 .isCamOn(true)
-                .currentUsers(0)
                 .limitUsers(6)
                 .endAt(LocalDate.now().plusDays(5))
                 .hashtags(hashtags)
@@ -220,9 +230,8 @@ class StudyRoomServiceTest {
                 .build();
     }
 
-    StudyRoom createStudyRoom() {
+    StudyRoom createStudyRoom(User user) {
         StudyRoomDto studyRoomDto = createStudyRoomDto(createHastagNames());
-        User user = createUser();
         return studyRoomMapper.toEntity(studyRoomDto, user);
     }
 

@@ -1,6 +1,7 @@
 package com.oddok.server.common.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.oddok.server.common.component.CustomLogoutSuccessHandler;
 import com.oddok.server.common.jwt.JwtAuthenticationFilter;
 import com.oddok.server.common.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -33,12 +35,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/auth/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/study-room/user-create").permitAll()
                 .antMatchers(HttpMethod.GET, "/study-room").permitAll()
+                .antMatchers(HttpMethod.GET, "/study-room/{id}").permitAll()
                 .antMatchers(HttpMethod.GET, "/participant/count").permitAll()
+                .antMatchers(HttpMethod.GET, "/hashtag/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .logout()
                 .logoutUrl("/auth/logout")
-                .logoutSuccessUrl("/")
+                .logoutSuccessHandler(new CustomLogoutSuccessHandler())
                 .invalidateHttpSession(true)
                 .and()
                 .headers()
@@ -58,4 +62,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 }
