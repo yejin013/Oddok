@@ -12,9 +12,8 @@ import {
   Textarea,
   Calendar,
 } from "@components/commons";
-import { VideoOn, MicOff, Cancel } from "@icons";
+import { VideoOn, VideoOff, MicOn, MicOff, Cancel, Thumbnail } from "@icons";
 import { CATEGORY_OPTIONS, TARGET_TIME_OPTIONS, HASHTAG_OPTIONS, USERLIMIT_OPTIONS } from "@utils/constants/options";
-import Image from "./image";
 import styles from "./SettingForm.module.css";
 
 function SettingForm({ roomData, onClose, onUpdate }) {
@@ -178,10 +177,10 @@ function SettingForm({ roomData, onClose, onUpdate }) {
           <p className={styles.label}>해시태그</p>
           <div className={styles.hashtag_item}>
             {HASHTAG_OPTIONS.map((label) => (
-              <HashtagButton label={label} onToggle={hashtagHandler} checked={hashtags.has(label)} />
+              <HashtagButton key={label} label={label} onToggle={hashtagHandler} checked={hashtags.has(label)} />
             ))}
             {newHashtags.map((label) => (
-              <HashtagButton label={label} onDelete={() => deleteHandler(label)} checked />
+              <HashtagButton key={label} label={label} onDelete={() => deleteHandler(label)} checked />
             ))}
             {isHashtagInput && (
               <InputButton onSubmit={(label) => newHashtagHandler(label)} onDelete={deleteHashtagInputHandler} />
@@ -200,7 +199,7 @@ function SettingForm({ roomData, onClose, onUpdate }) {
           <div>
             <p className={styles.label}>스터디 이미지</p>
             <div className={styles.image_box}>
-              <Image />
+              <Thumbnail />
             </div>
           </div>
           <div>
@@ -225,22 +224,22 @@ function SettingForm({ roomData, onClose, onUpdate }) {
                 onChange={validPasswordHandler}
                 isInvalid={isInvalidPassword}
               />
-              <p className={`${styles.invalid_message} ${isInvalidPassword ? "" : styles.hide}`}>
+              <p className={`${styles.invalid_message} ${!isInvalidPassword && styles.hide}`}>
                 비밀번호는 숫자 4자리 입니다.
               </p>
             </div>
             <div>
               <p className={styles.label}>장치 규칙</p>
-              <div className={styles.device_item}>
+              <div className={`${styles.device_item} ${roomInfo.isCamOn && styles.on}`}>
                 <ToggleButton
-                  icon={<VideoOn />}
-                  label="카메라 ON"
+                  icon={roomInfo.isCamOn ? <VideoOn /> : <VideoOff />}
+                  label={roomInfo.isCamOn ? "카메라 ON" : "카메라 OFF"}
                   onToggle={videoRuleHandler}
                   checked={roomInfo.isCamOn}
                 />
                 <ToggleButton
-                  icon={<MicOff />}
-                  label="마이크 OFF"
+                  icon={roomInfo.isMicOn ? <MicOn /> : <MicOff />}
+                  label={roomInfo.isMicOn ? "마이크 ON" : "마이크 OFF"}
                   onToggle={audioRuleHandler}
                   checked={roomInfo.isMicOn}
                 />

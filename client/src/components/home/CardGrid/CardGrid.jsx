@@ -7,7 +7,7 @@ function CardGrid({ rooms, showBookmark }) {
   return (
     <ul className={styles.container}>
       {rooms.map((roomData) => (
-        <Link to={`/studyroom/${roomData.id}/setting`} className={styles.studyroom}>
+        <Link key={roomData.id} to={`/studyroom/${roomData.id}/setting`} className={styles.studyroom}>
           <StudyRoomCard //
             roomData={roomData}
             showBookmark={showBookmark}

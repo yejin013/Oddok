@@ -23,10 +23,10 @@
   background-color: var(--primary-light);
 }
 
-.day_disabled {
+.react-datepicker__day--disabled {
   color: var(--gray600);
 }
-.day_disabled:hover {
+.react-datepicker__day--disabled:hover {
   background-color: transparent;
 }
 

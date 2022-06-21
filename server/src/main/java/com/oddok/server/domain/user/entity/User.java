@@ -1,5 +1,6 @@
 package com.oddok.server.domain.user.entity;
 
+import io.jsonwebtoken.Claims;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,6 +46,12 @@ public class User {
         this.role = role ;
         this.createAt = LocalDateTime.now();
         this.updateAt = LocalDateTime.now();
+    }
+
+    public User(Claims claims) {
+        this.id = Long.valueOf(claims.get("userId").toString());
+        this.email = claims.get("userId").toString();
+        this.role = Role.valueOf(claims.get("role").toString());
     }
 
     public void updateRefreshToken(String refreshToken) {
