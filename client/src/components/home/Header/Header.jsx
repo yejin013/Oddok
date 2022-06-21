@@ -59,9 +59,9 @@ function Header() {
 
   const clickLogoutBtn = () => {
     logout()
-      .then((response) => {
-        console.log("로그아웃", response); // 확인용
-        localStorage.setItem("isLogin", false);
+      .then(() => {
+        localStorage.removeItem("isLogin");
+        setUserState({ ...user, nickname: null, isLogin: localStorage.getItem("isLogin") }); // 유저 상태 초기화
         history.push({
           pathname: "/",
         });

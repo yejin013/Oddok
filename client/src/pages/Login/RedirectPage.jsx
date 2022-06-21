@@ -25,7 +25,6 @@ function RedirectPage() {
     }
     getKakaoToken(authCode)
       .then((response) => {
-        console.log(response); // 확인용
         setToken(response.data.access_token);
       })
       .catch((error) => console.error(error));
