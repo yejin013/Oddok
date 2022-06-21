@@ -13,7 +13,6 @@ function MainHome() {
   const setBookmark = useSetRecoilState(bookmarkState);
   const setUserState = useSetRecoilState(userState);
 
-  // get testUser
   useEffect(() => {
     getTestUser()
       .then((users) => console.log("get user", users))
@@ -22,7 +21,9 @@ function MainHome() {
 
   useEffect(async () => {
     await getNickname()
-      .then((response) => setUserState((prev) => ({ ...prev, nickname: response })))
+      .then((response) =>
+        setUserState((prev) => ({ ...prev, nickname: response.nickname }))
+      )
       .catch((error) => console.error("get nickname error", error));
   }, []);
 
