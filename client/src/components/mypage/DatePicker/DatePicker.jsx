@@ -30,7 +30,7 @@ function DatePicker({ setSelectedDate }) {
           onChange={(date) => setCurrentDate(date)}
           maxDate={new Date()}
           showPopperArrow={false}
-          popperPlacement="auto"
+          popperPlacement="bottom"
           customInput={<CustomInput />}
           renderCustomHeader={CalendarHeader}
           dayClassName={(date) =>
