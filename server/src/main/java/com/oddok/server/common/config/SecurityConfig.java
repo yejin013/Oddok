@@ -44,6 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/auth/logout")
                 .logoutSuccessHandler(new CustomLogoutSuccessHandler())
                 .invalidateHttpSession(true)
+                .deleteCookies("refreshToken")
                 .and()
                 .headers()
                 .frameOptions().disable()
