@@ -62,9 +62,7 @@ function Header() {
       .then(() => {
         localStorage.removeItem("isLogin");
         setUserState({ ...user, nickname: null, isLogin: localStorage.getItem("isLogin") }); // 유저 상태 초기화
-        history.push({
-          pathname: "/",
-        });
+        window.location.replace("/"); // 메인홈으로 새로고침
       })
       .catch((error) => console.error(error));
   };

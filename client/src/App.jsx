@@ -23,9 +23,9 @@ function App() {
     if (!user.isLogin) {
       return;
     }
-    setIsLoading((prev) => !prev);
+    setIsLoading(true);
     await getNewToken();
-    setIsLoading((prev) => !prev);
+    setIsLoading(false);
   }, []);
 
   return (
