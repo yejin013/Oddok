@@ -5,7 +5,7 @@ function TimeTableGrid() {
   const render = () => {
     const result = [];
     for (let i = 0; i < 6 * 24; i += 1) {
-      result.push(<div className={styles.gridcell} />);
+      result.push(<div className={styles.gridcell} key={i} />);
     }
     return result;
   };
