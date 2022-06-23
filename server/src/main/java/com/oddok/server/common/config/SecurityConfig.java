@@ -1,6 +1,8 @@
 package com.oddok.server.common.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.oddok.server.common.handler.CustomAccessDeniedHandler;
+import com.oddok.server.common.handler.CustomAuthenticationEntryPoint;
 import com.oddok.server.common.jwt.JwtAuthenticationFilter;
 import com.oddok.server.common.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
+        CustomAuthenticationEntryPoint customAuthenticationEntryPoint = new CustomAuthenticationEntryPoint();
+        CustomAccessDeniedHandler customAccessDeniedHandler = new CustomAccessDeniedHandler();
+
         http.httpBasic().disable()
                 .authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
@@ -45,6 +50,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK))
                 .invalidateHttpSession(true)
                 .deleteCookies("refreshToken")
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(customAuthenticationEntryPoint)
+                .accessDeniedHandler(customAccessDeniedHandler)
                 .and()
                 .headers()
                 .frameOptions().disable()
