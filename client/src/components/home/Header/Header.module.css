@@ -25,18 +25,18 @@
   justify-content: center;
 }
 
-.study_room,
-.mypage {
+.pages button {
   margin: 0 1em;
   font-size: 1.1rem;
   font-weight: 500;
-}
-
-.mypage {
   color: var(--gray600);
 }
 
-.mypage:hover {
+.pages button.clicked {
+  color: white;
+}
+
+.pages button:hover {
   color: white;
 }
 

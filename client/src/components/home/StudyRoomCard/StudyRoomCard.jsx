@@ -63,7 +63,7 @@ function StudyRoomCard({ roomData, showBookmark }) {
           </div>
           <div>
             {roomData.hashtags.map((hashtag) => (
-              <span>#{hashtag} </span>
+              <span key={hashtag}>#{hashtag} </span>
             ))}
           </div>
         </div>

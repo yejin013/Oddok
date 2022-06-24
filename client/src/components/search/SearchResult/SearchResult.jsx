@@ -9,7 +9,7 @@ function SearchResult() {
   const [searchedKeyword, setSearchedKeyword] = useState();
 
   useEffect(() => {
-    const qs = parseQueryString(location.search);
+    const qs = parseQueryString(decodeURI(location.search));
     setSearchedKeyword(qs);
   }, [location.search]);
 

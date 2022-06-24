@@ -41,3 +41,5 @@ application.properties
 !**/.keep
 
 src/main/generated/
+src/main/resources/
+nohup.out

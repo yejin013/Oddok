@@ -3,13 +3,12 @@ import { getPopluarHashtag } from "@api/hashtag-api";
 import { HashtagButton } from "@components/commons";
 import styles from "./SearchBrowse.module.css";
 
-function SearchBrowse({ searchHashtagHandler, searchKeywordHandler, setSearched }) {
+function SearchBrowse({ searchHashtagHandler, searchKeywordHandler }) {
   const [popularHashtags, setPopularHashtags] = useState([]);
   const [searchHistory, setSearchHistory] = useState([]); // {key: 생성시간, text: 검색어}
 
   // 인기 해시태그, 검색 기록 렌더링
   useEffect(() => {
-    setSearched({ title: "", hashtag: "" });
     (async () => {
       const response = await getPopluarHashtag();
       setPopularHashtags(response.data.hashtags);

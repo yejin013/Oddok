@@ -23,13 +23,13 @@ function Header() {
       .catch((error) => console.error("get nickname error", error));
   }, [axiosAuthorization]);
 
-  const ClickStudyRoom = () => {
+  const goToMain = () => {
     history.push({
       pathname: "/",
     });
   };
 
-  const ClickMypage = () => {
+  const goToMypage = () => {
     history.push({
       pathname: "/mypage",
     });
@@ -72,10 +72,9 @@ function Header() {
       <div className={styles.logo}>
         <a href="/">ODDOK</a>
       </div>
-
       <ul className={styles.pages}>
         <li>
-          <button type="button" className={styles.study_room} onClick={ClickStudyRoom}>
+          <button type="button" className={history.location.pathname === "/" ? styles.clicked : ""} onClick={goToMain}>
             스터디룸
           </button>
         </li>
@@ -85,7 +84,11 @@ function Header() {
               마이페이지
             </button>
           ) : (
-            <button type="button" className={styles.mypage} onClick={ClickMypage}>
+            <button
+              type="button"
+              className={history.location.pathname === "/mypage" ? styles.clicked : ""}
+              onClick={goToMypage}
+            >
               마이페이지
             </button>
           )}

@@ -23,6 +23,7 @@ function TabMenu({ setCurrentCategory }) {
     <nav className={styles.tab_menu}>
       {items.map((item) => (
         <TabMenuItem
+          key={item.name}
           title={item.name}
           onClick={() => filterCategoryHandler(item)}
           status={current === item.name ? "active" : ""}

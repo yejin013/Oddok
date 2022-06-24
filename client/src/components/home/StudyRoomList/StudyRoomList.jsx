@@ -75,7 +75,7 @@ function StudyRoomList({ searchedTitle, searchedHashtag, showBookmark }) {
           <p style={{ color: "white" }}>스터디룸이 없어요!🥲</p>
         )}
       </div>
-      {!isLastPage && (
+      {loadedRooms.length > 0 && !isLastPage && (
         <button type="button" onClick={clickMoreBtn}>
           더보기
         </button>

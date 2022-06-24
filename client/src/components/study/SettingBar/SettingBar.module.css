@@ -60,3 +60,7 @@
 .music_icon {
   padding: 0.5em;
 }
+
+.off {
+  color: var(--red);
+}

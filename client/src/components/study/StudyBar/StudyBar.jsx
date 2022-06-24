@@ -38,7 +38,7 @@ function StudyBar({
               <VideoOn />
             </button>
           ) : (
-            <button type="button" onClick={toggleVideo}>
+            <button type="button" className={styles.off} onClick={toggleVideo}>
               <VideoOff />
             </button>
           )}
@@ -49,7 +49,7 @@ function StudyBar({
               <MicOn />
             </button>
           ) : (
-            <button type="button" onClick={toggleAudio}>
+            <button type="button" className={styles.off} onClick={toggleAudio}>
               <MicOff />
             </button>
           )}
