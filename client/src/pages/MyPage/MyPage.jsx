@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axiosInstance from "@api/axios-config";
 import { useRecoilValue } from "recoil";
 import { userState } from "@recoil/user-state";
 import { getProfile, getTimeRecordList, getMyRoom } from "@api/mypage-api";
@@ -23,16 +22,14 @@ import getTimeDiff from "src/utils/getTimeDiff";
 import styles from "./MyPage.module.css";
 
 function MyPage() {
-  const axiosAuthorization = axiosInstance.defaults.headers.common["Authorization"];
-
   const {
     data: profileData, //
     setData: updateProfileData,
-  } = useAsync(getProfile, { onError: (error) => console.error(error) }, [axiosAuthorization], false);
+  } = useAsync(getProfile, { onError: (error) => console.error(error) }, [], false);
   const {
     data: myRoomData, //
     setData: updateRoomData,
-  } = useAsync(getMyRoom, { onError: (error) => console.error(error) }, [axiosAuthorization], false);
+  } = useAsync(getMyRoom, { onError: (error) => console.error(error) }, [], false);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(0, 10));
   const [timeRecordData, setTimeRecordData] = useState();
   const [totalStudyTime, setTotalStudyTime] = useState();
@@ -60,14 +57,11 @@ function MyPage() {
 
   useEffect(() => {
     try {
-      if (!axiosAuthorization) {
-        return;
-      }
       fetchTimeRecordData(selectedDate);
     } catch (error) {
       console.error(error);
     }
-  }, [selectedDate, axiosAuthorization]);
+  }, [selectedDate]);
 
   const renderEditModal = (type) => setIsModalOpen(type);
 

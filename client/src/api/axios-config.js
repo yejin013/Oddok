@@ -15,7 +15,11 @@ axiosInstance.interceptors.response.use(
     return res.data;
   },
   (error) => {
-    console.log("😵응답 에러", error);
+    console.log("😵응답 에러", error.response);
+    const { config, response } = error;
+    if (response.status === 401 && response.statusText === "Unauthorized") {
+      return axiosInstance(config); // 실패한 API 재요청
+    }
     throw error;
   },
 );

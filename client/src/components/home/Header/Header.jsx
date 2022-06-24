@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axiosInstance from "@api/axios-config";
 import { useRecoilState } from "recoil";
 import { useHistory } from "react-router-dom";
 import { userState } from "@recoil/user-state";
@@ -12,16 +11,15 @@ function Header() {
   const history = useHistory();
   const [isDropdown, setIsDropdown] = useState(false);
   const [user, setUserState] = useRecoilState(userState);
-  const axiosAuthorization = axiosInstance.defaults.headers.common["Authorization"];
 
   useEffect(async () => {
-    if (!user.isLogin || user.nickname !== null || !axiosAuthorization) {
+    if (!user.isLogin || user.nickname !== null) {
       return;
     }
     await getNickname()
       .then((response) => setUserState((prev) => ({ ...prev, nickname: response.nickname })))
       .catch((error) => console.error("get nickname error", error));
-  }, [axiosAuthorization]);
+  }, []);
 
   const goToMain = () => {
     history.push({

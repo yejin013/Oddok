@@ -36,6 +36,7 @@
     "jsx-a11y/click-events-have-key-events": "off",
     "dot-notation": "off",
     "prefer-destructuring": "off",
-    "no-restricted-globals": "off"
+    "no-restricted-globals": "off",
+    "jsx-a11y/no-noninteractive-element-interactions ": "off"
   }
 }
