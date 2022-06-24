@@ -124,4 +124,10 @@ public class ControllerErrorAdvice {
     public ErrorResponse handlerTokenValidFailedException() {
         return new ErrorResponse("토큰이 유효하지 않습니다.");
     }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(AccessTokenException.class)
+    public ErrorResponse handlerCustomAccessDeniedException() {
+        return new ErrorResponse("로그인이 되어 있지 않습니다.");
+    }
 }
