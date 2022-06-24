@@ -14,11 +14,11 @@ function Bookmark({ showBookmark }) {
   const bookmark = useRecoilValue(bookmarkState);
   const user = useRecoilValue(userState);
   const [participants, setParticipants] = useState([
-    { nickname: "현재 스터디원", joinTime: "없음", isActive: false },
-    { nickname: "현재 스터디원", joinTime: "없음", isActive: false },
-    { nickname: "현재 스터디원", joinTime: "없음", isActive: false },
-    { nickname: "현재 스터디원", joinTime: "없음", isActive: false },
-    { nickname: "현재 스터디원", joinTime: "없음", isActive: false },
+    { id: 1, nickname: "현재 스터디원", joinTime: "없음", isActive: false },
+    { id: 2, nickname: "현재 스터디원", joinTime: "없음", isActive: false },
+    { id: 3, nickname: "현재 스터디원", joinTime: "없음", isActive: false },
+    { id: 4, nickname: "현재 스터디원", joinTime: "없음", isActive: false },
+    { id: 5, nickname: "현재 스터디원", joinTime: "없음", isActive: false },
   ]);
   const history = useHistory();
 
@@ -106,7 +106,7 @@ function Bookmark({ showBookmark }) {
             </div>
             <ul className={styles.user_list}>
               {participants.map((participant) => (
-                <UserList participant={participant} />
+                <UserList key={participant.id} participant={participant} />
               ))}
             </ul>
           </div>
