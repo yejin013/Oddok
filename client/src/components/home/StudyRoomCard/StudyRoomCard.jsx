@@ -29,7 +29,7 @@ function StudyRoomCard({ roomData, showBookmark }) {
   };
 
   return (
-    <li key={roomData.id} className={styles.container}>
+    <li className={styles.container}>
       <div className={styles.wrapper}>
         <div className={styles.thumbnail_box}>
           <Thumbnail />
