@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-boolean-value */
 import React, { useRef } from "react";
 import { Route, useHistory } from "react-router-dom";
 import { Layout } from "@components/layout";
@@ -47,17 +46,19 @@ function Search() {
 
   return (
     <Layout>
-      <div className={styles.title_input}>
-        <form onSubmit={searchTitleHandler}>
-          <Input ref={titleRef} />
-        </form>
+      <div className={styles.container}>
+        <div className={styles.title_input}>
+          <form onSubmit={searchTitleHandler}>
+            <Input ref={titleRef} />
+          </form>
+        </div>
+        <Route exact path="/search">
+          <SearchBrowse searchHashtagHandler={searchHashtagHandler} searchKeywordHandler={searchKeywordHandler} />
+        </Route>
+        <Route path="/search/studyroom">
+          <SearchResult />
+        </Route>
       </div>
-      <Route exact path="/search">
-        <SearchBrowse searchHashtagHandler={searchHashtagHandler} searchKeywordHandler={searchKeywordHandler} />
-      </Route>
-      <Route path="/search/studyroom">
-        <SearchResult />
-      </Route>
     </Layout>
   );
 }
