@@ -66,7 +66,7 @@ function StudyRoomList({ searchedTitle, searchedHashtag, showBookmark }) {
         </div>
       </div>
       <div className={styles.studyroom_list}>
-        {loadedRooms ? (
+        {loadedRooms.length > 0 ? (
           <CardGrid //
             rooms={loadedRooms}
             showBookmark={showBookmark}
@@ -75,7 +75,7 @@ function StudyRoomList({ searchedTitle, searchedHashtag, showBookmark }) {
           <p style={{ color: "white" }}>스터디룸이 없어요!🥲</p>
         )}
       </div>
-      {!isLastPage && (
+      {loadedRooms.length > 0 && !isLastPage && (
         <button type="button" onClick={clickMoreBtn}>
           더보기
         </button>
