@@ -9,6 +9,9 @@ WebRTC 기반 화상 스터디 플랫폼
 
 배포 링크: https://oddokwithme.com/
 
+<img alt="DIAGRAM" src="https://user-images.githubusercontent.com/54929552/176563738-8a0a17d2-ec07-43f9-9f9c-85f93af2a767.png">
+
+
 <br/>
 
 ## 🙆‍♀️ 팀 구성원
