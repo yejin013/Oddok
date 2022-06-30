@@ -7,7 +7,7 @@ import TabMenu from "../TabMenu/TabMenu";
 import CardGrid from "../CardGrid/CardGrid";
 import styles from "./StudyRoomList.module.css";
 
-function StudyRoomList({ searchedTitle, searchedHashtag, showBookmark }) {
+function StudyRoomList({ searchedTitle, searchedHashtag, showBookmark, tagFilter }) {
   const [currentPage, setCurrentPage] = useState(0);
   const [currentCategory, setCurrentCategory] = useState(undefined);
   const [filterOpt, setFilterOpt] = useState(undefined);
@@ -60,6 +60,16 @@ function StudyRoomList({ searchedTitle, searchedHashtag, showBookmark }) {
     setCurrentPage((prev) => prev + 1);
   };
 
+  const isFiltered = (hashtags) => {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const e of [...tagFilter]) {
+      if (!hashtags.includes(e)) {
+        return false;
+      }
+    }
+    return true;
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.studyroom_head}>
@@ -74,7 +84,7 @@ function StudyRoomList({ searchedTitle, searchedHashtag, showBookmark }) {
       <div className={styles.studyroom_list}>
         <CardGrid //
           isLoading={isLoading}
-          rooms={loadedRooms}
+          rooms={tagFilter?.size > 0 ? loadedRooms.filter((room) => isFiltered(room.hashtags)) : loadedRooms}
           showBookmark={showBookmark}
         />
       </div>
