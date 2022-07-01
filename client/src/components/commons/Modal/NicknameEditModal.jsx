@@ -36,7 +36,7 @@ function NicknameEditModal({ onClose }) {
       onClose={onClose}
       onAction={{
         text: "확인",
-        action: async () => {
+        action: () => {
           changeNickname(nickname);
           onClose();
         },
