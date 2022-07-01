@@ -5,12 +5,14 @@ import { userState } from "@recoil/user-state";
 import { logout } from "@api/auth-api";
 import { Search, Profile } from "@icons";
 import { getNickname } from "@api/user-api";
+import { NicknameEditModal } from "@components/commons";
 import styles from "./Header.module.css";
 
 function Header() {
   const history = useHistory();
-  const [isDropdown, setIsDropdown] = useState(false);
   const [user, setUserState] = useRecoilState(userState);
+  const [isDropdown, setIsDropdown] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(async () => {
     if (!user.isLogin || user.nickname !== null) {
@@ -55,6 +57,11 @@ function Header() {
     setIsDropdown((prev) => !prev);
   };
 
+  const clickNicknameEditBtn = () => {
+    setIsModalOpen((prev) => !prev);
+    setIsDropdown((prev) => !prev);
+  };
+
   const clickLogoutBtn = () => {
     logout()
       .then(() => {
@@ -65,70 +72,81 @@ function Header() {
       .catch((error) => console.error(error));
   };
 
+  const onClose = () => {
+    setIsModalOpen((prev) => !prev);
+  };
+
   return (
-    <header className={styles.header}>
-      <div className={styles.logo}>
-        <a href="/">ODDOK</a>
-      </div>
-      <ul className={styles.pages}>
-        <li>
-          <button type="button" className={history.location.pathname === "/" ? styles.clicked : ""} onClick={goToMain}>
-            스터디룸
-          </button>
-        </li>
-        <li>
-          {!user.isLogin ? (
-            <button type="button" className={styles.mypage} onClick={goToLogin}>
-              마이페이지
-            </button>
-          ) : (
+    <div>
+      {isModalOpen ? <NicknameEditModal onClose={onClose} /> : null}
+      <header className={styles.header}>
+        <div className={styles.logo}>
+          <a href="/">ODDOK</a>
+        </div>
+        <ul className={styles.pages}>
+          <li>
             <button
               type="button"
-              className={history.location.pathname === "/mypage" ? styles.clicked : ""}
-              onClick={goToMypage}
+              className={history.location.pathname === "/" ? styles.clicked : ""}
+              onClick={goToMain}
             >
-              마이페이지
-            </button>
-          )}
-        </li>
-      </ul>
-      <div className={styles.buttons}>
-        <button type="button" className={styles.search} onClick={goToSearch}>
-          <Search />
-        </button>
-        <ul className={styles.my_info}>
-          <li>
-            <button type="button" className={styles.profile} onClick={clickProfileBtn}>
-              <Profile />
-              <span className={styles.nickname}>{user.nickname}</span>
+              스터디룸
             </button>
           </li>
-          {user.isLogin && isDropdown && (
-            <ul className={styles.info_buttons}>
-              <li>
-                <button type="button" className={styles.button}>
-                  닉네임 수정
-                </button>
-              </li>
-              <li>
-                <button type="button" className={styles.button} onClick={clickLogoutBtn}>
-                  로그아웃
-                </button>
-              </li>
-            </ul>
-          )}
+          <li>
+            {!user.isLogin ? (
+              <button type="button" className={styles.mypage} onClick={goToLogin}>
+                마이페이지
+              </button>
+            ) : (
+              <button
+                type="button"
+                className={history.location.pathname === "/mypage" ? styles.clicked : ""}
+                onClick={goToMypage}
+              >
+                마이페이지
+              </button>
+            )}
+          </li>
         </ul>
-        {!user.isLogin ? (
-          <button type="button" className={styles.study_button} onClick={goToLogin}>
-            + 새 스터디 만들기
+        <div className={styles.buttons}>
+          <button type="button" className={styles.search} onClick={goToSearch}>
+            <Search />
           </button>
-        ) : (
-          <button type="button" className={styles.study_button} onClick={goToCreateRoom}>
-            + 새 스터디 만들기
-          </button>
-        )}
-      </div>
-    </header>
+          <ul className={styles.my_info}>
+            <li>
+              <button type="button" className={styles.profile} onClick={clickProfileBtn}>
+                <Profile />
+                <span className={styles.nickname}>{user.nickname}</span>
+              </button>
+            </li>
+            {user.isLogin && isDropdown && (
+              <ul className={styles.info_buttons}>
+                <li>
+                  <button type="button" className={styles.button} onClick={clickNicknameEditBtn}>
+                    닉네임 수정
+                  </button>
+                </li>
+                <li>
+                  <button type="button" className={styles.button} onClick={clickLogoutBtn}>
+                    로그아웃
+                  </button>
+                </li>
+              </ul>
+            )}
+          </ul>
+          {!user.isLogin ? (
+            <button type="button" className={styles.study_button} onClick={goToLogin}>
+              + 새 스터디 만들기
+            </button>
+          ) : (
+            <button type="button" className={styles.study_button} onClick={goToCreateRoom}>
+              + 새 스터디 만들기
+            </button>
+          )}
+        </div>
+      </header>
+    </div>
   );
 }
 export default Header;
