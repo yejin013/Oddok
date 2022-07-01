@@ -106,6 +106,11 @@ function Header() {
           {user.isLogin && isDropdown && (
             <ul className={styles.info_buttons}>
               <li>
+                <button type="button" className={styles.button}>
+                  닉네임 수정
+                </button>
+              </li>
+              <li>
                 <button type="button" className={styles.button} onClick={clickLogoutBtn}>
                   로그아웃
                 </button>
