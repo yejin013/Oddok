@@ -2,10 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { useHistory } from "react-router-dom";
 import { userState } from "@recoil/user-state";
-import { logout } from "@api/auth-api";
 import { Search, Profile } from "@icons";
 import { getNickname } from "@api/user-api";
-import { NicknameEditModal } from "@components/commons";
+import { LogoutModal, NicknameEditModal } from "@components/commons";
 import styles from "./Header.module.css";
 
 function Header() {
@@ -57,19 +56,9 @@ function Header() {
     setIsDropdown((prev) => !prev);
   };
 
-  const clickNicknameEditBtn = () => {
-    setIsModalOpen((prev) => !prev);
+  const renderModal = (type) => {
+    setIsModalOpen(type);
     setIsDropdown((prev) => !prev);
-  };
-
-  const clickLogoutBtn = () => {
-    logout()
-      .then(() => {
-        localStorage.removeItem("isLogin");
-        setUserState({ ...user, nickname: null, isLogin: localStorage.getItem("isLogin") }); // 유저 상태 초기화
-        window.location.replace("/"); // 메인홈으로 새로고침
-      })
-      .catch((error) => console.error(error));
   };
 
   const onClose = () => {
@@ -78,7 +67,8 @@ function Header() {
 
   return (
     <div>
-      {isModalOpen ? <NicknameEditModal onClose={onClose} /> : null}
+      {(isModalOpen === "edit-nickname" && <NicknameEditModal onClose={onClose} />) ||
+        (isModalOpen === "logout" && <LogoutModal onClose={onClose} />)}
       <header className={styles.header}>
         <div className={styles.logo}>
           <a href="/">ODDOK</a>
@@ -123,12 +113,12 @@ function Header() {
             {user.isLogin && isDropdown && (
               <ul className={styles.info_buttons}>
                 <li>
-                  <button type="button" className={styles.button} onClick={clickNicknameEditBtn}>
+                  <button type="button" className={styles.button} onClick={() => renderModal("edit-nickname")}>
                     닉네임 수정
                   </button>
                 </li>
                 <li>
-                  <button type="button" className={styles.button} onClick={clickLogoutBtn}>
+                  <button type="button" className={styles.button} onClick={() => renderModal("logout")}>
                     로그아웃
                   </button>
                 </li>
