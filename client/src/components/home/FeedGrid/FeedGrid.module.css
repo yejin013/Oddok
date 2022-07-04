@@ -1,21 +1,28 @@
-.container {
+.content ul {
   display: grid;
   gap: 40px 20px;
   width: 100%;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 }
 
-.container a,
+.content a,
 a:visited {
   text-decoration: none;
   color: white;
 }
 
 .empty {
-  border: 1px solid goldenrod;
-  padding: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 130px 0;
+  color: var(--gray300);
+}
+
+.empty svg {
+  width: 70px;
 }
 
 .empty path {
-  fill: white;
+  fill: var(--gray300);
 }
