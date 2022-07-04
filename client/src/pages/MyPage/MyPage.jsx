@@ -32,7 +32,7 @@ function MyPage() {
   } = useAsync(getMyRoom, { onError: (error) => console.error(error) }, [], false);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(0, 10));
   const [timeRecordData, setTimeRecordData] = useState();
-  const [totalStudyTime, setTotalStudyTime] = useState();
+  const [totalStudyTime, setTotalStudyTime] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const user = useRecoilValue(userState);
@@ -169,7 +169,7 @@ function MyPage() {
                         <div className={styles.total_time}>
                           {`${Math.floor(totalStudyTime / 1000 / 60 / 60)}시간 
                       ${Math.floor((totalStudyTime / 1000 / 60) % 60)}분 
-                      ${(totalStudyTime / 1000) % 60}초`}
+                      ${Math.floor(totalStudyTime / 1000) % 60}초`}
                         </div>
                         <div className={styles.subject_list}>
                           <TimeRecordList list={timeRecordData} />
