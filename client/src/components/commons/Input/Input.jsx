@@ -20,6 +20,7 @@ const Input = forwardRef(
           maxLength={maxLength}
           onChange={onChange}
           value={value}
+          spellCheck="false"
         />
         {(isPlanBar || isChatBar) && (
           <button type="submit" className={styles.button}>
