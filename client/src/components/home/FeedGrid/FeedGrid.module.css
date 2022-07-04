@@ -10,3 +10,12 @@ a:visited {
   text-decoration: none;
   color: white;
 }
+
+.empty {
+  border: 1px solid goldenrod;
+  padding: 100px;
+}
+
+.empty path {
+  fill: white;
+}

@@ -1,8 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { EmojiDizzy } from "@icons";
 import StudyRoomCard from "../StudyRoomCard/StudyRoomCard";
 import Skeleton from "../StudyRoomCard/Skeleton";
-import styles from "./CardGrid.module.css";
+import styles from "./FeedGrid.module.css";
 
 function CardGrid({ isLoading, rooms, showBookmark }) {
   return (
@@ -16,7 +17,6 @@ function CardGrid({ isLoading, rooms, showBookmark }) {
         </Link>
       ))}
       {isLoading && new Array(16).fill(0).map(() => <Skeleton />)}
-      {!isLoading && rooms.length === 0 && <p>스터디룸이 없습니다🥲</p>}
     </ul>
   );
 }

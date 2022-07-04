@@ -4,8 +4,8 @@ import { Dropdown } from "@components/commons";
 import { ArrowDown } from "@icons";
 import { STUDY_FILTER_OPTIONS, STUDY_SORT_OPTIONS } from "@utils/constants/options";
 import TabMenu from "../TabMenu/TabMenu";
-import CardGrid from "../CardGrid/CardGrid";
-import styles from "./StudyRoomList.module.css";
+import FeedGrid from "../FeedGrid/FeedGrid";
+import styles from "./StudyRoomFeed.module.css";
 
 function StudyRoomList({ searchedTitle, searchedHashtag, showBookmark, tagFilter }) {
   const [currentPage, setCurrentPage] = useState(0);
@@ -82,7 +82,7 @@ function StudyRoomList({ searchedTitle, searchedHashtag, showBookmark, tagFilter
         </div>
       </div>
       <div className={styles.studyroom_list}>
-        <CardGrid //
+        <FeedGrid
           isLoading={isLoading}
           rooms={tagFilter?.size > 0 ? loadedRooms.filter((room) => isFiltered(room.hashtags)) : loadedRooms}
           showBookmark={showBookmark}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { getPopluarHashtag } from "@api/hashtag-api";
-import { StudyRoomList } from "@components/home";
+import { StudyRoomFeed } from "@components/home";
 import parseQueryString from "@utils/parseQueryString";
 import { HashtagList } from "..";
 import styles from "./SearchResult.module.css";
@@ -49,7 +49,7 @@ function SearchResult() {
         </div>
       )}
       <div>
-        <StudyRoomList
+        <StudyRoomFeed
           searchedTitle={searchedKeyword?.title}
           searchedHashtag={searchedKeyword?.hashtag}
           tagFilter={selectedHashtag}

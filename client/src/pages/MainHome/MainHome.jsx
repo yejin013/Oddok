@@ -6,7 +6,7 @@ import { getBookmark } from "@api/bookmark-api";
 import { getTestUser } from "@api/get-test-user";
 import { getNickname } from "@api/user-api";
 import { Layout } from "@components/layout";
-import { Bookmark, StudyRoomList } from "@components/home";
+import { Bookmark, StudyRoomFeed } from "@components/home";
 import styles from "./MainHome.module.css";
 
 function MainHome() {
@@ -21,9 +21,7 @@ function MainHome() {
 
   useEffect(async () => {
     await getNickname()
-      .then((response) =>
-        setUserState((prev) => ({ ...prev, nickname: response.nickname }))
-      )
+      .then((response) => setUserState((prev) => ({ ...prev, nickname: response.nickname })))
       .catch((error) => console.error("get nickname error", error));
   }, []);
 
@@ -39,7 +37,7 @@ function MainHome() {
         <Bookmark showBookmark={showBookmark} />
         <section className={styles.studyroom_list}>
           <h2>STUDY ROOM</h2>
-          <StudyRoomList showBookmark={showBookmark} />
+          <StudyRoomFeed showBookmark={showBookmark} />
         </section>
       </main>
     </Layout>
