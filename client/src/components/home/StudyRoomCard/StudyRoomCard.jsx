@@ -29,43 +29,41 @@ function StudyRoomCard({ roomData, showBookmark }) {
   };
 
   return (
-    <li className={styles.container}>
-      <div className={styles.wrapper}>
-        <div className={styles.thumbnail_box}>
-          <Thumbnail />
-          {!(bookmark && roomData.id === bookmark.id) ? (
-            <button
-              type="button"
-              className={styles.bookmark_icon}
-              onClick={(event) => {
-                event.preventDefault();
-                clickAddBtn();
-              }}
-            >
-              <BookMark />
-            </button>
-          ) : (
-            <button type="button" className={styles.bookmark_icon} onClick={cancelBookmark}>
-              <BookMarkHeart />
-            </button>
-          )}
-          <div className={styles.user_count}>
-            <div className={styles.count_icon}>
-              <UserCount number={roomData.currentUsers} />
-            </div>
-            <span>/ {roomData.limitUsers}</span>
+    <li className={styles.card}>
+      <div className={styles.thumbnail_box}>
+        <Thumbnail />
+        {!(bookmark && roomData.id === bookmark.id) ? (
+          <button
+            type="button"
+            className={styles.bookmark_icon}
+            onClick={(event) => {
+              event.preventDefault();
+              clickAddBtn();
+            }}
+          >
+            <BookMark />
+          </button>
+        ) : (
+          <button type="button" className={styles.bookmark_icon} onClick={cancelBookmark}>
+            <BookMarkHeart />
+          </button>
+        )}
+        <div className={styles.user_count}>
+          <div className={styles.count_icon}>
+            <UserCount number={roomData.currentUsers} />
           </div>
+          <span>/ {roomData.limitUsers}</span>
         </div>
-        <div className={styles.content_box}>
-          <div className={styles.content_head}>
-            <div className={styles.title}>{roomData.name}</div>
-            <div className={styles.lock_icon}>{roomData.isPublic ? <Unlock /> : <Lock />}</div>
-          </div>
-          <div>
-            {roomData.hashtags.map((hashtag) => (
-              <span key={hashtag}>#{hashtag} </span>
-            ))}
-          </div>
+      </div>
+      <div className={styles.content_box}>
+        <div className={styles.content_head}>
+          <span className={styles.title}>{roomData.name}</span>
+          <div className={styles.lock_icon}>{roomData.isPublic ? <Unlock /> : <Lock />}</div>
+        </div>
+        <div>
+          {roomData.hashtags.map((hashtag) => (
+            <span key={hashtag}>#{hashtag} </span>
+          ))}
         </div>
       </div>
     </li>
