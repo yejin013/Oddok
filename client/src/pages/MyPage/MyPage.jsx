@@ -18,7 +18,7 @@ import { SettingForm } from "@components/study";
 import { Layout } from "@components/layout";
 import useAsync from "@hooks/useAsync";
 import getColor from "src/utils/getColor";
-import getTimeDiff from "src/utils/getTimeDiff";
+import { getTimeDiff, getDday } from "@utils";
 import styles from "./MyPage.module.css";
 
 function MyPage() {
@@ -115,11 +115,7 @@ function MyPage() {
                   <div>
                     <div className={styles.sub_heading}>디데이</div>
                     <div className={styles.my_goal_box}>
-                      <div className={styles.bold}>
-                        {profileData?.dday
-                          ? `D - ${Math.floor((new Date(profileData.dday) - new Date()) / 1000 / 60 / 60 / 24)}`
-                          : "D - DAY"}
-                      </div>
+                      <div className={styles.bold}>{profileData?.dday && getDday(new Date(profileData.dday))}</div>
                       <div>
                         <div>{profileData?.ddayInfo ? profileData.ddayInfo : "날짜를 추가하세요."}</div>
                         <div>
@@ -168,8 +164,8 @@ function MyPage() {
                       <div className={styles.content}>
                         <div className={styles.total_time}>
                           {`${Math.floor(totalStudyTime / 1000 / 60 / 60)}시간 
-                      ${Math.floor((totalStudyTime / 1000 / 60) % 60)}분 
-                      ${Math.floor(totalStudyTime / 1000) % 60}초`}
+                          ${Math.floor((totalStudyTime / 1000 / 60) % 60)}분 
+                          ${Math.floor(totalStudyTime / 1000) % 60}초`}
                         </div>
                         <div className={styles.subject_list}>
                           <TimeRecordList list={timeRecordData} />
