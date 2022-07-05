@@ -22,12 +22,9 @@ function Calendar({ onChange, defaultDate }) {
       onChange={changeDate}
       minDate={new Date()}
       showPopperArrow={false}
-      popperPlacement="auto"
+      popperPlacement="bottom"
       customInput={<DateInput />}
       renderCustomHeader={CalendarHeader}
-      dayClassName={(date) =>
-        date.getDate() === currentDate.getDate() ? ".react-datepicker__day--selected" : ".react-datepicker__day"
-      }
     />
   );
 }

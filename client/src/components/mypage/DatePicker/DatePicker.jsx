@@ -4,7 +4,6 @@ import ko from "date-fns/locale/ko";
 import { addDays, subDays } from "date-fns";
 import { ArrowLeft, ArrowRight } from "@icons";
 import { CalendarHeader } from "@components/commons";
-import { dateFormatting } from "@utils";
 import CustomInput from "./CustomInput";
 import "react-datepicker/dist/react-datepicker.css";
 import "../../../assets/styles/calendar_style.css";
@@ -34,11 +33,6 @@ function DatePicker({ onChange }) {
           popperPlacement="bottom"
           customInput={<CustomInput />}
           renderCustomHeader={CalendarHeader}
-          dayClassName={(date) =>
-            dateFormatting(date) === dateFormatting(currentDate)
-              ? ".react-datepicker__day--selected"
-              : ".react-datepicker__day"
-          }
         />
       </div>
       <button type="button" className={styles.move_button} onClick={() => changeDate(addDays(currentDate, 1))}>
