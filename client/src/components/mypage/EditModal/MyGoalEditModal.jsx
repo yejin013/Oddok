@@ -28,6 +28,7 @@ function MyGoalEditModal({ profileData, onClose, refetch }) {
     try {
       if (profileData) await updateProfile(inputData);
       else await createProfile(inputData);
+      refetch();
     } catch (e) {
       console.error(e);
     }
@@ -38,7 +39,7 @@ function MyGoalEditModal({ profileData, onClose, refetch }) {
       <div className={styles.item}>
         <p>디데이</p>
         <div className={styles.dday}>
-          <Calendar onChange={selectDate} defaultDate={dateParsing(inputData?.dday)} />
+          <Calendar onChange={selectDate} defaultDate={inputData?.dday && dateParsing(inputData.dday)} />
           <Input onChange={inputDdayInfo} value={inputData?.ddayInfo || ""} />
         </div>
       </div>
@@ -70,7 +71,6 @@ function MyGoalEditModal({ profileData, onClose, refetch }) {
         action: () => {
           edit();
           onClose();
-          refetch();
         },
       }}
     />
