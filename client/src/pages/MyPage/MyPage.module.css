@@ -51,8 +51,9 @@
   height: 90px;
 }
 
-.my_goal_box {
+.my_goal .box {
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   gap: 16px;
@@ -70,7 +71,7 @@
   justify-content: space-around;
 }
 
-.box {
+.study_history .box {
   width: 270px;
   display: flex;
   flex-direction: column;

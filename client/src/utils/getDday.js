@@ -1,6 +1,5 @@
-function getDday(value) {
+function getDday(date) {
   const today = new Date(); // 현재 시간
-  const date = new Date(value.getTime() + value.getTimezoneOffset() * 60000); // 0시 0분
 
   // D - n
   if (today < date) return `D - ${Math.ceil((date - today) / 1000 / 60 / 60 / 24)}`;

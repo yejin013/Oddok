@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { createProfile, updateProfile } from "@api/mypage-api";
 import { Modal, Calendar, Input, Dropdown, Textarea } from "@components/commons";
+import { dateParsing, dateFormatting } from "@utils";
 import { TARGET_TIME_OPTIONS } from "@utils/constants/options";
 import styles from "./MyGoalEditModal.module.css";
 
@@ -8,7 +9,7 @@ function MyGoalEditModal({ profileData, onClose, onUpdate }) {
   const [inputData, setInputData] = useState(profileData);
 
   const selectDate = (date) => {
-    setInputData((prev) => ({ ...prev, dday: date.toISOString() }));
+    setInputData((prev) => ({ ...prev, dday: dateFormatting(date) }));
   };
 
   const inputDdayInfo = (e) => {
@@ -42,7 +43,7 @@ function MyGoalEditModal({ profileData, onClose, onUpdate }) {
       <div className={styles.item}>
         <p>디데이</p>
         <div className={styles.dday}>
-          <Calendar onChange={selectDate} defaultDate={inputData?.dday && new Date(inputData.dday)} />
+          <Calendar onChange={selectDate} defaultDate={dateParsing(inputData?.dday)} />
           <Input onChange={inputDdayInfo} value={inputData?.ddayInfo || ""} />
         </div>
       </div>

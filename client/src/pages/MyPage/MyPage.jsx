@@ -18,7 +18,7 @@ import { SettingForm } from "@components/study";
 import { Layout } from "@components/layout";
 import useAsync from "@hooks/useAsync";
 import getColor from "src/utils/getColor";
-import { getTimeDiff, getDday } from "@utils";
+import { getTimeDiff, getDday, dateParsing, dateFormatting } from "@utils";
 import styles from "./MyPage.module.css";
 
 function MyPage() {
@@ -30,7 +30,7 @@ function MyPage() {
     data: myRoomData, //
     setData: updateRoomData,
   } = useAsync(getMyRoom, { onError: (error) => console.error(error) }, [], false);
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(0, 10));
+  const [selectedDate, setSelectedDate] = useState(dateFormatting(new Date()));
   const [timeRecordData, setTimeRecordData] = useState();
   const [totalStudyTime, setTotalStudyTime] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -114,8 +114,8 @@ function MyPage() {
                 <div className={styles.contents}>
                   <div>
                     <div className={styles.sub_heading}>디데이</div>
-                    <div className={styles.my_goal_box}>
-                      <div className={styles.bold}>{profileData?.dday && getDday(new Date(profileData.dday))}</div>
+                    <div className={styles.box}>
+                      <div className={styles.bold}>{profileData?.dday && getDday(dateParsing(profileData.dday))}</div>
                       <div>
                         <div>{profileData?.ddayInfo ? profileData.ddayInfo : "날짜를 추가하세요."}</div>
                         <div>
@@ -130,7 +130,7 @@ function MyPage() {
                   </div>
                   <div>
                     <div className={styles.sub_heading}>공부시간</div>
-                    <div className={styles.my_goal_box}>
+                    <div className={styles.box}>
                       <div className={styles.bold}>
                         {profileData?.targetTime ? `${profileData?.targetTime} 시간` : "몇 시간"}
                       </div>
@@ -156,7 +156,7 @@ function MyPage() {
                     <div className={styles.date_box}>
                       <div className={styles.sub_heading}>날짜</div>
                       <div className={styles.content}>
-                        <DatePicker setSelectedDate={setSelectedDate} />
+                        <DatePicker onChange={(date) => setSelectedDate(dateFormatting(date))} />
                       </div>
                     </div>
                     <div className={styles.study_time_box}>
