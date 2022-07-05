@@ -8,9 +8,11 @@ import com.oddok.server.domain.profile.api.response.UpdateProfileResponse;
 import com.oddok.server.domain.profile.application.ProfileService;
 import com.oddok.server.domain.profile.dto.ProfileDto;
 import com.oddok.server.domain.profile.mapper.ProfileDtoMapper;
+import com.oddok.server.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,22 +28,22 @@ public class ProfileController {
     private final ProfileDtoMapper dtoMapper = Mappers.getMapper(ProfileDtoMapper.class);;
 
     @PostMapping
-    public ResponseEntity<CreateProfileResponse> create(@RequestHeader String userId, @RequestBody @Valid CreateProfileRequest createProfileRequest) {
-        ProfileDto profileDto = dtoMapper.fromCreateRequest(createProfileRequest, Long.parseLong(userId));
-        ProfileDto response = profileService.create(profileDto);
+    public ResponseEntity<CreateProfileResponse> create(@AuthenticationPrincipal User user, @RequestBody @Valid CreateProfileRequest createProfileRequest) {
+        ProfileDto profileDto = dtoMapper.fromCreateRequest(createProfileRequest);
+        ProfileDto response = profileService.create(user, profileDto);
         return ResponseEntity.ok(dtoMapper.toCreateResponse(response));
     }
 
     @GetMapping
-    public ResponseEntity<Optional<GetProfileResponse>> get(@RequestHeader String userId) {
-        Optional<ProfileDto> profileDto = profileService.get(Long.parseLong(userId));
+    public ResponseEntity<Optional<GetProfileResponse>> get(@AuthenticationPrincipal User user) {
+        Optional<ProfileDto> profileDto = profileService.get(user);
         return ResponseEntity.ok(profileDto.map(dtoMapper::toGetResponse));
     }
 
     @PutMapping
-    public ResponseEntity<UpdateProfileResponse> update(@RequestHeader String userId, @RequestBody @Valid UpdateProfileRequest updateProfileRequest) {
-        ProfileDto profileDto = dtoMapper.fromUpdateRequest(updateProfileRequest, Long.parseLong(userId));
-        ProfileDto response = profileService.update(profileDto);
+    public ResponseEntity<UpdateProfileResponse> update(@AuthenticationPrincipal User user, @RequestBody @Valid UpdateProfileRequest updateProfileRequest) {
+        ProfileDto profileDto = dtoMapper.fromUpdateRequest(updateProfileRequest);
+        ProfileDto response = profileService.update(user, profileDto);
         return ResponseEntity.ok(dtoMapper.toUpdateResponse(response));
     }
 }

@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useRecoilValue } from "recoil";
+import { userState } from "@recoil/user-state";
 import { bookmarkState } from "@recoil/bookmark-state";
 import { UserCount } from "@components/commons";
 import { Thumbnail } from "@icons";
@@ -11,18 +12,20 @@ import styles from "./Bookmark.module.css";
 
 function Bookmark({ showBookmark }) {
   const bookmark = useRecoilValue(bookmarkState);
+  const user = useRecoilValue(userState);
   const [participants, setParticipants] = useState([
-    { nickname: "현재 스터디원", joinTime: "없음", isActive: false },
-    { nickname: "현재 스터디원", joinTime: "없음", isActive: false },
-    { nickname: "현재 스터디원", joinTime: "없음", isActive: false },
-    { nickname: "현재 스터디원", joinTime: "없음", isActive: false },
-    { nickname: "현재 스터디원", joinTime: "없음", isActive: false },
+    { id: 1, nickname: "현재 스터디원", joinTime: "없음", isActive: false },
+    { id: 2, nickname: "현재 스터디원", joinTime: "없음", isActive: false },
+    { id: 3, nickname: "현재 스터디원", joinTime: "없음", isActive: false },
+    { id: 4, nickname: "현재 스터디원", joinTime: "없음", isActive: false },
+    { id: 5, nickname: "현재 스터디원", joinTime: "없음", isActive: false },
   ]);
   const history = useHistory();
-  const isBookmarkUser = true; // UserCount style위한 변수
 
   useEffect(() => {
-    // if(유저가 로그인했다면)
+    if (!user.isLogin) {
+      return;
+    }
     showBookmark();
   }, []);
 
@@ -103,7 +106,7 @@ function Bookmark({ showBookmark }) {
             </div>
             <ul className={styles.user_list}>
               {participants.map((participant) => (
-                <UserList participant={participant} />
+                <UserList key={participant.id} participant={participant} />
               ))}
             </ul>
           </div>

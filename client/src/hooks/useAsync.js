@@ -1,4 +1,5 @@
-import React, { useReducer, useEffect, useCallback } from "react";
+/* eslint-disable consistent-return */
+import { useReducer, useEffect, useCallback } from "react";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -32,7 +33,6 @@ function useAsync(requestFn, { onError }, deps = [], skip = true) {
   });
 
   const sendRequest = useCallback(
-    // eslint-disable-next-line consistent-return
     async (...args) => {
       dispatch({ type: "LOADING" });
       try {
