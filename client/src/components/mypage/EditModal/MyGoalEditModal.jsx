@@ -5,7 +5,7 @@ import { dateParsing, dateFormatting } from "@utils";
 import { TARGET_TIME_OPTIONS } from "@utils/constants/options";
 import styles from "./MyGoalEditModal.module.css";
 
-function MyGoalEditModal({ profileData, onClose, onUpdate }) {
+function MyGoalEditModal({ profileData, onClose, refetch }) {
   const [inputData, setInputData] = useState(profileData);
 
   const selectDate = (date) => {
@@ -26,13 +26,8 @@ function MyGoalEditModal({ profileData, onClose, onUpdate }) {
 
   const edit = async () => {
     try {
-      if (profileData) {
-        const response = await updateProfile(inputData);
-        onUpdate(response);
-        return;
-      }
-      const response = await createProfile(inputData);
-      onUpdate(response);
+      if (profileData) await updateProfile(inputData);
+      else await createProfile(inputData);
     } catch (e) {
       console.error(e);
     }
@@ -75,6 +70,7 @@ function MyGoalEditModal({ profileData, onClose, onUpdate }) {
         action: () => {
           edit();
           onClose();
+          refetch();
         },
       }}
     />
