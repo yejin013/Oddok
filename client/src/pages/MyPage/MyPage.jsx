@@ -82,7 +82,9 @@ function MyPage() {
                 <div>
                   <div className={styles.sub_heading}>디데이</div>
                   <div className={styles.box}>
-                    <div className={styles.bold}>{profileData?.dday && getDday(dateParsing(profileData.dday))}</div>
+                    <div className={styles.bold}>
+                      {profileData?.dday ? getDday(dateParsing(profileData.dday)) : "D-DAY"}
+                    </div>
                     <div>
                       <div>{profileData?.ddayInfo ? profileData.ddayInfo : "날짜를 추가하세요."}</div>
                       <div>

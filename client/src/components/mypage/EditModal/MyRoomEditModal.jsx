@@ -8,16 +8,16 @@ import EditButton from "../EditButton/EditButton";
 import styles from "./MyRoomEditModal.module.css";
 
 function MyRoomEditModal({ roomData, onClose, refetch }) {
+  const [inputData, setInputData] = useState(roomData);
   const [isFormOpen, setIsFormOpen] = useState(false);
 
   const editHandler = () => {
     setIsFormOpen(true);
   };
 
-  const updateMyRoom = async (data) => {
+  const updateMyRoom = async () => {
     try {
-      await updateStudyRoom(roomData.id, data);
-      onClose();
+      await updateStudyRoom(roomData.id, inputData);
       refetch();
     } catch (e) {
       console.error(e);
@@ -28,6 +28,7 @@ function MyRoomEditModal({ roomData, onClose, refetch }) {
     try {
       if (window.confirm("정말로 삭제하시겠습니까?")) {
         await deleteStudyRoom(roomData.id);
+        refetch();
         onClose();
       }
     } catch (e) {
@@ -39,24 +40,20 @@ function MyRoomEditModal({ roomData, onClose, refetch }) {
     <div className={styles.box}>
       <p>생성 스터디룸</p>
       <div className={styles.item}>
-        {roomData && (
-          <>
-            <div>
-              <MyRoom roomData={roomData} />
-            </div>
-            <div className={styles.buttons}>
-              <EditButton onClick={editHandler} />
-              <EditButton onClick={deleteHandler} deleteBtn />
-            </div>
-          </>
-        )}
+        <div>
+          <MyRoom roomData={inputData} />
+        </div>
+        <div className={styles.buttons}>
+          <EditButton onClick={editHandler} />
+          <EditButton onClick={deleteHandler} deleteBtn />
+        </div>
       </div>
     </div>
   );
   return (
     <div>
       {isFormOpen ? (
-        <SettingForm roomData={roomData} onClose={() => setIsFormOpen(false)} onUpdate={updateMyRoom} />
+        <SettingForm roomData={roomData} onClose={() => setIsFormOpen(false)} onUpdate={(data) => setInputData(data)} />
       ) : (
         <Modal
           title="스터디룸 수정"
@@ -65,8 +62,8 @@ function MyRoomEditModal({ roomData, onClose, refetch }) {
           onAction={{
             text: "확인",
             action: () => {
+              updateMyRoom();
               onClose();
-              refetch();
             },
           }}
         />

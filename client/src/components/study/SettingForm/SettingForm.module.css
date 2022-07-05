@@ -1,9 +1,19 @@
 .container {
-  width: 75%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
   height: 100vh;
+  background-color: black;
+  overflow-y: scroll;
+  z-index: 100;
+}
+
+.container section {
+  width: 75%;
   max-width: 1320px;
-  padding: 0 100px;
-  margin: 70px auto;
+  padding: 70px 100px;
+  margin: 0 auto;
   color: var(--gray100);
   font-weight: 500;
 }
@@ -163,7 +173,7 @@
 
 @media screen and (max-width: 1600px) {
   .container {
-    margin: 30px auto;
+    padding: 30px auto;
   }
   .save_button button {
     margin-bottom: 40px;
