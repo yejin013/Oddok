@@ -3,7 +3,7 @@ import { useSetRecoilState } from "recoil";
 import { bookmarkState } from "@recoil/bookmark-state";
 import { getBookmark } from "@api/bookmark-api";
 import { Layout } from "@components/layout";
-import { Bookmark, StudyRoomList } from "@components/home";
+import { Bookmark, StudyRoomFeed } from "@components/home";
 import styles from "./MainHome.module.css";
 
 function MainHome() {
@@ -21,7 +21,7 @@ function MainHome() {
         <Bookmark showBookmark={showBookmark} />
         <section className={styles.studyroom_list}>
           <h2>STUDY ROOM</h2>
-          <StudyRoomList showBookmark={showBookmark} />
+          <StudyRoomFeed showBookmark={showBookmark} />
         </section>
       </main>
     </Layout>

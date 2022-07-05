@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getPopluarHashtag } from "@api/hashtag-api";
-import { HashtagButton } from "@components/commons";
+import { HashtagList } from "..";
 import styles from "./SearchBrowse.module.css";
 
 function SearchBrowse({ searchHashtagHandler, searchKeywordHandler }) {
@@ -9,10 +9,7 @@ function SearchBrowse({ searchHashtagHandler, searchKeywordHandler }) {
 
   // 인기 해시태그, 검색 기록 렌더링
   useEffect(() => {
-    (async () => {
-      const response = await getPopluarHashtag();
-      setPopularHashtags(response.data.hashtags);
-    })();
+    getPopluarHashtag().then((response) => setPopularHashtags(response.data.hashtags));
     const keywords = JSON.parse(localStorage.getItem("keywords"));
     if (keywords) {
       setSearchHistory(keywords);
@@ -36,15 +33,9 @@ function SearchBrowse({ searchHashtagHandler, searchKeywordHandler }) {
 
   return (
     <div className={styles.container}>
-      <div>
+      <div className={styles.tag_list}>
         <h3>인기 태그</h3>
-        {popularHashtags.length > 0 && (
-          <div className={styles.hashtag_input}>
-            {popularHashtags.map((label) => (
-              <HashtagButton label={label} onToggle={searchHashtagHandler} />
-            ))}
-          </div>
-        )}
+        {popularHashtags.length > 0 && <HashtagList hashtagList={popularHashtags} onToggle={searchHashtagHandler} />}
       </div>
       <div className={styles.search_history}>
         <div className={styles.head}>

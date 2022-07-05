@@ -1,12 +1,12 @@
-.container {
-  color: white;
-  margin-bottom: 20px;
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .thumbnail_box {
   background-color: var(--gray900);
   position: relative;
-  margin-bottom: 16px;
   padding: 10px 30px;
 }
 
@@ -14,29 +14,29 @@
   position: absolute;
   top: 16px;
   left: 16px;
-  width: 11%;
+  width: 7%;
+  padding: 0;
   z-index: 100px;
 }
 
 .user_count {
-  display: flex;
-  width: fit-content;
   position: absolute;
+  display: flex;
+  align-items: baseline;
   bottom: 20px;
   right: 20px;
-  align-items: baseline;
+  height: 11%;
 }
 
 .count_icon {
-  height: 16px;
+  height: 100%;
   gap: 6px;
 }
 
 .user_count span {
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   color: var(--gray300);
   margin-left: 6px;
-  vertical-align: sub;
 }
 
 .content_box {

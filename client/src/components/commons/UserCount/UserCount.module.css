@@ -1,32 +1,10 @@
-/* .big {
-  width: 2em;
-  height: 2em;
-  margin-right: 0.5em;
-}
-
-.plus.big {
-  width: 1.5em;
-  height: 2.5em;
-}
-
-.small {
-  display: flex;
-  width: 1em;
-  height: 1em;
-}
-
-.plus.small {
-  width: 0.7em;
-  height: 1.3em;
-} */
-
 .count {
   display: flex;
   flex-direction: row;
   align-items: center;
-  color: var(--primary);
   gap: inherit;
   height: inherit;
+  color: var(--primary);
 }
 
 .person {
