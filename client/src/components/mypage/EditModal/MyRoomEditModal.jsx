@@ -1,21 +1,34 @@
 import React, { useState } from "react";
+import { updateStudyRoom } from "@api/study-room-api";
 import { deleteStudyRoom } from "@api/mypage-api";
 import { Modal } from "@components/commons";
+import { SettingForm } from "@components/study";
 import { MyRoom } from "@components/mypage";
 import EditButton from "../EditButton/EditButton";
 import styles from "./MyRoomEditModal.module.css";
 
-function MyRoomEditModal({ roomData, onFormOpen, onClose, onUpdate }) {
+function MyRoomEditModal({ roomData, onClose, refetch }) {
+  const [inputData, setInputData] = useState(roomData);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+
   const editHandler = () => {
-    onFormOpen(true);
-    onClose();
+    setIsFormOpen(true);
+  };
+
+  const updateMyRoom = async () => {
+    try {
+      await updateStudyRoom(roomData.id, inputData);
+      refetch();
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const deleteHandler = async () => {
     try {
       if (window.confirm("정말로 삭제하시겠습니까?")) {
         await deleteStudyRoom(roomData.id);
-        onUpdate();
+        refetch();
         onClose();
       }
     } catch (e) {
@@ -27,23 +40,34 @@ function MyRoomEditModal({ roomData, onFormOpen, onClose, onUpdate }) {
     <div className={styles.box}>
       <p>생성 스터디룸</p>
       <div className={styles.item}>
-        {roomData && (
-          <>
-            <div>
-              <MyRoom roomData={roomData} />
-            </div>
-            <div className={styles.buttons}>
-              <EditButton onClick={editHandler} />
-              <EditButton onClick={deleteHandler} deleteBtn />
-            </div>
-          </>
-        )}
+        <div>
+          <MyRoom roomData={inputData} />
+        </div>
+        <div className={styles.buttons}>
+          <EditButton onClick={editHandler} />
+          <EditButton onClick={deleteHandler} deleteBtn />
+        </div>
       </div>
     </div>
   );
   return (
     <div>
-      <Modal title="스터디룸 수정" content={content} onClose={onClose} onAction={{ text: "확인", action: onClose }} />
+      {isFormOpen ? (
+        <SettingForm roomData={roomData} onClose={() => setIsFormOpen(false)} onUpdate={(data) => setInputData(data)} />
+      ) : (
+        <Modal
+          title="스터디룸 수정"
+          content={content}
+          onClose={onClose}
+          onAction={{
+            text: "확인",
+            action: () => {
+              updateMyRoom();
+              onClose();
+            },
+          }}
+        />
+      )}
     </div>
   );
 }

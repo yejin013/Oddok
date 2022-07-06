@@ -11,6 +11,7 @@ const Textarea = forwardRef(({ placeholder, content, disabled, onChange, value }
       disabled={disabled}
       onChange={onChange}
       value={value}
+      spellCheck="false"
     >
       {content}
     </textarea>

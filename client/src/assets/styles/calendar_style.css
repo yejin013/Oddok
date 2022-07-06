@@ -3,38 +3,36 @@
   background-color: var(--gray900);
 }
 
+.react-datepicker div {
+  color: white;
+}
+
 .react-datepicker__header {
   background-color: var(--gray900);
-  color: white;
 }
 
-.react-datepicker__current-month {
-  color: white;
-}
-
-.react-datepicker__day-name {
-  color: white;
-}
-
-.day_default {
-  color: white;
-}
-.day_default:hover {
+.react-datepicker__day:hover {
   background-color: var(--primary-light);
+  color: black;
 }
 
-.react-datepicker__day--disabled {
+.react-datepicker__day.react-datepicker__day--disabled {
   color: var(--gray600);
 }
+
 .react-datepicker__day--disabled:hover {
   background-color: transparent;
 }
 
-.day_selected {
-  color: white;
+.react-datepicker__day.react-datepicker__day--selected {
   background-color: var(--primary);
+  color: black;
 }
 
-.day_selected:hover {
+.react-datepicker__day--selected:hover {
   background-color: var(--primary-light);
+}
+
+.react-datepicker__day--keyboard-selected {
+  background-color: transparent;
 }
