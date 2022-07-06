@@ -22,7 +22,7 @@ function StudyRoomCard({ roomData, showBookmark }) {
   };
 
   const cancelBookmark = async (event) => {
-    event.preventDefault();
+    event.stopPropagation();
     await deleteBookmark()
       .then(setBookmark(null))
       .catch((error) => console.log("delete bookmark error", error));
@@ -61,7 +61,7 @@ function StudyRoomCard({ roomData, showBookmark }) {
               type="button"
               className={styles.bookmark_icon}
               onClick={(event) => {
-                event.preventDefault();
+                event.stopPropagation();
                 clickAddBtn();
               }}
             >
