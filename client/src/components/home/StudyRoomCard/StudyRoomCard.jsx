@@ -1,13 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { useRecoilState } from "recoil";
 import { bookmarkState } from "@recoil/bookmark-state";
 import { addBookmark, deleteBookmark } from "@api/bookmark-api";
-import { Thumbnail, UserCount } from "@components/commons";
+import { PasswordModal, Thumbnail, UserCount } from "@components/commons";
 import { Lock, Unlock, BookMark, BookMarkHeart } from "@icons";
 import styles from "./StudyRoomCard.module.css";
 
 function StudyRoomCard({ roomData, showBookmark }) {
   const [bookmark, setBookmark] = useRecoilState(bookmarkState);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const selectBookmark = async (roomId) => {
     await addBookmark(roomId)
@@ -28,45 +29,52 @@ function StudyRoomCard({ roomData, showBookmark }) {
     await showBookmark();
   };
 
+  const closeModal = () => {
+    setIsModalOpen((prev) => !prev);
+  };
+
   return (
-    <li className={styles.card}>
-      <div className={styles.thumbnail_box}>
-        <Thumbnail />
-        {!(bookmark && roomData.id === bookmark.id) ? (
-          <button
-            type="button"
-            className={styles.bookmark_icon}
-            onClick={(event) => {
-              event.preventDefault();
-              clickAddBtn();
-            }}
-          >
-            <BookMark />
-          </button>
-        ) : (
-          <button type="button" className={styles.bookmark_icon} onClick={cancelBookmark}>
-            <BookMarkHeart />
-          </button>
-        )}
-        <div className={styles.user_count}>
-          <div className={styles.count_icon}>
-            <UserCount number={roomData.currentUsers} />
+    <>
+      {isModalOpen && <PasswordModal onClose={closeModal} />}
+      <li className={styles.card}>
+        <div className={styles.thumbnail_box}>
+          <Thumbnail />
+          {!(bookmark && roomData.id === bookmark.id) ? (
+            <button
+              type="button"
+              className={styles.bookmark_icon}
+              onClick={(event) => {
+                event.preventDefault();
+                clickAddBtn();
+              }}
+            >
+              <BookMark />
+            </button>
+          ) : (
+            <button type="button" className={styles.bookmark_icon} onClick={cancelBookmark}>
+              <BookMarkHeart />
+            </button>
+          )}
+          <div className={styles.user_count}>
+            <div className={styles.count_icon}>
+              <UserCount number={roomData.currentUsers} />
+            </div>
+            <span>/ {roomData.limitUsers}</span>
           </div>
-          <span>/ {roomData.limitUsers}</span>
         </div>
-      </div>
-      <div className={styles.content_box}>
-        <div className={styles.content_head}>
-          <span className={styles.title}>{roomData.name}</span>
-          <div className={styles.lock_icon}>{roomData.isPublic ? <Unlock /> : <Lock />}</div>
+        <div className={styles.content_box}>
+          <div className={styles.content_head}>
+            <span className={styles.title}>{roomData.name}</span>
+            <div className={styles.lock_icon}>{roomData.isPublic ? <Unlock /> : <Lock />}</div>
+          </div>
+          <div>
+            {roomData.hashtags.map((hashtag) => (
+              <span key={hashtag}>#{hashtag} </span>
+            ))}
+          </div>
         </div>
-        <div>
-          {roomData.hashtags.map((hashtag) => (
-            <span key={hashtag}>#{hashtag} </span>
-          ))}
-        </div>
-      </div>
-    </li>
+      </li>
+    </>
   );
 }
 

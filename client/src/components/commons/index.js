@@ -9,6 +9,7 @@ export { default as Loading } from "./Loading/Loading";
 export { default as Modal } from "./Modal/Modal";
 export { default as NicknameEditModal } from "./Modal/NicknameEditModal";
 export { default as LogoutModal } from "./Modal/LogoutModal";
+export { default as PasswordModal } from "./Modal/PasswordModal";
 export { default as RadioButton } from "./RadioButton/RadioButton";
 export { default as Textarea } from "./Textarea/Textarea";
 export { default as Thumbnail } from "./Thumbnail/Thumbnail";
