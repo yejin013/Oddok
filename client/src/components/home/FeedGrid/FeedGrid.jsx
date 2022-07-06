@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { EmojiDizzy } from "@icons";
 import StudyRoomCard from "../StudyRoomCard/StudyRoomCard";
 import Skeleton from "../StudyRoomCard/Skeleton";
@@ -11,12 +10,12 @@ function CardGrid({ isLoading, rooms, showBookmark }) {
       <ul>
         {isLoading && new Array(16).fill(0).map(() => <Skeleton />)}
         {rooms?.map((roomData) => (
-          <Link key={roomData.id} to={`/studyroom/${roomData.id}/setting`} className={styles.studyroom}>
-            <StudyRoomCard //
-              roomData={roomData}
-              showBookmark={showBookmark}
-            />
-          </Link>
+          <StudyRoomCard
+            className={styles.studyroom}
+            key={roomData.id}
+            roomData={roomData}
+            showBookmark={showBookmark}
+          />
         ))}
       </ul>
       {!isLoading && rooms.length === 0 && (
