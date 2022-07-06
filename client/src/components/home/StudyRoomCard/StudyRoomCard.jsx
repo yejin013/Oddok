@@ -52,7 +52,7 @@ function StudyRoomCard({ roomData, showBookmark }) {
 
   return (
     <>
-      {isModalOpen && <PasswordModal onClose={closeModal} />}
+      {isModalOpen && <PasswordModal roomId={roomData.id} onClose={closeModal} />}
       <li className={styles.card} onClick={onClick}>
         <div className={styles.thumbnail_box}>
           <Thumbnail />
