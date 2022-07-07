@@ -23,11 +23,17 @@ function PasswordModal({ roomId, onClose }) {
       });
   };
 
+  const onKeyPress = (event) => {
+    if (event.key === "Enter") {
+      onPasswordCheck();
+    }
+  };
+
   const content = (
     <>
       <label>
         <p className={styles.content}>비공개 스터디입니다. 비밀번호를 입력해주세요.</p>
-        <Input ref={inputRef} isInvalid={isInvalid} />
+        <Input ref={inputRef} isInvalid={isInvalid} onKeyPress={onKeyPress} />
       </label>
       {isInvalid && <p className={styles.error}>비밀번호를 잘못 입력했습니다. 다시 입력해주세요.</p>}
     </>

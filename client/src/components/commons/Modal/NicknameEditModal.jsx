@@ -22,10 +22,17 @@ function NicknameEditModal({ onClose }) {
     setUserState((prev) => ({ ...prev, nickname: response.nickname }));
   };
 
+  const onKeyPress = (event) => {
+    if (event.key === "Enter") {
+      changeNickname(nickname);
+      onClose();
+    }
+  };
+
   const content = (
     <div className={styles.box}>
       <p>닉네임</p>
-      <Input value={nickname} onChange={onChange} />
+      <Input value={nickname} onChange={onChange} onKeyPress={onKeyPress} />
     </div>
   );
 
