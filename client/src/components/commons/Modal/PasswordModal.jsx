@@ -1,26 +1,36 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { Modal, Input } from "@components/commons";
 import { checkPassword } from "@api/study-room-api";
 import styles from "./PasswordModal.module.css";
 
 function PasswordModal({ roomId, onClose }) {
+  const history = useHistory();
   const inputRef = useRef();
+  const [isInvalid, setIsInvalid] = useState(false);
 
   const onPasswordCheck = () => {
-    try {
-      const response = checkPassword(roomId, inputRef.current.value);
-      console.log("비밀번호", response);
-    } catch (error) {
-      console.error("비밀번호 에러", error);
-    }
+    checkPassword(roomId, inputRef.current.value)
+      .then(() => {
+        if (isInvalid) {
+          setIsInvalid(false);
+        }
+        history.push(`/studyroom/${roomId}/setting`);
+      })
+      .catch(() => {
+        setIsInvalid(true);
+      });
   };
 
   const content = (
-    <label>
-      <p className={styles.content}>비공개 스터디입니다. 비밀번호를 입력해주세요.</p>
-      <Input ref={inputRef} />
-    </label>
+    <>
+      <label>
+        <p className={styles.content}>비공개 스터디입니다. 비밀번호를 입력해주세요.</p>
+        <Input ref={inputRef} isInvalid={isInvalid} />
+      </label>
+      {isInvalid && <p className={styles.error}>비밀번호를 잘못 입력했습니다. 다시 입력해주세요.</p>}
+    </>
   );
 
   return (
