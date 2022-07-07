@@ -38,6 +38,8 @@ out/
 
 !**/.keep
 
+application-aws.properties
+
 src/main/generated/
 src/main/resources/
 nohup.out
