@@ -41,9 +41,7 @@ function StudyRoomCard({ roomData, showBookmark }) {
   const onClick = () => {
     if (!user.isLogin) {
       history.push("/login");
-    }
-
-    if (roomData.isPublic) {
+    } else if (user.isLogin && roomData.isPublic) {
       history.push(`/studyroom/${roomData.id}/setting`);
     } else {
       setIsModalOpen(true);
