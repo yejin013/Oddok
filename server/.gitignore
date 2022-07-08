@@ -36,9 +36,9 @@ out/
 ### VS Code ###
 .vscode/
 
-application.properties
-
 !**/.keep
+
+application-aws.properties
 
 src/main/generated/
 src/main/resources/
