@@ -9,3 +9,4 @@ export { default as StudyBar } from "./StudyBar/StudyBar";
 export { default as SubjectTime } from "./SubjectTime/SubjectTime";
 export { default as TotalTime } from "./TotalTime/TotalTime";
 export { default as UserVideo } from "./UserVideo/UserVideo";
+export { default as UserTag } from "./UserTag/UserTag";

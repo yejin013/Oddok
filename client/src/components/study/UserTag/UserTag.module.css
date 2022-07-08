@@ -1,0 +1,29 @@
+.box {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.33);
+  position: absolute;
+  bottom: 9px;
+  left: 12px;
+}
+
+.box > div {
+  display: flex;
+}
+
+.box svg {
+  width: 16px;
+  height: 16px;
+}
+
+.icon {
+  color: var(--red);
+}
+
+.box span {
+  color: white;
+  font-size: 14px;
+}

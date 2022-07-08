@@ -44,10 +44,14 @@
 
 .video {
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   transform: rotateY(180deg);
 }
 
 .side_bar {
   flex: 1 1 25%;
+}
+
+.video_wrapper {
+  position: relative;
 }
