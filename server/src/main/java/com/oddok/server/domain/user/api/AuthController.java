@@ -56,4 +56,15 @@ public class AuthController {
         TokenDto tokenDto = authService.refresh(refreshTokenCookie.getValue());
         return ResponseEntity.ok(authMapper.toTokenResponse(tokenDto));
     }
+
+    /**
+     * [GET] 회원 탈퇴 및 카카오 소셜 연결 끊기
+     * @param user
+     * @return
+     */
+    @GetMapping("/leave")
+    public ResponseEntity leaveAuth(@AuthenticationPrincipal User user) {
+        authService.leave(user);
+        return ResponseEntity.ok("탈퇴 성공");
+    }
 }

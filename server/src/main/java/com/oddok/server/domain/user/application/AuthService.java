@@ -53,6 +53,16 @@ public class AuthService {
                 .build();
     }
 
+    @Transactional
+    public void leave(User auth) {
+        // kakao 연결 끊기
+
+
+        // DB에서 회원 탈퇴
+        User user = findUser(auth.getId());
+        userRepository.delete(user);
+    }
+
     private User findUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
     }
