@@ -40,8 +40,14 @@ public class UserController {
                 userService.getUserInfo(user.getId())));
     }
 
+    @GetMapping("/info")
+    public ResponseEntity<GetUserResponse> getUser(@AuthenticationPrincipal User user) {
+        UserDto userInfo = userService.getUserInfo(user.getId());
+        return ResponseEntity.ok(userDtoMapper.toUserResponse(userInfo));
+    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<GetUserResponse> get(@PathVariable("id") Long id) {
+    public ResponseEntity<GetUserResponse> getUserById(@PathVariable("id") Long id) {
         UserDto userInfo = userService.getUserInfo(id);
         return ResponseEntity.ok(userDtoMapper.toUserResponse(userInfo));
     }
