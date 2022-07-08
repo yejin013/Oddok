@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { Modal, Input } from "@components/commons";
 import { checkPassword } from "@api/study-room-api";
@@ -9,6 +9,12 @@ function PasswordModal({ roomId, onClose }) {
   const history = useHistory();
   const inputRef = useRef();
   const [isInvalid, setIsInvalid] = useState(false);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
 
   const onPasswordCheck = () => {
     checkPassword(roomId, inputRef.current.value)
