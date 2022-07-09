@@ -4,7 +4,7 @@ import { SendButton } from "@icons";
 import styles from "./Input.module.css";
 
 const Input = forwardRef(
-  ({ type, placeholder, maxLength, onChange, isInvalid, value, isPlanBar, isChatBar, onKeyPress }, inputRef) => {
+  ({ type, placeholder, maxLength, onChange, isInvalid, value, isPlanBar, isChatBar }, inputRef) => {
     // useImperativeHandle(inputRef, () => {
     //   return {
     //     focus: () => inputRef.current.focus(),
@@ -21,7 +21,6 @@ const Input = forwardRef(
           onChange={onChange}
           value={value}
           spellCheck="false"
-          onKeyPress={onKeyPress}
         />
         {(isPlanBar || isChatBar) && (
           <button type="submit" className={styles.button}>

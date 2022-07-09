@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import { Modal, Input } from "@components/commons";
 import { editNickname } from "@api/user-api";
 import { useRecoilState } from "recoil";
@@ -8,13 +8,6 @@ import styles from "./NicknameEditModal.module.css";
 function NicknameEditModal({ onClose }) {
   const [user, setUserState] = useRecoilState(userState);
   const [nickname, setNickname] = useState(user.nickname);
-  const inputRef = useRef();
-
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, []);
 
   const onChange = (event) => {
     if (event.currentTarget == null) {
@@ -29,17 +22,10 @@ function NicknameEditModal({ onClose }) {
     setUserState((prev) => ({ ...prev, nickname: response.nickname }));
   };
 
-  const onKeyPress = (event) => {
-    if (event.key === "Enter") {
-      changeNickname(nickname);
-      onClose();
-    }
-  };
-
   const content = (
     <div className={styles.box}>
       <p>닉네임</p>
-      <Input ref={inputRef} value={nickname} onChange={onChange} onKeyPress={onKeyPress} />
+      <Input value={nickname} onChange={onChange} />
     </div>
   );
 

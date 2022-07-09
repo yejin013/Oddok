@@ -46,10 +46,3 @@ export const getStudyRoomList = async (page, sort, isPublic, category, name, has
   });
   return response.data;
 };
-
-export const checkPassword = async (roomId, password) => {
-  const response = await axiosInstance.post(`/study-room/check/${roomId}`, {
-    password,
-  });
-  return response;
-};
