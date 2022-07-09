@@ -49,6 +49,8 @@ function StudyRoom() {
 
   const toggleAudio = () => {
     publisher.streamManager.publishAudio(!publisher.streamManager.stream.audioActive);
+    session.signal({ data: JSON.stringify({ isMicOn: !isMuted }), type: "micStatusChanged" });
+    setPublisher({ ...publisher, isMicOn: !publisher.isMicOn });
     setIsMuted((prev) => !prev);
   };
 
@@ -108,6 +110,19 @@ function StudyRoom() {
       session.on("signal:updated-roominfo", (event) => {
         const data = JSON.parse(event.data);
         setRoomInfo(data);
+      });
+
+      session.on("signal:micStatusChanged", (event) => {
+        setSubscribers((prev) =>
+          prev.map((user) => {
+            if (user.streamManager.stream.connection.connectionId === event.from.connectionId) {
+              const userStatus = user;
+              userStatus.isMicOn = JSON.parse(event.data).isMicOn;
+              return userStatus;
+            }
+            return user;
+          }),
+        );
       });
 
       session.on("exception", (exception) => {
