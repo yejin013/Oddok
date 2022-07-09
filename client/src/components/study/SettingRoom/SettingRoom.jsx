@@ -76,7 +76,7 @@ function SettingRoom({ goToStudyRoom, updateRoomInfo }) {
             <div className={styles.video_wrapper}>
               <video className={styles.video} ref={videoRef} autoPlay />
               <TotalTime />
-              <UserTag isHost nickname="랩실도비" />
+              <UserTag isHost={userInfo.updateAllowed} isMicOn={isMuted} nickname={userInfo.nickname} />
             </div>
           </div>
           {isPlanOpen && (

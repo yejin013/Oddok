@@ -19,8 +19,12 @@
   height: 16px;
 }
 
-.icon {
+.off_icon {
   color: var(--red);
+}
+
+.on_icon {
+  color: white;
 }
 
 .box span {
