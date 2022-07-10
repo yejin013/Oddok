@@ -13,11 +13,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RequiredArgsConstructor
 public class ClientKakao {
 
-    @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
-    private String RESTAPIKEY;
-    @Value("${logout.redirect.uri}")
-    private String LOGOUT_REDIRECT_URI;
-
     public User getUserData(String kakaoAccessToken) {
         KakaoUserDto userData = WebClient.create().get()
                 .uri("https://kapi.kakao.com/v2/user/me")
@@ -34,9 +29,4 @@ public class ClientKakao {
                 .build();
     }
 
-    public void kakaoLogout() {
-        WebClient.create().get()
-                .uri("https://kapi.kakao.com/oauth/logout?client_id=+" + RESTAPIKEY +"&logout_redirect_uri="+ LOGOUT_REDIRECT_URI)
-                .retrieve();
-    }
 }
