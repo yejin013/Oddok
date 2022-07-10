@@ -11,6 +11,7 @@ import MyPage from "@pages/MyPage/MyPage";
 import StudyRoom from "@pages/StudyRoom/StudyRoom";
 import NotFoundPage from "@pages/NotFoundPage/NotFoundPage";
 import RedirectPage from "@pages/Login/RedirectPage";
+import LogoutRedirectPage from "@pages/LogoutRedirectPage/LogoutRedirectPage";
 import { getNewToken } from "@api/auth-api";
 import { Loading } from "@components/commons";
 
@@ -41,6 +42,9 @@ function App() {
           </Route>
           <Route path="/login/oauth2/code/kakao">
             <RedirectPage />
+          </Route>
+          <Route path="/logout/oauth2/code/kakao">
+            <LogoutRedirectPage />
           </Route>
           <Route path="/search">
             <Search />
