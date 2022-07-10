@@ -46,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .logout()
-                .logoutUrl("/logout/oauth2/code/kakao")
+                .logoutUrl("/auth/logout")
                 .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK))
                 .invalidateHttpSession(true)
                 .deleteCookies("refreshToken")

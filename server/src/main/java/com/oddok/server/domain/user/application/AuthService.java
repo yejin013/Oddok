@@ -53,6 +53,11 @@ public class AuthService {
                 .build();
     }
 
+    @Transactional
+    public void logout(User user) {
+        clientKakao.kakaoLogout();
+    }
+
     private User findUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
     }

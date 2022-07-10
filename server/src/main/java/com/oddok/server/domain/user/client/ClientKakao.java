@@ -4,6 +4,7 @@ import com.oddok.server.domain.user.dto.KakaoUserDto;
 import com.oddok.server.domain.user.entity.Role;
 import com.oddok.server.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -11,6 +12,11 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Component
 @RequiredArgsConstructor
 public class ClientKakao {
+
+    @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
+    private String RESTAPIKEY;
+    @Value("${logout.redirect.uri}")
+    private String LOGOUT_REDIRECT_URI;
 
     public User getUserData(String kakaoAccessToken) {
         KakaoUserDto userData = WebClient.create().get()
@@ -28,4 +34,9 @@ public class ClientKakao {
                 .build();
     }
 
+    public void kakaoLogout() {
+        WebClient.create().get()
+                .uri("https://kapi.kakao.com/oauth/logout?client_id=+" + RESTAPIKEY +"&logout_redirect_uri="+ LOGOUT_REDIRECT_URI)
+                .retrieve();
+    }
 }
