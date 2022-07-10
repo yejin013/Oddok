@@ -58,10 +58,4 @@ public class AuthController {
         TokenDto tokenDto = authService.refresh(refreshTokenCookie.getValue());
         return ResponseEntity.ok(authMapper.toTokenResponse(tokenDto));
     }
-
-    @GetMapping("/logout")
-    public ResponseEntity logout(@AuthenticationPrincipal User user) {
-        authService.logout(user);
-        return ResponseEntity.ok("로그아웃");
-    }
 }

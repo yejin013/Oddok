@@ -1,6 +1,5 @@
 package com.oddok.server.domain.user.application;
 
-import com.oddok.server.common.errors.TokenValidFailedException;
 import com.oddok.server.common.errors.UserNotFoundException;
 import com.oddok.server.common.jwt.JwtTokenProvider;
 import com.oddok.server.domain.user.client.ClientKakao;
@@ -51,11 +50,6 @@ public class AuthService {
         return TokenDto.builder()
                 .token(accessToken)
                 .build();
-    }
-
-    @Transactional
-    public void logout(User user) {
-        clientKakao.kakaoLogout();
     }
 
     private User findUser(Long userId) {
