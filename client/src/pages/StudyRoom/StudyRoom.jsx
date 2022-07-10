@@ -5,7 +5,15 @@ import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import { roomIdState, roomInfoState, videoState, audioState } from "@recoil/studyroom-state";
 import { userState } from "@recoil/user-state";
 import { updateStudyRoom, leaveStudyRoom } from "@api/study-room-api";
-import { StudyBar, UserVideo, SettingSideBar, ChatSideBar, PlanSidebar, SettingForm } from "@components/study";
+import {
+  StudyBar,
+  UserVideo,
+  SettingSideBar,
+  ChatSideBar,
+  PlanSidebar,
+  ParticipantSideBar,
+  SettingForm,
+} from "@components/study";
 import { Modal } from "@components/commons";
 import styles from "./StudyRoom.module.css";
 
@@ -24,7 +32,12 @@ function StudyRoom() {
   const roomId = useRecoilValue(roomIdState);
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
   const resetRoomInfo = useResetRecoilState(roomInfoState);
-  const [sideBarState, setSideBarState] = useState({ setting: false, chatting: false, plan: false });
+  const [sideBarState, setSideBarState] = useState({
+    setting: false,
+    chatting: false,
+    plan: false,
+    participant: false,
+  });
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [isLeaveOpen, setIsLeaveOpen] = useState(false);
   const localUser = useRecoilValue(userState);
@@ -136,15 +149,38 @@ function StudyRoom() {
   };
 
   const clickSettingBtn = () => {
-    setSideBarState({ ...sideBarState, setting: !sideBarState.setting, chatting: false, plan: false });
+    setSideBarState({
+      ...sideBarState,
+      setting: !sideBarState.setting,
+      chatting: false,
+      plan: false,
+      participant: false,
+    });
   };
 
   const clickChatBtn = () => {
-    setSideBarState({ ...sideBarState, setting: false, chatting: !sideBarState.chatting, plan: false });
+    setSideBarState({
+      ...sideBarState,
+      setting: false,
+      chatting: !sideBarState.chatting,
+      plan: false,
+      participant: false,
+    });
   };
 
   const clickPlanBtn = () => {
-    setSideBarState({ ...sideBarState, setting: false, chatting: false, plan: !sideBarState.plan });
+    setSideBarState({ ...sideBarState, setting: false, chatting: false, plan: !sideBarState.plan, participant: false });
+  };
+
+  const clickParticipantBtn = () => {
+    if (!publisher) return;
+    setSideBarState({
+      ...sideBarState,
+      setting: false,
+      chatting: false,
+      plan: false,
+      participant: !sideBarState.participant,
+    });
   };
 
   const updateRoomInfo = async (data) => {
@@ -183,6 +219,11 @@ function StudyRoom() {
         <div className={`${styles.side_bar} ${!sideBarState.chatting && styles.hide}`}>
           <ChatSideBar session={session} />
         </div>
+        {sideBarState.participant && (
+          <div className={styles.side_bar}>
+            <ParticipantSideBar participants={[publisher, ...subscribers]} />
+          </div>
+        )}
       </div>
       <div className={styles.bar}>
         <StudyBar
@@ -192,6 +233,7 @@ function StudyRoom() {
           toggleAudio={toggleAudio}
           isPlaying={isPlaying}
           isMuted={isMuted}
+          clickParticipantBtn={clickParticipantBtn}
           clickChatBtn={clickChatBtn}
           onClickplanBtn={clickPlanBtn}
           onClickLeaveBtn={clickLeaveBtn}
