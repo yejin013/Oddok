@@ -55,8 +55,5 @@ public class ClientKakao {
                 .bodyToMono(KakaoUserDto.class)
                 .block();
     }
-//
-//    public String getUserAccessToken() {
-//
-//    }
+
 }
