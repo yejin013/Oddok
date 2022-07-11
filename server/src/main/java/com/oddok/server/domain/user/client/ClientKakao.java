@@ -8,6 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Component
@@ -37,16 +40,21 @@ public class ClientKakao {
                 .role(Role.USER)
                 .build();
     }
-//
-//    public void leaveUser() {
-//        WebClient.create().get()
-//                .uri("https://kapi.kakao.com/v1/user/unlink")
-//                .accept(MediaType.APPLICATION_JSON)
-//                .headers(h -> h.setBearerAuth(kakaoAccessToken))
-//                .retrieve()
-//                .bodyToMono(KakaoUserDto.class)
-//                .block();
-//    }
+
+    public void leaveUser(Long userId) {
+        MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
+        formData.add("target_id_type", "user_id");
+        formData.add("target_id", userId.toString());
+
+        WebClient.create().post()
+                .uri("https://kapi.kakao.com/v1/user/unlink")
+                .accept(MediaType.APPLICATION_FORM_URLENCODED)
+                .header("Authorization", "KakaoAK " + appAdminKey)
+                .body(BodyInserters.fromFormData(formData))
+                .retrieve()
+                .bodyToMono(KakaoUserDto.class)
+                .block();
+    }
 //
 //    public String getUserAccessToken() {
 //
