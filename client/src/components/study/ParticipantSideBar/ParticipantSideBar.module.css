@@ -1,9 +1,12 @@
 .side {
   height: 100%;
+  padding: 16px;
+}
+
+.side > ul {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 16px;
 }
 
 .item {
