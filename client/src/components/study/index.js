@@ -1,4 +1,5 @@
 export { default as ChatSideBar } from "./ChatSideBar/ChatSideBar";
+export { default as ParticipantSideBar } from "./ParticipantSideBar/ParticipantSideBar";
 export { default as Plan } from "./Plans/Plans";
 export { default as PlanSidebar } from "./PlanSidebar/PlanSidebar";
 export { default as SettingBar } from "./SettingBar/SettingBar";
@@ -9,3 +10,4 @@ export { default as StudyBar } from "./StudyBar/StudyBar";
 export { default as SubjectTime } from "./SubjectTime/SubjectTime";
 export { default as TotalTime } from "./TotalTime/TotalTime";
 export { default as UserVideo } from "./UserVideo/UserVideo";
+export { default as UserTag } from "./UserTag/UserTag";

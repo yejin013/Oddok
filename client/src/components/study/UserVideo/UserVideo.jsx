@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import TotalTime from "../TotalTime/TotalTime";
+import UserTag from "../UserTag/UserTag";
 import styles from "./UserVideo.module.css";
 
 function UserVideo({ count, publisher, subscriber }) {
@@ -8,9 +9,9 @@ function UserVideo({ count, publisher, subscriber }) {
   useEffect(() => {
     if (videoRef) {
       if (publisher) {
-        publisher.addVideoElement(videoRef.current);
+        publisher.streamManager.addVideoElement(videoRef.current);
       } else if (subscriber) {
-        subscriber.addVideoElement(videoRef.current);
+        subscriber.streamManager.addVideoElement(videoRef.current);
       }
     }
   }, [publisher, subscriber]);
@@ -36,6 +37,11 @@ function UserVideo({ count, publisher, subscriber }) {
     <li className={`${styles.video} ${getCount(count)}`}>
       <video className={styles.user_video} ref={videoRef} autoPlay />
       {publisher && <TotalTime />}
+      <UserTag
+        isHost={publisher ? publisher.isHost : subscriber.isHost}
+        isMicOn={publisher ? publisher.isMicOn : subscriber.isMicOn}
+        nickname={publisher ? publisher.nickname : subscriber.nickname}
+      />
     </li>
   );
 }

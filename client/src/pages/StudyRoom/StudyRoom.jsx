@@ -3,8 +3,17 @@ import { useHistory, useLocation, useParams } from "react-router-dom";
 import { OpenVidu } from "openvidu-browser";
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import { roomIdState, roomInfoState, videoState, audioState } from "@recoil/studyroom-state";
+import { userState } from "@recoil/user-state";
 import { updateStudyRoom, leaveStudyRoom } from "@api/study-room-api";
-import { StudyBar, UserVideo, SettingSideBar, ChatSideBar, PlanSidebar, SettingForm } from "@components/study";
+import {
+  StudyBar,
+  UserVideo,
+  SettingSideBar,
+  ChatSideBar,
+  PlanSidebar,
+  ParticipantSideBar,
+  SettingForm,
+} from "@components/study";
 import { Modal } from "@components/commons";
 import styles from "./StudyRoom.module.css";
 
@@ -23,9 +32,15 @@ function StudyRoom() {
   const roomId = useRecoilValue(roomIdState);
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
   const resetRoomInfo = useResetRecoilState(roomInfoState);
-  const [sideBarState, setSideBarState] = useState({ setting: false, chatting: false, plan: false });
+  const [sideBarState, setSideBarState] = useState({
+    setting: false,
+    chatting: false,
+    plan: false,
+    participant: false,
+  });
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [isLeaveOpen, setIsLeaveOpen] = useState(false);
+  const localUser = useRecoilValue(userState);
 
   const clickLeaveBtn = () => {
     setIsLeaveOpen(true);
@@ -41,12 +56,14 @@ function StudyRoom() {
   };
 
   const toggleVideo = () => {
-    publisher.publishVideo(!publisher.stream.videoActive);
+    publisher.streamManager.publishVideo(!publisher.streamManager.stream.videoActive);
     setIsPlaying((prev) => !prev);
   };
 
   const toggleAudio = () => {
-    publisher.publishAudio(!publisher.stream.audioActive);
+    publisher.streamManager.publishAudio(!publisher.streamManager.stream.audioActive);
+    session.signal({ data: JSON.stringify({ isMicOn: !isMuted }), type: "micStatusChanged" });
+    setPublisher({ ...publisher, isMicOn: !publisher.isMicOn });
     setIsMuted((prev) => !prev);
   };
 
@@ -62,10 +79,14 @@ function StudyRoom() {
   useEffect(() => {
     if (session) {
       (async () => {
-        await session.connect(location.state.token);
+        await session.connect(location.state.token, {
+          nickname: localUser.nickname,
+          isHost: localUser.updateAllowed,
+          isMicOn: isMuted,
+        });
         const devices = await OV.getDevices();
         const videoDevices = devices.filter((device) => device.kind === "videoinput");
-        const localUser = OV.initPublisher(undefined, {
+        const localUserStream = OV.initPublisher(undefined, {
           audioSource: undefined,
           videoSource: videoDevices[0].label ? videoDevices.deviceId : undefined,
           publishAudio: isMuted,
@@ -73,29 +94,52 @@ function StudyRoom() {
           frameRate: 30,
           mirror: false,
         });
-        await session.publish(localUser);
-        setPublisher(localUser);
+        await session.publish(localUserStream);
+        setPublisher({
+          streamManager: localUserStream,
+          nickname: localUser.nickname,
+          isHost: localUser.updateAllowed,
+          isMicOn: isMuted,
+        });
       })();
 
       // 3. 소켓 이벤트 처리
       // 1) 스트림 생성
       session.on("streamCreated", (event) => {
         const participant = session.subscribe(event.stream, undefined);
-        setSubscribers((prev) => [...prev, participant]);
+        const data = JSON.parse(event.stream.connection.data);
+        setSubscribers((prev) => [
+          ...prev,
+          { streamManager: participant, nickname: data.nickname, isHost: data.isHost, isMicOn: data.isMicOn },
+        ]);
         setCount((prev) => prev + 1);
       });
       // 2) 스트림 삭제
       session.on("streamDestroyed", (event) => {
-        setSubscribers((prev) => prev.filter((subscriber) => subscriber !== event.stream.streamManager));
+        setSubscribers((prev) => prev.filter((subscriber) => subscriber.streamManager !== event.stream.streamManager));
         setCount((prev) => prev - 1);
-      });
-      session.on("exception", (exception) => {
-        console.warn(exception);
       });
       // 3) 방장이 방 정보를 수정했을 때
       session.on("signal:updated-roominfo", (event) => {
         const data = JSON.parse(event.data);
         setRoomInfo(data);
+      });
+
+      session.on("signal:micStatusChanged", (event) => {
+        setSubscribers((prev) =>
+          prev.map((user) => {
+            if (user.streamManager.stream.connection.connectionId === event.from.connectionId) {
+              const userStatus = user;
+              userStatus.isMicOn = JSON.parse(event.data).isMicOn;
+              return userStatus;
+            }
+            return user;
+          }),
+        );
+      });
+
+      session.on("exception", (exception) => {
+        console.warn(exception);
       });
     }
   }, [session]);
@@ -105,15 +149,38 @@ function StudyRoom() {
   };
 
   const clickSettingBtn = () => {
-    setSideBarState({ ...sideBarState, setting: !sideBarState.setting, chatting: false, plan: false });
+    setSideBarState({
+      ...sideBarState,
+      setting: !sideBarState.setting,
+      chatting: false,
+      plan: false,
+      participant: false,
+    });
   };
 
   const clickChatBtn = () => {
-    setSideBarState({ ...sideBarState, setting: false, chatting: !sideBarState.chatting, plan: false });
+    setSideBarState({
+      ...sideBarState,
+      setting: false,
+      chatting: !sideBarState.chatting,
+      plan: false,
+      participant: false,
+    });
   };
 
   const clickPlanBtn = () => {
-    setSideBarState({ ...sideBarState, setting: false, chatting: false, plan: !sideBarState.plan });
+    setSideBarState({ ...sideBarState, setting: false, chatting: false, plan: !sideBarState.plan, participant: false });
+  };
+
+  const clickParticipantBtn = () => {
+    if (!publisher) return;
+    setSideBarState({
+      ...sideBarState,
+      setting: false,
+      chatting: false,
+      plan: false,
+      participant: !sideBarState.participant,
+    });
   };
 
   const updateRoomInfo = async (data) => {
@@ -152,6 +219,11 @@ function StudyRoom() {
         <div className={`${styles.side_bar} ${!sideBarState.chatting && styles.hide}`}>
           <ChatSideBar session={session} />
         </div>
+        {sideBarState.participant && (
+          <div className={styles.side_bar}>
+            <ParticipantSideBar participants={[publisher, ...subscribers]} />
+          </div>
+        )}
       </div>
       <div className={styles.bar}>
         <StudyBar
@@ -161,6 +233,7 @@ function StudyRoom() {
           toggleAudio={toggleAudio}
           isPlaying={isPlaying}
           isMuted={isMuted}
+          clickParticipantBtn={clickParticipantBtn}
           clickChatBtn={clickChatBtn}
           onClickplanBtn={clickPlanBtn}
           onClickLeaveBtn={clickLeaveBtn}

@@ -1,0 +1,39 @@
+.side {
+  height: 100%;
+  padding: 16px;
+}
+
+.side > ul {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--gray900);
+  border-radius: 4px;
+  padding: 10px 14px;
+  color: white;
+}
+
+.item > div {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.side svg {
+  width: 18px;
+  height: 18px;
+}
+
+.on_icon {
+  color: white;
+}
+
+.off_icon {
+  color: var(--red);
+}
