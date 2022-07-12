@@ -9,11 +9,7 @@ import { Loading, Modal } from "@components/commons";
 function LogoutRedirectPage() {
   const history = useHistory();
   const [user, setUserState] = useRecoilState(userState);
-  const {
-    loading: isLoading,
-    error: isError,
-    sendRequest: onLogout,
-  } = useAsync(logout, { onError: (error) => console.error(error) });
+  const { loading: isLoading, error: isError, sendRequest: onLogout } = useAsync(logout);
 
   useEffect(() => {
     onLogout()
