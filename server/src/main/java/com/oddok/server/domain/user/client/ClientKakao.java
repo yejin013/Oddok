@@ -1,6 +1,5 @@
 package com.oddok.server.domain.user.client;
 
-import com.oddok.server.common.errors.SocialDataNotFoundException;
 import com.oddok.server.domain.user.dto.KakaoUserDto;
 import com.oddok.server.domain.user.entity.Role;
 import com.oddok.server.domain.user.entity.User;
@@ -32,10 +31,8 @@ public class ClientKakao {
                 .bodyToMono(KakaoUserDto.class)
                 .block();
 
-        if (userData.getKakaoAccount().getEmail().isEmpty()) throw new SocialDataNotFoundException();
-
         return User.builder()
-                .email(userData.getKakaoAccount().getEmail())
+                .userId(userData.getId().toString())
                 .nickname(userData.getProperties().getNickname())
                 .role(Role.USER)
                 .build();

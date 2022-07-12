@@ -7,14 +7,14 @@ import lombok.Getter;
 public class UserDto {
     private final Long id;
 
-    private final String email;
+    private final String userId;
 
     private final String nickname;
 
     @Builder
-    public UserDto (Long id, String email, String nickname) {
+    public UserDto (Long id, String userId, String nickname) {
         this.id = id;
-        this.email = email;
+        this.userId = userId;
         this.nickname = nickname;
     }
 }

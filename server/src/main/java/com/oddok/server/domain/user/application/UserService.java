@@ -36,19 +36,19 @@ public class UserService {
     public TokensDto createUser() {
         User maker1 = new User("maker@kakao.com", "maker", Role.USER);
         User savedUser = userRepository.save(maker1);
-        savedUser.updateRefreshToken(authTokenProvider.createRefreshToken(savedUser.getId().toString(), savedUser.getEmail(), savedUser.getRole()));
-        userRepository.save(new User("user1@kakao.com", "user1", Role.USER));
-        userRepository.save(new User("user2@kakao.com", "user2", Role.USER));
-        userRepository.save(new User("user3@kakao.com", "user3", Role.USER));
-        userRepository.save(new User("user4@kakao.com", "user4", Role.USER));
-        userRepository.save(new User("user5@kakao.com", "user5", Role.USER));
-        userRepository.save(new User("user6@kakao.com", "user6", Role.USER));
-        userRepository.save(new User("user7@kakao.com", "user7", Role.USER));
-        userRepository.save(new User("user8@kakao.com", "user8", Role.USER));
-        userRepository.save(new User("user9@kakao.com", "user9", Role.USER));
+        savedUser.updateRefreshToken(authTokenProvider.createRefreshToken(savedUser.getId().toString(), savedUser.getUserId(), savedUser.getRole()));
+        userRepository.save(new User("user1", "user1", Role.USER));
+        userRepository.save(new User("user2", "user2", Role.USER));
+        userRepository.save(new User("user3", "user3", Role.USER));
+        userRepository.save(new User("user4", "user4", Role.USER));
+        userRepository.save(new User("user5", "user5", Role.USER));
+        userRepository.save(new User("user6", "user6", Role.USER));
+        userRepository.save(new User("user7", "user7", Role.USER));
+        userRepository.save(new User("user8", "user8", Role.USER));
+        userRepository.save(new User("user9", "user9", Role.USER));
 
         return TokensDto.builder()
-                .accessToken(authTokenProvider.createAccessToken(savedUser.getId().toString(), savedUser.getEmail(), savedUser.getRole()))
+                .accessToken(authTokenProvider.createAccessToken(savedUser.getId().toString(), savedUser.getUserId(), savedUser.getRole()))
                 .refreshToken(savedUser.getRefreshToken())
                 .build();
     }

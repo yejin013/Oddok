@@ -1,6 +1,5 @@
 package com.oddok.server.domain.user.application;
 
-import com.oddok.server.common.errors.TokenValidFailedException;
 import com.oddok.server.common.errors.UserNotFoundException;
 import com.oddok.server.common.jwt.JwtTokenProvider;
 import com.oddok.server.domain.user.client.ClientKakao;
@@ -26,13 +25,13 @@ public class AuthService {
     public TokensDto login(String kakaoAccessToken) {
         User kakaoUser = clientKakao.getUserData(kakaoAccessToken);
 
-        String userEmail = kakaoUser.getEmail();
+        String userId = kakaoUser.getUserId();
 
-        User user = userRepository.findByEmail(userEmail).orElseGet(() -> userRepository.save(kakaoUser));
+        User user = userRepository.findByUserId(userId).orElseGet(() -> userRepository.save(kakaoUser));
 
-        String accessToken = authTokenProvider.createAccessToken(user.getId().toString(), userEmail, user.getRole());
+        String accessToken = authTokenProvider.createAccessToken(user.getId().toString(), userId, user.getRole());
 
-        user.updateRefreshToken(authTokenProvider.createRefreshToken(user.getId().toString(), userEmail, user.getRole()));
+        user.updateRefreshToken(authTokenProvider.createRefreshToken(user.getId().toString(), userId, user.getRole()));
 
         return TokensDto.builder()
                 .accessToken(accessToken)
@@ -46,7 +45,7 @@ public class AuthService {
 
         User user = findUser(Long.parseLong(refreshUserId));
 
-        String accessToken = authTokenProvider.createAccessToken(user.getId().toString(), user.getEmail(), user.getRole());
+        String accessToken = authTokenProvider.createAccessToken(user.getId().toString(), user.getUserId(), user.getRole());
 
         return TokenDto.builder()
                 .token(accessToken)
