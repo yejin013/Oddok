@@ -38,10 +38,10 @@ public class ClientKakao {
                 .build();
     }
 
-    public void leaveUser(Long userId) {
+    public void leaveUser(String userId) {
         MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
         formData.add("target_id_type", "user_id");
-        formData.add("target_id", userId.toString());
+        formData.add("target_id", userId);
 
         WebClient.create().post()
                 .uri("https://kapi.kakao.com/v1/user/unlink")
