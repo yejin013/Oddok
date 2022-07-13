@@ -64,12 +64,12 @@ public class JwtTokenProvider {
     /**
      * AccessToken 생성
      *
-     * @param userId 발급할 사용자의 아이디
+     * @param id 발급할 사용자의 아이디
      * @param role  사용자에게 허용할 권한
      * @return AccessToken
      */
-    public String createAccessToken(String userId, String email, Role role) {
-        return generateToken(userId, email, role, Long.parseLong(accessTokenValidMilSecond));
+    public String createAccessToken(String id, String userId, Role role) {
+        return generateToken(id, userId, role, Long.parseLong(accessTokenValidMilSecond));
     }
 
     /**
@@ -79,23 +79,23 @@ public class JwtTokenProvider {
      * @param role  사용자에게 허용할 권한
      * @return AccessToken
      */
-    public String createRefreshToken(String userId, String email, Role role) {
-        return generateToken(userId, email, role, Long.parseLong(refreshTokenValidMilSecond));
+    public String createRefreshToken(String id, String userId, Role role) {
+        return generateToken(id, userId, role, Long.parseLong(refreshTokenValidMilSecond));
     }
 
     /**
      * JWTToken 생성
      *
-     * @param userId              발급할 사용자의 아이디
+     * @param id              발급할 사용자의 아이디
      * @param role               사용자에게 허용할 권한
      * @param tokenValidMilSecond 토큰 유효시간
      * @return AccessToken
      */
-    protected String generateToken(String userId, String email, Role role, long tokenValidMilSecond) {
+    protected String generateToken(String id, String userId, Role role, long tokenValidMilSecond) {
         Date now = new Date();
         return Jwts.builder()
-                .claim("userId",userId)
-                .claim("email", email)
+                .claim("id", id)
+                .claim("userId", userId)
                 .claim("role", role)
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + tokenValidMilSecond))
@@ -155,7 +155,7 @@ public class JwtTokenProvider {
      * @return UserId
      */
     public String getUserId(Claims claims) {
-        return (String) claims.get("userId");
+        return (String) claims.get("id");
     }
 
     /**

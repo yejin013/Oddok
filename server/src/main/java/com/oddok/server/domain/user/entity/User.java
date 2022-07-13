@@ -19,7 +19,7 @@ public class User {
     private Long id;
 
     @Column(unique = true, nullable = false, length = 255)
-    private String email;
+    private String userId;
 
     @Column(length = 8)
     private String nickname;
@@ -40,8 +40,8 @@ public class User {
     private LocalDateTime updateAt;
 
     @Builder
-    public User(String email, String nickname, Role role) {
-        this.email = email;
+    public User(String userId, String nickname, Role role) {
+        this.userId = userId;
         this.nickname = nickname;
         this.role = role ;
         this.createAt = LocalDateTime.now();
@@ -49,8 +49,8 @@ public class User {
     }
 
     public User(Claims claims) {
-        this.id = Long.valueOf(claims.get("userId").toString());
-        this.email = claims.get("userId").toString();
+        this.id = Long.valueOf(claims.get("id").toString());
+        this.userId = claims.get("userId").toString();
         this.role = Role.valueOf(claims.get("role").toString());
     }
 
