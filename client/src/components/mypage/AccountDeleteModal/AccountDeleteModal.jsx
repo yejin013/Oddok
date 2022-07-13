@@ -9,8 +9,7 @@ function AccountDeleteModal({ onClose }) {
 
   const onDeleteAccount = () => {
     deleteAccount()
-      .then((response) => {
-        console.log(response); // 확인용
+      .then(() => {
         localStorage.removeItem("isLogin");
         setUserState({ ...user, isLogin: localStorage.getItem("isLogin") });
         window.location.replace("/");
