@@ -8,7 +8,7 @@ function AccountDeleteModal({ onClose }) {
   const [user, setUserState] = useRecoilState(userState);
 
   const onDeleteAccount = () => {
-    deleteAccount
+    deleteAccount()
       .then((response) => {
         console.log(response); // 확인용
         localStorage.removeItem("isLogin");

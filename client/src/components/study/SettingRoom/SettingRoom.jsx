@@ -4,7 +4,7 @@ import { userState } from "@recoil/user-state";
 import { videoState, audioState, roomTitleState } from "@recoil/studyroom-state";
 import { planState } from "@recoil/plan-state";
 import { ToolTip } from "@components/commons";
-import { SettingBar, SettingForm, SettingSideBar, TotalTime, PlanSidebar } from "@components/study";
+import { SettingBar, SettingForm, SettingSideBar, TotalTime, PlanSidebar, UserTag } from "@components/study";
 import styles from "./SettingRoom.module.css";
 
 function SettingRoom({ goToStudyRoom, updateRoomInfo }) {
@@ -73,8 +73,11 @@ function SettingRoom({ goToStudyRoom, updateRoomInfo }) {
             </div>
           )}
           <div className={styles.video_container}>
-            <video className={styles.video} ref={videoRef} autoPlay />
-            <TotalTime />
+            <div className={styles.video_wrapper}>
+              <video className={styles.video} ref={videoRef} autoPlay />
+              <TotalTime />
+              <UserTag isHost={userInfo.updateAllowed} isMicOn={isMuted} nickname={userInfo.nickname} />
+            </div>
           </div>
           {isPlanOpen && (
             <div className={styles.side_bar}>

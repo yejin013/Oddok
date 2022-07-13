@@ -1,7 +1,7 @@
 .bar {
   display: flex;
   align-items: center;
-  height: 77px;
+  height: 10vh;
   background-color: var(--gray950);
   color: var(--gray300);
   padding: 0.2em 1.5em;

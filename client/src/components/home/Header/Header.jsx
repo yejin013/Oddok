@@ -4,7 +4,8 @@ import { useHistory } from "react-router-dom";
 import { userState } from "@recoil/user-state";
 import { Search, Profile } from "@icons";
 import { getNickname } from "@api/user-api";
-import { LogoutModal, NicknameEditModal } from "@components/commons";
+import { NicknameEditModal } from "@components/commons";
+import { KAKAO_LOGOUT_URL } from "@api/kakao";
 import styles from "./Header.module.css";
 
 function Header() {
@@ -56,8 +57,8 @@ function Header() {
     setIsDropdown((prev) => !prev);
   };
 
-  const renderModal = (type) => {
-    setIsModalOpen(type);
+  const clickNicknameEditBtn = () => {
+    setIsModalOpen((prev) => !prev);
     setIsDropdown((prev) => !prev);
   };
 
@@ -67,8 +68,7 @@ function Header() {
 
   return (
     <div>
-      {(isModalOpen === "edit-nickname" && <NicknameEditModal onClose={onClose} />) ||
-        (isModalOpen === "logout" && <LogoutModal onClose={onClose} />)}
+      {isModalOpen && <NicknameEditModal onClose={onClose} />}
       <header className={styles.header}>
         <div className={styles.logo}>
           <a href="/">ODDOK</a>
@@ -113,14 +113,16 @@ function Header() {
             {user.isLogin && isDropdown && (
               <ul className={styles.info_buttons}>
                 <li>
-                  <button type="button" className={styles.button} onClick={() => renderModal("edit-nickname")}>
+                  <button type="button" className={styles.button} onClick={clickNicknameEditBtn}>
                     닉네임 수정
                   </button>
                 </li>
                 <li>
-                  <button type="button" className={styles.button} onClick={() => renderModal("logout")}>
-                    로그아웃
-                  </button>
+                  <a href={KAKAO_LOGOUT_URL}>
+                    <button type="button" className={styles.button}>
+                      로그아웃
+                    </button>
+                  </a>
                 </li>
               </ul>
             )}

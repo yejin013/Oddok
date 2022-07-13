@@ -18,15 +18,13 @@ function JoinRoom() {
     data: roomData,
     error: getInfoError,
     reset: getInfoErrorReset,
-  } = useAsync(() => getStudyRoom(id), { onError: (error) => console.log(error) }, [id], false);
+  } = useAsync(() => getStudyRoom(id), [id], false);
   const {
     loading: isLoading,
     error: joinError,
     sendRequest: joinRoom,
     reset: joinErrorReset,
-  } = useAsync(joinStudyRoom, {
-    onError: (error) => console.error(error),
-  });
+  } = useAsync(joinStudyRoom);
 
   // TODO 방장일 경우 수정권한 주기
   useEffect(() => {
