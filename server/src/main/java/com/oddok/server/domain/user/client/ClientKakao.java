@@ -19,7 +19,7 @@ public class ClientKakao {
     @Value("${spring.security.oauth2.client.provider.kakao.user-info-uri}")
     String userApi;
 
-    @Value("${spring.security.oauth2.client.registration.kakao.client-secret}")
+    @Value("${kakao.admin-key}")
     String appAdminKey;
 
     public User getUserData(String kakaoAccessToken) {
