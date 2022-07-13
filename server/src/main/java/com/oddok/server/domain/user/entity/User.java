@@ -49,7 +49,7 @@ public class User {
     }
 
     public User(Claims claims) {
-        this.id = Long.valueOf(claims.get("userId").toString());
+        this.id = Long.valueOf(claims.get("id").toString());
         this.userId = claims.get("userId").toString();
         this.role = Role.valueOf(claims.get("role").toString());
     }
