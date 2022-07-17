@@ -149,38 +149,35 @@ function StudyRoom() {
   };
 
   const clickSettingBtn = () => {
-    setSideBarState({
-      ...sideBarState,
-      setting: !sideBarState.setting,
+    setSideBarState((prev) => ({
+      setting: !prev.setting,
       chatting: false,
       plan: false,
       participant: false,
-    });
+    }));
   };
 
   const clickChatBtn = () => {
-    setSideBarState({
-      ...sideBarState,
+    setSideBarState((prev) => ({
       setting: false,
-      chatting: !sideBarState.chatting,
+      chatting: !prev.chatting,
       plan: false,
       participant: false,
-    });
+    }));
   };
 
   const clickPlanBtn = () => {
-    setSideBarState({ ...sideBarState, setting: false, chatting: false, plan: !sideBarState.plan, participant: false });
+    setSideBarState((prev) => ({ setting: false, chatting: false, plan: !prev.plan, participant: false }));
   };
 
   const clickParticipantBtn = () => {
     if (!publisher) return;
-    setSideBarState({
-      ...sideBarState,
+    setSideBarState((prev) => ({
       setting: false,
       chatting: false,
       plan: false,
-      participant: !sideBarState.participant,
-    });
+      participant: !prev.participant,
+    }));
   };
 
   const updateRoomInfo = async (data) => {
