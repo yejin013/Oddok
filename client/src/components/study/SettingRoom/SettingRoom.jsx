@@ -60,18 +60,12 @@ function SettingRoom({ goToStudyRoom, updateRoomInfo }) {
 
   return (
     <div>
-      <div className={styles.setting}>
-        {clickedSettingBtn && userInfo.updateAllowed && (
-          <SettingForm onClose={clickSettingBtn} onUpdate={updateRoomInfo} />
-        )}
-      </div>
+      {clickedSettingBtn && userInfo.updateAllowed && (
+        <SettingForm onClose={clickSettingBtn} onUpdate={updateRoomInfo} />
+      )}
       <div className={styles.room}>
         <section className={styles.video_component}>
-          {clickedSettingBtn && !userInfo.updateAllowed && (
-            <div className={styles.side_bar}>
-              <SettingSideBar />
-            </div>
-          )}
+          {clickedSettingBtn && !userInfo.updateAllowed && <SettingSideBar />}
           <div className={styles.video_container}>
             <div className={styles.video_wrapper}>
               <video className={styles.video} ref={videoRef} autoPlay />
@@ -79,11 +73,7 @@ function SettingRoom({ goToStudyRoom, updateRoomInfo }) {
               <UserTag isHost={userInfo.updateAllowed} isMicOn={isMuted} nickname={userInfo.nickname} />
             </div>
           </div>
-          {isPlanOpen && (
-            <div className={styles.side_bar}>
-              <PlanSidebar />
-            </div>
-          )}
+          {isPlanOpen && <PlanSidebar />}
         </section>
         <div className={styles.bar}>
           {!roomTitle && (

@@ -78,8 +78,8 @@ function PlanSidebar({ isStudyRoom }) {
           isStudyRoom={isStudyRoom}
         />
       </div>
-      <form ref={formRef} className={styles.form} onSubmit={submitPlan}>
-        <Input ref={inputRef} isPlanBar={isPlanBar} />
+      <form ref={formRef} onSubmit={submitPlan}>
+        <Input ref={inputRef} isPlanBar={isPlanBar} placeholder="목표를 입력하세요" />
       </form>
     </aside>
   );

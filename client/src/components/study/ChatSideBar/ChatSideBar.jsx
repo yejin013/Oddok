@@ -5,7 +5,7 @@ import { Input } from "@components/commons";
 import ChatBubble from "./ChatBubble";
 import styles from "./ChatSideBar.module.css";
 
-function ChatSideBar({ session }) {
+function ChatSideBar({ session, display }) {
   // 내 채팅인지 다른 유저의 채팅인지 구분하기 위한 임시 변수
   // const [myName, setMyName] = useState(`도비${Math.floor(Math.random() * 100000000)}`);
   const user = useRecoilValue(userState);
@@ -53,7 +53,7 @@ function ChatSideBar({ session }) {
   };
 
   return (
-    <aside className={styles.side_box}>
+    <aside className={`${styles.side} ${!display && styles.hide}`}>
       <div ref={chatBoxRef} className={styles.chat_box}>
         {bubbles.map((bubble) => (
           <ChatBubble
@@ -64,7 +64,7 @@ function ChatSideBar({ session }) {
           />
         ))}
       </div>
-      <form className={styles.form} onSubmit={submitChatHandler}>
+      <form onSubmit={submitChatHandler}>
         <Input placeholder="메시지를 입력하세요" ref={inputRef} isChatBar={isChatBar} />
       </form>
     </aside>

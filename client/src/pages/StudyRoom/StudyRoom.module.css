@@ -7,15 +7,6 @@
   background-color: var(--gray950);
 }
 
-.setting {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 10;
-  background-color: var(--gray950);
-}
-
 .video_container {
   height: 90vh;
   display: flex; /* 사이드바 있을 때 */
@@ -34,10 +25,7 @@
   margin: 0;
 }
 
-.side_bar {
-  flex: 1 1 25%;
-}
-
 .side_bar.hide {
+  flex: 1 1 25%;
   display: none;
 }

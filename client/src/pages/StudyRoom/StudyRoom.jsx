@@ -195,32 +195,16 @@ function StudyRoom() {
 
   return (
     <div className={styles.room}>
-      <div className={styles.setting}>
-        {isDetailOpen && <SettingForm onClose={clickDetailBtn} onUpdate={updateRoomInfo} />}
-      </div>
+      {isDetailOpen && <SettingForm onClose={clickDetailBtn} onUpdate={updateRoomInfo} />}
       <div className={styles.video_container}>
-        {sideBarState.setting && (
-          <div className={styles.side_bar}>
-            <SettingSideBar clickDetailBtn={clickDetailBtn} />
-          </div>
-        )}
+        {sideBarState.setting && <SettingSideBar clickDetailBtn={clickDetailBtn} />}
         <ul className={styles.videos}>
           {publisher && <UserVideo count={count} publisher={publisher} />}
           {subscribers && subscribers.map((subscriber) => <UserVideo count={count} subscriber={subscriber} />)}
         </ul>
-        {sideBarState.plan && (
-          <div className={styles.side_bar}>
-            <PlanSidebar isStudyRoom={isStudyRoom} />
-          </div>
-        )}
-        <div className={`${styles.side_bar} ${!sideBarState.chatting && styles.hide}`}>
-          <ChatSideBar session={session} />
-        </div>
-        {sideBarState.participant && (
-          <div className={styles.side_bar}>
-            <ParticipantSideBar participants={[publisher, ...subscribers]} />
-          </div>
-        )}
+        {sideBarState.plan && <PlanSidebar isStudyRoom={isStudyRoom} />}
+        {sideBarState.participant && <ParticipantSideBar participants={[publisher, ...subscribers]} />}
+        <ChatSideBar session={session} display={sideBarState.chatting} />
       </div>
       <div className={styles.bar}>
         <StudyBar
