@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useHistory, useLocation, useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { OpenVidu } from "openvidu-browser";
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
-import { roomIdState, roomInfoState, videoState, audioState } from "@recoil/studyroom-state";
+import { roomInfoState, videoState, audioState } from "@recoil/studyroom-state";
 import { userState } from "@recoil/user-state";
 import { updateStudyRoom, leaveStudyRoom } from "@api/study-room-api";
 import {
@@ -19,8 +19,7 @@ import styles from "./StudyRoom.module.css";
 
 function StudyRoom() {
   const history = useHistory();
-  const location = useLocation();
-  const { id } = useParams();
+  const { roomId } = useParams();
   const OV = new OpenVidu();
   const [session, setSession] = useState();
   const [publisher, setPublisher] = useState();
@@ -29,7 +28,6 @@ function StudyRoom() {
   const [isPlaying, setIsPlaying] = useRecoilState(videoState);
   const [isMuted, setIsMuted] = useRecoilState(audioState);
   const isStudyRoom = true; // studyroom에 입장했을 때만 생기는 UI를 위한 변수
-  const roomId = useRecoilValue(roomIdState);
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
   const resetRoomInfo = useResetRecoilState(roomInfoState);
   const [sideBarState, setSideBarState] = useState({
@@ -47,7 +45,7 @@ function StudyRoom() {
   };
 
   const leaveRoom = async () => {
-    await leaveStudyRoom(id);
+    await leaveStudyRoom(roomId);
     await session.disconnect();
     resetRoomInfo();
     history.push({
@@ -69,8 +67,8 @@ function StudyRoom() {
 
   // 1. 유저 세션 생성
   useEffect(() => {
-    if (!location.state) {
-      history.push(`/studyroom/${id}/setting`);
+    if (!history.location.state) {
+      history.push(`/studyroom/${roomId}/setting`);
     }
     setSession(OV.initSession());
   }, []);
@@ -79,7 +77,7 @@ function StudyRoom() {
   useEffect(() => {
     if (session) {
       (async () => {
-        await session.connect(location.state.token, {
+        await session.connect(history.location.state.token, {
           nickname: localUser.nickname,
           isHost: localUser.updateAllowed,
           isMicOn: isMuted,

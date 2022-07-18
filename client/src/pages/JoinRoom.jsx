@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { userState } from "@recoil/user-state";
-import { roomIdState, roomInfoState } from "@recoil/studyroom-state";
+import { roomInfoState } from "@recoil/studyroom-state";
 import { getStudyRoom, joinStudyRoom, updateStudyRoom } from "@api/study-room-api";
 import useAsync from "@hooks/useAsync";
 import { Loading, Modal } from "@components/commons";
@@ -10,15 +10,14 @@ import { SettingRoom } from "@components/study";
 
 function JoinRoom() {
   const history = useHistory();
-  const { id } = useParams();
-  const setRoomId = useSetRecoilState(roomIdState);
+  const { roomId } = useParams();
   const setRoomInfo = useSetRecoilState(roomInfoState);
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const {
     data: roomData,
     error: getInfoError,
     reset: getInfoErrorReset,
-  } = useAsync(() => getStudyRoom(id), { onError: (error) => console.log(error) }, [id], false);
+  } = useAsync(() => getStudyRoom(roomId), { onError: (error) => console.log(error) }, [roomId], false);
   const {
     loading: isLoading,
     error: joinError,
@@ -40,10 +39,9 @@ function JoinRoom() {
   }, [roomData, setRoomInfo]);
 
   const goToStudyRoom = async () => {
-    setRoomId(id);
-    const joinResponse = await joinRoom(id);
+    const joinResponse = await joinRoom(roomId);
     history.push({
-      pathname: `/studyroom/${id}`,
+      pathname: `/studyroom/${roomId}`,
       state: {
         token: joinResponse.token,
       },
@@ -60,7 +58,7 @@ function JoinRoom() {
 
   const updateRoomInfo = async (data) => {
     try {
-      const response = await updateStudyRoom(id, data);
+      const response = await updateStudyRoom(roomId, data);
       setRoomInfo(response);
     } catch (e) {
       console.error(e);

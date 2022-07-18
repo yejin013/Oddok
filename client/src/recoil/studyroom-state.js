@@ -10,11 +10,6 @@ export const audioState = atom({
   default: false,
 });
 
-export const roomIdState = atom({
-  key: "roomId",
-  default: 0,
-});
-
 export const roomInfoState = atom({
   key: "roomInfoState",
   default: {
