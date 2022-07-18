@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { userState } from "@recoil/user-state";
-import { videoState, audioState, roomTitleState } from "@recoil/studyroom-state";
-import { planState } from "@recoil/plan-state";
-import { ToolTip } from "@components/commons";
+import { videoState, audioState } from "@recoil/studyroom-state";
 import { SettingBar, SettingForm, SettingSideBar, TotalTime, PlanSidebar, UserTag } from "@components/study";
 import styles from "./SettingRoom.module.css";
 
@@ -13,9 +11,7 @@ function SettingRoom({ goToStudyRoom, updateRoomInfo }) {
   const [isMuted, setIsMuted] = useRecoilState(audioState);
   const [clickedSettingBtn, setClickedSettingBtn] = useState(false);
   const userInfo = useRecoilValue(userState);
-  const roomTitle = useRecoilValue(roomTitleState);
   const [isPlanOpen, setisPlanOpen] = useState(false);
-  const plan = useRecoilValue(planState);
 
   useEffect(() => {
     const getVideoandAudio = async () => {
@@ -60,44 +56,29 @@ function SettingRoom({ goToStudyRoom, updateRoomInfo }) {
 
   return (
     <div className={styles.room}>
-      <section className={styles.video_component}>
+      <div className={styles.video_container}>
         {clickedSettingBtn &&
           (userInfo.updateAllowed ? (
             <SettingForm onClose={clickSettingBtn} onUpdate={updateRoomInfo} />
           ) : (
             <SettingSideBar />
           ))}
-        <div className={styles.video_container}>
-          <div className={styles.video_wrapper}>
-            <video className={styles.video} ref={videoRef} autoPlay />
-            <TotalTime />
-            <UserTag isHost={userInfo.updateAllowed} isMicOn={isMuted} nickname={userInfo.nickname} />
-          </div>
+        <div className={styles.video_wrapper}>
+          <video ref={videoRef} autoPlay />
+          <TotalTime />
+          <UserTag isHost={userInfo.updateAllowed} isMicOn={isMuted} nickname={userInfo.nickname} />
         </div>
         {isPlanOpen && <PlanSidebar />}
-      </section>
-      <div className={styles.bar}>
-        {!roomTitle && (
-          <div className={styles.setting_tooltip}>
-            <ToolTip type="left" message="해시태그나 스터디 유형 설정은 여기에서!" />
-          </div>
-        )}
-        {plan.length === 0 && (
-          <div className={styles.plan_tooltip}>
-            <ToolTip message="오늘의 스터디 플랜을 적어볼까요?⏱️" />
-          </div>
-        )}
-        <SettingBar
-          title={roomTitle || "방정보를 입력해주세요"}
-          goToStudyRoom={goToStudyRoom}
-          toggleVideo={toggleVideo}
-          toggleAudio={toggleAudio}
-          clickSettingBtn={clickSettingBtn}
-          onClickplanBtn={clickPlanBtn}
-          isPlaying={isPlaying}
-          isMuted={isMuted}
-        />
       </div>
+      <SettingBar
+        goToStudyRoom={goToStudyRoom}
+        toggleVideo={toggleVideo}
+        toggleAudio={toggleAudio}
+        clickSettingBtn={clickSettingBtn}
+        onClickplanBtn={clickPlanBtn}
+        isPlaying={isPlaying}
+        isMuted={isMuted}
+      />
     </div>
   );
 }

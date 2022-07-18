@@ -3,8 +3,17 @@
   align-items: center;
   background-color: var(--gray950);
   color: var(--gray300);
+  width: 100%;
   height: 77px;
   padding: 0.2em 1.5em;
+  position: relative;
+}
+
+.bar button,
+.bar i {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .info,
@@ -37,7 +46,6 @@
 
 .start_button {
   font-size: 1rem;
-  font-weight: 600;
   padding: 0.9em 5em;
   width: 300px;
   background-color: var(--primary);
@@ -47,20 +55,30 @@
 
 .start_button:disabled {
   background-color: var(--gray800);
+  color: var(--gray500);
 }
 
 .music {
   display: flex;
   align-items: center;
-  margin-left: 0.8em;
+  gap: 8px;
+  margin-left: 16px;
   font-size: 0.75rem;
   color: var(--gray600);
 }
 
-.music_icon {
-  padding: 0.5em;
-}
-
 .off {
   color: var(--red);
+}
+
+.setting_tooltip,
+.plan_tooltip {
+  position: absolute;
+  top: -70px;
+  left: 16px;
+}
+
+.plan_tooltip {
+  left: 50%;
+  transform: translateX(-50%);
 }

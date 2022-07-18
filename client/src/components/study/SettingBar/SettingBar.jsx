@@ -1,19 +1,14 @@
 import React from "react";
 import { useRecoilValue } from "recoil";
-import { selectedPlanState } from "@recoil/plan-state";
+import { roomTitleState } from "@recoil/studyroom-state";
+import { planState, selectedPlanState } from "@recoil/plan-state";
+import { ToolTip } from "@components/commons";
 import { Setting, Music, VideoOn, VideoOff, MicOn, MicOff, GoalOpen } from "@icons";
 import styles from "./SettingBar.module.css";
 
-function SettingBar({
-  title,
-  goToStudyRoom,
-  toggleVideo,
-  toggleAudio,
-  clickSettingBtn,
-  onClickplanBtn,
-  isPlaying,
-  isMuted,
-}) {
+function SettingBar({ goToStudyRoom, toggleVideo, toggleAudio, clickSettingBtn, onClickplanBtn, isPlaying, isMuted }) {
+  const roomTitle = useRecoilValue(roomTitleState);
+  const plan = useRecoilValue(planState);
   const selectedPlan = useRecoilValue(selectedPlanState);
 
   return (
@@ -22,9 +17,9 @@ function SettingBar({
         <button type="button" onClick={clickSettingBtn}>
           <Setting />
         </button>
-        <span>{title}</span>
+        <span>{roomTitle || "방정보를 입력해주세요"}</span>
         <div className={styles.music}>
-          <i className={styles.music_icon}>
+          <i>
             <Music />
           </i>
           <span>없음</span>
@@ -60,11 +55,21 @@ function SettingBar({
           )}
         </li>
         <li>
-          <button type="button" className={styles.start_button} onClick={goToStudyRoom} disabled={!title}>
+          <button type="button" className={styles.start_button} onClick={goToStudyRoom} disabled={!roomTitle}>
             스터디 시작하기
           </button>
         </li>
       </ul>
+      {!roomTitle && (
+        <div className={styles.setting_tooltip}>
+          <ToolTip type="left" message="해시태그나 스터디 유형 설정은 여기에서!" />
+        </div>
+      )}
+      {plan.length === 0 && (
+        <div className={styles.plan_tooltip}>
+          <ToolTip message="오늘의 스터디 플랜을 적어볼까요?⏱️" />
+        </div>
+      )}
     </section>
   );
 }
