@@ -59,44 +59,44 @@ function SettingRoom({ goToStudyRoom, updateRoomInfo }) {
   };
 
   return (
-    <div>
-      {clickedSettingBtn && userInfo.updateAllowed && (
-        <SettingForm onClose={clickSettingBtn} onUpdate={updateRoomInfo} />
-      )}
-      <div className={styles.room}>
-        <section className={styles.video_component}>
-          {clickedSettingBtn && !userInfo.updateAllowed && <SettingSideBar />}
-          <div className={styles.video_container}>
-            <div className={styles.video_wrapper}>
-              <video className={styles.video} ref={videoRef} autoPlay />
-              <TotalTime />
-              <UserTag isHost={userInfo.updateAllowed} isMicOn={isMuted} nickname={userInfo.nickname} />
-            </div>
+    <div className={styles.room}>
+      <section className={styles.video_component}>
+        {clickedSettingBtn &&
+          (userInfo.updateAllowed ? (
+            <SettingForm onClose={clickSettingBtn} onUpdate={updateRoomInfo} />
+          ) : (
+            <SettingSideBar />
+          ))}
+        <div className={styles.video_container}>
+          <div className={styles.video_wrapper}>
+            <video className={styles.video} ref={videoRef} autoPlay />
+            <TotalTime />
+            <UserTag isHost={userInfo.updateAllowed} isMicOn={isMuted} nickname={userInfo.nickname} />
           </div>
-          {isPlanOpen && <PlanSidebar />}
-        </section>
-        <div className={styles.bar}>
-          {!roomTitle && (
-            <div className={styles.setting_tooltip}>
-              <ToolTip type="left" message="해시태그나 스터디 유형 설정은 여기에서!" />
-            </div>
-          )}
-          {plan.length === 0 && (
-            <div className={styles.plan_tooltip}>
-              <ToolTip message="오늘의 스터디 플랜을 적어볼까요?⏱️" />
-            </div>
-          )}
-          <SettingBar
-            title={roomTitle || "방정보를 입력해주세요"}
-            goToStudyRoom={goToStudyRoom}
-            toggleVideo={toggleVideo}
-            toggleAudio={toggleAudio}
-            clickSettingBtn={clickSettingBtn}
-            onClickplanBtn={clickPlanBtn}
-            isPlaying={isPlaying}
-            isMuted={isMuted}
-          />
         </div>
+        {isPlanOpen && <PlanSidebar />}
+      </section>
+      <div className={styles.bar}>
+        {!roomTitle && (
+          <div className={styles.setting_tooltip}>
+            <ToolTip type="left" message="해시태그나 스터디 유형 설정은 여기에서!" />
+          </div>
+        )}
+        {plan.length === 0 && (
+          <div className={styles.plan_tooltip}>
+            <ToolTip message="오늘의 스터디 플랜을 적어볼까요?⏱️" />
+          </div>
+        )}
+        <SettingBar
+          title={roomTitle || "방정보를 입력해주세요"}
+          goToStudyRoom={goToStudyRoom}
+          toggleVideo={toggleVideo}
+          toggleAudio={toggleAudio}
+          clickSettingBtn={clickSettingBtn}
+          onClickplanBtn={clickPlanBtn}
+          isPlaying={isPlaying}
+          isMuted={isMuted}
+        />
       </div>
     </div>
   );
