@@ -9,9 +9,8 @@ function SettingRoom({ goToStudyRoom, updateRoomInfo }) {
   const videoRef = useRef();
   const [isPlaying, setIsPlaying] = useRecoilState(videoState);
   const [isMuted, setIsMuted] = useRecoilState(audioState);
-  const [clickedSettingBtn, setClickedSettingBtn] = useState(false);
+  const [sideBarState, setSideBarState] = useState({ setting: false, plan: false });
   const userInfo = useRecoilValue(userState);
-  const [isPlanOpen, setisPlanOpen] = useState(false);
 
   useEffect(() => {
     const getVideoandAudio = async () => {
@@ -47,17 +46,17 @@ function SettingRoom({ goToStudyRoom, updateRoomInfo }) {
   };
 
   const clickSettingBtn = () => {
-    setClickedSettingBtn((prev) => !prev);
+    setSideBarState((prev) => ({ ...prev, setting: !prev.setting, plan: false }));
   };
 
   const clickPlanBtn = () => {
-    setisPlanOpen((prev) => !prev);
+    setSideBarState((prev) => ({ ...prev, plan: !prev.plan, setting: false }));
   };
 
   return (
     <div className={styles.room}>
       <div className={styles.video_container}>
-        {clickedSettingBtn &&
+        {sideBarState.setting &&
           (userInfo.updateAllowed ? (
             <SettingForm onClose={clickSettingBtn} onUpdate={updateRoomInfo} />
           ) : (
@@ -68,13 +67,13 @@ function SettingRoom({ goToStudyRoom, updateRoomInfo }) {
           <TotalTime />
           <UserTag isHost={userInfo.updateAllowed} isMicOn={isMuted} nickname={userInfo.nickname} />
         </div>
-        {isPlanOpen && <PlanSidebar />}
+        {sideBarState.plan && <PlanSidebar />}
       </div>
       <SettingBar
         goToStudyRoom={goToStudyRoom}
         toggleVideo={toggleVideo}
         toggleAudio={toggleAudio}
-        clickSettingBtn={clickSettingBtn}
+        onClickSettingBtn={clickSettingBtn}
         onClickplanBtn={clickPlanBtn}
         isPlaying={isPlaying}
         isMuted={isMuted}

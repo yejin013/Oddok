@@ -6,7 +6,15 @@ import { ToolTip } from "@components/commons";
 import { Setting, Music, VideoOn, VideoOff, MicOn, MicOff, GoalOpen } from "@icons";
 import styles from "./SettingBar.module.css";
 
-function SettingBar({ goToStudyRoom, toggleVideo, toggleAudio, clickSettingBtn, onClickplanBtn, isPlaying, isMuted }) {
+function SettingBar({
+  goToStudyRoom,
+  toggleVideo,
+  toggleAudio,
+  onClickSettingBtn,
+  onClickplanBtn,
+  isPlaying,
+  isMuted,
+}) {
   const roomTitle = useRecoilValue(roomTitleState);
   const plan = useRecoilValue(planState);
   const selectedPlan = useRecoilValue(selectedPlanState);
@@ -14,7 +22,7 @@ function SettingBar({ goToStudyRoom, toggleVideo, toggleAudio, clickSettingBtn, 
   return (
     <section className={styles.bar}>
       <div className={styles.info}>
-        <button type="button" onClick={clickSettingBtn}>
+        <button type="button" onClick={onClickSettingBtn}>
           <Setting />
         </button>
         <span>{roomTitle || "방정보를 입력해주세요"}</span>
