@@ -1,14 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useSetRecoilState, useRecoilValue } from "recoil";
 import { userState } from "@recoil/user-state";
-import { videoState, audioState } from "@recoil/studyroom-state";
+import { deviceState } from "@recoil/studyroom-state";
 import { SettingBar, SettingForm, SettingSideBar, TotalTime, PlanSidebar, UserTag } from "@components/study";
 import styles from "./SettingRoom.module.css";
 
 function SettingRoom({ goToStudyRoom, updateRoomInfo }) {
   const videoRef = useRef();
-  const [isPlaying, setIsPlaying] = useRecoilState(videoState);
-  const [isMuted, setIsMuted] = useRecoilState(audioState);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
+  const setDeviceStatus = useSetRecoilState(deviceState);
   const [sideBarState, setSideBarState] = useState({ setting: false, plan: false });
   const userInfo = useRecoilValue(userState);
 
@@ -30,6 +31,10 @@ function SettingRoom({ goToStudyRoom, updateRoomInfo }) {
       });
     };
   }, []);
+
+  useEffect(() => {
+    setDeviceStatus({ cam: isPlaying, mic: isMuted });
+  }, [isPlaying, isMuted]);
 
   const toggleVideo = () => {
     const myStream = videoRef.current.srcObject;

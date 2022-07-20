@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { OpenVidu } from "openvidu-browser";
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
-import { roomInfoState, videoState, audioState } from "@recoil/studyroom-state";
+import { roomInfoState, deviceState } from "@recoil/studyroom-state";
 import { userState } from "@recoil/user-state";
 import { updateStudyRoom, leaveStudyRoom } from "@api/study-room-api";
 import {
@@ -25,8 +25,7 @@ function StudyRoom() {
   const [publisher, setPublisher] = useState();
   const [subscribers, setSubscribers] = useState([]);
   const [count, setCount] = useState(1);
-  const [isPlaying, setIsPlaying] = useRecoilState(videoState);
-  const [isMuted, setIsMuted] = useRecoilState(audioState);
+  const [deviceStatus, setDeviceStatus] = useRecoilState(deviceState);
   const isStudyRoom = true; // studyroom에 입장했을 때만 생기는 UI를 위한 변수
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
   const resetRoomInfo = useResetRecoilState(roomInfoState);
@@ -55,14 +54,14 @@ function StudyRoom() {
 
   const toggleVideo = () => {
     publisher.streamManager.publishVideo(!publisher.streamManager.stream.videoActive);
-    setIsPlaying((prev) => !prev);
+    setDeviceStatus((prev) => ({ ...prev, cam: !prev.cam }));
   };
 
   const toggleAudio = () => {
     publisher.streamManager.publishAudio(!publisher.streamManager.stream.audioActive);
-    session.signal({ data: JSON.stringify({ isMicOn: !isMuted }), type: "micStatusChanged" });
+    session.signal({ data: JSON.stringify({ isMicOn: !deviceStatus.mic }), type: "micStatusChanged" });
     setPublisher({ ...publisher, isMicOn: !publisher.isMicOn });
-    setIsMuted((prev) => !prev);
+    setDeviceStatus((prev) => ({ ...prev, mic: !prev.mic }));
   };
 
   // 1. 유저 세션 생성
@@ -80,15 +79,15 @@ function StudyRoom() {
         await session.connect(history.location.state.token, {
           nickname: localUser.nickname,
           isHost: localUser.updateAllowed,
-          isMicOn: isMuted,
+          isMicOn: deviceStatus.mic,
         });
         const devices = await OV.getDevices();
         const videoDevices = devices.filter((device) => device.kind === "videoinput");
         const localUserStream = OV.initPublisher(undefined, {
           audioSource: undefined,
           videoSource: videoDevices[0].label ? videoDevices.deviceId : undefined,
-          publishAudio: isMuted,
-          publishVideo: isPlaying,
+          publishAudio: deviceStatus.mic,
+          publishVideo: deviceStatus.cam,
           frameRate: 30,
           mirror: false,
         });
@@ -97,7 +96,7 @@ function StudyRoom() {
           streamManager: localUserStream,
           nickname: localUser.nickname,
           isHost: localUser.updateAllowed,
-          isMicOn: isMuted,
+          isMicOn: deviceStatus.mic,
         });
       })();
 
@@ -210,8 +209,8 @@ function StudyRoom() {
           clickSettingBtn={clickSettingBtn}
           toggleVideo={toggleVideo}
           toggleAudio={toggleAudio}
-          isPlaying={isPlaying}
-          isMuted={isMuted}
+          isPlaying={deviceStatus.cam}
+          isMuted={deviceStatus.mic}
           clickParticipantBtn={clickParticipantBtn}
           clickChatBtn={clickChatBtn}
           onClickplanBtn={clickPlanBtn}
