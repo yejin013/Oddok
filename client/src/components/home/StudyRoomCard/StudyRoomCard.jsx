@@ -17,7 +17,7 @@ function StudyRoomCard({ roomData, showBookmark }) {
 
   const addBookmark = async (roomId) => {
     await saveBookmark(roomId)
-      .then(() => console.log("add bookmark"))
+      .then(console.log)
       .catch((error) => console.log("add bookmark error", error));
   };
 
@@ -31,22 +31,28 @@ function StudyRoomCard({ roomData, showBookmark }) {
   // 북마크 버튼 누르면 새로고침 없이 바로 북마크 정보 보여줌
   const onBookmarkAddBtnClick = async (event) => {
     event.stopPropagation();
+    if (!user.isLogin) {
+      history.push("/login");
+      return;
+    }
     await addBookmark(roomData.id);
     await showBookmark();
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
   };
 
   const onStudyRoomClick = () => {
     if (!user.isLogin) {
       history.push("/login");
-    } else if (user.isLogin && roomData.isPublic) {
+      return;
+    }
+    if (roomData.isPublic) {
       history.push(`/studyroom/${roomData.id}/setting`);
     } else {
       setIsModalOpen(true);
     }
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
