@@ -1,18 +1,11 @@
 import { atom, selector } from "recoil";
 
-export const videoState = atom({
-  key: "videoState",
-  default: true,
-});
-
-export const audioState = atom({
-  key: "audioState",
-  default: false,
-});
-
-export const roomIdState = atom({
-  key: "roomId",
-  default: 0,
+export const deviceState = atom({
+  key: "deviceState",
+  default: {
+    cam: true,
+    mic: false,
+  },
 });
 
 export const roomInfoState = atom({

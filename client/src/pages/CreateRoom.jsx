@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { userState } from "@recoil/user-state";
-import { roomIdState, roomInfoState } from "@recoil/studyroom-state";
+import { roomInfoState } from "@recoil/studyroom-state";
 import { createStudyRoom, joinStudyRoom } from "@api/study-room-api";
 import useAsync from "@hooks/useAsync";
 import { Loading, Modal } from "@components/commons";
@@ -10,7 +10,6 @@ import { SettingRoom } from "@components/study";
 
 function CreateRoom() {
   const history = useHistory();
-  const setRoomId = useSetRecoilState(roomIdState);
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
   const {
@@ -34,7 +33,6 @@ function CreateRoom() {
   const goToStudyRoom = async () => {
     const createResponse = await createRequest(roomInfo);
     const joinResponse = await joinRequest(createResponse.id);
-    setRoomId(createResponse.id);
     history.push({
       pathname: `/studyroom/${createResponse.id}`,
       state: {

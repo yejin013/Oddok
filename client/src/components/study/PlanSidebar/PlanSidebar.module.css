@@ -1,17 +1,15 @@
 .plan_bar {
+  flex: 1 1 25%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   background-color: var(--gray950);
   color: white;
   width: 100%;
   height: 100%;
-  padding: 0.5em;
+  padding: 16px;
 }
 
 .plans {
-  height: 90%;
-  padding: 0.5em;
-}
-
-.form {
-  height: 10%;
-  padding: 0 0.5em;
+  flex: 1;
 }

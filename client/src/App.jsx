@@ -55,10 +55,10 @@ function App() {
           <Route path="/studyroom/create">
             <CreateRoom />
           </Route>
-          <Route exact path="/studyroom/:id">
+          <Route exact path="/studyroom/:roomId">
             <StudyRoom />
           </Route>
-          <Route path="/studyroom/:id/setting">
+          <Route path="/studyroom/:roomId/setting">
             <JoinRoom />
           </Route>
           <Route path="*">

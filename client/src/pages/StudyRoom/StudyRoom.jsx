@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useHistory, useLocation, useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { OpenVidu } from "openvidu-browser";
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
-import { roomIdState, roomInfoState, videoState, audioState } from "@recoil/studyroom-state";
+import { roomInfoState, deviceState } from "@recoil/studyroom-state";
 import { userState } from "@recoil/user-state";
 import { updateStudyRoom, leaveStudyRoom } from "@api/study-room-api";
 import {
@@ -19,17 +19,14 @@ import styles from "./StudyRoom.module.css";
 
 function StudyRoom() {
   const history = useHistory();
-  const location = useLocation();
-  const { id } = useParams();
+  const { roomId } = useParams();
   const OV = new OpenVidu();
   const [session, setSession] = useState();
   const [publisher, setPublisher] = useState();
   const [subscribers, setSubscribers] = useState([]);
   const [count, setCount] = useState(1);
-  const [isPlaying, setIsPlaying] = useRecoilState(videoState);
-  const [isMuted, setIsMuted] = useRecoilState(audioState);
+  const [deviceStatus, setDeviceStatus] = useRecoilState(deviceState);
   const isStudyRoom = true; // studyroom에 입장했을 때만 생기는 UI를 위한 변수
-  const roomId = useRecoilValue(roomIdState);
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
   const resetRoomInfo = useResetRecoilState(roomInfoState);
   const [sideBarState, setSideBarState] = useState({
@@ -47,7 +44,7 @@ function StudyRoom() {
   };
 
   const leaveRoom = async () => {
-    await leaveStudyRoom(id);
+    await leaveStudyRoom(roomId);
     await session.disconnect();
     resetRoomInfo();
     history.push({
@@ -57,20 +54,20 @@ function StudyRoom() {
 
   const toggleVideo = () => {
     publisher.streamManager.publishVideo(!publisher.streamManager.stream.videoActive);
-    setIsPlaying((prev) => !prev);
+    setDeviceStatus((prev) => ({ ...prev, cam: !prev.cam }));
   };
 
   const toggleAudio = () => {
     publisher.streamManager.publishAudio(!publisher.streamManager.stream.audioActive);
-    session.signal({ data: JSON.stringify({ isMicOn: !isMuted }), type: "micStatusChanged" });
+    session.signal({ data: JSON.stringify({ isMicOn: !deviceStatus.mic }), type: "micStatusChanged" });
     setPublisher({ ...publisher, isMicOn: !publisher.isMicOn });
-    setIsMuted((prev) => !prev);
+    setDeviceStatus((prev) => ({ ...prev, mic: !prev.mic }));
   };
 
   // 1. 유저 세션 생성
   useEffect(() => {
-    if (!location.state) {
-      history.push(`/studyroom/${id}/setting`);
+    if (!history.location.state) {
+      history.push(`/studyroom/${roomId}/setting`);
     }
     setSession(OV.initSession());
   }, []);
@@ -79,18 +76,18 @@ function StudyRoom() {
   useEffect(() => {
     if (session) {
       (async () => {
-        await session.connect(location.state.token, {
+        await session.connect(history.location.state.token, {
           nickname: localUser.nickname,
           isHost: localUser.updateAllowed,
-          isMicOn: isMuted,
+          isMicOn: deviceStatus.mic,
         });
         const devices = await OV.getDevices();
         const videoDevices = devices.filter((device) => device.kind === "videoinput");
         const localUserStream = OV.initPublisher(undefined, {
           audioSource: undefined,
           videoSource: videoDevices[0].label ? videoDevices.deviceId : undefined,
-          publishAudio: isMuted,
-          publishVideo: isPlaying,
+          publishAudio: deviceStatus.mic,
+          publishVideo: deviceStatus.cam,
           frameRate: 30,
           mirror: false,
         });
@@ -99,7 +96,7 @@ function StudyRoom() {
           streamManager: localUserStream,
           nickname: localUser.nickname,
           isHost: localUser.updateAllowed,
-          isMicOn: isMuted,
+          isMicOn: deviceStatus.mic,
         });
       })();
 
@@ -149,38 +146,35 @@ function StudyRoom() {
   };
 
   const clickSettingBtn = () => {
-    setSideBarState({
-      ...sideBarState,
-      setting: !sideBarState.setting,
+    setSideBarState((prev) => ({
+      setting: !prev.setting,
       chatting: false,
       plan: false,
       participant: false,
-    });
+    }));
   };
 
   const clickChatBtn = () => {
-    setSideBarState({
-      ...sideBarState,
+    setSideBarState((prev) => ({
       setting: false,
-      chatting: !sideBarState.chatting,
+      chatting: !prev.chatting,
       plan: false,
       participant: false,
-    });
+    }));
   };
 
   const clickPlanBtn = () => {
-    setSideBarState({ ...sideBarState, setting: false, chatting: false, plan: !sideBarState.plan, participant: false });
+    setSideBarState((prev) => ({ setting: false, chatting: false, plan: !prev.plan, participant: false }));
   };
 
   const clickParticipantBtn = () => {
     if (!publisher) return;
-    setSideBarState({
-      ...sideBarState,
+    setSideBarState((prev) => ({
       setting: false,
       chatting: false,
       plan: false,
-      participant: !sideBarState.participant,
-    });
+      participant: !prev.participant,
+    }));
   };
 
   const updateRoomInfo = async (data) => {
@@ -198,32 +192,16 @@ function StudyRoom() {
 
   return (
     <div className={styles.room}>
-      <div className={styles.setting}>
-        {isDetailOpen && <SettingForm onClose={clickDetailBtn} onUpdate={updateRoomInfo} />}
-      </div>
+      {isDetailOpen && <SettingForm onClose={clickDetailBtn} onUpdate={updateRoomInfo} />}
       <div className={styles.video_container}>
-        {sideBarState.setting && (
-          <div className={styles.side_bar}>
-            <SettingSideBar clickDetailBtn={clickDetailBtn} />
-          </div>
-        )}
+        {sideBarState.setting && <SettingSideBar clickDetailBtn={clickDetailBtn} />}
         <ul className={styles.videos}>
           {publisher && <UserVideo count={count} publisher={publisher} />}
           {subscribers && subscribers.map((subscriber) => <UserVideo count={count} subscriber={subscriber} />)}
         </ul>
-        {sideBarState.plan && (
-          <div className={styles.side_bar}>
-            <PlanSidebar isStudyRoom={isStudyRoom} />
-          </div>
-        )}
-        <div className={`${styles.side_bar} ${!sideBarState.chatting && styles.hide}`}>
-          <ChatSideBar session={session} />
-        </div>
-        {sideBarState.participant && (
-          <div className={styles.side_bar}>
-            <ParticipantSideBar participants={[publisher, ...subscribers]} />
-          </div>
-        )}
+        {sideBarState.plan && <PlanSidebar isStudyRoom={isStudyRoom} />}
+        {sideBarState.participant && <ParticipantSideBar participants={[publisher, ...subscribers]} />}
+        <ChatSideBar session={session} display={sideBarState.chatting} />
       </div>
       <div className={styles.bar}>
         <StudyBar
@@ -231,8 +209,8 @@ function StudyRoom() {
           clickSettingBtn={clickSettingBtn}
           toggleVideo={toggleVideo}
           toggleAudio={toggleAudio}
-          isPlaying={isPlaying}
-          isMuted={isMuted}
+          isPlaying={deviceStatus.cam}
+          isMuted={deviceStatus.mic}
           clickParticipantBtn={clickParticipantBtn}
           clickChatBtn={clickChatBtn}
           onClickplanBtn={clickPlanBtn}

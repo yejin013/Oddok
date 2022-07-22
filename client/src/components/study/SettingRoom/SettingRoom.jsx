@@ -1,21 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useSetRecoilState, useRecoilValue } from "recoil";
 import { userState } from "@recoil/user-state";
-import { videoState, audioState, roomTitleState } from "@recoil/studyroom-state";
-import { planState } from "@recoil/plan-state";
-import { ToolTip } from "@components/commons";
+import { deviceState } from "@recoil/studyroom-state";
 import { SettingBar, SettingForm, SettingSideBar, TotalTime, PlanSidebar, UserTag } from "@components/study";
 import styles from "./SettingRoom.module.css";
 
 function SettingRoom({ goToStudyRoom, updateRoomInfo }) {
   const videoRef = useRef();
-  const [isPlaying, setIsPlaying] = useRecoilState(videoState);
-  const [isMuted, setIsMuted] = useRecoilState(audioState);
-  const [clickedSettingBtn, setClickedSettingBtn] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
+  const setDeviceStatus = useSetRecoilState(deviceState);
+  const [sideBarState, setSideBarState] = useState({ setting: false, plan: false });
   const userInfo = useRecoilValue(userState);
-  const roomTitle = useRecoilValue(roomTitleState);
-  const [isPlanOpen, setisPlanOpen] = useState(false);
-  const plan = useRecoilValue(planState);
 
   useEffect(() => {
     const getVideoandAudio = async () => {
@@ -36,6 +32,10 @@ function SettingRoom({ goToStudyRoom, updateRoomInfo }) {
     };
   }, []);
 
+  useEffect(() => {
+    setDeviceStatus({ cam: isPlaying, mic: isMuted });
+  }, [isPlaying, isMuted]);
+
   const toggleVideo = () => {
     const myStream = videoRef.current.srcObject;
     const videoTrack = myStream.getVideoTracks()[0];
@@ -51,63 +51,38 @@ function SettingRoom({ goToStudyRoom, updateRoomInfo }) {
   };
 
   const clickSettingBtn = () => {
-    setClickedSettingBtn((prev) => !prev);
+    setSideBarState((prev) => ({ ...prev, setting: !prev.setting, plan: false }));
   };
 
   const clickPlanBtn = () => {
-    setisPlanOpen((prev) => !prev);
+    setSideBarState((prev) => ({ ...prev, plan: !prev.plan, setting: false }));
   };
 
   return (
-    <div>
-      <div className={styles.setting}>
-        {clickedSettingBtn && userInfo.updateAllowed && (
-          <SettingForm onClose={clickSettingBtn} onUpdate={updateRoomInfo} />
-        )}
-      </div>
-      <div className={styles.room}>
-        <section className={styles.video_component}>
-          {clickedSettingBtn && !userInfo.updateAllowed && (
-            <div className={styles.side_bar}>
-              <SettingSideBar />
-            </div>
-          )}
-          <div className={styles.video_container}>
-            <div className={styles.video_wrapper}>
-              <video className={styles.video} ref={videoRef} autoPlay />
-              <TotalTime />
-              <UserTag isHost={userInfo.updateAllowed} isMicOn={isMuted} nickname={userInfo.nickname} />
-            </div>
-          </div>
-          {isPlanOpen && (
-            <div className={styles.side_bar}>
-              <PlanSidebar />
-            </div>
-          )}
-        </section>
-        <div className={styles.bar}>
-          {!roomTitle && (
-            <div className={styles.setting_tooltip}>
-              <ToolTip type="left" message="해시태그나 스터디 유형 설정은 여기에서!" />
-            </div>
-          )}
-          {plan.length === 0 && (
-            <div className={styles.plan_tooltip}>
-              <ToolTip message="오늘의 스터디 플랜을 적어볼까요?⏱️" />
-            </div>
-          )}
-          <SettingBar
-            title={roomTitle || "방정보를 입력해주세요"}
-            goToStudyRoom={goToStudyRoom}
-            toggleVideo={toggleVideo}
-            toggleAudio={toggleAudio}
-            clickSettingBtn={clickSettingBtn}
-            onClickplanBtn={clickPlanBtn}
-            isPlaying={isPlaying}
-            isMuted={isMuted}
-          />
+    <div className={styles.room}>
+      <div className={styles.video_container}>
+        {sideBarState.setting &&
+          (userInfo.updateAllowed ? (
+            <SettingForm onClose={clickSettingBtn} onUpdate={updateRoomInfo} />
+          ) : (
+            <SettingSideBar />
+          ))}
+        <div className={styles.video_wrapper}>
+          <video ref={videoRef} autoPlay />
+          <TotalTime />
+          <UserTag isHost={userInfo.updateAllowed} isMicOn={isMuted} nickname={userInfo.nickname} />
         </div>
+        {sideBarState.plan && <PlanSidebar />}
       </div>
+      <SettingBar
+        goToStudyRoom={goToStudyRoom}
+        toggleVideo={toggleVideo}
+        toggleAudio={toggleAudio}
+        onClickSettingBtn={clickSettingBtn}
+        onClickplanBtn={clickPlanBtn}
+        isPlaying={isPlaying}
+        isMuted={isMuted}
+      />
     </div>
   );
 }
