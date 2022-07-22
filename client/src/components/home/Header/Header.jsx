@@ -22,9 +22,9 @@ function Header() {
   };
 
   useEffect(() => {
-    document.addEventListener("mousedown", onOutsideClick);
+    document.addEventListener("click", onOutsideClick);
     return () => {
-      document.removeEventListener("mousedown", onOutsideClick);
+      document.removeEventListener("click", onOutsideClick);
     };
   }, [isDropdown]);
 
