@@ -3,5 +3,5 @@ import { atom } from "recoil";
 
 export const userState = atom({
   key: "userState",
-  default: { userId: "", nickname: null, updateAllowed: false },
+  default: { isLogin: localStorage.getItem("isLogin"), nickname: null, updateAllowed: false },
 });

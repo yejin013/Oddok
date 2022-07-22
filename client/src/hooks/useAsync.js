@@ -1,4 +1,5 @@
-import React, { useReducer, useEffect, useCallback } from "react";
+/* eslint-disable consistent-return */
+import { useReducer, useEffect, useCallback } from "react";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -24,7 +25,7 @@ const reducer = (state, action) => {
  * - skip을 false로 지정시 자동 호출 (get 요청시 사용)
  * - sendRequest 직접 호출 가능
  */
-function useAsync(requestFn, { onError }, deps = [], skip = true) {
+function useAsync(requestFn, deps = [], skip = true) {
   const [state, dispatch] = useReducer(reducer, {
     loading: false,
     data: null,
@@ -32,7 +33,6 @@ function useAsync(requestFn, { onError }, deps = [], skip = true) {
   });
 
   const sendRequest = useCallback(
-    // eslint-disable-next-line consistent-return
     async (...args) => {
       dispatch({ type: "LOADING" });
       try {
@@ -40,7 +40,6 @@ function useAsync(requestFn, { onError }, deps = [], skip = true) {
         dispatch({ type: "SUCCESS", data });
         return data;
       } catch (error) {
-        onError(error.response);
         dispatch({ type: "ERROR", error: error.response });
       }
     },

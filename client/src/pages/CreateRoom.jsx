@@ -17,17 +17,13 @@ function CreateRoom() {
     error: createError,
     sendRequest: createRequest,
     reset: createErrorReset,
-  } = useAsync(createStudyRoom, {
-    onError: (error) => console.error(error),
-  });
+  } = useAsync(createStudyRoom);
   const {
     loading: joinLoading,
     error: joinError,
     sendRequest: joinRequest,
     reset: joinErrorReset,
-  } = useAsync(joinStudyRoom, {
-    onError: (error) => console.error(error),
-  });
+  } = useAsync(joinStudyRoom);
 
   useEffect(() => {
     // 스터디룸을 개설하는 유저에게 방 정보 업데이트 권한을 준다 (추후 삭제)

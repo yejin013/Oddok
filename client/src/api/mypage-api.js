@@ -16,9 +16,8 @@ export const getTimeRecordList = async (date) => {
 };
 
 export const getMyRoom = async () => {
-  const id = localStorage.getItem("userId");
   const response = await axiosInstance({
-    url: `/study-room/user/${id}`,
+    url: "/user/my-study-room",
   });
   return response;
 };

@@ -1,37 +1,31 @@
 package com.oddok.server.domain.timerecord.application;
 
-import com.oddok.server.common.errors.UserNotFoundException;
 import com.oddok.server.domain.timerecord.dao.TimeRecordRepository;
 import com.oddok.server.domain.timerecord.dto.TimeRecordDto;
 import com.oddok.server.domain.timerecord.entity.TimeRecord;
 import com.oddok.server.domain.timerecord.mapper.TimeRecordMapper;
-import com.oddok.server.domain.user.dao.UserRepository;
 import com.oddok.server.domain.user.entity.User;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
 @Service
 public class TimeRecordService {
 
     private final TimeRecordRepository timeRecordRepository;
-    private final UserRepository userRepository;
 
     private final TimeRecordMapper timeRecordMapper;
 
-    public TimeRecordService(TimeRecordRepository timeRecordRepository, UserRepository userRepository) {
+    public TimeRecordService(TimeRecordRepository timeRecordRepository) {
         this.timeRecordRepository = timeRecordRepository;
-        this.userRepository = userRepository;
 
         this.timeRecordMapper = Mappers.getMapper(TimeRecordMapper.class);
     }
 
-    public void create(Long userId, TimeRecordDto timeRecordDto) {
-        User user = findUser(userId);
+    public void create(User user, TimeRecordDto timeRecordDto) {
         TimeRecord timeRecord = timeRecordRepository.save(timeRecordMapper.toEntity(timeRecordDto, user));
         timeRecordMapper.toDto(timeRecord);
     }
@@ -39,8 +33,7 @@ public class TimeRecordService {
     /**
      * 해당 유저의 당일 날짜에 해당하는 시간표만 조회
      */
-    public List<TimeRecordDto> get(Long userId) {
-        User user = findUser(userId);
+    public List<TimeRecordDto> get(User user) {
         LocalDate day = LocalDate.now();
         LocalDateTime startDatetime = day.atStartOfDay(); // 오늘 00:00:00
         LocalDateTime endDatetime = day.atTime(23, 59, 59); // 오늘 23:59:59
@@ -51,8 +44,7 @@ public class TimeRecordService {
     /**
      * 해당 날짜의 타임레코드 가져오기
      */
-    public List<TimeRecordDto> get(Long userId, String date) {
-        User user = findUser(userId);
+    public List<TimeRecordDto> get(User user, String date) {
         LocalDate day = LocalDate.parse(date);
         LocalDateTime startDatetime = day.atStartOfDay(); // 오늘 00:00:00
         LocalDateTime endDatetime = day.atTime(23, 59, 59); // 오늘 23:59:59
@@ -75,9 +67,5 @@ public class TimeRecordService {
      */
     public void delete(Long id) {
         timeRecordRepository.deleteById(id);
-    }
-
-    private User findUser(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
     }
 }

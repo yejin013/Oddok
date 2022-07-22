@@ -10,32 +10,35 @@ import java.util.Set;
 
 @Getter
 public class BookmarkDto {
-    private Long id;
+    private final Long id;
 
-    private String name;
+    private final String name;
 
-    private Set<String> hashtags;
+    private final Set<String> hashtags;
 
-    private String image;
+    private final String image;
 
-    private String rule;
+    private final Boolean isPublic;
 
-    private Integer currentUsers;
+    private final String rule;
 
-    private Integer limitUsers;
+    private final Integer currentUsers;
 
-    private LocalDateTime endAt;
+    private final Integer limitUsers;
 
-    private List<ParticipantDto> participant;
+    private final LocalDateTime endAt;
+
+    private final List<ParticipantDto> participant;
 
     @Builder
     public BookmarkDto(Long id, String name, Set<String> hashtags, String image,
-                               String rule, Integer currentUsers, Integer limitUsers,
-                               LocalDateTime endAt, List<ParticipantDto> participant) {
+                       Boolean isPublic, String rule, Integer currentUsers,
+                       Integer limitUsers, LocalDateTime endAt, List<ParticipantDto> participant) {
         this.id = id;
         this.name = name;
         this.hashtags = hashtags;
         this.image = image;
+        this.isPublic = isPublic;
         this.rule = rule;
         this.currentUsers = currentUsers;
         this.limitUsers = limitUsers;

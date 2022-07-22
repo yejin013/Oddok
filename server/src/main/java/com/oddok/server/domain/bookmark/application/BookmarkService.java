@@ -28,7 +28,6 @@ import java.util.Optional;
 public class BookmarkService {
 
     private final BookmarkRepository bookmarkRepository;
-    private final UserRepository userRepository;
     private final StudyRoomRepository studyRoomRepository;
     private final ParticipantRepository participantRepository;
 
@@ -36,8 +35,7 @@ public class BookmarkService {
      * 북마크 생성
      */
     @Transactional
-    public void create(Long userId, Long studyRoomId) {
-        User user = findUser(userId);
+    public void create(User user, Long studyRoomId) {
         StudyRoom studyRoom = findStudyRoom(studyRoomId);
 
         Optional<Bookmark> bookmark = bookmarkRepository.findByUser(user);
@@ -55,8 +53,7 @@ public class BookmarkService {
      * 북마크 조회
      * @return
      */
-    public Optional<BookmarkDto> get(Long userId) {
-        User user = findUser(userId);
+    public Optional<BookmarkDto> get(User user) {
         Optional<Bookmark> bookmark = bookmarkRepository.findByUser(user);
 
         if(bookmark.isEmpty())
@@ -77,16 +74,8 @@ public class BookmarkService {
      * 북마크 삭제
      */
     @Transactional
-    public void delete(Long userId) {
-        User user = findUser(userId);
+    public void delete(User user) {
         bookmarkRepository.deleteByUser(user);
-    }
-
-    /**
-     * 유저 정보 검색
-     */
-    private User findUser(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
     }
 
     /**
