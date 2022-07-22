@@ -28,7 +28,7 @@ function Header() {
     await getNickname()
       .then((response) => setUserState((prev) => ({ ...prev, nickname: response.nickname })))
       .catch((error) => console.error("get nickname error", error));
-  }, []);
+  }, [user.isLogin, user.nickname]);
 
   useEffect(() => {
     document.addEventListener("mousedown", onOutsideClick);
