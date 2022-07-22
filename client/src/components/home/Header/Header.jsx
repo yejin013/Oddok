@@ -21,6 +21,13 @@ function Header() {
     }
   };
 
+  useEffect(() => {
+    document.addEventListener("mousedown", onOutsideClick);
+    return () => {
+      document.removeEventListener("mousedown", onOutsideClick);
+    };
+  }, [isDropdown]);
+
   useEffect(async () => {
     if (!user.isLogin || user.nickname !== null) {
       return;
@@ -30,41 +37,21 @@ function Header() {
       .catch((error) => console.error("get nickname error", error));
   }, [user.isLogin, user.nickname]);
 
-  useEffect(() => {
-    document.addEventListener("mousedown", onOutsideClick);
-    return () => {
-      document.removeEventListener("mousedown", onOutsideClick);
-    };
-  }, [isDropdown]);
-
-  const goToMain = () => {
-    history.push({
-      pathname: "/",
-    });
-  };
-
-  const goToMypage = () => {
-    history.push({
-      pathname: "/mypage",
-    });
-  };
-
-  const goToSearch = () => {
-    history.push({
-      pathname: "/search",
-    });
-  };
-
-  const goToCreateRoom = () => {
-    history.push({
-      pathname: "/studyroom/create",
-    });
-  };
-
-  const goToLogin = () => {
-    history.push({
-      pathname: "/login",
-    });
+  const goToPage = (page) => {
+    switch (page) {
+      case "main":
+        return () => history.push("/");
+      case "mypage":
+        return () => history.push("/mypage");
+      case "search":
+        return () => history.push("/search");
+      case "create":
+        return () => history.push("/studyroom/create");
+      case "login":
+        return () => history.push("/login");
+      default:
+        return () => history.push("*");
+    }
   };
 
   const onProfileBtnClick = () => {
@@ -92,29 +79,23 @@ function Header() {
             <button
               type="button"
               className={history.location.pathname === "/" ? styles.clicked : ""}
-              onClick={goToMain}
+              onClick={goToPage("main")}
             >
               스터디룸
             </button>
           </li>
           <li>
-            {!user.isLogin ? (
-              <button type="button" className={styles.mypage} onClick={goToLogin}>
-                마이페이지
-              </button>
-            ) : (
-              <button
-                type="button"
-                className={history.location.pathname === "/mypage" ? styles.clicked : ""}
-                onClick={goToMypage}
-              >
-                마이페이지
-              </button>
-            )}
+            <button
+              type="button"
+              className={history.location.pathname === "/mypage" ? styles.clicked : ""}
+              onClick={user.isLogin ? goToPage("mypage") : goToPage("login")}
+            >
+              마이페이지
+            </button>
           </li>
         </ul>
         <div className={styles.buttons}>
-          <button type="button" className={styles.search} onClick={goToSearch}>
+          <button type="button" className={styles.search} onClick={goToPage("search")}>
             <Search />
           </button>
           <ul className={styles.my_info}>
@@ -141,15 +122,13 @@ function Header() {
               </ul>
             )}
           </ul>
-          {!user.isLogin ? (
-            <button type="button" className={styles.study_button} onClick={goToLogin}>
-              + 새 스터디 만들기
-            </button>
-          ) : (
-            <button type="button" className={styles.study_button} onClick={goToCreateRoom}>
-              + 새 스터디 만들기
-            </button>
-          )}
+          <button
+            type="button"
+            className={styles.study_button}
+            onClick={user.isLogin ? goToPage("create") : goToPage("login")}
+          >
+            + 새 스터디 만들기
+          </button>
         </div>
       </header>
     </div>
