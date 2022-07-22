@@ -16,7 +16,7 @@ function Header() {
   const dropdownRef = useRef();
 
   const onOutsideClick = (event) => {
-    if (isDropdown && !dropdownRef.current.contains(event.target)) {
+    if (isDropdown && dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setIsDropdown(false);
     }
   };
@@ -68,7 +68,7 @@ function Header() {
   };
 
   return (
-    <div>
+    <>
       {isModalOpen && <NicknameEditModal onClose={closeModal} />}
       <header className={styles.header}>
         <div className={styles.logo}>
@@ -94,17 +94,17 @@ function Header() {
             </button>
           </li>
         </ul>
-        <div className={styles.buttons}>
-          <button type="button" className={styles.search} onClick={goToPage("search")}>
-            <Search />
-          </button>
-          <ul className={styles.my_info}>
-            <li>
-              <button type="button" className={styles.profile} onClick={onProfileBtnClick}>
-                <Profile />
-                <span className={styles.nickname}>{user.nickname}</span>
-              </button>
-            </li>
+        <ul className={styles.buttons}>
+          <li>
+            <button type="button" className={styles.search} onClick={goToPage("search")}>
+              <Search />
+            </button>
+          </li>
+          <li className={styles.my_info}>
+            <button type="button" className={styles.profile} onClick={onProfileBtnClick}>
+              <Profile />
+              <span className={styles.nickname}>{user.nickname}</span>
+            </button>
             {user.isLogin && isDropdown && (
               <ul className={styles.info_buttons} ref={dropdownRef}>
                 <li>
@@ -121,17 +121,19 @@ function Header() {
                 </li>
               </ul>
             )}
-          </ul>
-          <button
-            type="button"
-            className={styles.study_button}
-            onClick={user.isLogin ? goToPage("create") : goToPage("login")}
-          >
-            + 새 스터디 만들기
-          </button>
-        </div>
+          </li>
+          <li>
+            <button
+              type="button"
+              className={styles.study_button}
+              onClick={user.isLogin ? goToPage("create") : goToPage("login")}
+            >
+              + 새 스터디 만들기
+            </button>
+          </li>
+        </ul>
       </header>
-    </div>
+    </>
   );
 }
 export default Header;
