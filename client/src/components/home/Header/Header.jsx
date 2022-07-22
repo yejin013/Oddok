@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRecoilState } from "recoil";
 import { useHistory } from "react-router-dom";
 import { userState } from "@recoil/user-state";
@@ -13,6 +13,13 @@ function Header() {
   const [user, setUserState] = useRecoilState(userState);
   const [isDropdown, setIsDropdown] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const dropdownRef = useRef();
+
+  const onOutsideClick = (event) => {
+    if (isDropdown && !dropdownRef.current.contains(event.target)) {
+      setIsDropdown(false);
+    }
+  };
 
   useEffect(async () => {
     if (!user.isLogin || user.nickname !== null) {
@@ -22,6 +29,13 @@ function Header() {
       .then((response) => setUserState((prev) => ({ ...prev, nickname: response.nickname })))
       .catch((error) => console.error("get nickname error", error));
   }, []);
+
+  useEffect(() => {
+    document.addEventListener("mousedown", onOutsideClick);
+    return () => {
+      document.removeEventListener("mousedown", onOutsideClick);
+    };
+  }, [isDropdown]);
 
   const goToMain = () => {
     history.push({
@@ -53,22 +67,22 @@ function Header() {
     });
   };
 
-  const clickProfileBtn = () => {
+  const onProfileBtnClick = () => {
     setIsDropdown((prev) => !prev);
   };
 
-  const clickNicknameEditBtn = () => {
-    setIsModalOpen((prev) => !prev);
-    setIsDropdown((prev) => !prev);
+  const onNicknameEditBtnClick = () => {
+    setIsModalOpen(true);
+    setIsDropdown(false);
   };
 
-  const onClose = () => {
-    setIsModalOpen((prev) => !prev);
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
     <div>
-      {isModalOpen && <NicknameEditModal onClose={onClose} />}
+      {isModalOpen && <NicknameEditModal onClose={closeModal} />}
       <header className={styles.header}>
         <div className={styles.logo}>
           <a href="/">ODDOK</a>
@@ -105,15 +119,15 @@ function Header() {
           </button>
           <ul className={styles.my_info}>
             <li>
-              <button type="button" className={styles.profile} onClick={clickProfileBtn}>
+              <button type="button" className={styles.profile} onClick={onProfileBtnClick}>
                 <Profile />
                 <span className={styles.nickname}>{user.nickname}</span>
               </button>
             </li>
             {user.isLogin && isDropdown && (
-              <ul className={styles.info_buttons}>
+              <ul className={styles.info_buttons} ref={dropdownRef}>
                 <li>
-                  <button type="button" className={styles.button} onClick={clickNicknameEditBtn}>
+                  <button type="button" className={styles.button} onClick={onNicknameEditBtnClick}>
                     닉네임 수정
                   </button>
                 </li>
