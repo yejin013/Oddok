@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import axios from "axios";
+import ApiError from "./error/ApiError";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 const axiosInstance = axios.create({
@@ -18,13 +19,10 @@ axiosInstance.interceptors.request.use((config) => {
 });
 
 axiosInstance.interceptors.response.use(
-  (res) => {
-    console.log("🙂응답 성공", res);
-    return res.data;
-  },
+  (res) => res.data,
   (error) => {
-    console.log("😵응답 에러", error);
-    throw error;
+    // console.log("😵응답 에러", error.response);
+    throw new ApiError(error.response.data.message, error.response.status);
   },
 );
 

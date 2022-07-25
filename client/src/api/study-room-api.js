@@ -1,13 +1,19 @@
 import axios from "axios";
 import axiosInstance from "./axios-config";
+import CreateStudyRoomError from "./error/CreateStudyRoomError";
+import JoinStudyRoomError from "./error/JoinStudyRoomError";
 
 export const createStudyRoom = async (roomInfo) => {
-  const response = await axiosInstance({
-    url: "/study-room",
-    method: "POST",
-    data: roomInfo,
-  });
-  return response;
+  try {
+    const response = await axiosInstance({
+      url: "/study-room",
+      method: "POST",
+      data: roomInfo,
+    });
+    return response;
+  } catch (error) {
+    throw new CreateStudyRoomError(error);
+  }
 };
 
 export const getStudyRoom = async (roomId) => {
@@ -18,10 +24,14 @@ export const getStudyRoom = async (roomId) => {
 };
 
 export const joinStudyRoom = async (roomId) => {
-  const response = await axiosInstance({
-    url: `/study-room/join/${roomId}`,
-  });
-  return response;
+  try {
+    const response = await axiosInstance({
+      url: `/study-room/join/${roomId}`,
+    });
+    return response;
+  } catch (error) {
+    throw new JoinStudyRoomError(error);
+  }
 };
 
 export const updateStudyRoom = async (roomId, newRoomInfo) => {
