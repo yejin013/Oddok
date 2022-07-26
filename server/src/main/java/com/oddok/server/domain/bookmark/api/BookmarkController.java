@@ -30,8 +30,8 @@ public class BookmarkController {
      */
     @PostMapping("/{id}")
     public ResponseEntity<?> create(@AuthenticationPrincipal User user, @PathVariable Long id) {
-        bookmarkService.create(user, id);
-        return ResponseEntity.ok().build();
+        BookmarkDto bookmarkDto = bookmarkService.create(user, id);
+        return ResponseEntity.ok(bookmarkDtoMapper.toGetResponse(bookmarkDto));
     }
 
     /**
