@@ -17,7 +17,7 @@ function StudyRoomCard({ roomData, showBookmark }) {
 
   const addBookmark = async (roomId) => {
     await saveBookmark(roomId)
-      .then(console.log)
+      .then()
       .catch((error) => console.log("add bookmark error", error));
   };
 
