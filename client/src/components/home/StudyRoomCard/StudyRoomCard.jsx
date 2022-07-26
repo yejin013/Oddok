@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { bookmarkState } from "@recoil/bookmark-state";
 import { userState } from "@recoil/user-state";
-import { addBookmark, deleteBookmark } from "@api/bookmark-api";
+import { saveBookmark, removeBookmark } from "@api/bookmark-api";
 import { PasswordModal, Thumbnail, UserCount } from "@components/commons";
 import { Lock, Unlock, BookMark, BookMarkHeart } from "@icons";
 import styles from "./StudyRoomCard.module.css";
@@ -15,58 +15,58 @@ function StudyRoomCard({ roomData, showBookmark }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const history = useHistory();
 
-  const selectBookmark = async (roomId) => {
-    await addBookmark(roomId)
-      .then(() => console.log("add bookmark"))
+  const addBookmark = async (roomId) => {
+    await saveBookmark(roomId)
+      .then()
       .catch((error) => console.log("add bookmark error", error));
   };
 
-  const cancelBookmark = async (event) => {
+  const deleteBookmark = async (event) => {
     event.stopPropagation();
-    await deleteBookmark()
+    await removeBookmark()
       .then(setBookmark(null))
       .catch((error) => console.log("delete bookmark error", error));
   };
 
   // 북마크 버튼 누르면 새로고침 없이 바로 북마크 정보 보여줌
-  const clickAddBtn = async () => {
-    await selectBookmark(roomData.id);
+  const onBookmarkAddBtnClick = async (event) => {
+    event.stopPropagation();
+    if (!user.isLogin) {
+      history.push("/login");
+      return;
+    }
+    await addBookmark(roomData.id);
     await showBookmark();
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const onClick = () => {
+  const onStudyRoomClick = () => {
     if (!user.isLogin) {
       history.push("/login");
-    } else if (user.isLogin && roomData.isPublic) {
+      return;
+    }
+    if (roomData.isPublic) {
       history.push(`/studyroom/${roomData.id}/setting`);
     } else {
       setIsModalOpen(true);
     }
   };
 
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <>
       {isModalOpen && <PasswordModal roomId={roomData.id} onClose={closeModal} />}
-      <li className={styles.card} onClick={onClick}>
+      <li className={styles.card} onClick={onStudyRoomClick}>
         <div className={styles.thumbnail_box}>
           <Thumbnail />
           {!(bookmark && roomData.id === bookmark.id) ? (
-            <button
-              type="button"
-              className={styles.bookmark_icon}
-              onClick={(event) => {
-                event.stopPropagation();
-                clickAddBtn();
-              }}
-            >
+            <button type="button" className={styles.bookmark_icon} onClick={onBookmarkAddBtnClick}>
               <BookMark />
             </button>
           ) : (
-            <button type="button" className={styles.bookmark_icon} onClick={cancelBookmark}>
+            <button type="button" className={styles.bookmark_icon} onClick={deleteBookmark}>
               <BookMarkHeart />
             </button>
           )}

@@ -4,7 +4,7 @@ import StudyRoomCard from "../StudyRoomCard/StudyRoomCard";
 import Skeleton from "../StudyRoomCard/Skeleton";
 import styles from "./FeedGrid.module.css";
 
-function CardGrid({ isLoading, rooms, showBookmark }) {
+function FeedGrid({ isLoading, rooms, showBookmark }) {
   return (
     <div className={styles.content}>
       <ul>
@@ -28,4 +28,4 @@ function CardGrid({ isLoading, rooms, showBookmark }) {
   );
 }
 
-export default CardGrid;
+export default FeedGrid;
