@@ -2,6 +2,7 @@ export { default as AddButton } from "./AddButton/AddButton";
 export { default as Calendar } from "./Calendar/Calendar";
 export { default as CalendarHeader } from "./Calendar/CalendarHeader";
 export { default as Dropdown } from "./Dropdown/Dropdown";
+export { default as ErrorModal } from "./ErrorModal/ErrorModal";
 export { default as HashtagButton } from "./HashtagButton/HashtagButton";
 export { default as Input } from "./Input/Input";
 export { default as InputButton } from "./InputButton/InputButton";

@@ -7,10 +7,12 @@ import Search from "@pages/Search/Search";
 import MyPage from "@pages/MyPage/MyPage";
 import StudyRoom from "@pages/StudyRoom/StudyRoom";
 import NotFoundPage from "@pages/NotFoundPage/NotFoundPage";
+import { ErrorModal } from "@components/commons";
 
 function App() {
   return (
     <BrowserRouter>
+      <ErrorModal />
       <Switch>
         <Route exact path="/">
           <MainHome />
