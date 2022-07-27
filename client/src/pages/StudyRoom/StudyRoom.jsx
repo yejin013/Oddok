@@ -66,11 +66,16 @@ function StudyRoom() {
   };
 
   const startOpenvidu = async () => {
-    await connectToSession(session, history.location.state.token, {
-      nickname: localUser.nickname,
-      isHost: localUser.updateAllowed,
-      isMicOn: deviceStatus.mic,
-    });
+    await connectToSession(
+      session,
+      history.location.state.token,
+      {
+        nickname: localUser.nickname,
+        isHost: localUser.updateAllowed,
+        isMicOn: deviceStatus.mic,
+      },
+      roomId,
+    );
     const userStream = await connectDevice(deviceStatus);
     setPublisher({
       streamManager: userStream,

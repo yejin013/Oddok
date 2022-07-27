@@ -1,15 +1,17 @@
 import { OpenVidu } from "openvidu-browser";
 import OpenviduError from "@api/error/OpenviduError";
 import { OPENVIDU_MESSAGE } from "@utils/constants/API_ERROR";
+import { leaveStudyRoom } from "@api/study-room-api";
 
 const OV = new OpenVidu();
 
 export const initSession = () => OV.initSession();
 
-export const connectToSession = async (session, token, userData) => {
+export const connectToSession = async (session, token, userData, roomId) => {
   try {
     await session.connect(token, userData);
   } catch (error) {
+    await leaveStudyRoom(roomId);
     throw new OpenviduError(error, OPENVIDU_MESSAGE.CONNECT[error.code]);
   }
 };
