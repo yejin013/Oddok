@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import { OpenVidu } from "openvidu-browser";
-import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState, useResetRecoilState } from "recoil";
 import { roomInfoState, deviceState } from "@recoil/studyroom-state";
+import { errorState } from "@recoil/error-state";
 import { userState } from "@recoil/user-state";
 import { updateStudyRoom, leaveStudyRoom } from "@api/study-room-api";
+import { initSession, connectToSession, connectDevice, publishStream } from "@api/openvidu-api";
 import {
   StudyBar,
   UserVideo,
@@ -20,8 +21,7 @@ import styles from "./StudyRoom.module.css";
 function StudyRoom() {
   const history = useHistory();
   const { roomId } = useParams();
-  const OV = new OpenVidu();
-  const [session, setSession] = useState();
+  const [session, setSession] = useState(initSession());
   const [publisher, setPublisher] = useState();
   const [subscribers, setSubscribers] = useState([]);
   const [count, setCount] = useState(1);
@@ -38,6 +38,7 @@ function StudyRoom() {
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [isLeaveOpen, setIsLeaveOpen] = useState(false);
   const localUser = useRecoilValue(userState);
+  const setError = useSetRecoilState(errorState);
 
   const clickLeaveBtn = () => {
     setIsLeaveOpen(true);
@@ -45,7 +46,7 @@ function StudyRoom() {
 
   const leaveRoom = async () => {
     await leaveStudyRoom(roomId);
-    await session.disconnect();
+    session.disconnect();
     resetRoomInfo();
     history.push({
       pathname: "/",
@@ -64,82 +65,66 @@ function StudyRoom() {
     setDeviceStatus((prev) => ({ ...prev, mic: !prev.mic }));
   };
 
-  // 1. 유저 세션 생성
+  const startOpenvidu = async () => {
+    await connectToSession(session, history.location.state.token, {
+      nickname: localUser.nickname,
+      isHost: localUser.updateAllowed,
+      isMicOn: deviceStatus.mic,
+    });
+    const userStream = await connectDevice(deviceStatus);
+    setPublisher({
+      streamManager: userStream,
+      nickname: localUser.nickname,
+      isHost: localUser.isHost,
+      isMic: deviceStatus.mic,
+    });
+    await publishStream(session, userStream);
+  };
+
   useEffect(() => {
     if (!history.location.state) {
       history.push(`/studyroom/${roomId}/setting`);
     }
-    setSession(OV.initSession());
+    startOpenvidu().catch((error) => setError(error));
   }, []);
 
-  // 2. 방 세션과 유저 세션 연결
   useEffect(() => {
-    if (session) {
-      (async () => {
-        await session.connect(history.location.state.token, {
-          nickname: localUser.nickname,
-          isHost: localUser.updateAllowed,
-          isMicOn: deviceStatus.mic,
-        });
-        const devices = await OV.getDevices();
-        const videoDevices = devices.filter((device) => device.kind === "videoinput");
-        const localUserStream = OV.initPublisher(undefined, {
-          audioSource: undefined,
-          videoSource: videoDevices[0].label ? videoDevices.deviceId : undefined,
-          publishAudio: deviceStatus.mic,
-          publishVideo: deviceStatus.cam,
-          frameRate: 30,
-          mirror: false,
-        });
-        await session.publish(localUserStream);
-        setPublisher({
-          streamManager: localUserStream,
-          nickname: localUser.nickname,
-          isHost: localUser.updateAllowed,
-          isMicOn: deviceStatus.mic,
-        });
-      })();
-
-      // 3. 소켓 이벤트 처리
-      // 1) 스트림 생성
-      session.on("streamCreated", (event) => {
-        const participant = session.subscribe(event.stream, undefined);
-        const data = JSON.parse(event.stream.connection.data);
-        setSubscribers((prev) => [
-          ...prev,
-          { streamManager: participant, nickname: data.nickname, isHost: data.isHost, isMicOn: data.isMicOn },
-        ]);
-        setCount((prev) => prev + 1);
-      });
-      // 2) 스트림 삭제
-      session.on("streamDestroyed", (event) => {
-        setSubscribers((prev) => prev.filter((subscriber) => subscriber.streamManager !== event.stream.streamManager));
-        setCount((prev) => prev - 1);
-      });
-      // 3) 방장이 방 정보를 수정했을 때
-      session.on("signal:updated-roominfo", (event) => {
-        const data = JSON.parse(event.data);
-        setRoomInfo(data);
-      });
-
-      session.on("signal:micStatusChanged", (event) => {
-        setSubscribers((prev) =>
-          prev.map((user) => {
-            if (user.streamManager.stream.connection.connectionId === event.from.connectionId) {
-              const userStatus = user;
-              userStatus.isMicOn = JSON.parse(event.data).isMicOn;
-              return userStatus;
-            }
-            return user;
-          }),
-        );
-      });
-
-      session.on("exception", (exception) => {
-        console.warn(exception);
-      });
-    }
-  }, [session]);
+    // 1) 스트림 생성
+    session.on("streamCreated", (event) => {
+      const participant = session.subscribe(event.stream, undefined);
+      const data = JSON.parse(event.stream.connection.data);
+      setSubscribers((prev) => [
+        ...prev,
+        { streamManager: participant, nickname: data.nickname, isHost: data.isHost, isMicOn: data.isMicOn },
+      ]);
+      setCount((prev) => prev + 1);
+    });
+    // 2) 스트림 삭제
+    session.on("streamDestroyed", (event) => {
+      setSubscribers((prev) => prev.filter((subscriber) => subscriber.streamManager !== event.stream.streamManager));
+      setCount((prev) => prev - 1);
+    });
+    // 3) 방장이 방 정보를 수정했을 때
+    session.on("signal:updated-roominfo", (event) => {
+      const data = JSON.parse(event.data);
+      setRoomInfo(data);
+    });
+    session.on("signal:micStatusChanged", (event) => {
+      setSubscribers((prev) =>
+        prev.map((user) => {
+          if (user.streamManager.stream.connection.connectionId === event.from.connectionId) {
+            const userStatus = user;
+            userStatus.isMicOn = JSON.parse(event.data).isMicOn;
+            return userStatus;
+          }
+          return user;
+        }),
+      );
+    });
+    session.on("exception", (exception) => {
+      console.warn(exception);
+    });
+  }, []);
 
   const clickDetailBtn = () => {
     setIsDetailOpen((prev) => !prev);

@@ -17,7 +17,7 @@ function JoinRoom() {
   const setError = useSetRecoilState(errorState);
   const { loading, request: joinStudy } = useAsync({
     requestFn: () => joinStudyRoom(roomId),
-    onSuccess: (token) =>
+    onSuccess: ({ token }) =>
       history.push({
         pathname: `/studyroom/${roomId}`,
         state: {

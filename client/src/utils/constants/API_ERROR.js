@@ -16,6 +16,12 @@ export const MESSAGE = {
   },
 };
 
+export const OPENVIDU_MESSAGE = {
+  CONNECT: {
+    401: "스터디룸 재입장에 실패했습니다.",
+  },
+};
+
 export const ACTION = {
   // LoginError: { text: "다시 로그인하기", path: "/login" },
 };

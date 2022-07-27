@@ -16,11 +16,11 @@ function CreateRoom() {
   const setError = useSetRecoilState(errorState);
   const { loading, request: startStudy } = useAsync({
     requestFn: () => startStudyRoom(roomInfo),
-    onSuccess: (data) =>
+    onSuccess: ({ id, token }) =>
       history.push({
-        pathname: `/studyroom/${data.id}`,
+        pathname: `/studyroom/${id}`,
         state: {
-          token: data.token,
+          token,
         },
       }),
     onError: (error) => setError(error),
