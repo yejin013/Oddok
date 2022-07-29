@@ -1,5 +1,6 @@
 package com.oddok.server.common.jwt;
 
+import com.oddok.server.domain.user.entity.Auth;
 import com.oddok.server.domain.user.entity.Role;
 import com.oddok.server.domain.user.entity.User;
 import io.jsonwebtoken.Claims;
@@ -145,7 +146,7 @@ public class JwtTokenProvider {
      * @return Spring Security 인증토큰
      */
     public Authentication getAuthentication(Claims claims) {
-        return new UsernamePasswordAuthenticationToken(new User(claims), "", getAuthorities(claims));
+        return new UsernamePasswordAuthenticationToken(new Auth(claims), "", getAuthorities(claims));
     }
 
     /**

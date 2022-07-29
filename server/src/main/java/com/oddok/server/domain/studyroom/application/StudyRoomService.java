@@ -10,6 +10,8 @@ import com.oddok.server.domain.participant.entity.Participant;
 import com.oddok.server.domain.studyroom.entity.StudyRoom;
 import com.oddok.server.domain.studyroom.mapper.StudyRoomMapper;
 
+import com.oddok.server.domain.user.dao.UserRepository;
+import com.oddok.server.domain.user.entity.Auth;
 import com.oddok.server.domain.user.entity.User;
 
 import java.time.LocalDate;
@@ -31,13 +33,15 @@ public class StudyRoomService {
     private final SessionManager sessionManager;
 
     private final StudyRoomRepository studyRoomRepository;
+    private final UserRepository userRepository;
     private final ParticipantRepository participantRepository;
     private final HashtagRepository hashtagRepository;
 
     private final StudyRoomMapper studyRoomMapper = Mappers.getMapper(StudyRoomMapper.class);
 
     @Transactional
-    public StudyRoomDto createStudyRoom(User user, StudyRoomDto studyRoomDto) {
+    public StudyRoomDto createStudyRoom(Auth auth, StudyRoomDto studyRoomDto) {
+        User user = findUser(auth);
         checkUserIsAlreadyPublisher(user);
         StudyRoom studyRoom = studyRoomMapper.toEntity(studyRoomDto, user);
         studyRoom = studyRoomRepository.save(studyRoom);
@@ -52,8 +56,9 @@ public class StudyRoomService {
      * @return token
      */
     @Transactional
-    public String userJoinStudyRoom(Long id, User user) {
+    public String userJoinStudyRoom(Long id, Auth auth) {
         StudyRoom studyRoom = findStudyRoom(id);
+        User user = findUser(auth);
         checkStudyRoomEnd(id, studyRoom);
         checkUserAlreadyJoined(user);
         checkStudyRoomFull(id, studyRoom);
@@ -209,5 +214,10 @@ public class StudyRoomService {
     private StudyRoom findStudyRoom(Long id) {
         return studyRoomRepository.findById(id)
                 .orElseThrow(() -> new StudyRoomNotFoundException(id));
+    }
+
+    private User findUser(Auth auth) {
+        return userRepository.findById(auth.getId())
+                .orElseThrow(() -> new UserNotFoundException(auth.getId()));
     }
 }

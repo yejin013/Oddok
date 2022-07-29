@@ -16,6 +16,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.oddok.server.domain.user.dto.TokensDto;
+import com.oddok.server.domain.user.entity.Auth;
 import com.oddok.server.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -66,9 +67,9 @@ public class StudyRoomController {
      * @return CreateStudyRoomResponse: 생성된 방 정보
      */
     @PostMapping
-    public ResponseEntity<CreateStudyRoomResponse> create(@AuthenticationPrincipal User user, @RequestBody @Valid CreateStudyRoomRequest createStudyRoomRequest) {
+    public ResponseEntity<CreateStudyRoomResponse> create(@AuthenticationPrincipal Auth auth, @RequestBody @Valid CreateStudyRoomRequest createStudyRoomRequest) {
         StudyRoomDto requestDto = studyRoomDtoMapper.fromCreateRequest(createStudyRoomRequest);
-        Long studyRoomId = studyRoomService.createStudyRoom(user, requestDto).getId();
+        Long studyRoomId = studyRoomService.createStudyRoom(auth, requestDto).getId();
         return ResponseEntity.ok(new CreateStudyRoomResponse(studyRoomId));
     }
 
@@ -91,9 +92,9 @@ public class StudyRoomController {
      * @return token
      */
     @GetMapping(value = "/join/{id}")
-    public ResponseEntity<TokenResponse> join(@PathVariable Long id, @AuthenticationPrincipal User user) {
-        log.info("join userId = {}, id = {}", user.getId(), id);
-        String token = studyRoomService.userJoinStudyRoom(id, user);
+    public ResponseEntity<TokenResponse> join(@PathVariable Long id, @AuthenticationPrincipal Auth auth) {
+        log.info("join userId = {}, id = {}", auth.getId(), id);
+        String token = studyRoomService.userJoinStudyRoom(id, auth);
         TokenResponse tokenResponse = new TokenResponse(token);
         return ResponseEntity.ok(tokenResponse);
     }

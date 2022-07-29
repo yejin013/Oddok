@@ -1,6 +1,7 @@
 package com.oddok.server.domain.profile.entity;
 
 import com.oddok.server.domain.user.entity.User;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,15 +11,13 @@ import java.time.LocalDate;
 
 @Getter
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DiscriminatorValue("user_profile")
 @Table(name = "user_profile")
-public class Profile {
+public class Profile extends User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @OneToOne
-    private User user;
 
     @Column(length = 255)
     private String goal;
@@ -33,8 +32,7 @@ public class Profile {
     private String ddayInfo;
 
     @Builder
-    public Profile(User user, String goal, Integer targetTime, LocalDate dday, String ddayInfo) {
-        this.user = user;
+    public Profile(String goal, Integer targetTime, LocalDate dday, String ddayInfo) {
         this.goal = goal;
         this.targetTime = targetTime;
         this.dday = dday;
