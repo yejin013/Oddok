@@ -17,7 +17,7 @@ function JoinRoom() {
     data: roomData,
     error: getInfoError,
     reset: getInfoErrorReset,
-  } = useAsync(() => getStudyRoom(id), [id], false);
+  } = useAsync(() => getStudyRoom(roomId), [roomId], false);
   const {
     loading: isLoading,
     error: joinError,
