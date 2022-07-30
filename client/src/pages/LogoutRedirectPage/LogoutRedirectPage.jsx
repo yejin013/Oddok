@@ -16,7 +16,6 @@ function LogoutRedirectPage() {
       .then(() => {
         localStorage.removeItem("isLogin");
         setUserState({ ...user, isLogin: localStorage.getItem("isLogin"), nickname: null });
-        window.location.replace("/");
       })
       .catch((error) => console.error(error));
   }, []);

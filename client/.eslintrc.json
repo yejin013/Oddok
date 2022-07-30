@@ -38,6 +38,7 @@
     "prefer-destructuring": "off",
     "no-restricted-globals": "off",
     "jsx-a11y/no-noninteractive-element-interactions ": "off",
-    "import/no-cycle": "off"
+    "import/no-cycle": "off",
+    "react/jsx-props-no-spreading": "off"
   }
 }

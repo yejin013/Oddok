@@ -32,9 +32,6 @@ function RedirectPage() {
       .then(() => {
         localStorage.setItem("isLogin", true); // 로그인상태 설정
         setUserState({ ...user, isLogin: localStorage.getItem("isLogin") });
-        history.replace({
-          pathname: "/",
-        });
       })
       .catch((error) => console.error(error));
   }, [token]);

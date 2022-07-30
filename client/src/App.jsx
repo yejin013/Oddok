@@ -14,6 +14,7 @@ import RedirectPage from "@pages/Login/RedirectPage";
 import LogoutRedirectPage from "@pages/LogoutRedirectPage/LogoutRedirectPage";
 import { getNewToken } from "@api/auth-api";
 import { Loading } from "@components/commons";
+import { PrivateRoute, PublicRoute } from "@components/router";
 
 function App() {
   const user = useRecoilValue(userState);
@@ -34,36 +35,16 @@ function App() {
       {isLoading && <Loading />}
       <BrowserRouter>
         <Switch>
-          <Route exact path="/">
-            <MainHome />
-          </Route>
-          <Route exact path="/login">
-            <Login />
-          </Route>
-          <Route path="/login/oauth2/code/kakao">
-            <RedirectPage />
-          </Route>
-          <Route path="/logout/oauth2/code/kakao">
-            <LogoutRedirectPage />
-          </Route>
-          <Route path="/search">
-            <Search />
-          </Route>
-          <Route path="/mypage">
-            <MyPage />
-          </Route>
-          <Route path="/studyroom/create">
-            <CreateRoom />
-          </Route>
-          <Route exact path="/studyroom/:roomId">
-            <StudyRoom />
-          </Route>
-          <Route path="/studyroom/:roomId/setting">
-            <JoinRoom />
-          </Route>
-          <Route path="*">
-            <NotFoundPage />
-          </Route>
+          <PublicRoute exact path="/" component={MainHome} />
+          <PublicRoute restricted exact path="/login" component={Login} />
+          <PublicRoute restricted path="/login/oauth2/code/kakao" component={RedirectPage} />
+          <PrivateRoute path="/logout/oauth2/code/kakao" component={LogoutRedirectPage} />
+          <PublicRoute path="/search" component={Search} />
+          <PrivateRoute path="/mypage" component={MyPage} />
+          <PrivateRoute path="/studyroom/create" component={CreateRoom} />
+          <PrivateRoute path="/studyroom/:roomId/setting" component={JoinRoom} />
+          <PrivateRoute path="/studyroom/:roomId" component={StudyRoom} />
+          <PublicRoute path="*" component={NotFoundPage} />
         </Switch>
       </BrowserRouter>
     </>
