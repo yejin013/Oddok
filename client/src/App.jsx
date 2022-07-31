@@ -13,7 +13,7 @@ import NotFoundPage from "@pages/NotFoundPage/NotFoundPage";
 import RedirectPage from "@pages/Login/RedirectPage";
 import LogoutRedirectPage from "@pages/LogoutRedirectPage/LogoutRedirectPage";
 import { getNewToken } from "@api/auth-api";
-import { Loading } from "@components/commons";
+import { Loading, ErrorModal } from "@components/commons";
 import { PrivateRoute, PublicRoute } from "@components/router";
 
 function App() {
@@ -34,6 +34,7 @@ function App() {
     <>
       {isLoading && <Loading />}
       <BrowserRouter>
+        <ErrorModal />
         <Switch>
           <PublicRoute exact path="/" component={MainHome} />
           <PublicRoute restricted exact path="/login" component={Login} />

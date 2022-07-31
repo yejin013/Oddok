@@ -15,14 +15,14 @@ import {
 } from "@components/mypage";
 import { Textarea, NicknameEditModal } from "@components/commons";
 import { Layout } from "@components/layout";
-import useFetch from "@hooks/useFetch";
+import useAsync from "@hooks/useAsync";
 import getColor from "src/utils/getColor";
 import { getTimeDiff, getDday, dateParsing, dateFormatting } from "@utils";
 import styles from "./MyPage.module.css";
 
 function MyPage() {
-  const { data: profileData, request: refetchProfile } = useFetch(getProfile);
-  const { data: myRoomData, request: refetchMyRoom } = useFetch(getMyRoom);
+  const { data: profileData, request: refetchProfile } = useAsync({ requestFn: getProfile, skip: false });
+  const { data: myRoomData, request: refetchMyRoom } = useAsync({ requestFn: getMyRoom, skip: false });
   const [selectedDate, setSelectedDate] = useState(dateFormatting(new Date()));
   const [timeRecordData, setTimeRecordData] = useState();
   const [totalStudyTime, setTotalStudyTime] = useState(0);

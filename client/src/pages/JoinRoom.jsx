@@ -3,60 +3,41 @@ import { useHistory, useParams } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { userState } from "@recoil/user-state";
 import { roomInfoState } from "@recoil/studyroom-state";
+import { errorState } from "@recoil/error-state";
 import { getStudyRoom, joinStudyRoom, updateStudyRoom } from "@api/study-room-api";
 import useAsync from "@hooks/useAsync";
-import { Loading, Modal } from "@components/commons";
+import { Loading } from "@components/commons";
 import { SettingRoom } from "@components/study";
 
 function JoinRoom() {
   const history = useHistory();
   const { roomId } = useParams();
-  const setRoomInfo = useSetRecoilState(roomInfoState);
   const [userInfo, setUserInfo] = useRecoilState(userState);
-  const {
-    data: roomData,
-    error: getInfoError,
-    reset: getInfoErrorReset,
-  } = useAsync(() => getStudyRoom(roomId), [roomId], false);
-  const {
-    loading: isLoading,
-    error: joinError,
-    sendRequest: joinRoom,
-    reset: joinErrorReset,
-  } = useAsync(joinStudyRoom);
+  const setRoomInfo = useSetRecoilState(roomInfoState);
+  const setError = useSetRecoilState(errorState);
+  const { loading, request: joinStudy } = useAsync({
+    requestFn: () => joinStudyRoom(roomId),
+    onSuccess: ({ token }) =>
+      history.push({
+        pathname: `/studyroom/${roomId}`,
+        state: {
+          token,
+        },
+      }),
+    onError: (error) => setError(error),
+  });
 
   // TODO 방장일 경우 수정권한 주기
   useEffect(() => {
-    setUserInfo({ ...userInfo, updateAllowed: false });
+    setUserInfo({ ...userInfo, updateAllowed: true });
+    getStudyRoom(roomId)
+      .then((data) => setRoomInfo(data))
+      .catch((e) => console.error(e));
   }, []);
 
-  useEffect(() => {
-    if (roomData) {
-      setRoomInfo(roomData);
-    }
-  }, [roomData, setRoomInfo]);
-
-  const goToStudyRoom = async () => {
-    const joinResponse = await joinRoom(roomId);
-    history.push({
-      pathname: `/studyroom/${roomId}`,
-      state: {
-        token: joinResponse.token,
-      },
-    });
-  };
-
-  const onClose = () => {
-    if (getInfoError) {
-      getInfoErrorReset();
-      return;
-    }
-    if (joinError) joinErrorReset();
-  };
-
-  const updateRoomInfo = async (data) => {
+  const updateRoomInfo = async (roomData) => {
     try {
-      const response = await updateStudyRoom(roomId, data);
+      const response = await updateStudyRoom(roomId, roomData);
       setRoomInfo(response);
     } catch (e) {
       console.error(e);
@@ -65,16 +46,8 @@ function JoinRoom() {
 
   return (
     <>
-      {isLoading && <Loading />}
-      {(getInfoError || joinError) && (
-        <Modal
-          title="ERROR⚠️"
-          content={getInfoError?.data.message || joinError?.data.message}
-          onClose={onClose}
-          onAction={{ text: "메인으로 돌아가기", action: () => history.push("/") }}
-        />
-      )}
-      <SettingRoom goToStudyRoom={goToStudyRoom} updateRoomInfo={updateRoomInfo} />
+      {loading && <Loading />}
+      <SettingRoom goToStudyRoom={() => joinStudy()} updateRoomInfo={updateRoomInfo} />
     </>
   );
 }
