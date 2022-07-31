@@ -1,10 +1,11 @@
 import React from "react";
+import loading from "../../../assets/loading.gif";
 import styles from "./Loading.module.css";
 
 function Loading() {
   return (
-    <div className={styles.loading}>
-      <div className={styles.text}>🕓</div>
+    <div className={styles.container}>
+      <img className={styles.loading} src={loading} alt="loading" />
     </div>
   );
 }

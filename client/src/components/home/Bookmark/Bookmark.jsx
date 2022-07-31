@@ -2,8 +2,9 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useRecoilValue } from "recoil";
+import { userState } from "@recoil/user-state";
 import { bookmarkState } from "@recoil/bookmark-state";
-import { UserCount } from "@components/commons";
+import { PasswordModal, UserCount } from "@components/commons";
 import { Thumbnail } from "@icons";
 import UserList from "../UserList/UserList";
 import TotalParticipant from "../TotalParticipant/TotalParticipant";
@@ -11,18 +12,21 @@ import styles from "./Bookmark.module.css";
 
 function Bookmark({ showBookmark }) {
   const bookmark = useRecoilValue(bookmarkState);
+  const user = useRecoilValue(userState);
   const [participants, setParticipants] = useState([
-    { nickname: "현재 스터디원", joinTime: "없음", isActive: false },
-    { nickname: "현재 스터디원", joinTime: "없음", isActive: false },
-    { nickname: "현재 스터디원", joinTime: "없음", isActive: false },
-    { nickname: "현재 스터디원", joinTime: "없음", isActive: false },
-    { nickname: "현재 스터디원", joinTime: "없음", isActive: false },
+    { id: 1, nickname: "현재 스터디원", joinTime: "없음", isActive: false },
+    { id: 2, nickname: "현재 스터디원", joinTime: "없음", isActive: false },
+    { id: 3, nickname: "현재 스터디원", joinTime: "없음", isActive: false },
+    { id: 4, nickname: "현재 스터디원", joinTime: "없음", isActive: false },
+    { id: 5, nickname: "현재 스터디원", joinTime: "없음", isActive: false },
   ]);
   const history = useHistory();
-  const isBookmarkUser = true; // UserCount style위한 변수
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    // if(유저가 로그인했다면)
+    if (!user.isLogin) {
+      return;
+    }
     showBookmark();
   }, []);
 
@@ -43,73 +47,80 @@ function Bookmark({ showBookmark }) {
     }
   }, [bookmark]);
 
-  // TODO
-  // 비밀번호 확인
-  const goToStudyRoom = () => {
-    history.push({
-      pathname: `/studyroom/${bookmark.id}/setting`,
-    });
+  const handleStartBtnClick = () => {
+    if (bookmark.isPublic) {
+      history.push(`/studyroom/${bookmark.id}/setting`);
+    } else {
+      setIsModalOpen(true);
+    }
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
-    <div className={styles.bookmark}>
-      {!bookmark ? (
-        <TotalParticipant />
-      ) : (
-        <div>
-          <div className={styles.count_info}>
-            <div className={styles.count_box}>
-              <div className={styles.count_icon}>
-                <UserCount number={bookmark.currentUsers} />
+    <>
+      {isModalOpen && <PasswordModal roomId={bookmark.id} onClose={closeModal} />}
+      <div className={styles.bookmark}>
+        {!bookmark ? (
+          <TotalParticipant />
+        ) : (
+          <div>
+            <div className={styles.count_info}>
+              <div className={styles.count_box}>
+                <div className={styles.count_icon}>
+                  <UserCount number={bookmark.currentUsers} />
+                </div>
+                <p className={styles.count}>스터디원 {bookmark.currentUsers}명이 공부 중이에요</p>
               </div>
-              <p className={styles.count}>스터디원 {bookmark.currentUsers}명이 공부 중이에요</p>
+              <div className={styles.button_box}>
+                <button className={styles.button} type="button" onClick={handleStartBtnClick}>
+                  바로 스터디 시작하기
+                </button>
+              </div>
             </div>
-            <div className={styles.button_box}>
-              <button className={styles.button} type="button" onClick={goToStudyRoom}>
-                바로 스터디 시작하기
-              </button>
+            <div className={styles.info}>
+              <div className={styles.detail}>
+                <div className={styles.thumbnail}>
+                  <Thumbnail />
+                </div>
+                <div className={styles.room_info}>
+                  <h3 className={styles.name}>{bookmark.name}</h3>
+                  <p className={styles.detail_box}>
+                    <span className={styles.title}>해시태그</span>
+                    {bookmark?.hashtags.length !== 0 ? (
+                      bookmark.hashtags.map((hashtag) => <span className={styles.content}>#{hashtag} </span>)
+                    ) : (
+                      <span className={styles.content}>없음</span>
+                    )}
+                  </p>
+                  <p className={styles.detail_box}>
+                    <span className={styles.title}>인원</span>
+                    <span className={styles.content}>
+                      {bookmark.currentUsers}명 / {bookmark.limitUsers}명
+                    </span>
+                  </p>
+                  <p className={styles.detail_box}>
+                    <span className={styles.title}>기간</span>
+                    <span className={styles.content}>{!bookmark.endAt ? "없음" : `${bookmark.endAt}까지`}</span>
+                  </p>
+                  <p className={styles.rule}>
+                    <span className={styles.rule_title}>스터디규칙</span>
+                    <span className={styles.rule_content}>{bookmark.rule || "없음"}</span>
+                  </p>
+                </div>
+              </div>
+              <ul className={styles.user_list}>
+                {participants.map((participant) => (
+                  <UserList key={participant.id} participant={participant} />
+                ))}
+              </ul>
             </div>
           </div>
-          <div className={styles.info}>
-            <div className={styles.detail}>
-              <div className={styles.thumbnail}>
-                <Thumbnail />
-              </div>
-              <div className={styles.room_info}>
-                <h3 className={styles.name}>{bookmark.name}</h3>
-                <p className={styles.detail_box}>
-                  <span className={styles.title}>해시태그</span>
-                  {bookmark?.hashtags.length !== 0 ? (
-                    bookmark.hashtags.map((hashtag) => <span className={styles.content}>#{hashtag} </span>)
-                  ) : (
-                    <span className={styles.content}>없음</span>
-                  )}
-                </p>
-                <p className={styles.detail_box}>
-                  <span className={styles.title}>인원</span>
-                  <span className={styles.content}>
-                    {bookmark.currentUsers}명 / {bookmark.limitUsers}명
-                  </span>
-                </p>
-                <p className={styles.detail_box}>
-                  <span className={styles.title}>기간</span>
-                  <span className={styles.content}>{!bookmark.endAt ? "없음" : `${bookmark.endAt}까지`}</span>
-                </p>
-                <p className={styles.rule}>
-                  <span className={styles.rule_title}>스터디규칙</span>
-                  <span className={styles.rule_content}>{bookmark.rule || "없음"}</span>
-                </p>
-              </div>
-            </div>
-            <ul className={styles.user_list}>
-              {participants.map((participant) => (
-                <UserList participant={participant} />
-              ))}
-            </ul>
-          </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </>
   );
 }
 

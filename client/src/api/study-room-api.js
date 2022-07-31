@@ -65,8 +65,15 @@ export const getStudyRoom = async (roomId) => {
 };
 
 export const getStudyRoomList = async (page, sort, isPublic, category, name, hashtag) => {
-  const response = await axios.get("/study-room/search", {
+  const response = await axios.get("/study-room", {
     params: { page, sort, isPublic, category, name, hashtag },
   });
   return response.data;
+};
+
+export const checkPassword = async (roomId, password) => {
+  const response = await axiosInstance.post(`/study-room/check/${roomId}`, {
+    password,
+  });
+  return response;
 };

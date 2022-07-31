@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { userState } from "@recoil/user-state";
 import { UserCount } from "@components/commons";
 import { getTotalParticipant } from "@api/participant-api";
-import { Plus } from "@icons";
 import styles from "./TotalParticipant.module.css";
 
 function TotalParticipant() {
+  const user = useRecoilValue(userState);
+  const history = useHistory();
   const [totalParticipant, setTotalParticipant] = useState();
-  const isTotalUser = true; // UserCount style위한 변수
 
   useEffect(() => {
-    // 로그인을 안함 or 로그인했는데 북마크가 없음
     getTotalParticipant()
       .then((response) => setTotalParticipant(response.data))
       .catch((error) => console.log("get total participant error", error));
   }, []);
 
-  // 버튼 누르면 로그인 페이지 이동
   return (
     <div className={styles.participant}>
       <div className={styles.count_box}>
@@ -25,9 +26,27 @@ function TotalParticipant() {
         <p className={styles.count}>{totalParticipant}명이 ODDOK에서 공부 중이에요</p>
       </div>
       <div className={styles.button_box}>
-        <button className={styles.button} type="button">
-          ODDOK과 함께 스터디 시작하기
-        </button>
+        {!user.isLogin ? (
+          <button
+            className={styles.button}
+            type="button"
+            onClick={() => {
+              history.push("/login");
+            }}
+          >
+            ODDOK과 함께 스터디 시작하기
+          </button>
+        ) : (
+          <button
+            className={styles.button}
+            type="button"
+            onClick={() => {
+              history.push("/studyroom/create");
+            }}
+          >
+            ODDOK과 함께 스터디 시작하기
+          </button>
+        )}
       </div>
     </div>
   );
