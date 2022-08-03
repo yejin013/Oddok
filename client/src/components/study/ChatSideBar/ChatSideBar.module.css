@@ -10,16 +10,3 @@
 .side.hide {
   display: none;
 }
-
-.chat_box {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  padding: 0.5em;
-  gap: 16px;
-  overflow-y: scroll;
-}
-
-.chat_box::-webkit-scrollbar {
-  display: none;
-}

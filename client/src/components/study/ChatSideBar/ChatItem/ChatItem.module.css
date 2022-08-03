@@ -1,4 +1,4 @@
-.bubble_box {
+.bubble {
   background-color: var(--gray800);
   border-radius: 20px 20px 0px 20px;
   padding: 12px;
@@ -10,13 +10,13 @@
   line-height: 28px;
 }
 
-.bubble_box.left {
+.bubble.left {
   border-radius: 20px 20px 20px 0px;
   margin-left: 0;
   margin-right: auto;
 }
 
-.bubble_info {
+.info {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
@@ -24,6 +24,6 @@
   font-size: 0.75rem;
 }
 
-.bubble_info.left {
+.info.left {
   justify-content: flex-start;
 }

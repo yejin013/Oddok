@@ -1,13 +1,13 @@
 import React from "react";
-import styles from "./ChatBubble.module.css";
+import styles from "./ChatItem.module.css";
 
 // 내 채팅일 경우 우측 정렬
 // 다른 유저 채팅일 경우 좌측 정렬
 function ChatBubble({ content, time, userName, isMine }) {
   return (
-    <div className={styles.bubble_container}>
-      <div className={`${styles.bubble_box} ${isMine ? "" : styles.left}`}>{content}</div>
-      <div className={`${styles.bubble_info} ${isMine ? "" : styles.left}`}>
+    <li>
+      <div className={`${styles.bubble} ${isMine ? "" : styles.left}`}>{content}</div>
+      <div className={`${styles.info} ${isMine ? "" : styles.left}`}>
         {isMine ? (
           <>
             <span>{time}</span>
@@ -20,7 +20,7 @@ function ChatBubble({ content, time, userName, isMine }) {
           </>
         )}
       </div>
-    </div>
+    </li>
   );
 }
 
