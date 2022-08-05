@@ -9,13 +9,13 @@ import { Loading, Modal } from "@components/commons";
 function LogoutRedirectPage() {
   const history = useHistory();
   const [user, setUserState] = useRecoilState(userState);
-  const { loading: isLoading, error: isError, sendRequest: onLogout } = useAsync(logout);
+  const { loading: isLoading, error: isError, request: onLogout } = useAsync({ requestFn: logout });
 
   useEffect(() => {
     onLogout()
       .then(() => {
-        localStorage.removeItem("isLogin");
-        setUserState({ ...user, isLogin: localStorage.getItem("isLogin"), nickname: null });
+        localStorage.setItem("isLogin", false);
+        setUserState({ ...user, isLogin: JSON.parse(localStorage.getItem("isLogin")), nickname: null });
       })
       .catch((error) => console.error(error));
   }, []);

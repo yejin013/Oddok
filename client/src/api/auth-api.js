@@ -1,6 +1,7 @@
 /* eslint-disable no-use-before-define */
 import axios from "axios";
 import axiosInstance from "./axios-config";
+import LoginError from "./error/LoginError";
 import { kakaoConfig } from "./kakao";
 
 const JWT_EXPIRY_TIME = 6 * 3600 * 1000; // JWT AccessToken 만료시간 (6시간)
@@ -27,13 +28,13 @@ export const getKakaoToken = async (code) => {
 };
 
 export const login = async (token) => {
-  axios.defaults.withCredentials = true; // refreshToken을 쿠키로 받기 위해 설정
-  await axios
-    .get(`/auth?token=${token}`)
-    .then((response) => {
-      onLoginSuccess(response);
-    })
-    .catch((error) => console.error("login error", error));
+  try {
+    axios.defaults.withCredentials = true; // refreshToken을 쿠키로 받기 위해 설정
+    const response = await axios.get(`/auth?token=${token}`);
+    onLoginSuccess(response);
+  } catch (error) {
+    throw new LoginError(error);
+  }
 };
 
 export const getNewToken = async () => {
