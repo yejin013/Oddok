@@ -10,7 +10,7 @@ import UserList from "../UserList/UserList";
 import TotalParticipant from "../TotalParticipant/TotalParticipant";
 import styles from "./Bookmark.module.css";
 
-function Bookmark({ showBookmark }) {
+function Bookmark() {
   const bookmark = useRecoilValue(bookmarkState);
   const user = useRecoilValue(userState);
   const [participants, setParticipants] = useState([
@@ -22,13 +22,6 @@ function Bookmark({ showBookmark }) {
   ]);
   const history = useHistory();
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  useEffect(() => {
-    if (!user.isLogin) {
-      return;
-    }
-    showBookmark();
-  }, []);
 
   // 현재 참여 중인 유저리스트
   useEffect(() => {

@@ -4,17 +4,16 @@ import StudyRoomCard from "../StudyRoomCard/StudyRoomCard";
 import Skeleton from "../StudyRoomCard/Skeleton";
 import styles from "./FeedGrid.module.css";
 
-function FeedGrid({ isLoading, rooms, showBookmark }) {
+function FeedGrid({ isLoading, rooms }) {
   return (
     <div className={styles.content}>
       <ul>
         {isLoading && new Array(16).fill(0).map(() => <Skeleton />)}
         {rooms?.map((roomData) => (
-          <StudyRoomCard
+          <StudyRoomCard //
             className={styles.studyroom}
             key={roomData.id}
             roomData={roomData}
-            showBookmark={showBookmark}
           />
         ))}
       </ul>
