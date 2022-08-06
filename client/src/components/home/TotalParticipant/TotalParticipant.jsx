@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import { userState } from "@recoil/user-state";
 import { UserCount } from "@components/commons";
 import { getTotalParticipant } from "@api/participant-api";
 import styles from "./TotalParticipant.module.css";
 
 function TotalParticipant() {
-  const user = useRecoilValue(userState);
   const history = useHistory();
   const [totalParticipant, setTotalParticipant] = useState(0);
 
@@ -18,10 +15,6 @@ function TotalParticipant() {
   }, []);
 
   const onButtonClick = () => {
-    if (!user.isLogin) {
-      history.push("/login");
-      return;
-    }
     history.push("/studyroom/create");
   };
 
