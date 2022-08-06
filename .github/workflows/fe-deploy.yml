@@ -39,6 +39,8 @@ jobs:
         
       - name: Build
         run: npm run build
+        env:
+          CI: false
         if: ${{ always() }}
 
       - name: Make zip file
