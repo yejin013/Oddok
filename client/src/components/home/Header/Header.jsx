@@ -28,13 +28,13 @@ function Header() {
     };
   }, [isDropdown]);
 
-  useEffect(async () => {
+  useEffect(() => {
     if (!user.isLogin || user.nickname !== null) {
       return;
     }
-    await getNickname()
+    getNickname()
       .then((response) => setUserState((prev) => ({ ...prev, nickname: response.nickname })))
-      .catch((error) => console.error("get nickname error", error));
+      .catch((error) => console.error(error));
   }, [user.isLogin, user.nickname]);
 
   const goToPage = (page) => {
@@ -47,8 +47,6 @@ function Header() {
         return () => history.push("/search");
       case "create":
         return () => history.push("/studyroom/create");
-      case "login":
-        return () => history.push("/login");
       default:
         return () => history.push("*");
     }
@@ -88,7 +86,7 @@ function Header() {
             <button
               type="button"
               className={history.location.pathname === "/mypage" ? styles.clicked : ""}
-              onClick={user.isLogin ? goToPage("mypage") : goToPage("login")}
+              onClick={goToPage("mypage")}
             >
               마이페이지
             </button>
@@ -123,11 +121,7 @@ function Header() {
             )}
           </li>
           <li>
-            <button
-              type="button"
-              className={styles.study_button}
-              onClick={user.isLogin ? goToPage("create") : goToPage("login")}
-            >
+            <button type="button" className={styles.study_button} onClick={goToPage("create")}>
               + 새 스터디 만들기
             </button>
           </li>

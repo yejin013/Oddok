@@ -7,7 +7,7 @@ import TabMenu from "../TabMenu/TabMenu";
 import FeedGrid from "../FeedGrid/FeedGrid";
 import styles from "./StudyRoomFeed.module.css";
 
-function StudyRoomList({ searchedTitle, searchedHashtag, showBookmark, tagFilter }) {
+function StudyRoomList({ searchedTitle, searchedHashtag, tagFilter }) {
   const [currentPage, setCurrentPage] = useState(0);
   const [currentCategory, setCurrentCategory] = useState(undefined);
   const [filterOpt, setFilterOpt] = useState(undefined);
@@ -85,7 +85,6 @@ function StudyRoomList({ searchedTitle, searchedHashtag, showBookmark, tagFilter
         <FeedGrid
           isLoading={isLoading}
           rooms={tagFilter?.size > 0 ? loadedRooms.filter((room) => isFiltered(room.hashtags)) : loadedRooms}
-          showBookmark={showBookmark}
         />
       </div>
       {loadedRooms.length > 0 && !isLastPage && (

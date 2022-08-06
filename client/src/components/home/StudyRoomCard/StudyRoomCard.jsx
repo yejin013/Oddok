@@ -9,35 +9,11 @@ import { PasswordModal, Thumbnail, UserCount } from "@components/commons";
 import { Lock, Unlock, BookMark, BookMarkHeart } from "@icons";
 import styles from "./StudyRoomCard.module.css";
 
-function StudyRoomCard({ roomData, showBookmark }) {
+function StudyRoomCard({ roomData }) {
   const user = useRecoilValue(userState);
   const [bookmark, setBookmark] = useRecoilState(bookmarkState);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const history = useHistory();
-
-  const addBookmark = async (roomId) => {
-    await saveBookmark(roomId)
-      .then()
-      .catch((error) => console.log("add bookmark error", error));
-  };
-
-  const deleteBookmark = async (event) => {
-    event.stopPropagation();
-    await removeBookmark()
-      .then(setBookmark(null))
-      .catch((error) => console.log("delete bookmark error", error));
-  };
-
-  // 북마크 버튼 누르면 새로고침 없이 바로 북마크 정보 보여줌
-  const onBookmarkAddBtnClick = async (event) => {
-    event.stopPropagation();
-    if (!user.isLogin) {
-      history.push("/login");
-      return;
-    }
-    await addBookmark(roomData.id);
-    await showBookmark();
-  };
 
   const onStudyRoomClick = () => {
     if (!user.isLogin) {
@@ -49,6 +25,24 @@ function StudyRoomCard({ roomData, showBookmark }) {
     } else {
       setIsModalOpen(true);
     }
+  };
+
+  const onBookmarkAddBtnClick = (event) => {
+    event.stopPropagation();
+    if (!user.isLogin) {
+      history.push("/login");
+      return;
+    }
+    saveBookmark(roomData.id)
+      .then((response) => setBookmark(response))
+      .catch((error) => console.error(error));
+  };
+
+  const onBookmarkDeleteBtnClick = (event) => {
+    event.stopPropagation();
+    removeBookmark()
+      .then(setBookmark(null))
+      .catch((error) => console.error(error));
   };
 
   const closeModal = () => {
@@ -66,7 +60,7 @@ function StudyRoomCard({ roomData, showBookmark }) {
               <BookMark />
             </button>
           ) : (
-            <button type="button" className={styles.bookmark_icon} onClick={deleteBookmark}>
+            <button type="button" className={styles.bookmark_icon} onClick={onBookmarkDeleteBtnClick}>
               <BookMarkHeart />
             </button>
           )}

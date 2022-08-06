@@ -1,6 +1,5 @@
 .count {
   display: flex;
-  flex-direction: row;
   align-items: center;
   gap: inherit;
   height: inherit;
