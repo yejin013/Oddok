@@ -39,6 +39,7 @@ function Dropdown({ options, onSelect, defaultValue }) {
       </div>
       <ul className={`${isActive ? styles.active : ""}`}>
         {options.map((option) => (
+          // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
           <li key={option.value} className={styles.opt} onClick={() => clickOption(option.label, option.value)}>
             {option.label}
           </li>
