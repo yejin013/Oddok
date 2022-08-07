@@ -3,14 +3,15 @@ import { useSetRecoilState, useRecoilValue } from "recoil";
 import { userState } from "@recoil/user-state";
 import { deviceState } from "@recoil/studyroom-state";
 import { SettingBar, SettingForm, SettingSideBar, TotalTime, PlanSidebar, UserTag } from "@components/study";
+import { useToggleSideBar } from "@hooks";
 import styles from "./SettingRoom.module.css";
 
 function SettingRoom({ goToStudyRoom, updateRoomInfo }) {
   const videoRef = useRef();
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
+  const { sideBarType, toggleSideBar } = useToggleSideBar();
   const setDeviceStatus = useSetRecoilState(deviceState);
-  const [sideBarState, setSideBarState] = useState({ setting: false, plan: false });
   const userInfo = useRecoilValue(userState);
 
   useEffect(() => {
@@ -50,20 +51,12 @@ function SettingRoom({ goToStudyRoom, updateRoomInfo }) {
     setIsMuted((prev) => !prev);
   };
 
-  const clickSettingBtn = () => {
-    setSideBarState((prev) => ({ ...prev, setting: !prev.setting, plan: false }));
-  };
-
-  const clickPlanBtn = () => {
-    setSideBarState((prev) => ({ ...prev, plan: !prev.plan, setting: false }));
-  };
-
   return (
     <div className={styles.room}>
       <div className={styles.video_container}>
-        {sideBarState.setting &&
+        {sideBarType === "SETTING" &&
           (userInfo.updateAllowed ? (
-            <SettingForm onClose={clickSettingBtn} onUpdate={updateRoomInfo} />
+            <SettingForm onClose={() => toggleSideBar(null)} onUpdate={updateRoomInfo} />
           ) : (
             <SettingSideBar />
           ))}
@@ -72,14 +65,13 @@ function SettingRoom({ goToStudyRoom, updateRoomInfo }) {
           <TotalTime />
           <UserTag isHost={userInfo.updateAllowed} isMicOn={isMuted} nickname={userInfo.nickname} />
         </div>
-        {sideBarState.plan && <PlanSidebar />}
+        {sideBarType === "PLAN" && <PlanSidebar />}
       </div>
       <SettingBar
         goToStudyRoom={goToStudyRoom}
         toggleVideo={toggleVideo}
         toggleAudio={toggleAudio}
-        onClickSettingBtn={clickSettingBtn}
-        onClickplanBtn={clickPlanBtn}
+        clickSideBarBtn={toggleSideBar}
         isPlaying={isPlaying}
         isMuted={isMuted}
       />

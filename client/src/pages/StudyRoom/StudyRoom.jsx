@@ -16,6 +16,7 @@ import {
   SettingForm,
 } from "@components/study";
 import { Modal } from "@components/commons";
+import { useToggleSideBar } from "@hooks";
 import styles from "./StudyRoom.module.css";
 
 function StudyRoom() {
@@ -29,12 +30,7 @@ function StudyRoom() {
   const isStudyRoom = true; // studyroom에 입장했을 때만 생기는 UI를 위한 변수
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
   const resetRoomInfo = useResetRecoilState(roomInfoState);
-  const [sideBarState, setSideBarState] = useState({
-    setting: false,
-    chatting: false,
-    plan: false,
-    participant: false,
-  });
+  const { sideBarType, toggleSideBar } = useToggleSideBar();
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [isLeaveOpen, setIsLeaveOpen] = useState(false);
   const localUser = useRecoilValue(userState);
@@ -135,38 +131,6 @@ function StudyRoom() {
     setIsDetailOpen((prev) => !prev);
   };
 
-  const clickSettingBtn = () => {
-    setSideBarState((prev) => ({
-      setting: !prev.setting,
-      chatting: false,
-      plan: false,
-      participant: false,
-    }));
-  };
-
-  const clickChatBtn = () => {
-    setSideBarState((prev) => ({
-      setting: false,
-      chatting: !prev.chatting,
-      plan: false,
-      participant: false,
-    }));
-  };
-
-  const clickPlanBtn = () => {
-    setSideBarState((prev) => ({ setting: false, chatting: false, plan: !prev.plan, participant: false }));
-  };
-
-  const clickParticipantBtn = () => {
-    if (!publisher) return;
-    setSideBarState((prev) => ({
-      setting: false,
-      chatting: false,
-      plan: false,
-      participant: !prev.participant,
-    }));
-  };
-
   const updateRoomInfo = async (data) => {
     try {
       const response = await updateStudyRoom(roomId, data);
@@ -184,26 +148,25 @@ function StudyRoom() {
     <div className={styles.room}>
       {isDetailOpen && <SettingForm onClose={clickDetailBtn} onUpdate={updateRoomInfo} />}
       <div className={styles.video_container}>
-        {sideBarState.setting && <SettingSideBar clickDetailBtn={clickDetailBtn} />}
+        {sideBarType === "SETTING" && <SettingSideBar clickDetailBtn={clickDetailBtn} />}
         <ul className={styles.videos}>
           {publisher && <UserVideo count={count} publisher={publisher} />}
           {subscribers && subscribers.map((subscriber) => <UserVideo count={count} subscriber={subscriber} />)}
         </ul>
-        {sideBarState.plan && <PlanSidebar isStudyRoom={isStudyRoom} />}
-        {sideBarState.participant && <ParticipantSideBar participants={[publisher, ...subscribers]} />}
-        <ChatSideBar session={session} display={sideBarState.chatting} />
+        {sideBarType === "PLAN" && <PlanSidebar isStudyRoom={isStudyRoom} />}
+        {sideBarType === "PARTICIPANT" && (
+          <ParticipantSideBar participants={publisher ? [publisher, ...subscribers] : []} />
+        )}
+        <ChatSideBar session={session} display={sideBarType === "CHATTING"} />
       </div>
       <div className={styles.bar}>
         <StudyBar
           roomName={roomInfo.name}
-          clickSettingBtn={clickSettingBtn}
           toggleVideo={toggleVideo}
           toggleAudio={toggleAudio}
           isPlaying={deviceStatus.cam}
           isMuted={deviceStatus.mic}
-          clickParticipantBtn={clickParticipantBtn}
-          clickChatBtn={clickChatBtn}
-          onClickplanBtn={clickPlanBtn}
+          clickSideBarBtn={toggleSideBar}
           onClickLeaveBtn={clickLeaveBtn}
         />
       </div>
