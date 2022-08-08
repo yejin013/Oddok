@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useRef, useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { Modal, Input } from "@components/commons";
@@ -18,15 +17,17 @@ function PasswordModal({ roomId, onClose }) {
 
   const onPasswordCheck = () => {
     checkPassword(roomId, inputRef.current.value)
-      .then(() => {
-        if (isInvalid) {
-          setIsInvalid(false);
-        }
-        history.push(`/studyroom/${roomId}/setting`);
-      })
+      .then(() => history.push(`/studyroom/${roomId}/setting`))
       .catch(() => {
         setIsInvalid(true);
+        inputRef.current.value = "";
       });
+  };
+
+  const onChange = () => {
+    if (isInvalid) {
+      setIsInvalid(false);
+    }
   };
 
   const onKeyPress = (event) => {
@@ -37,9 +38,9 @@ function PasswordModal({ roomId, onClose }) {
 
   const content = (
     <>
-      <label>
+      <label htmlFor="password">
         <p className={styles.content}>비공개 스터디입니다. 비밀번호를 입력해주세요.</p>
-        <Input ref={inputRef} isInvalid={isInvalid} maxLength="4" onKeyPress={onKeyPress} />
+        <Input ref={inputRef} isInvalid={isInvalid} maxLength="4" onChange={onChange} onKeyPress={onKeyPress} />
       </label>
       {isInvalid && <p className={styles.error}>비밀번호를 잘못 입력했습니다. 다시 입력해주세요.</p>}
     </>
