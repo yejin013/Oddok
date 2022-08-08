@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { Close } from "@icons";
 import styles from "./Modal.module.css";
 
-function Modal({ title, content, onClose, onAction, onSubAction }) {
+function Modal({ title, content, onClose, onAction, onSubAction, disabled }) {
   const modalRef = useRef();
 
   const onOutsideClick = (event) => {
@@ -37,7 +37,7 @@ function Modal({ title, content, onClose, onAction, onSubAction }) {
                 {onSubAction.text}
               </button>
             )}
-            <button className={styles.main_btn} type="button" onClick={onAction.action}>
+            <button className={styles.main_btn} type="button" onClick={onAction.action} disabled={disabled}>
               {onAction.text}
             </button>
           </footer>
