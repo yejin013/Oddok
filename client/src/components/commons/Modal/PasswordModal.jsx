@@ -21,6 +21,7 @@ function PasswordModal({ roomId, onClose }) {
       .catch(() => {
         setIsInvalid(true);
         inputRef.current.value = "";
+        inputRef.current.focus();
       });
   };
 
