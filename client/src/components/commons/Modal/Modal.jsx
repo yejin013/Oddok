@@ -1,23 +1,13 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { createPortal } from "react-dom";
 import { Close } from "@icons";
+import useOutSideClick from "@hooks/useOutSideClick";
 import styles from "./Modal.module.css";
 
 function Modal({ title, content, onClose, onAction, onSubAction, disabled }) {
   const modalRef = useRef();
 
-  const onOutsideClick = (event) => {
-    if (!modalRef.current.contains(event.target)) {
-      onClose();
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("mousedown", onOutsideClick);
-    return () => {
-      document.removeEventListener("mousedown", onOutsideClick);
-    };
-  }, []);
+  useOutSideClick(modalRef, onClose);
 
   return (
     <>

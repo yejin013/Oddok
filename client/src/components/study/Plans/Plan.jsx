@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Dots, Circle, CheckedCircle } from "@icons";
 import { Input } from "@components/commons";
+import useOutSideClick from "@hooks/useOutSideClick";
 import styles from "./Plan.module.css";
 
 function Plan({ plan, onPlanClick, onDelete, onEdit, isStudyRoom }) {
@@ -9,6 +10,9 @@ function Plan({ plan, onPlanClick, onDelete, onEdit, isStudyRoom }) {
   const displayType = isEdited ? styles.hide : "";
   const checkDisplayType = isStudyRoom ? styles.show : styles.hide;
   const formRef = useRef();
+  const dropdownRef = useRef();
+
+  useOutSideClick(dropdownRef, () => setIsClickedBtn(false));
 
   // dots button
   const clickBtn = () => {
@@ -65,7 +69,7 @@ function Plan({ plan, onPlanClick, onDelete, onEdit, isStudyRoom }) {
           <Input value={plan.name} onChange={changeHandler} />
         </form>
       )}
-      <ul>
+      <ul ref={dropdownRef}>
         <li>
           <button type="button" className={styles.dots} onClick={clickBtn}>
             <Dots />

@@ -6,6 +6,7 @@ import { Search, Profile } from "@icons";
 import { getNickname } from "@api/user-api";
 import { NicknameEditModal } from "@components/commons";
 import { KAKAO_LOGOUT_URL } from "@api/kakao";
+import useOutSideClick from "@hooks/useOutSideClick";
 import styles from "./Header.module.css";
 
 function Header() {
@@ -15,18 +16,7 @@ function Header() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const dropdownRef = useRef();
 
-  const onOutsideClick = (event) => {
-    if (isDropdown && dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-      setIsDropdown(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("click", onOutsideClick);
-    return () => {
-      document.removeEventListener("click", onOutsideClick);
-    };
-  }, [isDropdown]);
+  useOutSideClick(dropdownRef, () => setIsDropdown(false));
 
   useEffect(() => {
     if (!user.isLogin || user.nickname !== null) {
@@ -98,13 +88,13 @@ function Header() {
               <Search />
             </button>
           </li>
-          <li className={styles.my_info}>
+          <li ref={dropdownRef} className={styles.my_info}>
             <button type="button" className={styles.profile} onClick={onProfileBtnClick}>
               <Profile />
               <span className={styles.nickname}>{user.nickname}</span>
             </button>
             {user.isLogin && isDropdown && (
-              <ul className={styles.info_buttons} ref={dropdownRef}>
+              <ul className={styles.info_buttons}>
                 <li>
                   <button type="button" className={styles.button} onClick={onNicknameEditBtnClick}>
                     닉네임 수정
