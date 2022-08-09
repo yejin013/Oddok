@@ -10,8 +10,8 @@ function AccountDeleteModal({ onClose }) {
   const onDeleteAccount = () => {
     deleteAccount()
       .then(() => {
-        localStorage.removeItem("isLogin");
-        setUserState({ ...user, isLogin: localStorage.getItem("isLogin") });
+        localStorage.setItem("isLogin", false);
+        setUserState({ ...user, isLogin: JSON.parse(localStorage.getItem("isLogin")) });
         window.location.replace("/");
       })
       .catch((error) => console.error(error));
