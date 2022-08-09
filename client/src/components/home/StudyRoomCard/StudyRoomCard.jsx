@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-import React, { useState } from "react";
+import React from "react";
 import { useHistory } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { bookmarkState } from "@recoil/bookmark-state";
@@ -7,12 +7,13 @@ import { userState } from "@recoil/user-state";
 import { saveBookmark, removeBookmark } from "@api/bookmark-api";
 import { PasswordModal, Thumbnail, UserCount } from "@components/commons";
 import { Lock, Unlock, BookMark, BookMarkHeart } from "@icons";
+import useModal from "@hooks/useModal";
 import styles from "./StudyRoomCard.module.css";
 
 function StudyRoomCard({ roomData }) {
   const user = useRecoilValue(userState);
   const [bookmark, setBookmark] = useRecoilState(bookmarkState);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { isModal, openModal, closeModal } = useModal();
   const history = useHistory();
 
   const onStudyRoomClick = () => {
@@ -23,7 +24,7 @@ function StudyRoomCard({ roomData }) {
     if (roomData.isPublic) {
       history.push(`/studyroom/${roomData.id}/setting`);
     } else {
-      setIsModalOpen(true);
+      openModal();
     }
   };
 
@@ -45,13 +46,9 @@ function StudyRoomCard({ roomData }) {
       .catch((error) => console.error(error));
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
   return (
     <>
-      {isModalOpen && <PasswordModal roomId={roomData.id} onClose={closeModal} />}
+      {isModal && <PasswordModal roomId={roomData.id} onClose={closeModal} />}
       <li className={styles.card} onClick={onStudyRoomClick}>
         <div className={styles.thumbnail_box}>
           <Thumbnail />

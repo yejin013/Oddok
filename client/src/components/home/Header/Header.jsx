@@ -7,13 +7,14 @@ import { getNickname } from "@api/user-api";
 import { NicknameEditModal } from "@components/commons";
 import { KAKAO_LOGOUT_URL } from "@api/kakao";
 import useOutSideClick from "@hooks/useOutSideClick";
+import useModal from "@hooks/useModal";
 import styles from "./Header.module.css";
 
 function Header() {
   const history = useHistory();
   const [user, setUserState] = useRecoilState(userState);
   const [isDropdown, setIsDropdown] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { isModal, openModal, closeModal } = useModal();
   const dropdownRef = useRef();
 
   useOutSideClick(dropdownRef, () => setIsDropdown(false));
@@ -47,17 +48,13 @@ function Header() {
   };
 
   const onNicknameEditBtnClick = () => {
-    setIsModalOpen(true);
+    openModal();
     setIsDropdown(false);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
   };
 
   return (
     <>
-      {isModalOpen && <NicknameEditModal onClose={closeModal} />}
+      {isModal && <NicknameEditModal onClose={closeModal} />}
       <header className={styles.header}>
         <div className={styles.logo}>
           <a href="/">ODDOK</a>

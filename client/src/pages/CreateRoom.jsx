@@ -34,7 +34,7 @@ function CreateRoom() {
   return (
     <>
       {loading && <Loading />}
-      <SettingRoom goToStudyRoom={() => startStudy()} />
+      <SettingRoom goToStudyRoom={startStudy} />
     </>
   );
 }
