@@ -1,16 +1,20 @@
 import React from "react";
+import { useRecoilValue } from "recoil";
+import { roomInfoState } from "@recoil/studyroom-state";
 import { Setting, Music, VideoOn, VideoOff, MicOn, MicOff, Chat, Member, Door } from "@icons";
 import SubjectTime from "../SubjectTime/SubjectTime";
 import styles from "./StudyBar.module.css";
 
-function StudyBar({ roomName, toggleVideo, toggleAudio, isPlaying, isMuted, clickSideBarBtn, onClickLeaveBtn }) {
+function StudyBar({ toggleVideo, toggleAudio, isPlaying, isMuted, clickSideBarBtn, onClickLeaveBtn }) {
+  const roomInfo = useRecoilValue(roomInfoState);
+
   return (
     <section className={styles.bar}>
       <div className={styles.info}>
         <button type="button">
           <Setting onClick={() => clickSideBarBtn("SETTING")} />
         </button>
-        <span>{roomName}</span>
+        <span>{roomInfo.name}</span>
         <div className={styles.music}>
           <i className={styles.music_icon}>
             <Music />

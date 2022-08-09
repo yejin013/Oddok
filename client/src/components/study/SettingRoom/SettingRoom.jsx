@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { userState } from "@recoil/user-state";
 import { deviceState } from "@recoil/studyroom-state";
-import { SettingBar, SettingForm, SettingSideBar, TotalTime, PlanSidebar, UserTag } from "@components/study";
+import { SettingBar, SettingForm, SettingSideBar, PlanSidebar, UserVideo } from "@components/study";
 import { useToggleSideBar } from "@hooks";
 import styles from "./SettingRoom.module.css";
 
@@ -13,6 +14,8 @@ function SettingRoom({ goToStudyRoom, updateRoomInfo }) {
   const { sideBarType, toggleSideBar } = useToggleSideBar();
   const setDeviceStatus = useSetRecoilState(deviceState);
   const userInfo = useRecoilValue(userState);
+  const location = useLocation();
+  const path = location.pathname === "/studyroom/create";
 
   useEffect(() => {
     const getVideoandAudio = async () => {
@@ -55,15 +58,17 @@ function SettingRoom({ goToStudyRoom, updateRoomInfo }) {
     <div className={styles.room}>
       <div className={styles.video_container}>
         {sideBarType === "SETTING" &&
-          (userInfo.updateAllowed ? (
-            <SettingForm onClose={() => toggleSideBar(null)} onUpdate={updateRoomInfo} />
-          ) : (
-            <SettingSideBar />
-          ))}
+          (path ? <SettingForm onClose={() => toggleSideBar()} /> : <SettingSideBar updateRoomInfo={updateRoomInfo} />)}
         <div className={styles.video_wrapper}>
-          <video ref={videoRef} autoPlay />
-          <TotalTime />
-          <UserTag isHost={userInfo.updateAllowed} isMicOn={isMuted} nickname={userInfo.nickname} />
+          <UserVideo
+            count={1}
+            user={{
+              streamRef: videoRef,
+              isHost: userInfo.updateAllowed,
+              isMicOn: isMuted,
+              nickname: userInfo.nickname,
+            }}
+          />
         </div>
         {sideBarType === "PLAN" && <PlanSidebar />}
       </div>

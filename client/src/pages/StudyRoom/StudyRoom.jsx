@@ -6,15 +6,7 @@ import { errorState } from "@recoil/error-state";
 import { userState } from "@recoil/user-state";
 import { updateStudyRoom, leaveStudyRoom } from "@api/study-room-api";
 import { initSession, connectToSession, connectDevice, publishStream } from "@api/openvidu-api";
-import {
-  StudyBar,
-  UserVideo,
-  SettingSideBar,
-  ChatSideBar,
-  PlanSidebar,
-  ParticipantSideBar,
-  SettingForm,
-} from "@components/study";
+import { StudyBar, UserVideo, SettingSideBar, ChatSideBar, PlanSidebar, ParticipantSideBar } from "@components/study";
 import { Modal } from "@components/commons";
 import { useToggleSideBar } from "@hooks";
 import styles from "./StudyRoom.module.css";
@@ -31,7 +23,6 @@ function StudyRoom() {
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
   const resetRoomInfo = useResetRecoilState(roomInfoState);
   const { sideBarType, toggleSideBar } = useToggleSideBar();
-  const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [isLeaveOpen, setIsLeaveOpen] = useState(false);
   const localUser = useRecoilValue(userState);
   const setError = useSetRecoilState(errorState);
@@ -50,12 +41,12 @@ function StudyRoom() {
   };
 
   const toggleVideo = () => {
-    publisher.streamManager.publishVideo(!publisher.streamManager.stream.videoActive);
+    publisher.stream.publishVideo(!publisher.stream.stream.videoActive);
     setDeviceStatus((prev) => ({ ...prev, cam: !prev.cam }));
   };
 
   const toggleAudio = () => {
-    publisher.streamManager.publishAudio(!publisher.streamManager.stream.audioActive);
+    publisher.stream.publishAudio(!publisher.stream.stream.audioActive);
     session.signal({ data: JSON.stringify({ isMicOn: !deviceStatus.mic }), type: "micStatusChanged" });
     setPublisher({ ...publisher, isMicOn: !publisher.isMicOn });
     setDeviceStatus((prev) => ({ ...prev, mic: !prev.mic }));
@@ -74,7 +65,7 @@ function StudyRoom() {
     );
     const userStream = await connectDevice(deviceStatus);
     setPublisher({
-      streamManager: userStream,
+      stream: userStream,
       nickname: localUser.nickname,
       isHost: localUser.isHost,
       isMic: deviceStatus.mic,
@@ -96,13 +87,13 @@ function StudyRoom() {
       const data = JSON.parse(event.stream.connection.data);
       setSubscribers((prev) => [
         ...prev,
-        { streamManager: participant, nickname: data.nickname, isHost: data.isHost, isMicOn: data.isMicOn },
+        { stream: participant, nickname: data.nickname, isHost: data.isHost, isMicOn: data.isMicOn },
       ]);
       setCount((prev) => prev + 1);
     });
     // 2) 스트림 삭제
     session.on("streamDestroyed", (event) => {
-      setSubscribers((prev) => prev.filter((subscriber) => subscriber.streamManager !== event.stream.streamManager));
+      setSubscribers((prev) => prev.filter((subscriber) => subscriber.stream !== event.stream.streamManager));
       setCount((prev) => prev - 1);
     });
     // 3) 방장이 방 정보를 수정했을 때
@@ -113,7 +104,7 @@ function StudyRoom() {
     session.on("signal:micStatusChanged", (event) => {
       setSubscribers((prev) =>
         prev.map((user) => {
-          if (user.streamManager.stream.connection.connectionId === event.from.connectionId) {
+          if (user.stream.stream.connection.connectionId === event.from.connectionId) {
             const userStatus = user;
             userStatus.isMicOn = JSON.parse(event.data).isMicOn;
             return userStatus;
@@ -126,10 +117,6 @@ function StudyRoom() {
       console.warn(exception);
     });
   }, []);
-
-  const clickDetailBtn = () => {
-    setIsDetailOpen((prev) => !prev);
-  };
 
   const updateRoomInfo = async (data) => {
     try {
@@ -146,12 +133,13 @@ function StudyRoom() {
 
   return (
     <div className={styles.room}>
-      {isDetailOpen && <SettingForm onClose={clickDetailBtn} onUpdate={updateRoomInfo} />}
       <div className={styles.video_container}>
-        {sideBarType === "SETTING" && <SettingSideBar clickDetailBtn={clickDetailBtn} />}
+        {sideBarType === "SETTING" && <SettingSideBar updateRoomInfo={updateRoomInfo} />}
         <ul className={styles.videos}>
-          {publisher && <UserVideo count={count} publisher={publisher} />}
-          {subscribers && subscribers.map((subscriber) => <UserVideo count={count} subscriber={subscriber} />)}
+          {publisher && <UserVideo count={count} user={publisher} />}
+          {subscribers?.map((subscriber) => (
+            <UserVideo count={count} user={subscriber} />
+          ))}
         </ul>
         {sideBarType === "PLAN" && <PlanSidebar isStudyRoom={isStudyRoom} />}
         {sideBarType === "PARTICIPANT" && (
@@ -161,7 +149,6 @@ function StudyRoom() {
       </div>
       <div className={styles.bar}>
         <StudyBar
-          roomName={roomInfo.name}
           toggleVideo={toggleVideo}
           toggleAudio={toggleAudio}
           isPlaying={deviceStatus.cam}
