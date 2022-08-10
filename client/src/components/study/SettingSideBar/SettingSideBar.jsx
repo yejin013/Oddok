@@ -35,25 +35,23 @@ function SettingSideBar({ session }) {
       {isFormOpen && <SettingForm onClose={clickDetailBtn} onUpdate={updateRoomInfo} />}
       <aside className={styles.side_box}>
         <h1>{roomInfo.name}</h1>
-        <div className={styles.roomInfo_item}>
-          <div className={styles.hashtag}>
+        <div>
+          <ul className={styles.hashtags}>
             {roomInfo.hashtags.map((hashtag) => (
-              <div>
-                <div className={styles.icon}>
-                  <Hashtag />
-                </div>
-                <div>{hashtag}</div>
-              </div>
+              <li>
+                <Hashtag />
+                <span>{hashtag}</span>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
-        <div className={styles.info_item}>
-          <p>목표시간</p>
-          <div className={styles.text_field}>{roomInfo.targetTime}시간</div>
+        <div>
+          <span className={styles.label}>스터디 기간</span>
+          <div className={styles.text_field}>{roomInfo.endAt}</div>
         </div>
-        <div className={`${styles.info_item} ${styles.rule}`}>
-          <p>스터디 규칙</p>
-          <div className={`${styles.text_field} ${styles.text_area}`}>{roomInfo.rule ? roomInfo.rule : "없음"}</div>
+        <div className={styles.rule}>
+          <span className={styles.label}>스터디 규칙</span>
+          <div className={styles.text_field}>{roomInfo.rule ? roomInfo.rule : "없음"}</div>
         </div>
         {updateAllowed && (
           <button className={styles.button} type="submit" onClick={clickDetailBtn}>

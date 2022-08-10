@@ -27,8 +27,7 @@ function CreateRoom() {
   });
 
   useEffect(() => {
-    // 스터디룸을 개설하는 유저에게 방 정보 업데이트 권한을 준다 (추후 삭제)
-    setUserInfo({ ...userInfo, updateAllowed: true });
+    setUserInfo({ ...userInfo, updateAllowed: true }); // @TODO 방장 권한 부여
   }, []);
 
   return (

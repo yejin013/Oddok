@@ -83,10 +83,10 @@ function StudyRoom() {
   const participants = localUser ? [localUser, ...remoteUsers] : [];
 
   return (
-    <div className={styles.room}>
-      <div className={styles.video_container}>
+    <div className={styles.layout}>
+      <section className={styles.video_section}>
         {sideBarType === "SETTING" && <SettingSideBar session={session} />}
-        <ul className={styles.videos}>
+        <ul className={styles.videos_container}>
           {localUser.stream && <UserVideo count={participants.length} user={localUser} />}
           {remoteUsers.map((remoteUser) => (
             <UserVideo count={participants.length} user={remoteUser} />
@@ -95,17 +95,15 @@ function StudyRoom() {
         {sideBarType === "PLAN" && <PlanSidebar isStudyRoom={isStudyRoom} />}
         {sideBarType === "PARTICIPANT" && <ParticipantSideBar participants={participants} />}
         <ChatSideBar session={session} display={sideBarType === "CHATTING"} />
-      </div>
-      <div className={styles.bar}>
-        <StudyBar
-          toggleVideo={toggleVideo}
-          toggleAudio={toggleAudio}
-          isPlaying={videoActive}
-          isMuted={audioActive}
-          clickSideBarBtn={toggleSideBar}
-          onClickLeaveBtn={() => setIsLeaveOpen(true)}
-        />
-      </div>
+      </section>
+      <StudyBar
+        toggleVideo={toggleVideo}
+        toggleAudio={toggleAudio}
+        isPlaying={videoActive}
+        isMuted={audioActive}
+        clickSideBarBtn={toggleSideBar}
+        onClickLeaveBtn={() => setIsLeaveOpen(true)}
+      />
       {isLeaveOpen && (
         <Modal
           title="스터디 종료"

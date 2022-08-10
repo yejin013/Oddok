@@ -17,10 +17,10 @@ function SettingRoom({ goToStudyRoom }) {
   const setDeviceStatus = useSetRecoilState(deviceState);
 
   return (
-    <div className={styles.room}>
-      <div className={styles.video_container}>
+    <div className={styles.layout}>
+      <section className={styles.video_section}>
         {sideBarType === "SETTING" && (path ? <SettingForm onClose={() => toggleSideBar()} /> : <SettingSideBar />)}
-        <div className={styles.video_wrapper}>
+        <div className={styles.video_container}>
           <UserVideo
             count={1}
             user={{
@@ -32,7 +32,7 @@ function SettingRoom({ goToStudyRoom }) {
           />
         </div>
         {sideBarType === "PLAN" && <PlanSidebar />}
-      </div>
+      </section>
       <SettingBar
         goToStudyRoom={() => {
           setDeviceStatus({ cam: videoActive, mic: audioActive });
