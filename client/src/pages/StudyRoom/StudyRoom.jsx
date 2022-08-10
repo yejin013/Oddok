@@ -16,6 +16,7 @@ import {
   SettingForm,
 } from "@components/study";
 import { Modal } from "@components/commons";
+import useModal from "@hooks/useModal";
 import styles from "./StudyRoom.module.css";
 
 function StudyRoom() {
@@ -36,12 +37,12 @@ function StudyRoom() {
     participant: false,
   });
   const [isDetailOpen, setIsDetailOpen] = useState(false);
-  const [isLeaveOpen, setIsLeaveOpen] = useState(false);
+  const { isModal: isLeaveModal, openModal: openLeaveModal, closeModal } = useModal();
   const localUser = useRecoilValue(userState);
   const setError = useSetRecoilState(errorState);
 
   const clickLeaveBtn = () => {
-    setIsLeaveOpen(true);
+    openLeaveModal();
   };
 
   const leaveRoom = async () => {
@@ -207,11 +208,11 @@ function StudyRoom() {
           onClickLeaveBtn={clickLeaveBtn}
         />
       </div>
-      {isLeaveOpen && (
+      {isLeaveModal && (
         <Modal
           title="스터디 종료"
           content="정말 나가시겠습니까?"
-          onClose={() => setIsLeaveOpen(false)}
+          onClose={closeModal}
           onAction={{ text: "나가기", action: leaveRoom }}
         />
       )}

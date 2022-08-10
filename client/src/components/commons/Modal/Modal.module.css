@@ -81,6 +81,13 @@
   background-color: #e9b636;
 }
 
+.main_btn:disabled {
+  border: 1px solid var(--gray900);
+  background-color: var(--gray800);
+  color: var(--gray500);
+  cursor: default;
+}
+
 .sub_btn {
   color: var(--gray600);
 }

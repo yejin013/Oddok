@@ -5,6 +5,7 @@ import { useRecoilValue } from "recoil";
 import { bookmarkState } from "@recoil/bookmark-state";
 import { PasswordModal, UserCount } from "@components/commons";
 import { Thumbnail } from "@icons";
+import useModal from "@hooks/useModal";
 import styles from "./Bookmark.module.css";
 
 const initialParticipant = [
@@ -19,7 +20,7 @@ function Bookmark() {
   const bookmark = useRecoilValue(bookmarkState);
   const history = useHistory();
   const [participants, setParticipants] = useState(initialParticipant);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { isModal, openModal, closeModal } = useModal();
 
   // 북마크한 스터디룸의 현재 참여자 리스트
   useEffect(() => {
@@ -44,17 +45,13 @@ function Bookmark() {
     if (bookmark.isPublic) {
       history.push(`/studyroom/${bookmark.id}/setting`);
     } else {
-      setIsModalOpen(true);
+      openModal();
     }
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
   };
 
   return (
     <>
-      {isModalOpen && <PasswordModal roomId={bookmark.id} onClose={closeModal} />}
+      {isModal && <PasswordModal roomId={bookmark.id} onClose={closeModal} />}
       <section className={styles.bookmark}>
         <div className={styles.count_info}>
           <div className={styles.count_icon}>

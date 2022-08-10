@@ -6,27 +6,18 @@ import { Search, Profile } from "@icons";
 import { getNickname } from "@api/user-api";
 import { NicknameEditModal } from "@components/commons";
 import { KAKAO_LOGOUT_URL } from "@api/kakao";
+import useOutSideClick from "@hooks/useOutSideClick";
+import useModal from "@hooks/useModal";
 import styles from "./Header.module.css";
 
 function Header() {
   const history = useHistory();
   const [user, setUserState] = useRecoilState(userState);
   const [isDropdown, setIsDropdown] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { isModal, openModal, closeModal } = useModal();
   const dropdownRef = useRef();
 
-  const onOutsideClick = (event) => {
-    if (isDropdown && dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-      setIsDropdown(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("click", onOutsideClick);
-    return () => {
-      document.removeEventListener("click", onOutsideClick);
-    };
-  }, [isDropdown]);
+  useOutSideClick(dropdownRef, () => setIsDropdown(false));
 
   useEffect(() => {
     if (!user.isLogin || user.nickname !== null) {
@@ -57,17 +48,13 @@ function Header() {
   };
 
   const onNicknameEditBtnClick = () => {
-    setIsModalOpen(true);
+    openModal();
     setIsDropdown(false);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
   };
 
   return (
     <>
-      {isModalOpen && <NicknameEditModal onClose={closeModal} />}
+      {isModal && <NicknameEditModal onClose={closeModal} />}
       <header className={styles.header}>
         <div className={styles.logo}>
           <a href="/">ODDOK</a>
@@ -98,13 +85,13 @@ function Header() {
               <Search />
             </button>
           </li>
-          <li className={styles.my_info}>
+          <li ref={dropdownRef} className={styles.my_info}>
             <button type="button" className={styles.profile} onClick={onProfileBtnClick}>
               <Profile />
               <span className={styles.nickname}>{user.nickname}</span>
             </button>
             {user.isLogin && isDropdown && (
-              <ul className={styles.info_buttons} ref={dropdownRef}>
+              <ul className={styles.info_buttons}>
                 <li>
                   <button type="button" className={styles.button} onClick={onNicknameEditBtnClick}>
                     닉네임 수정

@@ -12,9 +12,9 @@
 }
 
 .name {
-  width: 90%;
-  text-align: left;
+  width: 100%;
   margin-left: 0.5em;
+  margin-right: 1.2em;
   padding-right: 0.5em;
   cursor: pointer;
 }
@@ -24,7 +24,6 @@
 }
 
 .dots {
-  margin-left: 1.2em;
   padding-top: 0.4em;
 }
 

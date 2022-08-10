@@ -18,6 +18,7 @@ import { Layout } from "@components/layout";
 import useAsync from "@hooks/useAsync";
 import getColor from "src/utils/getColor";
 import { getTimeDiff, getDday, dateParsing, dateFormatting } from "@utils";
+import useModal from "@hooks/useModal";
 import styles from "./MyPage.module.css";
 
 function MyPage() {
@@ -26,7 +27,7 @@ function MyPage() {
   const [selectedDate, setSelectedDate] = useState(dateFormatting(new Date()));
   const [timeRecordData, setTimeRecordData] = useState();
   const [totalStudyTime, setTotalStudyTime] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { isModal, openModal, closeModal } = useModal();
   const user = useRecoilValue(userState);
 
   const fetchTimeRecordData = async (date) => {
@@ -55,20 +56,18 @@ function MyPage() {
     }
   }, [selectedDate]);
 
-  const renderModal = (type) => setIsModalOpen(type);
-
-  const closeModal = () => setIsModalOpen(false);
+  const renderModal = (type) => openModal(type);
 
   return (
     <div>
-      {(isModalOpen === "edit-mygoal" && (
+      {(isModal === "edit-mygoal" && (
         <MyGoalEditModal profileData={profileData} onClose={closeModal} refetch={refetchProfile} />
       )) ||
-        (isModalOpen === "edit-myroom" && (
+        (isModal === "edit-myroom" && (
           <MyRoomEditModal roomData={myRoomData} onClose={closeModal} refetch={refetchMyRoom} />
         )) ||
-        (isModalOpen === "edit-nickname" && <NicknameEditModal onClose={closeModal} />) ||
-        (isModalOpen === "delete-account" && <AccountDeleteModal onClose={closeModal} />)}
+        (isModal === "edit-nickname" && <NicknameEditModal onClose={closeModal} />) ||
+        (isModal === "delete-account" && <AccountDeleteModal onClose={closeModal} />)}
       <Layout>
         <div className={styles.mypage}>
           <aside className={styles.side_nav_bar}>

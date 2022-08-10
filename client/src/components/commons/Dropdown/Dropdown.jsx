@@ -1,11 +1,14 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { ArrowDown } from "@icons";
+import useOutSideClick from "@hooks/useOutSideClick";
 import styles from "./Dropdown.module.css";
 
 function Dropdown({ options, onSelect, defaultValue }) {
   const [isActive, setIsActive] = useState(false);
   const [selectedOpt, setSelectedOpt] = useState(defaultValue);
-  const insideRef = useRef();
+  const dropdownRef = useRef();
+
+  useOutSideClick(dropdownRef, () => setIsActive(false));
 
   const toggleMenu = () => {
     setIsActive((prev) => !prev);
@@ -17,20 +20,8 @@ function Dropdown({ options, onSelect, defaultValue }) {
     setIsActive(false);
   };
 
-  useEffect(() => {
-    const clickOutside = (e) => {
-      if (isActive && insideRef.current && !insideRef.current.contains(e.target)) {
-        setIsActive(false);
-      }
-    };
-    document.addEventListener("mousedown", clickOutside);
-    return () => {
-      document.removeEventListener("mousedown", clickOutside);
-    };
-  }, [isActive]);
-
   return (
-    <div ref={insideRef} className={styles.container}>
+    <div ref={dropdownRef} className={styles.container}>
       <div className={styles.select} onClick={toggleMenu}>
         <p className={styles.selected_opt}>{selectedOpt || options[0].label}</p>
         <div className={styles.icon}>

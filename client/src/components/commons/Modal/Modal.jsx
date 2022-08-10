@@ -1,23 +1,13 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { createPortal } from "react-dom";
 import { Close } from "@icons";
+import useOutSideClick from "@hooks/useOutSideClick";
 import styles from "./Modal.module.css";
 
-function Modal({ title, content, onClose, onAction, onSubAction }) {
+function Modal({ title, content, onClose, onAction, onSubAction, disabled }) {
   const modalRef = useRef();
 
-  const onOutsideClick = (event) => {
-    if (!modalRef.current.contains(event.target)) {
-      onClose();
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("mousedown", onOutsideClick);
-    return () => {
-      document.removeEventListener("mousedown", onOutsideClick);
-    };
-  }, []);
+  useOutSideClick(modalRef, onClose);
 
   return (
     <>
@@ -37,7 +27,7 @@ function Modal({ title, content, onClose, onAction, onSubAction }) {
                 {onSubAction.text}
               </button>
             )}
-            <button className={styles.main_btn} type="button" onClick={onAction.action}>
+            <button className={styles.main_btn} type="button" onClick={onAction.action} disabled={disabled}>
               {onAction.text}
             </button>
           </footer>

@@ -9,6 +9,7 @@ function NicknameEditModal({ onClose }) {
   const [user, setUserState] = useRecoilState(userState);
   const [nickname, setNickname] = useState(user.nickname);
   const inputRef = useRef();
+  const [isDisabled, setIsDisabled] = useState(false);
 
   useEffect(() => {
     if (inputRef.current) {
@@ -17,10 +18,12 @@ function NicknameEditModal({ onClose }) {
   }, []);
 
   const onChange = (event) => {
-    if (event.currentTarget == null) {
-      return;
-    }
     event.preventDefault();
+    if (!event.currentTarget.value) {
+      setIsDisabled(true);
+    } else if (event.currentTarget.value && isDisabled) {
+      setIsDisabled(false);
+    }
     setNickname(event.currentTarget.value);
   };
 
@@ -30,6 +33,9 @@ function NicknameEditModal({ onClose }) {
   };
 
   const onKeyPress = (event) => {
+    if (isDisabled) {
+      return;
+    }
     if (event.key === "Enter") {
       changeNickname(nickname);
       onClose();
@@ -37,10 +43,10 @@ function NicknameEditModal({ onClose }) {
   };
 
   const content = (
-    <div className={styles.box}>
-      <p>닉네임</p>
-      <Input ref={inputRef} value={nickname} onChange={onChange} onKeyPress={onKeyPress} />
-    </div>
+    <label htmlFor="nickname">
+      <p className={styles.content}>닉네임</p>
+      <Input ref={inputRef} value={nickname} maxLength="8" onChange={onChange} onKeyPress={onKeyPress} />
+    </label>
   );
 
   return (
@@ -55,6 +61,7 @@ function NicknameEditModal({ onClose }) {
           onClose();
         },
       }}
+      disabled={isDisabled}
     />
   );
 }
