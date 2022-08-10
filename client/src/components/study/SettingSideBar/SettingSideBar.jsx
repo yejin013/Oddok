@@ -1,17 +1,34 @@
 import React, { useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useParams } from "react-router-dom";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { roomInfoState } from "@recoil/studyroom-state";
 import { userState } from "@recoil/user-state";
 import { Hashtag, Play, Pause } from "@icons";
+import { updateStudyRoom } from "@api/study-room-api";
 import { SettingForm } from "..";
 import styles from "./SettingSideBar.module.css";
 
-function SettingSideBar({ updateRoomInfo }) {
+function SettingSideBar({ session }) {
+  const { roomId } = useParams();
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const roomInfo = useRecoilValue(roomInfoState);
+  const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
   const { updateAllowed } = useRecoilValue(userState);
 
   const clickDetailBtn = () => setIsFormOpen((prev) => !prev);
+
+  const updateRoomInfo = async (data) => {
+    try {
+      const res = await updateStudyRoom(roomId, data);
+      session?.signal({
+        data: JSON.stringify(res),
+        to: [],
+        type: "roomDataUpdated",
+      });
+      setRoomInfo(res);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   return (
     <>

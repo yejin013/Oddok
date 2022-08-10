@@ -4,7 +4,7 @@ import { useRecoilState, useRecoilValue, useSetRecoilState, useResetRecoilState 
 import { roomInfoState, deviceState } from "@recoil/studyroom-state";
 import { errorState } from "@recoil/error-state";
 import { userState } from "@recoil/user-state";
-import { updateStudyRoom, leaveStudyRoom } from "@api/study-room-api";
+import { leaveStudyRoom } from "@api/study-room-api";
 import { initSession, connectToSession, connectDevice, publishStream } from "@api/openvidu-api";
 import { StudyBar, UserVideo, SettingSideBar, ChatSideBar, PlanSidebar, ParticipantSideBar } from "@components/study";
 import { Modal } from "@components/commons";
@@ -118,23 +118,10 @@ function StudyRoom() {
     });
   }, []);
 
-  const updateRoomInfo = async (data) => {
-    try {
-      const response = await updateStudyRoom(roomId, data);
-      session.signal({
-        data: JSON.stringify(response),
-        to: [],
-        type: "updated-roominfo",
-      });
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
   return (
     <div className={styles.room}>
       <div className={styles.video_container}>
-        {sideBarType === "SETTING" && <SettingSideBar updateRoomInfo={updateRoomInfo} />}
+        {sideBarType === "SETTING" && <SettingSideBar session={session} />}
         <ul className={styles.videos}>
           {publisher && <UserVideo count={count} user={publisher} />}
           {subscribers?.map((subscriber) => (

@@ -7,7 +7,7 @@ import { SettingBar, SettingForm, SettingSideBar, PlanSidebar, UserVideo } from 
 import { useToggleSideBar } from "@hooks";
 import styles from "./SettingRoom.module.css";
 
-function SettingRoom({ goToStudyRoom, updateRoomInfo }) {
+function SettingRoom({ goToStudyRoom }) {
   const videoRef = useRef();
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
@@ -57,8 +57,7 @@ function SettingRoom({ goToStudyRoom, updateRoomInfo }) {
   return (
     <div className={styles.room}>
       <div className={styles.video_container}>
-        {sideBarType === "SETTING" &&
-          (path ? <SettingForm onClose={() => toggleSideBar()} /> : <SettingSideBar updateRoomInfo={updateRoomInfo} />)}
+        {sideBarType === "SETTING" && (path ? <SettingForm onClose={() => toggleSideBar()} /> : <SettingSideBar />)}
         <div className={styles.video_wrapper}>
           <UserVideo
             count={1}
