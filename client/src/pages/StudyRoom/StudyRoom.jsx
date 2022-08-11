@@ -4,7 +4,7 @@ import { useRecoilState, useSetRecoilState, useResetRecoilState } from "recoil";
 import { roomInfoState, deviceState } from "@recoil/studyroom-state";
 import { errorState } from "@recoil/error-state";
 import { leaveStudyRoom } from "@api/study-room-api";
-import { initSession, connectToSession, connectDevice, publishStream } from "@api/openvidu-api";
+import { initSession, connectToSession, connectDevice, initPublisher } from "@api/openvidu-api";
 import { StudyBar, UserVideo, SettingSideBar, ChatSideBar, PlanSidebar, ParticipantSideBar } from "@components/study";
 import { Modal } from "@components/commons";
 import { useToggleSideBar } from "@hooks";
@@ -37,10 +37,13 @@ function StudyRoom() {
   };
 
   const startOpenvidu = async () => {
-    await connectToSession(session, history.location.state.token, localUser, roomId);
-    const stream = await connectDevice(deviceStatus);
+    const [_, deviceId] = await Promise.all([
+      connectToSession(session, history.location.state.token, localUser, roomId),
+      connectDevice(deviceStatus),
+    ]);
+    const stream = await initPublisher(deviceId, deviceStatus);
+    session.publish(stream);
     setLocalUser((prev) => ({ ...prev, stream, isMicOn: audioActive }));
-    await publishStream(session, stream);
   };
 
   useEffect(() => {
