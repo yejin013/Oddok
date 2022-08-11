@@ -77,12 +77,6 @@ function StudyRoom() {
     });
   }, []);
 
-  useEffect(() => {
-    if (localUser.stream) {
-      session.signal({ data: JSON.stringify({ isMicOn: audioActive }), type: "micStatusChanged" });
-    }
-  }, [audioActive]);
-
   const participants = localUser ? [localUser, ...remoteUsers] : [];
 
   return (
@@ -101,7 +95,11 @@ function StudyRoom() {
       </section>
       <StudyBar
         toggleVideo={toggleVideo}
-        toggleAudio={toggleAudio}
+        toggleAudio={() => {
+          toggleAudio();
+          if (localUser.stream)
+            session.signal({ data: JSON.stringify({ isMicOn: audioActive }), type: "micStatusChanged" });
+        }}
         isPlaying={videoActive}
         isMuted={audioActive}
         clickSideBarBtn={toggleSideBar}

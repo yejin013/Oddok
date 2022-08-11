@@ -26,6 +26,7 @@ const useMyStream = () => {
 
   const toggleVideo = () => {
     const myStream = videoRef.current.srcObject;
+    if (!myStream) return;
     const videoTrack = myStream.getVideoTracks()[0];
     videoTrack.enabled = !videoTrack.enabled;
     setVideoActive((prev) => !prev);
@@ -33,6 +34,7 @@ const useMyStream = () => {
 
   const toggleAudio = () => {
     const myStream = videoRef.current.srcObject;
+    if (!myStream) return;
     const audioTrack = myStream.getAudioTracks()[0];
     audioTrack.enabled = !audioTrack.enabled;
     setAudioActive((prev) => !prev);
