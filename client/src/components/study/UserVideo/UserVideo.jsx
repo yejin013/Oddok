@@ -33,7 +33,7 @@ function UserVideo({ count, user }) {
     <li className={`${styles.wrapper} ${getCount(count)}`}>
       <video className={styles.video} ref={user.streamRef || videoRef} autoPlay />
       {!user.connectionId && <TotalTime />}
-      <UserTag isHost={user.isHost} isMicOn={user.isMicOn} nickname={user.nickname} />
+      <UserTag isHost={user.isHost} audioActive={user.audioActive} nickname={user.nickname} />
     </li>
   );
 }

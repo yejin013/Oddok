@@ -41,7 +41,7 @@ function StudyRoom() {
     ]);
     const stream = await initPublisher(deviceId, deviceStatus);
     session.publish(stream);
-    setLocalUser((prev) => ({ ...prev, stream, isMicOn: audioActive }));
+    setLocalUser((prev) => ({ ...prev, stream, audioActive }));
   };
 
   useEffect(() => {
@@ -75,6 +75,10 @@ function StudyRoom() {
     });
   }, []);
 
+  useEffect(() => {
+    if (localUser.stream) session.signal({ data: JSON.stringify({ audioActive }), type: "micStatusChanged" });
+  }, [audioActive]);
+
   const participants = localUser ? [localUser, ...remoteUsers] : [];
 
   return (
@@ -93,13 +97,9 @@ function StudyRoom() {
       </section>
       <StudyBar
         toggleVideo={toggleVideo}
-        toggleAudio={() => {
-          toggleAudio();
-          if (localUser.stream)
-            session.signal({ data: JSON.stringify({ isMicOn: audioActive }), type: "micStatusChanged" });
-        }}
-        isPlaying={videoActive}
-        isMuted={audioActive}
+        toggleAudio={toggleAudio}
+        videoActive={videoActive}
+        audioActive={audioActive}
         clickSideBarBtn={toggleSideBar}
         onClickLeaveBtn={() => setIsLeaveOpen(true)}
       />

@@ -30,8 +30,8 @@ export const initPublisher = async (deviceId, deviceStatus) => {
     return OV.initPublisherAsync(undefined, {
       audioSource: undefined,
       videoSource: deviceId,
-      publishAudio: deviceStatus.mic,
-      publishVideo: deviceStatus.cam,
+      publishAudio: deviceStatus.audio,
+      publishVideo: deviceStatus.video,
       frameRate: 30,
       mirror: false,
     });

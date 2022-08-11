@@ -5,8 +5,8 @@ const useManageRemoteUsers = () => {
 
   const onRemoteStreamCreated = (event, stream) => {
     const { data, connectionId } = event.stream.connection;
-    const { nickname, isHost, isMicOn } = JSON.parse(data);
-    setRemoteUsers((prev) => [...prev, { stream, connectionId, nickname, isHost, isMicOn }]);
+    const { nickname, isHost, audioActive } = JSON.parse(data);
+    setRemoteUsers((prev) => [...prev, { stream, connectionId, nickname, isHost, audioActive }]);
   };
 
   const onRemoteStreamDestroyed = (event) => {
@@ -14,10 +14,11 @@ const useManageRemoteUsers = () => {
   };
 
   const onRemoteMicStatusChanged = (from, data) => {
-    const { isMicOn } = JSON.parse(data);
+    console.log(data);
+    const { audioActive } = JSON.parse(data);
     setRemoteUsers((prev) =>
       prev.map((user) => {
-        if (user.connectionId === from.connectionId) return { ...user, isMicOn };
+        if (user.connectionId === from.connectionId) return { ...user, audioActive };
         return user;
       }),
     );

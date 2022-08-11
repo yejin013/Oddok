@@ -5,7 +5,7 @@ import { Setting, Music, VideoOn, VideoOff, MicOn, MicOff, Chat, Member, Door } 
 import SubjectTime from "../SubjectTime/SubjectTime";
 import styles from "./StudyBar.module.css";
 
-function StudyBar({ toggleVideo, toggleAudio, isPlaying, isMuted, clickSideBarBtn, onClickLeaveBtn }) {
+function StudyBar({ toggleVideo, toggleAudio, videoActive, audioActive, clickSideBarBtn, onClickLeaveBtn }) {
   const roomInfo = useRecoilValue(roomInfoState);
 
   return (
@@ -27,7 +27,7 @@ function StudyBar({ toggleVideo, toggleAudio, isPlaying, isMuted, clickSideBarBt
       </div>
       <ul className={styles.buttons}>
         <li className={styles.video_button}>
-          {isPlaying ? (
+          {videoActive ? (
             <button type="button" onClick={toggleVideo}>
               <VideoOn />
             </button>
@@ -38,7 +38,7 @@ function StudyBar({ toggleVideo, toggleAudio, isPlaying, isMuted, clickSideBarBt
           )}
         </li>
         <li className={styles.audio_button}>
-          {isMuted ? (
+          {audioActive ? (
             <button type="button" onClick={toggleAudio}>
               <MicOn />
             </button>

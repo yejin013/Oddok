@@ -3,8 +3,8 @@ import { atom, selector } from "recoil";
 export const deviceState = atom({
   key: "deviceState",
   default: {
-    cam: true,
-    mic: false,
+    video: true,
+    audio: false,
   },
 });
 
@@ -22,7 +22,7 @@ export const roomInfoState = atom({
     isMicOn: false,
     isCamOn: false,
     bgmlink: "",
-    endAt: new Date(new Date(2022, 11, 32) + 3240 * 10000).toISOString().split("T")[0],
+    endAt: "2022-12-31",
   },
 });
 

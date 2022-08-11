@@ -4,10 +4,10 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { userState } from "@recoil/user-state";
 import { roomInfoState } from "@recoil/studyroom-state";
 import { errorState } from "@recoil/error-state";
-import { getStudyRoom, joinStudyRoom, updateStudyRoom } from "@api/study-room-api";
-import useAsync from "@hooks/useAsync";
+import { getStudyRoom, joinStudyRoom } from "@api/study-room-api";
 import { Loading } from "@components/commons";
 import { SettingRoom } from "@components/study";
+import { useAsync } from "@hooks";
 
 function JoinRoom() {
   const history = useHistory();

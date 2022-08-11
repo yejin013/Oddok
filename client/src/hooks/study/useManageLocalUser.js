@@ -5,14 +5,14 @@ import { userState } from "@recoil/user-state";
 
 const useManageLocalUser = () => {
   const { nickname, updateAllowed } = useRecoilValue(userState);
-  const { mic, cam } = useRecoilValue(deviceState);
+  const { video, audio } = useRecoilValue(deviceState);
   const [localUser, setLocalUser] = useState({
     nickname,
     isHost: updateAllowed,
-    isMicOn: mic,
+    audioActive: audio,
   });
-  const [videoActive, setVideoActive] = useState(cam);
-  const [audioActive, setAudioActive] = useState(mic);
+  const [videoActive, setVideoActive] = useState(video);
+  const [audioActive, setAudioActive] = useState(audio);
 
   const toggleVideo = () => {
     localUser.stream.publishVideo(!localUser.stream.stream.videoActive);
@@ -22,7 +22,7 @@ const useManageLocalUser = () => {
   const toggleAudio = () => {
     localUser.stream.publishAudio(!localUser.stream.stream.audioActive);
     setAudioActive(localUser.stream.stream.audioActive);
-    setLocalUser((prev) => ({ ...prev, isMicOn: localUser.stream.stream.audioActive }));
+    setLocalUser((prev) => ({ ...prev, audioActive: localUser.stream.stream.audioActive }));
   };
 
   return {

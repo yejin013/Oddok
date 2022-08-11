@@ -12,7 +12,7 @@ function SettingRoom({ goToStudyRoom }) {
   const path = location.pathname === "/studyroom/create";
   const { videoRef, videoActive, audioActive, toggleVideo, toggleAudio } = useMyStream();
   const { sideBarType, toggleSideBar } = useToggleSideBar();
-  const { updateAllowed, nickname } = useRecoilValue(userState);
+  const { nickname, updateAllowed } = useRecoilValue(userState);
   const setDeviceStatus = useSetRecoilState(deviceState);
 
   return (
@@ -25,7 +25,7 @@ function SettingRoom({ goToStudyRoom }) {
             user={{
               streamRef: videoRef,
               isHost: updateAllowed,
-              isMicOn: audioActive,
+              audioActive,
               nickname,
             }}
           />
@@ -34,14 +34,14 @@ function SettingRoom({ goToStudyRoom }) {
       </section>
       <SettingBar
         goToStudyRoom={() => {
-          setDeviceStatus({ cam: videoActive, mic: audioActive });
+          setDeviceStatus({ video: videoActive, audio: audioActive });
           goToStudyRoom();
         }}
         toggleVideo={toggleVideo}
         toggleAudio={toggleAudio}
         clickSideBarBtn={toggleSideBar}
-        isPlaying={videoActive}
-        isMuted={audioActive}
+        videoActive={videoActive}
+        audioActive={audioActive}
       />
     </div>
   );
