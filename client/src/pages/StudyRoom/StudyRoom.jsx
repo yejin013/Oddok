@@ -7,9 +7,7 @@ import { leaveStudyRoom } from "@api/study-room-api";
 import { initSession, connectToSession, connectDevice, initPublisher } from "@api/openvidu-api";
 import { StudyBar, UserVideo, SettingSideBar, ChatSideBar, PlanSidebar, ParticipantSideBar } from "@components/study";
 import { Modal } from "@components/commons";
-import { useToggleSideBar } from "@hooks";
-import useManageLocalUser from "./useManageLocalUser";
-import useManageRemoteUsers from "./useManageRemoteUsers";
+import { useToggleSideBar, useManageLocalUser, useManageRemoteUsers } from "@hooks";
 import styles from "./StudyRoom.module.css";
 
 function StudyRoom() {

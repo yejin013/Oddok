@@ -4,8 +4,7 @@ import { useSetRecoilState, useRecoilValue } from "recoil";
 import { userState } from "@recoil/user-state";
 import { deviceState } from "@recoil/studyroom-state";
 import { SettingBar, SettingForm, SettingSideBar, PlanSidebar, UserVideo } from "@components/study";
-import { useToggleSideBar } from "@hooks";
-import useMyStream from "./useMyStream";
+import { useToggleSideBar, useMyStream } from "@hooks";
 import styles from "./SettingRoom.module.css";
 
 function SettingRoom({ goToStudyRoom }) {
