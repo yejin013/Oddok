@@ -17,6 +17,7 @@ function StudyRoom() {
   const { localUser, setLocalUser, videoActive, audioActive, toggleVideo, toggleAudio } = useManageLocalUser();
   const { remoteUsers, onRemoteStreamCreated, onRemoteStreamDestroyed, onRemoteMicStatusChanged } =
     useManageRemoteUsers();
+  const participants = localUser ? [localUser, ...remoteUsers] : [];
   const [deviceStatus, setDeviceStatus] = useRecoilState(deviceState);
   const isStudyRoom = true; // studyroom에 입장했을 때만 생기는 UI를 위한 변수
   const setRoomInfo = useSetRecoilState(roomInfoState);
@@ -78,8 +79,6 @@ function StudyRoom() {
   useEffect(() => {
     if (localUser.stream) session.signal({ data: JSON.stringify({ audioActive }), type: "micStatusChanged" });
   }, [audioActive]);
-
-  const participants = localUser ? [localUser, ...remoteUsers] : [];
 
   return (
     <div className={styles.layout}>

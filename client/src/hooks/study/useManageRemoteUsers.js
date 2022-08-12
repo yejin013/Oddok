@@ -14,7 +14,6 @@ const useManageRemoteUsers = () => {
   };
 
   const onRemoteMicStatusChanged = (from, data) => {
-    console.log(data);
     const { audioActive } = JSON.parse(data);
     setRemoteUsers((prev) =>
       prev.map((user) => {

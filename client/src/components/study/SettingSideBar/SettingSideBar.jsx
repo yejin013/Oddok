@@ -14,7 +14,7 @@ function SettingSideBar({ session }) {
   const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
   const { updateAllowed } = useRecoilValue(userState);
 
-  const clickDetailBtn = () => setIsFormOpen((prev) => !prev);
+  const toggleSettingForm = () => setIsFormOpen((prev) => !prev);
 
   const updateRoomInfo = async (data) => {
     try {
@@ -32,13 +32,13 @@ function SettingSideBar({ session }) {
 
   return (
     <>
-      {isFormOpen && <SettingForm onClose={clickDetailBtn} onUpdate={updateRoomInfo} />}
+      {isFormOpen && <SettingForm onClose={toggleSettingForm} onUpdate={updateRoomInfo} />}
       <aside className={styles.side_box}>
         <h1>{roomInfo.name}</h1>
         <div>
           <ul className={styles.hashtags}>
             {roomInfo.hashtags.map((hashtag) => (
-              <li>
+              <li key={hashtag}>
                 <Hashtag />
                 <span>{hashtag}</span>
               </li>

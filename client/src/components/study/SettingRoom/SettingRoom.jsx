@@ -18,7 +18,7 @@ function SettingRoom({ goToStudyRoom }) {
   return (
     <div className={styles.layout}>
       <section className={styles.video_section}>
-        {sideBarType === "SETTING" && (path ? <SettingForm onClose={() => toggleSideBar()} /> : <SettingSideBar />)}
+        {sideBarType === "SETTING" && (path ? <SettingForm onClose={toggleSideBar} /> : <SettingSideBar />)}
         <div className={styles.video_container}>
           <UserVideo
             count={1}
