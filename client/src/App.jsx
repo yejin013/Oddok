@@ -15,6 +15,7 @@ import LogoutRedirectPage from "@pages/LogoutRedirectPage/LogoutRedirectPage";
 import { getNewToken } from "@api/auth/auth-api";
 import { Loading, ErrorModal } from "@components/commons";
 import { PrivateRoute, PublicRoute } from "@components/router";
+import styles from "./App.module.css";
 
 function App() {
   const user = useRecoilValue(userState);
@@ -31,7 +32,7 @@ function App() {
   }, []);
 
   return (
-    <>
+    <div className={styles.app}>
       {isLoading && <Loading />}
       <BrowserRouter>
         <ErrorModal />
@@ -48,7 +49,7 @@ function App() {
           <PublicRoute path="*" component={NotFoundPage} />
         </Switch>
       </BrowserRouter>
-    </>
+    </div>
   );
 }
 
