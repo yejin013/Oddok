@@ -1,7 +1,7 @@
 /* eslint-disable no-use-before-define */
 import axios from "axios";
-import axiosInstance from "./axios-config";
-import LoginError from "./error/LoginError";
+import axiosInstance from "../axios-config";
+import LoginError from "../error/LoginError";
 import { kakaoConfig } from "./kakao";
 
 const JWT_EXPIRY_TIME = 6 * 3600 * 1000; // JWT AccessToken 만료시간 (6시간)

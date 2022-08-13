@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal } from "@components/commons";
-import { deleteAccount } from "@api/auth-api";
+import { deleteAccount } from "@api/auth/auth-api";
 import { useRecoilState } from "recoil";
 import { userState } from "@recoil/user-state";
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 // import { useHistory } from "react-router-dom";
-import { getKakaoToken, login } from "@api/auth-api";
+import { getKakaoToken, login } from "@api/auth/auth-api";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { userState } from "@recoil/user-state";
 import { errorState } from "@recoil/error-state";

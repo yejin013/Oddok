@@ -12,7 +12,7 @@ import StudyRoom from "@pages/StudyRoom/StudyRoom";
 import NotFoundPage from "@pages/NotFoundPage/NotFoundPage";
 import RedirectPage from "@pages/Login/RedirectPage";
 import LogoutRedirectPage from "@pages/LogoutRedirectPage/LogoutRedirectPage";
-import { getNewToken } from "@api/auth-api";
+import { getNewToken } from "@api/auth/auth-api";
 import { Loading, ErrorModal } from "@components/commons";
 import { PrivateRoute, PublicRoute } from "@components/router";
 

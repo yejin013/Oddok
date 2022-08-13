@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import { logout } from "@api/auth-api";
+import { logout } from "@api/auth/auth-api";
 import { useRecoilState } from "recoil";
 import { userState } from "@recoil/user-state";
 import useAsync from "@hooks/useAsync";
