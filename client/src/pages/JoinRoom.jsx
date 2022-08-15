@@ -4,10 +4,10 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { userState } from "@recoil/user-state";
 import { roomInfoState } from "@recoil/studyroom-state";
 import { errorState } from "@recoil/error-state";
-import { getStudyRoom, joinStudyRoom, updateStudyRoom } from "@api/study-room-api";
-import useAsync from "@hooks/useAsync";
+import { getStudyRoom, joinStudyRoom } from "@api/study-room-api";
 import { Loading } from "@components/commons";
 import { SettingRoom } from "@components/study";
+import { useAsync } from "@hooks";
 
 function JoinRoom() {
   const history = useHistory();
@@ -17,37 +17,28 @@ function JoinRoom() {
   const setError = useSetRecoilState(errorState);
   const { loading, request: joinStudy } = useAsync({
     requestFn: () => joinStudyRoom(roomId),
-    onSuccess: ({ token }) =>
+    onSuccess: ({ token }) => {
       history.push({
         pathname: `/studyroom/${roomId}`,
         state: {
           token,
         },
-      }),
+      });
+    },
     onError: (error) => setError(error),
   });
 
-  // TODO 방장일 경우 수정권한 주기
   useEffect(() => {
-    setUserInfo({ ...userInfo, updateAllowed: true });
+    setUserInfo({ ...userInfo, updateAllowed: false }); // @TODO 방장 권한 부여
     getStudyRoom(roomId)
       .then((data) => setRoomInfo(data))
       .catch((e) => console.error(e));
   }, []);
 
-  const updateRoomInfo = async (roomData) => {
-    try {
-      const response = await updateStudyRoom(roomId, roomData);
-      setRoomInfo(response);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
   return (
     <>
       {loading && <Loading />}
-      <SettingRoom goToStudyRoom={joinStudy} updateRoomInfo={updateRoomInfo} />
+      <SettingRoom goToStudyRoom={joinStudy} />
     </>
   );
 }

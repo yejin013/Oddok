@@ -1,21 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import { useRecoilState, useRecoilValue, useSetRecoilState, useResetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState, useResetRecoilState } from "recoil";
 import { roomInfoState, deviceState } from "@recoil/studyroom-state";
 import { errorState } from "@recoil/error-state";
-import { userState } from "@recoil/user-state";
-import { updateStudyRoom, leaveStudyRoom } from "@api/study-room-api";
-import { initSession, connectToSession, connectDevice, publishStream } from "@api/openvidu-api";
-import {
-  StudyBar,
-  UserVideo,
-  SettingSideBar,
-  ChatSideBar,
-  PlanSidebar,
-  ParticipantSideBar,
-  SettingForm,
-} from "@components/study";
+import { leaveStudyRoom } from "@api/study-room-api";
+import { initSession, connectToSession, connectDevice, initPublisher } from "@api/openvidu-api";
+import { StudyBar, UserVideo, SettingSideBar, ChatSideBar, PlanSidebar, ParticipantSideBar } from "@components/study";
 import { Modal } from "@components/commons";
+import { useToggleSideBar, useManageLocalUser, useManageRemoteUsers } from "@hooks";
 import useModal from "@hooks/useModal";
 import styles from "./StudyRoom.module.css";
 
@@ -23,27 +15,17 @@ function StudyRoom() {
   const history = useHistory();
   const { roomId } = useParams();
   const [session, setSession] = useState(initSession());
-  const [publisher, setPublisher] = useState();
-  const [subscribers, setSubscribers] = useState([]);
-  const [count, setCount] = useState(1);
+  const { localUser, setLocalUser, videoActive, audioActive, toggleVideo, toggleAudio } = useManageLocalUser();
+  const { remoteUsers, onRemoteStreamCreated, onRemoteStreamDestroyed, onRemoteMicStatusChanged } =
+    useManageRemoteUsers();
+  const participants = localUser ? [localUser, ...remoteUsers] : [];
   const [deviceStatus, setDeviceStatus] = useRecoilState(deviceState);
   const isStudyRoom = true; // studyroom에 입장했을 때만 생기는 UI를 위한 변수
-  const [roomInfo, setRoomInfo] = useRecoilState(roomInfoState);
+  const setRoomInfo = useSetRecoilState(roomInfoState);
   const resetRoomInfo = useResetRecoilState(roomInfoState);
-  const [sideBarState, setSideBarState] = useState({
-    setting: false,
-    chatting: false,
-    plan: false,
-    participant: false,
-  });
-  const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const { sideBarType, toggleSideBar } = useToggleSideBar();
   const { isModal: isLeaveModal, openModal: openLeaveModal, closeModal } = useModal();
-  const localUser = useRecoilValue(userState);
   const setError = useSetRecoilState(errorState);
-
-  const clickLeaveBtn = () => {
-    openLeaveModal();
-  };
 
   const leaveRoom = async () => {
     await leaveStudyRoom(roomId);
@@ -54,37 +36,14 @@ function StudyRoom() {
     });
   };
 
-  const toggleVideo = () => {
-    publisher.streamManager.publishVideo(!publisher.streamManager.stream.videoActive);
-    setDeviceStatus((prev) => ({ ...prev, cam: !prev.cam }));
-  };
-
-  const toggleAudio = () => {
-    publisher.streamManager.publishAudio(!publisher.streamManager.stream.audioActive);
-    session.signal({ data: JSON.stringify({ isMicOn: !deviceStatus.mic }), type: "micStatusChanged" });
-    setPublisher({ ...publisher, isMicOn: !publisher.isMicOn });
-    setDeviceStatus((prev) => ({ ...prev, mic: !prev.mic }));
-  };
-
   const startOpenvidu = async () => {
-    await connectToSession(
-      session,
-      history.location.state.token,
-      {
-        nickname: localUser.nickname,
-        isHost: localUser.updateAllowed,
-        isMicOn: deviceStatus.mic,
-      },
-      roomId,
-    );
-    const userStream = await connectDevice(deviceStatus);
-    setPublisher({
-      streamManager: userStream,
-      nickname: localUser.nickname,
-      isHost: localUser.isHost,
-      isMic: deviceStatus.mic,
-    });
-    await publishStream(session, userStream);
+    const [_, deviceId] = await Promise.all([
+      connectToSession(session, history.location.state.token, localUser, roomId),
+      connectDevice(deviceStatus),
+    ]);
+    const stream = await initPublisher(deviceId, deviceStatus);
+    session.publish(stream);
+    setLocalUser((prev) => ({ ...prev, stream, audioActive }));
   };
 
   useEffect(() => {
@@ -95,119 +54,55 @@ function StudyRoom() {
   }, []);
 
   useEffect(() => {
-    // 1) 스트림 생성
     session.on("streamCreated", (event) => {
-      const participant = session.subscribe(event.stream, undefined);
-      const data = JSON.parse(event.stream.connection.data);
-      setSubscribers((prev) => [
-        ...prev,
-        { streamManager: participant, nickname: data.nickname, isHost: data.isHost, isMicOn: data.isMicOn },
-      ]);
-      setCount((prev) => prev + 1);
+      const userStream = session.subscribe(event.stream, undefined);
+      onRemoteStreamCreated(event, userStream);
     });
-    // 2) 스트림 삭제
+
     session.on("streamDestroyed", (event) => {
-      setSubscribers((prev) => prev.filter((subscriber) => subscriber.streamManager !== event.stream.streamManager));
-      setCount((prev) => prev - 1);
+      onRemoteStreamDestroyed(event);
     });
-    // 3) 방장이 방 정보를 수정했을 때
-    session.on("signal:updated-roominfo", (event) => {
-      const data = JSON.parse(event.data);
-      setRoomInfo(data);
+
+    session.on("signal:roomDataUpdated", (event) => {
+      setRoomInfo(JSON.parse(event.data));
     });
+
     session.on("signal:micStatusChanged", (event) => {
-      setSubscribers((prev) =>
-        prev.map((user) => {
-          if (user.streamManager.stream.connection.connectionId === event.from.connectionId) {
-            const userStatus = user;
-            userStatus.isMicOn = JSON.parse(event.data).isMicOn;
-            return userStatus;
-          }
-          return user;
-        }),
-      );
+      const { from, data } = event;
+      onRemoteMicStatusChanged(from, data);
     });
+
     session.on("exception", (exception) => {
       console.warn(exception);
     });
   }, []);
 
-  const clickDetailBtn = () => {
-    setIsDetailOpen((prev) => !prev);
-  };
-
-  const clickSettingBtn = () => {
-    setSideBarState((prev) => ({
-      setting: !prev.setting,
-      chatting: false,
-      plan: false,
-      participant: false,
-    }));
-  };
-
-  const clickChatBtn = () => {
-    setSideBarState((prev) => ({
-      setting: false,
-      chatting: !prev.chatting,
-      plan: false,
-      participant: false,
-    }));
-  };
-
-  const clickPlanBtn = () => {
-    setSideBarState((prev) => ({ setting: false, chatting: false, plan: !prev.plan, participant: false }));
-  };
-
-  const clickParticipantBtn = () => {
-    if (!publisher) return;
-    setSideBarState((prev) => ({
-      setting: false,
-      chatting: false,
-      plan: false,
-      participant: !prev.participant,
-    }));
-  };
-
-  const updateRoomInfo = async (data) => {
-    try {
-      const response = await updateStudyRoom(roomId, data);
-      session.signal({
-        data: JSON.stringify(response),
-        to: [],
-        type: "updated-roominfo",
-      });
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  useEffect(() => {
+    if (localUser.stream) session.signal({ data: JSON.stringify({ audioActive }), type: "micStatusChanged" });
+  }, [audioActive]);
 
   return (
-    <div className={styles.room}>
-      {isDetailOpen && <SettingForm onClose={clickDetailBtn} onUpdate={updateRoomInfo} />}
-      <div className={styles.video_container}>
-        {sideBarState.setting && <SettingSideBar clickDetailBtn={clickDetailBtn} />}
-        <ul className={styles.videos}>
-          {publisher && <UserVideo count={count} publisher={publisher} />}
-          {subscribers && subscribers.map((subscriber) => <UserVideo count={count} subscriber={subscriber} />)}
+    <div className={styles.layout}>
+      <section className={styles.video_section}>
+        {sideBarType === "SETTING" && <SettingSideBar session={session} />}
+        <ul className={styles.videos_container}>
+          {localUser.stream && <UserVideo count={participants.length} user={localUser} />}
+          {remoteUsers.map((remoteUser) => (
+            <UserVideo count={participants.length} user={remoteUser} />
+          ))}
         </ul>
-        {sideBarState.plan && <PlanSidebar isStudyRoom={isStudyRoom} />}
-        {sideBarState.participant && <ParticipantSideBar participants={[publisher, ...subscribers]} />}
-        <ChatSideBar session={session} display={sideBarState.chatting} />
-      </div>
-      <div className={styles.bar}>
-        <StudyBar
-          roomName={roomInfo.name}
-          clickSettingBtn={clickSettingBtn}
-          toggleVideo={toggleVideo}
-          toggleAudio={toggleAudio}
-          isPlaying={deviceStatus.cam}
-          isMuted={deviceStatus.mic}
-          clickParticipantBtn={clickParticipantBtn}
-          clickChatBtn={clickChatBtn}
-          onClickplanBtn={clickPlanBtn}
-          onClickLeaveBtn={clickLeaveBtn}
-        />
-      </div>
+        {sideBarType === "PLAN" && <PlanSidebar isStudyRoom={isStudyRoom} />}
+        {sideBarType === "PARTICIPANT" && <ParticipantSideBar participants={participants} />}
+        <ChatSideBar session={session} display={sideBarType === "CHATTING"} />
+      </section>
+      <StudyBar
+        toggleVideo={toggleVideo}
+        toggleAudio={toggleAudio}
+        videoActive={videoActive}
+        audioActive={audioActive}
+        clickSideBarBtn={toggleSideBar}
+        onClickLeaveBtn={openLeaveModal}
+      />
       {isLeaveModal && (
         <Modal
           title="스터디 종료"

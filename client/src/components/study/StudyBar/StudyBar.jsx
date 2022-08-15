@@ -1,27 +1,20 @@
 import React from "react";
+import { useRecoilValue } from "recoil";
+import { roomInfoState } from "@recoil/studyroom-state";
 import { Setting, Music, VideoOn, VideoOff, MicOn, MicOff, Chat, Member, Door } from "@icons";
 import SubjectTime from "../SubjectTime/SubjectTime";
 import styles from "./StudyBar.module.css";
 
-function StudyBar({
-  roomName,
-  clickSettingBtn,
-  toggleVideo,
-  toggleAudio,
-  isPlaying,
-  isMuted,
-  clickParticipantBtn,
-  clickChatBtn,
-  onClickplanBtn,
-  onClickLeaveBtn,
-}) {
+function StudyBar({ toggleVideo, toggleAudio, videoActive, audioActive, clickSideBarBtn, onClickLeaveBtn }) {
+  const roomInfo = useRecoilValue(roomInfoState);
+
   return (
     <section className={styles.bar}>
       <div className={styles.info}>
         <button type="button">
-          <Setting onClick={clickSettingBtn} />
+          <Setting onClick={() => clickSideBarBtn("SETTING")} />
         </button>
-        <span>{roomName}</span>
+        <span>{roomInfo.name}</span>
         <div className={styles.music}>
           <i className={styles.music_icon}>
             <Music />
@@ -30,11 +23,11 @@ function StudyBar({
         </div>
       </div>
       <div className={styles.time}>
-        <SubjectTime onClickplanBtn={onClickplanBtn} />
+        <SubjectTime onClickplanBtn={() => clickSideBarBtn("PLAN")} />
       </div>
       <ul className={styles.buttons}>
         <li className={styles.video_button}>
-          {isPlaying ? (
+          {videoActive ? (
             <button type="button" onClick={toggleVideo}>
               <VideoOn />
             </button>
@@ -45,7 +38,7 @@ function StudyBar({
           )}
         </li>
         <li className={styles.audio_button}>
-          {isMuted ? (
+          {audioActive ? (
             <button type="button" onClick={toggleAudio}>
               <MicOn />
             </button>
@@ -56,12 +49,12 @@ function StudyBar({
           )}
         </li>
         <li className={styles.chat_button}>
-          <button type="button" onClick={clickChatBtn}>
+          <button type="button" onClick={() => clickSideBarBtn("CHATTING")}>
             <Chat />
           </button>
         </li>
         <li className={styles.member_button}>
-          <button type="button" onClick={clickParticipantBtn}>
+          <button type="button" onClick={() => clickSideBarBtn("PARTICIPANT")}>
             <Member />
           </button>
         </li>
