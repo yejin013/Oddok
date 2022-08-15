@@ -1,7 +1,7 @@
 import axios from "axios";
 import axiosInstance from "@api/axios-config";
 import StudyRoomError from "@api/error/StudyRoomError";
-import { MESSAGE } from "@utils/constants/API_ERROR";
+import { STUDY_MESSAGE } from "@utils/constants/API_ERROR";
 
 export const createStudyRoom = async (roomInfo) => {
   try {
@@ -12,7 +12,7 @@ export const createStudyRoom = async (roomInfo) => {
     });
     return response;
   } catch (error) {
-    throw new StudyRoomError(error, MESSAGE.CREATE_STUDY_ROOM[error.status]);
+    throw new StudyRoomError(error, STUDY_MESSAGE.CREATE_STUDY_ROOM[error.status]);
   }
 };
 
@@ -23,7 +23,7 @@ export const joinStudyRoom = async (roomId) => {
     });
     return response;
   } catch (error) {
-    throw new StudyRoomError(error, MESSAGE.JOIN_STUDY_ROOM[error.status]);
+    throw new StudyRoomError(error, STUDY_MESSAGE.JOIN_STUDY_ROOM[error.status]);
   }
 };
 
@@ -42,7 +42,7 @@ export const updateStudyRoom = async (roomId, newRoomInfo) => {
     });
     return response;
   } catch (error) {
-    throw new StudyRoomError(error, MESSAGE.UPDATE_STUDY_ROOM[error.status]);
+    throw new StudyRoomError(error, STUDY_MESSAGE.UPDATE_STUDY_ROOM[error.status]);
   }
 };
 
@@ -53,7 +53,7 @@ export const leaveStudyRoom = async (roomId) => {
     });
     return response;
   } catch (error) {
-    throw new StudyRoomError(error, MESSAGE.LEAVE_STUDY_ROOM[error.status]);
+    throw new StudyRoomError(error, STUDY_MESSAGE.LEAVE_STUDY_ROOM[error.status]);
   }
 };
 

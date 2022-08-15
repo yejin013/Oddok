@@ -22,13 +22,15 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
 
   // 새로고침했을 때도 로그인 상태 계속 유지
-  useEffect(async () => {
-    if (!user.isLogin) {
-      return;
+  useEffect(() => {
+    if (!user.isLogin) return;
+    try {
+      setIsLoading(true);
+      getNewToken();
+      setIsLoading(false);
+    } catch (error) {
+      console.error(error);
     }
-    setIsLoading(true);
-    await getNewToken();
-    setIsLoading(false);
   }, []);
 
   return (
