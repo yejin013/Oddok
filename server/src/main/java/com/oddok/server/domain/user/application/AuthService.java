@@ -55,7 +55,7 @@ public class AuthService {
     @Transactional
     public void leave(User auth) {
         // kakao 연결 끊기 - kakaoId로 삭제
-        clientKakao.leaveUser(auth.getUserId());
+       // clientKakao.leaveUser(auth.getUserId());
 
         // DB에서 회원 탈퇴
         User user = findUser(auth.getId());
