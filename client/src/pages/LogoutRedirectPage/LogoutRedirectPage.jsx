@@ -3,8 +3,8 @@ import { useHistory } from "react-router-dom";
 import { logout } from "@api/auth-api";
 import { useRecoilState } from "recoil";
 import { userState } from "@recoil/user-state";
-import useAsync from "@hooks/useAsync";
 import { Loading, Modal } from "@components/commons";
+import { useAsync } from "@hooks";
 
 function LogoutRedirectPage() {
   const history = useHistory();

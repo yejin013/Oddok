@@ -54,7 +54,7 @@ function SettingSideBar({ session }) {
           <div className={styles.text_field}>{roomInfo.rule ? roomInfo.rule : "없음"}</div>
         </div>
         {updateAllowed && (
-          <button className={styles.button} type="submit" onClick={clickDetailBtn}>
+          <button className={styles.button} type="submit" onClick={toggleSettingForm}>
             방 정보 수정
           </button>
         )}

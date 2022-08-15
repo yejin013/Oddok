@@ -16,8 +16,7 @@ import {
 import { Textarea, NicknameEditModal } from "@components/commons";
 import { Layout } from "@components/layout";
 import { getColor, getTimeDiff, getDday, dateParsing, dateFormatting } from "@utils";
-import useAsync from "@hooks/useAsync";
-import useModal from "@hooks/useModal";
+import { useAsync, useModal } from "@hooks";
 import styles from "./MyPage.module.css";
 
 function MyPage() {
