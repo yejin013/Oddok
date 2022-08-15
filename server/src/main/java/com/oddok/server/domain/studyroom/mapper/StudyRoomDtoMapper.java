@@ -12,15 +12,13 @@ import org.mapstruct.Mapping;
 @Mapper
 public interface StudyRoomDtoMapper {
 
-    @Mapping(source = "userId", target = "userId")
     @Mapping(source = "studyRoomId", target = "id")
     @Mapping(target = "currentUsers", ignore = true)
-    StudyRoomDto fromUpdateRequest(UpdateStudyRoomRequest request, Long userId, Long studyRoomId);
+    StudyRoomDto fromUpdateRequest(UpdateStudyRoomRequest request, Long studyRoomId);
 
-    @Mapping(source = "userId", target="userId")
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "sessionId", ignore = true)
-    StudyRoomDto fromCreateRequest(CreateStudyRoomRequest request, String userId);
+    StudyRoomDto fromCreateRequest(CreateStudyRoomRequest request);
 
     GetStudyRoomResponse toGetResponse(StudyRoomDto studyRoomDto);
 

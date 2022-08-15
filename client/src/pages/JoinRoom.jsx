@@ -38,7 +38,7 @@ function JoinRoom() {
   return (
     <>
       {loading && <Loading />}
-      <SettingRoom goToStudyRoom={() => joinStudy()} />
+      <SettingRoom goToStudyRoom={joinStudy} />
     </>
   );
 }

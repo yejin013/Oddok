@@ -11,11 +11,13 @@ import {
   EditButton,
   MyGoalEditModal,
   MyRoomEditModal,
+  AccountDeleteModal,
 } from "@components/mypage";
 import { Textarea, NicknameEditModal } from "@components/commons";
 import { Layout } from "@components/layout";
-import { useAsync } from "@hooks";
 import { getColor, getTimeDiff, getDday, dateParsing, dateFormatting } from "@utils";
+import useAsync from "@hooks/useAsync";
+import useModal from "@hooks/useModal";
 import styles from "./MyPage.module.css";
 
 function MyPage() {
@@ -24,7 +26,7 @@ function MyPage() {
   const [selectedDate, setSelectedDate] = useState(dateFormatting(new Date()));
   const [timeRecordData, setTimeRecordData] = useState();
   const [totalStudyTime, setTotalStudyTime] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { isModal, openModal, closeModal } = useModal();
   const user = useRecoilValue(userState);
 
   const fetchTimeRecordData = async (date) => {
@@ -53,19 +55,18 @@ function MyPage() {
     }
   }, [selectedDate]);
 
-  const renderEditModal = (type) => setIsModalOpen(type);
-
-  const closeModal = () => setIsModalOpen(false);
+  const renderModal = (type) => openModal(type);
 
   return (
     <div>
-      {(isModalOpen === "edit-mygoal" && (
+      {(isModal === "edit-mygoal" && (
         <MyGoalEditModal profileData={profileData} onClose={closeModal} refetch={refetchProfile} />
       )) ||
-        (isModalOpen === "edit-myroom" && (
+        (isModal === "edit-myroom" && (
           <MyRoomEditModal roomData={myRoomData} onClose={closeModal} refetch={refetchMyRoom} />
         )) ||
-        (isModalOpen === "edit-nickname" && <NicknameEditModal onClose={closeModal} />)}
+        (isModal === "edit-nickname" && <NicknameEditModal onClose={closeModal} />) ||
+        (isModal === "delete-account" && <AccountDeleteModal onClose={closeModal} />)}
       <Layout>
         <div className={styles.mypage}>
           <aside className={styles.side_nav_bar}>
@@ -75,7 +76,7 @@ function MyPage() {
             <section className={styles.my_goal}>
               <div className={styles.heading}>
                 <div>내 목표</div>
-                <EditButton onClick={() => renderEditModal("edit-mygoal")} />
+                <EditButton onClick={() => renderModal("edit-mygoal")} />
               </div>
               <div className={styles.contents}>
                 <div>
@@ -150,7 +151,7 @@ function MyPage() {
             <section>
               <div className={styles.heading}>
                 <div>생성 스터디룸</div>
-                {myRoomData && <EditButton onClick={() => renderEditModal("edit-myroom")} />}
+                {myRoomData && <EditButton onClick={() => renderModal("edit-myroom")} />}
               </div>
               <div className={styles.sub_heading}>생성한 스터디룸</div>
               <div className={styles.contents}>
@@ -160,7 +161,7 @@ function MyPage() {
             <section className={styles.account}>
               <div className={styles.heading}>
                 <div>계정</div>
-                <EditButton onClick={() => renderEditModal("edit-nickname")} />
+                <EditButton onClick={() => renderModal("edit-nickname")} />
               </div>
               <div className={styles.contents}>
                 <div>
@@ -169,7 +170,7 @@ function MyPage() {
                 </div>
                 <div>
                   <div className={styles.sub_heading}>위험구역</div>
-                  <button type="button" className={styles.delete_btn}>
+                  <button type="button" className={styles.delete_btn} onClick={() => renderModal("delete-account")}>
                     계정 삭제
                   </button>
                 </div>

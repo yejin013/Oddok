@@ -3,113 +3,116 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { bookmarkState } from "@recoil/bookmark-state";
-import { UserCount } from "@components/commons";
+import { PasswordModal, UserCount } from "@components/commons";
 import { Thumbnail } from "@icons";
-import UserList from "../UserList/UserList";
-import TotalParticipant from "../TotalParticipant/TotalParticipant";
+import useModal from "@hooks/useModal";
 import styles from "./Bookmark.module.css";
 
-function Bookmark({ showBookmark }) {
+const initialParticipant = [
+  { id: 1, nickname: null, joinTime: null, isActive: false },
+  { id: 2, nickname: null, joinTime: null, isActive: false },
+  { id: 3, nickname: null, joinTime: null, isActive: false },
+  { id: 4, nickname: null, joinTime: null, isActive: false },
+  { id: 5, nickname: null, joinTime: null, isActive: false },
+];
+
+function Bookmark() {
   const bookmark = useRecoilValue(bookmarkState);
-  const [participants, setParticipants] = useState([
-    { nickname: "현재 스터디원", joinTime: "없음", isActive: false },
-    { nickname: "현재 스터디원", joinTime: "없음", isActive: false },
-    { nickname: "현재 스터디원", joinTime: "없음", isActive: false },
-    { nickname: "현재 스터디원", joinTime: "없음", isActive: false },
-    { nickname: "현재 스터디원", joinTime: "없음", isActive: false },
-  ]);
   const history = useHistory();
-  const isBookmarkUser = true; // UserCount style위한 변수
+  const [participants, setParticipants] = useState(initialParticipant);
+  const { isModal, openModal, closeModal } = useModal();
 
+  // 북마크한 스터디룸의 현재 참여자 리스트
   useEffect(() => {
-    // if(유저가 로그인했다면)
-    showBookmark();
-  }, []);
-
-  // 현재 참여 중인 유저리스트
-  useEffect(() => {
-    if (bookmark) {
-      const updatedUsers = [...participants];
-      for (let i = 0; i < updatedUsers.length; i += 1) {
-        if (!bookmark.participant[i]) {
-          return;
-        }
-        const name = bookmark.participant[i].nickname;
-        const time = bookmark.participant[i].joinTime.split(/[T, .]/)[1];
-        const updated = { ...updatedUsers[i], nickname: name, joinTime: time, isActive: true };
-        updatedUsers[i] = updated;
-        setParticipants(updatedUsers);
+    if (bookmark.participant.length === 0) {
+      setParticipants([...initialParticipant]);
+      return;
+    }
+    const updatedParticipants = [...participants];
+    for (let i = 0; i < participants.length; i += 1) {
+      if (!bookmark.participant[i]) {
+        updatedParticipants[i] = { ...participants[i], nickname: null, joinTime: null, isActive: false };
+      } else {
+        const nickname = bookmark.participant[i].nickname;
+        const joinTime = bookmark.participant[i].joinTime.split(/[T, .]/)[1];
+        updatedParticipants[i] = { ...participants[i], nickname, joinTime, isActive: true };
       }
     }
+    setParticipants(updatedParticipants);
   }, [bookmark]);
 
-  // TODO
-  // 비밀번호 확인
-  const goToStudyRoom = () => {
-    history.push({
-      pathname: `/studyroom/${bookmark.id}/setting`,
-    });
+  const onStartBtnClick = () => {
+    if (bookmark.isPublic) {
+      history.push(`/studyroom/${bookmark.id}/setting`);
+    } else {
+      openModal();
+    }
   };
 
   return (
-    <div className={styles.bookmark}>
-      {!bookmark ? (
-        <TotalParticipant />
-      ) : (
-        <div>
-          <div className={styles.count_info}>
-            <div className={styles.count_box}>
-              <div className={styles.count_icon}>
-                <UserCount number={bookmark.currentUsers} />
-              </div>
-              <p className={styles.count}>스터디원 {bookmark.currentUsers}명이 공부 중이에요</p>
-            </div>
-            <div className={styles.button_box}>
-              <button className={styles.button} type="button" onClick={goToStudyRoom}>
-                바로 스터디 시작하기
-              </button>
-            </div>
+    <>
+      {isModal && <PasswordModal roomId={bookmark.id} onClose={closeModal} />}
+      <section className={styles.bookmark}>
+        <div className={styles.count_info}>
+          <div className={styles.count_icon}>
+            <UserCount number={bookmark.currentUsers} />
           </div>
-          <div className={styles.info}>
-            <div className={styles.detail}>
-              <div className={styles.thumbnail}>
-                <Thumbnail />
-              </div>
-              <div className={styles.room_info}>
-                <h3 className={styles.name}>{bookmark.name}</h3>
-                <p className={styles.detail_box}>
-                  <span className={styles.title}>해시태그</span>
-                  {bookmark?.hashtags.length !== 0 ? (
-                    bookmark.hashtags.map((hashtag) => <span className={styles.content}>#{hashtag} </span>)
-                  ) : (
-                    <span className={styles.content}>없음</span>
-                  )}
-                </p>
-                <p className={styles.detail_box}>
-                  <span className={styles.title}>인원</span>
-                  <span className={styles.content}>
-                    {bookmark.currentUsers}명 / {bookmark.limitUsers}명
-                  </span>
-                </p>
-                <p className={styles.detail_box}>
-                  <span className={styles.title}>기간</span>
-                  <span className={styles.content}>{!bookmark.endAt ? "없음" : `${bookmark.endAt}까지`}</span>
-                </p>
-                <p className={styles.rule}>
-                  <span className={styles.rule_title}>스터디규칙</span>
-                  <span className={styles.rule_content}>{bookmark.rule || "없음"}</span>
-                </p>
-              </div>
-            </div>
-            <ul className={styles.user_list}>
-              {participants.map((participant) => (
-                <UserList participant={participant} />
-              ))}
-            </ul>
+          <div className={styles.count_box}>
+            <span className={styles.text}>스터디원 {bookmark.currentUsers}명이 공부 중이에요</span>
+            <button className={styles.button} type="button" onClick={onStartBtnClick}>
+              바로 스터디 시작하기
+            </button>
           </div>
         </div>
-      )}
-    </div>
+        <div className={styles.info}>
+          <div className={styles.thumbnail}>
+            <Thumbnail />
+          </div>
+          <div className={styles.detail_box}>
+            <h3 className={styles.name}>{bookmark.name}</h3>
+            <p className={styles.detail}>
+              <span className={styles.title}>해시태그</span>
+              {bookmark.hashtags.length !== 0 ? (
+                bookmark.hashtags.map((hashtag) => (
+                  <span key={hashtag} className={styles.content}>
+                    #{hashtag}&nbsp;
+                  </span>
+                ))
+              ) : (
+                <span className={styles.content}>없음</span>
+              )}
+            </p>
+            <p className={styles.detail}>
+              <span className={styles.title}>인원</span>
+              <span className={styles.content}>
+                {bookmark.currentUsers}명 / {bookmark.limitUsers}명
+              </span>
+            </p>
+            <p className={styles.detail}>
+              <span className={styles.title}>기간</span>
+              <span className={styles.content}>{bookmark.endAt ? `${bookmark.endAt}까지` : "없음"}</span>
+            </p>
+            <p className={styles.rule}>
+              <span className={styles.rule_title}>스터디규칙</span>
+              <span className={styles.rule_content}>{bookmark.rule || "없음"}</span>
+            </p>
+          </div>
+          <ul className={styles.participants}>
+            {participants.map((participant) => (
+              <li key={participant.id} className={`${styles.list} ${participant.isActive && styles.active}`}>
+                <div className={styles.nickname}>
+                  <span>{participant.id}.&nbsp;</span>
+                  <span>{participant.nickname || "현재 스터디원"}</span>
+                </div>
+                <span className={styles.time}>
+                  {participant.isActive ? `${participant.joinTime} ~ 지금까지` : "없음"}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    </>
   );
 }
 

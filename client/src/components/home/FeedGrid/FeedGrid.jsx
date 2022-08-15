@@ -1,22 +1,20 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { EmojiDizzy } from "@icons";
 import StudyRoomCard from "../StudyRoomCard/StudyRoomCard";
 import Skeleton from "../StudyRoomCard/Skeleton";
 import styles from "./FeedGrid.module.css";
 
-function CardGrid({ isLoading, rooms, showBookmark }) {
+function FeedGrid({ isLoading, rooms }) {
   return (
     <div className={styles.content}>
       <ul>
         {isLoading && new Array(16).fill(0).map(() => <Skeleton />)}
         {rooms?.map((roomData) => (
-          <Link key={roomData.id} to={`/studyroom/${roomData.id}/setting`} className={styles.studyroom}>
-            <StudyRoomCard //
-              roomData={roomData}
-              showBookmark={showBookmark}
-            />
-          </Link>
+          <StudyRoomCard //
+            className={styles.studyroom}
+            key={roomData.id}
+            roomData={roomData}
+          />
         ))}
       </ul>
       {!isLoading && rooms.length === 0 && (
@@ -29,4 +27,4 @@ function CardGrid({ isLoading, rooms, showBookmark }) {
   );
 }
 
-export default CardGrid;
+export default FeedGrid;

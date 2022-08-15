@@ -8,6 +8,7 @@ import { initSession, connectToSession, connectDevice, initPublisher } from "@ap
 import { StudyBar, UserVideo, SettingSideBar, ChatSideBar, PlanSidebar, ParticipantSideBar } from "@components/study";
 import { Modal } from "@components/commons";
 import { useToggleSideBar, useManageLocalUser, useManageRemoteUsers } from "@hooks";
+import useModal from "@hooks/useModal";
 import styles from "./StudyRoom.module.css";
 
 function StudyRoom() {
@@ -23,7 +24,7 @@ function StudyRoom() {
   const setRoomInfo = useSetRecoilState(roomInfoState);
   const resetRoomInfo = useResetRecoilState(roomInfoState);
   const { sideBarType, toggleSideBar } = useToggleSideBar();
-  const [isLeaveOpen, setIsLeaveOpen] = useState(false);
+  const { isModal: isLeaveModal, openModal: openLeaveModal, closeModal } = useModal();
   const setError = useSetRecoilState(errorState);
 
   const leaveRoom = async () => {
@@ -100,13 +101,13 @@ function StudyRoom() {
         videoActive={videoActive}
         audioActive={audioActive}
         clickSideBarBtn={toggleSideBar}
-        onClickLeaveBtn={() => setIsLeaveOpen(true)}
+        onClickLeaveBtn={openLeaveModal}
       />
-      {isLeaveOpen && (
+      {isLeaveModal && (
         <Modal
           title="스터디 종료"
           content="정말 나가시겠습니까?"
-          onClose={() => setIsLeaveOpen(false)}
+          onClose={closeModal}
           onAction={{ text: "나가기", action: leaveRoom }}
         />
       )}
