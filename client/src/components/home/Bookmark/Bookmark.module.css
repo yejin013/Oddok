@@ -61,7 +61,7 @@
   padding: 0 1em;
 }
 
-.participants {
+.users {
   width: 90%;
   display: flex;
   flex-direction: column;
