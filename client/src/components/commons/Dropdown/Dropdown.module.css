@@ -50,16 +50,5 @@
 }
 
 .container ul li:hover {
-  background-color: var(--gray800);
-}
-
-.container ul::-webkit-scrollbar {
-  width: 10px;
-}
-.container ul::-webkit-scrollbar-track {
-  border-radius: 100px;
-}
-.container ul::-webkit-scrollbar-thumb {
-  background-color: var(--gray800);
-  border-radius: 100px;
+  background-color: rgba(52, 58, 64, 0.5);
 }

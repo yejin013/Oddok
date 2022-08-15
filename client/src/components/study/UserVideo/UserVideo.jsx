@@ -3,18 +3,14 @@ import TotalTime from "../TotalTime/TotalTime";
 import UserTag from "../UserTag/UserTag";
 import styles from "./UserVideo.module.css";
 
-function UserVideo({ count, publisher, subscriber }) {
+function UserVideo({ count, user }) {
   const videoRef = useRef();
 
   useEffect(() => {
     if (videoRef) {
-      if (publisher) {
-        publisher.streamManager.addVideoElement(videoRef.current);
-      } else if (subscriber) {
-        subscriber.streamManager.addVideoElement(videoRef.current);
-      }
+      user.stream?.addVideoElement(videoRef.current);
     }
-  }, [publisher, subscriber]);
+  }, [user.stream]);
 
   const getCount = (number) => {
     switch (number) {
@@ -34,14 +30,10 @@ function UserVideo({ count, publisher, subscriber }) {
   };
 
   return (
-    <li className={`${styles.video} ${getCount(count)}`}>
-      <video className={styles.user_video} ref={videoRef} autoPlay />
-      {publisher && <TotalTime />}
-      <UserTag
-        isHost={publisher ? publisher.isHost : subscriber.isHost}
-        isMicOn={publisher ? publisher.isMicOn : subscriber.isMicOn}
-        nickname={publisher ? publisher.nickname : subscriber.nickname}
-      />
+    <li className={`${styles.wrapper} ${getCount(count)}`}>
+      <video className={styles.video} ref={user.streamRef || videoRef} autoPlay />
+      {!user.connectionId && <TotalTime />}
+      <UserTag isHost={user.isHost} audioActive={user.audioActive} nickname={user.nickname} />
     </li>
   );
 }

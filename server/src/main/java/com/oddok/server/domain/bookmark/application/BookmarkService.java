@@ -1,6 +1,7 @@
 package com.oddok.server.domain.bookmark.application;
 
 import com.oddok.server.common.errors.StudyRoomNotFoundException;
+import com.oddok.server.common.errors.UserNotFoundException;
 import com.oddok.server.domain.bookmark.dao.BookmarkRepository;
 import com.oddok.server.domain.bookmark.dto.BookmarkDto;
 import com.oddok.server.domain.participant.dao.ParticipantRepository;
@@ -10,6 +11,7 @@ import com.oddok.server.domain.bookmark.mapper.BookmarkMapper;
 import com.oddok.server.domain.participant.mapper.ParticipantMapper;
 import com.oddok.server.domain.studyroom.dao.StudyRoomRepository;
 import com.oddok.server.domain.studyroom.entity.StudyRoom;
+import com.oddok.server.domain.user.dao.UserRepository;
 import com.oddok.server.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
@@ -27,6 +29,7 @@ public class BookmarkService {
 
     private final BookmarkRepository bookmarkRepository;
     private final StudyRoomRepository studyRoomRepository;
+    private final UserRepository userRepository;
     private final ParticipantRepository participantRepository;
 
     private final BookmarkMapper bookmarkMapper = Mappers.getMapper(BookmarkMapper.class);
@@ -36,8 +39,9 @@ public class BookmarkService {
      * 북마크 생성
      */
     @Transactional
-    public BookmarkDto create(User user, Long studyRoomId) {
+    public BookmarkDto create(User auth, Long studyRoomId) {
         StudyRoom studyRoom = findStudyRoom(studyRoomId);
+        User user = findUser(auth.getId());
 
         Bookmark bookmark = bookmarkRepository.findByUser(user);
         if(bookmark != null) {
@@ -60,7 +64,8 @@ public class BookmarkService {
      * 북마크 조회
      * @return
      */
-    public Optional<BookmarkDto> get(User user) {
+    public Optional<BookmarkDto> get(User auth) {
+        User user = findUser(auth.getId());
         Bookmark bookmark = bookmarkRepository.findByUser(user);
 
         if(bookmark == null)
@@ -81,7 +86,8 @@ public class BookmarkService {
      * 북마크 삭제
      */
     @Transactional
-    public void delete(User user) {
+    public void delete(User auth) {
+        User user = findUser(auth.getId());
         bookmarkRepository.deleteByUser(user);
     }
 
@@ -91,5 +97,12 @@ public class BookmarkService {
     private StudyRoom findStudyRoom(Long studyRoomId) {
         return studyRoomRepository.findByIdAndEndAtIsGreaterThanEqual(studyRoomId, LocalDate.now())
                 .orElseThrow(() -> new StudyRoomNotFoundException(studyRoomId));
+    }
+
+    /**
+     * 유저 정보 확인
+     */
+    private User findUser(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 }

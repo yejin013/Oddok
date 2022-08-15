@@ -1,87 +1,47 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
+import { useLocation } from "react-router-dom";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { userState } from "@recoil/user-state";
 import { deviceState } from "@recoil/studyroom-state";
-import { SettingBar, SettingForm, SettingSideBar, TotalTime, PlanSidebar, UserTag } from "@components/study";
+import { SettingBar, SettingForm, SettingSideBar, PlanSidebar, UserVideo } from "@components/study";
+import { useToggleSideBar, useMyStream } from "@hooks";
 import styles from "./SettingRoom.module.css";
 
-function SettingRoom({ goToStudyRoom, updateRoomInfo }) {
-  const videoRef = useRef();
-  const [isPlaying, setIsPlaying] = useState(true);
-  const [isMuted, setIsMuted] = useState(false);
+function SettingRoom({ goToStudyRoom }) {
+  const location = useLocation();
+  const path = location.pathname === "/studyroom/create";
+  const { videoRef, videoActive, audioActive, toggleVideo, toggleAudio } = useMyStream();
+  const { sideBarType, toggleSideBar } = useToggleSideBar();
+  const { nickname, updateAllowed } = useRecoilValue(userState);
   const setDeviceStatus = useSetRecoilState(deviceState);
-  const [sideBarState, setSideBarState] = useState({ setting: false, plan: false });
-  const userInfo = useRecoilValue(userState);
-
-  useEffect(() => {
-    const getVideoandAudio = async () => {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: true,
-        video: true,
-      });
-      videoRef.current.srcObject = stream;
-      const audioTrack = videoRef.current.srcObject.getAudioTracks()[0];
-      audioTrack.enabled = !audioTrack.enabled; // enabled 초기값: true
-      window.localStream = stream;
-    };
-    getVideoandAudio();
-    return () => {
-      window.localStream.getTracks().forEach((track) => {
-        track.stop();
-      });
-    };
-  }, []);
-
-  useEffect(() => {
-    setDeviceStatus({ cam: isPlaying, mic: isMuted });
-  }, [isPlaying, isMuted]);
-
-  const toggleVideo = () => {
-    const myStream = videoRef.current.srcObject;
-    const videoTrack = myStream.getVideoTracks()[0];
-    videoTrack.enabled = !videoTrack.enabled;
-    setIsPlaying((prev) => !prev);
-  };
-
-  const toggleAudio = () => {
-    const myStream = videoRef.current.srcObject;
-    const audioTrack = myStream.getAudioTracks()[0];
-    audioTrack.enabled = !audioTrack.enabled;
-    setIsMuted((prev) => !prev);
-  };
-
-  const clickSettingBtn = () => {
-    setSideBarState((prev) => ({ ...prev, setting: !prev.setting, plan: false }));
-  };
-
-  const clickPlanBtn = () => {
-    setSideBarState((prev) => ({ ...prev, plan: !prev.plan, setting: false }));
-  };
 
   return (
-    <div className={styles.room}>
-      <div className={styles.video_container}>
-        {sideBarState.setting &&
-          (userInfo.updateAllowed ? (
-            <SettingForm onClose={clickSettingBtn} onUpdate={updateRoomInfo} />
-          ) : (
-            <SettingSideBar />
-          ))}
-        <div className={styles.video_wrapper}>
-          <video ref={videoRef} autoPlay />
-          <TotalTime />
-          <UserTag isHost={userInfo.updateAllowed} isMicOn={isMuted} nickname={userInfo.nickname} />
+    <div className={styles.layout}>
+      <section className={styles.video_section}>
+        {sideBarType === "SETTING" && (path ? <SettingForm onClose={toggleSideBar} /> : <SettingSideBar />)}
+        <div className={styles.video_container}>
+          <UserVideo
+            count={1}
+            user={{
+              streamRef: videoRef,
+              isHost: updateAllowed,
+              audioActive,
+              nickname,
+            }}
+          />
         </div>
-        {sideBarState.plan && <PlanSidebar />}
-      </div>
+        {sideBarType === "PLAN" && <PlanSidebar />}
+      </section>
       <SettingBar
-        goToStudyRoom={goToStudyRoom}
+        goToStudyRoom={() => {
+          setDeviceStatus({ video: videoActive, audio: audioActive });
+          goToStudyRoom();
+        }}
         toggleVideo={toggleVideo}
         toggleAudio={toggleAudio}
-        onClickSettingBtn={clickSettingBtn}
-        onClickplanBtn={clickPlanBtn}
-        isPlaying={isPlaying}
-        isMuted={isMuted}
+        clickSideBarBtn={toggleSideBar}
+        videoActive={videoActive}
+        audioActive={audioActive}
       />
     </div>
   );

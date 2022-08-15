@@ -4,10 +4,10 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { userState } from "@recoil/user-state";
 import { roomInfoState } from "@recoil/studyroom-state";
 import { errorState } from "@recoil/error-state";
-import useAsync from "@hooks/useAsync";
 import { startStudyRoom } from "@api/study-room-api";
 import { Loading } from "@components/commons";
 import { SettingRoom } from "@components/study";
+import { useAsync } from "@hooks";
 
 function CreateRoom() {
   const history = useHistory();
@@ -27,8 +27,7 @@ function CreateRoom() {
   });
 
   useEffect(() => {
-    // 스터디룸을 개설하는 유저에게 방 정보 업데이트 권한을 준다 (추후 삭제)
-    setUserInfo({ ...userInfo, updateAllowed: true });
+    setUserInfo({ ...userInfo, updateAllowed: true }); // @TODO 방장 권한 부여
   }, []);
 
   return (
