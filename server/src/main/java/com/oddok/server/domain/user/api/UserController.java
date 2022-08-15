@@ -27,6 +27,13 @@ public class UserController {
     private final UserService userService;
     private final UserDtoMapper userDtoMapper = Mappers.getMapper(UserDtoMapper.class);
 
+    @GetMapping("/info")
+    public ResponseEntity<GetUserResponse> getUserInfo(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(userDtoMapper.toUserResponse(
+                userService.getUserInfo(user.getId())
+        ));
+    }
+
     @PatchMapping("/nickname")
     public ResponseEntity<ChangeNicknameResponse> changeNickname(@AuthenticationPrincipal User user,
                                                                  @RequestBody @Valid ChangeNicknameRequest changeNicknameRequest) {
