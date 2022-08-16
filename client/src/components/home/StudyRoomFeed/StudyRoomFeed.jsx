@@ -20,10 +20,10 @@ function StudyRoomList({ tagFilter }) {
       const rooms = await getStudyRoomList(params, page);
       if (rooms.length < 16) setIsLastPage(true);
       onSuccess(rooms);
-      setLoading(false);
     } catch (e) {
-      setLoading(false);
       console.error(e);
+    } finally {
+      setLoading(false);
     }
   }, []);
 
