@@ -1,63 +1,44 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { getStudyRoomList } from "@api/study-room-api";
 import { Dropdown } from "@components/commons";
+import { TabMenu, FeedGrid } from "@components/home";
 import { ArrowDown } from "@icons";
+import { useSearchParams } from "@hooks";
 import { STUDY_FILTER_OPTIONS, STUDY_SORT_OPTIONS } from "@utils/constants/options";
-import TabMenu from "../TabMenu/TabMenu";
-import FeedGrid from "../FeedGrid/FeedGrid";
 import styles from "./StudyRoomFeed.module.css";
 
-function StudyRoomList({ searchedTitle, searchedHashtag, tagFilter }) {
-  const [currentPage, setCurrentPage] = useState(0);
-  const [currentCategory, setCurrentCategory] = useState(undefined);
-  const [filterOpt, setFilterOpt] = useState(undefined);
-  const [sortOpt, setSortOpt] = useState(undefined);
+function StudyRoomList({ tagFilter }) {
+  const { searchParams, setSearchParams } = useSearchParams();
+  const [loadedStudyRooms, setLoadedStudyRooms] = useState([]);
+  const [nextPage, setNextPage] = useState(1);
   const [isLastPage, setIsLastPage] = useState(false);
-  const [loadedRooms, setLoadedRooms] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const fetchRoomData = useCallback(async (page, sort, isPublic, category, name, hashtag) => {
-    const rooms = await getStudyRoomList(page, sort, isPublic, category, name, hashtag);
-    return rooms;
+  const fetchStudyRoomlist = useCallback(async (params, page, onSuccess) => {
+    try {
+      setLoading(true);
+      const rooms = await getStudyRoomList(params, page);
+      if (rooms.length < 16) setIsLastPage(true);
+      onSuccess(rooms);
+      setLoading(false);
+    } catch (e) {
+      setLoading(false);
+      console.error(e);
+    }
   }, []);
 
   useEffect(() => {
-    (async () => {
-      setIsLoading(true);
-      const rooms = await fetchRoomData(undefined, sortOpt, filterOpt, currentCategory, searchedTitle, searchedHashtag);
-      setLoadedRooms(rooms);
-      setIsLoading(false);
-    })();
-    setCurrentPage(0);
-  }, [fetchRoomData, sortOpt, filterOpt, currentCategory, searchedTitle, searchedHashtag]);
+    fetchStudyRoomlist(searchParams, null, (rooms) => {
+      setLoadedStudyRooms(rooms);
+      setNextPage(1);
+    });
+  }, [searchParams, fetchStudyRoomlist]);
 
-  const sortRoomHandler = (value) => {
-    setSortOpt(value);
-  };
-
-  const filterRoomHandler = (value) => {
-    setFilterOpt(value);
-  };
-
-  // 더보기
-  const clickMoreBtn = async () => {
-    setIsLoading(true);
-    const rooms = await fetchRoomData(
-      currentPage + 1,
-      sortOpt,
-      filterOpt,
-      currentCategory,
-      searchedTitle,
-      searchedHashtag,
-    );
-    setIsLoading(false);
-    // 더이상 가져올 데이터가 없으면 더보기 버튼을 없앤다
-    if (rooms.length === 0) {
-      setIsLastPage(true);
-      return;
-    }
-    setLoadedRooms((prev) => [...prev, ...rooms]);
-    setCurrentPage((prev) => prev + 1);
+  const clickMoreBtn = () => {
+    fetchStudyRoomlist(searchParams, nextPage, (rooms) => {
+      setLoadedStudyRooms((prev) => [...prev, ...rooms]);
+      setNextPage((prev) => prev + 1);
+    });
   };
 
   const isFiltered = (hashtags) => {
@@ -74,20 +55,31 @@ function StudyRoomList({ searchedTitle, searchedHashtag, tagFilter }) {
     <div className={styles.container}>
       <div className={styles.studyroom_head}>
         <div className={styles.tab_menu}>
-          <TabMenu setCurrentCategory={setCurrentCategory} />
+          <TabMenu
+            defaultValue={searchParams.get("category")}
+            setCurrentCategory={(value) => setSearchParams("category", value)}
+          />
         </div>
         <div className={styles.filter}>
-          <Dropdown options={STUDY_FILTER_OPTIONS} onSelect={filterRoomHandler} />
-          <Dropdown options={STUDY_SORT_OPTIONS} onSelect={sortRoomHandler} />
+          <Dropdown
+            options={STUDY_FILTER_OPTIONS}
+            defaultValue={searchParams.get("isPublic")}
+            onSelect={(value) => setSearchParams("isPublic", value)}
+          />
+          <Dropdown
+            options={STUDY_SORT_OPTIONS}
+            defaultValue={searchParams.get("sort")}
+            onSelect={(value) => setSearchParams("sort", value)}
+          />
         </div>
       </div>
       <div className={styles.studyroom_list}>
         <FeedGrid
-          isLoading={isLoading}
-          rooms={tagFilter?.size > 0 ? loadedRooms.filter((room) => isFiltered(room.hashtags)) : loadedRooms}
+          isLoading={loading}
+          rooms={tagFilter?.size > 0 ? loadedStudyRooms.filter((room) => isFiltered(room.hashtags)) : loadedStudyRooms}
         />
       </div>
-      {loadedRooms.length > 0 && !isLastPage && (
+      {loadedStudyRooms.length > 0 && !isLastPage && (
         <button className={styles.more_btn} type="button" onClick={clickMoreBtn}>
           <span>더보기</span>
           <div className={styles.icon}>

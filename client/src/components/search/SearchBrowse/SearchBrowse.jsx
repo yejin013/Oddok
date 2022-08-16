@@ -1,20 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { getPopluarHashtag } from "@api/hashtag-api";
+import { useSearchParams } from "@hooks";
 import { HashtagList } from "..";
 import styles from "./SearchBrowse.module.css";
 
-function SearchBrowse({ searchHashtagHandler, searchKeywordHandler }) {
-  const [popularHashtags, setPopularHashtags] = useState([]);
+function SearchBrowse() {
+  const { setSearchParams } = useSearchParams();
   const [searchHistory, setSearchHistory] = useState([]); // {key: 생성시간, text: 검색어}
 
   // 인기 해시태그, 검색 기록 렌더링
   useEffect(() => {
-    getPopluarHashtag().then((response) => setPopularHashtags(response.data.hashtags));
     const keywords = JSON.parse(localStorage.getItem("keywords"));
     if (keywords) {
       setSearchHistory(keywords);
     }
   }, []);
+
+  // 인기 해시태그 클릭으로 검색
+  const searchHashtagHandler = (e) => {
+    setSearchParams("hashtag", e.target.value, "/search/studyroom");
+  };
+
+  // 검색기록으로 타이틀 검색
+  const searchKeywordHandler = (text) => {
+    setSearchParams("title", text, "/search/studyroom");
+  };
 
   // 검색기록 전체 삭제
   const removeAllHandler = () => {
@@ -35,7 +44,7 @@ function SearchBrowse({ searchHashtagHandler, searchKeywordHandler }) {
     <div className={styles.container}>
       <div className={styles.tag_list}>
         <h3>인기 태그</h3>
-        {popularHashtags.length > 0 && <HashtagList hashtagList={popularHashtags} onToggle={searchHashtagHandler} />}
+        <HashtagList onToggle={searchHashtagHandler} />
       </div>
       <div className={styles.search_history}>
         <div className={styles.head}>
