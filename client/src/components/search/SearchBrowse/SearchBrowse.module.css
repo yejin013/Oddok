@@ -4,29 +4,7 @@
   gap: 50px;
 }
 
-.head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-weight: 600;
-}
-
-.search_history button {
-  font-size: 0.875rem;
-  padding: 0;
-}
-
-.search_history button:hover {
-  color: rgba(200, 200, 200);
-}
-
-.content li {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.875rem;
-  margin-bottom: 12px;
-}
-
-.content span:hover {
-  color: rgba(200, 200, 200);
+.container h3 {
+  margin: 12px 0;
+  font-size: 1rem;
 }
