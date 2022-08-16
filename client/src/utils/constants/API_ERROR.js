@@ -1,4 +1,4 @@
-export const MESSAGE = {
+export const STUDY_MESSAGE = {
   CREATE_STUDY_ROOM: {
     403: "이미 개설한 스터디가 있어 요청이 실패했습니다.\n기존 스터디룸을 삭제하고 다시 시도해주세요.",
   },
@@ -22,6 +22,14 @@ export const OPENVIDU_MESSAGE = {
   },
 };
 
-export const ACTION = {
-  // LoginError: { text: "다시 로그인하기", path: "/login" },
+export const AUTH_ERROR = {
+  LOGIN: {
+    message: "로그인에 실패했습니다. 다시 시도해주시기 바랍니다.",
+    action: { text: "다시 로그인하기", path: "/login" },
+  },
+  LOGOUT: "로그아웃에 실패했습니다. 다시 시도해주시기 바랍니다.",
+  DELETE_ACCOUNT: {
+    message: "계정 삭제에 실패했습니다. 다시 시도해주시기 바랍니다.",
+    action: { text: "확인", path: "/mypage" },
+  },
 };

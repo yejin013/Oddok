@@ -5,7 +5,7 @@ import { userState } from "@recoil/user-state";
 import { Search, Profile } from "@icons";
 import { getNickname } from "@api/user-api";
 import { NicknameEditModal } from "@components/commons";
-import { KAKAO_LOGOUT_URL } from "@api/kakao";
+import { KAKAO_LOGOUT_URL } from "@api/auth/kakao";
 import useOutSideClick from "@hooks/useOutSideClick";
 import useModal from "@hooks/useModal";
 import styles from "./Header.module.css";

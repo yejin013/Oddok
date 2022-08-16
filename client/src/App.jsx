@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
-import { userState } from "@recoil/user-state";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import React from "react";
+import { BrowserRouter, Switch } from "react-router-dom";
 import CreateRoom from "@pages/CreateRoom";
 import JoinRoom from "@pages/JoinRoom";
 import MainHome from "@pages/MainHome/MainHome";
@@ -12,27 +10,13 @@ import StudyRoom from "@pages/StudyRoom/StudyRoom";
 import NotFoundPage from "@pages/NotFoundPage/NotFoundPage";
 import RedirectPage from "@pages/Login/RedirectPage";
 import LogoutRedirectPage from "@pages/LogoutRedirectPage/LogoutRedirectPage";
-import { getNewToken } from "@api/auth-api";
-import { Loading, ErrorModal } from "@components/commons";
+import { ErrorModal } from "@components/commons";
 import { PrivateRoute, PublicRoute } from "@components/router";
+import styles from "./App.module.css";
 
 function App() {
-  const user = useRecoilValue(userState);
-  const [isLoading, setIsLoading] = useState(false);
-
-  // 새로고침했을 때도 로그인 상태 계속 유지
-  useEffect(async () => {
-    if (!user.isLogin) {
-      return;
-    }
-    setIsLoading(true);
-    await getNewToken();
-    setIsLoading(false);
-  }, []);
-
   return (
-    <>
-      {isLoading && <Loading />}
+    <div className={styles.app}>
       <BrowserRouter>
         <ErrorModal />
         <Switch>
@@ -48,7 +32,7 @@ function App() {
           <PublicRoute path="*" component={NotFoundPage} />
         </Switch>
       </BrowserRouter>
-    </>
+    </div>
   );
 }
 

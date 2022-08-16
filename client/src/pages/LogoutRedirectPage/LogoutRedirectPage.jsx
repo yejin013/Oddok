@@ -1,38 +1,26 @@
-import React, { useEffect } from "react";
-import { useHistory } from "react-router-dom";
-import { logout } from "@api/auth-api";
-import { useRecoilState } from "recoil";
+import React from "react";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { userState } from "@recoil/user-state";
-import { Loading, Modal } from "@components/commons";
+import { errorState } from "@recoil/error-state";
+import { logout } from "@api/auth/auth-api";
+import { Loading } from "@components/commons";
 import { useAsync } from "@hooks";
 
 function LogoutRedirectPage() {
-  const history = useHistory();
   const [user, setUserState] = useRecoilState(userState);
-  const { loading: isLoading, error: isError, request: onLogout } = useAsync({ requestFn: logout });
+  const setError = useSetRecoilState(errorState);
 
-  useEffect(() => {
-    onLogout()
-      .then(() => {
-        localStorage.setItem("isLogin", false);
-        setUserState({ ...user, isLogin: JSON.parse(localStorage.getItem("isLogin")), nickname: null });
-      })
-      .catch((error) => console.error(error));
-  }, []);
+  const { loading: isLoading } = useAsync({
+    requestFn: logout,
+    skip: false,
+    onSuccess: () => {
+      localStorage.setItem("isLogin", false);
+      setUserState({ ...user, isLogin: JSON.parse(localStorage.getItem("isLogin")) });
+    },
+    onError: (error) => setError(error),
+  });
 
-  return (
-    <>
-      {isLoading && <Loading />}
-      {isError && (
-        <Modal
-          title="로그아웃 실패"
-          content="로그아웃에 실패하였습니다. 다시 시도해주시기 바랍니다."
-          onClose={() => history.push("/")}
-          onAction={{ text: "메인으로 돌아가기", action: () => history.push("/") }}
-        />
-      )}
-    </>
-  );
+  return <div>{isLoading && <Loading />}</div>;
 }
 
 export default LogoutRedirectPage;

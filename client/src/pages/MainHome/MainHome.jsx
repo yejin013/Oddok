@@ -23,7 +23,7 @@ function MainHome() {
   return (
     <Layout>
       <main className={styles.main}>
-        {!bookmark ? <TotalParticipant /> : <Bookmark />}
+        {!bookmark ? <TotalParticipant /> : <Bookmark bookmark={bookmark} />}
         <section className={styles.studyroom_list}>
           <h2>STUDY ROOM</h2>
           <StudyRoomFeed />

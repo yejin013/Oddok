@@ -30,6 +30,7 @@ function useAsync({ requestFn, deps = [], skip = true, onSuccess, onError }) {
     if (!skip) {
       request();
     }
+    return () => reset();
   }, deps);
 
   return { ...state, request, reset };
