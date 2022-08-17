@@ -9,13 +9,13 @@ function SearchResult() {
   const [selectedHashtag, setSelectedHashtag] = useState(new Set());
 
   const selectTagFilters = (e) => {
-    const set = new Set(selectedHashtag);
-    if (!e.target.checked) {
-      set.delete(e.target.value);
-    } else {
-      set.add(e.target.value);
-    }
-    setSelectedHashtag(set);
+    if (e.target.checked) setSelectedHashtag((prev) => new Set(prev).add(e.target.value));
+    else
+      setSelectedHashtag((prev) => {
+        const next = new Set(prev);
+        next.delete(e.target.value);
+        return next;
+      });
   };
 
   return (
@@ -25,9 +25,7 @@ function SearchResult() {
         <h3>태그 필터</h3>
         <HashtagList onToggle={selectTagFilters} />
       </div>
-      <div>
-        <StudyRoomFeed tagFilter={selectedHashtag} />
-      </div>
+      <StudyRoomFeed tagFilter={selectedHashtag} />
     </div>
   );
 }
