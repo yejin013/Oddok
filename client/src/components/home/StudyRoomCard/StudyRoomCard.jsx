@@ -11,10 +11,10 @@ import useModal from "@hooks/useModal";
 import styles from "./StudyRoomCard.module.css";
 
 function StudyRoomCard({ roomData }) {
+  const history = useHistory();
   const user = useRecoilValue(userState);
   const [bookmark, setBookmark] = useRecoilState(bookmarkState);
   const { isModal, openModal, closeModal } = useModal();
-  const history = useHistory();
 
   const onStudyRoomClick = () => {
     if (!user.isLogin) {
@@ -51,7 +51,7 @@ function StudyRoomCard({ roomData }) {
       {isModal && <PasswordModal roomId={roomData.id} onClose={closeModal} />}
       <li className={styles.wrapper} onClick={onStudyRoomClick}>
         <Thumbnail>
-          {!(bookmark && roomData.id === bookmark.id) ? (
+          {bookmark?.id !== roomData.id ? (
             <button type="button" className={styles.bookmark_btn} onClick={onBookmarkAddBtnClick}>
               <BookMark />
             </button>
