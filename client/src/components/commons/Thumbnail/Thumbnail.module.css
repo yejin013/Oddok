@@ -1,5 +1,8 @@
-.image_box {
+.wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  padding: 10px 30px;
+  background-color: var(--gray900);
 }
