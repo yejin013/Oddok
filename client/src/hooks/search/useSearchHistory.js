@@ -1,12 +1,9 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 
 const useSearchHistory = () => {
   const [history, setHistory] = useState([]);
 
-  const getHistory = useCallback(
-    () => (localStorage.getItem("keywords") ? JSON.parse(localStorage.getItem("keywords")) : []),
-    [],
-  );
+  const getHistory = () => (localStorage.getItem("keywords") ? JSON.parse(localStorage.getItem("keywords")) : []);
 
   const addHistory = (text) => {
     const newItem = { key: new Date(), text };

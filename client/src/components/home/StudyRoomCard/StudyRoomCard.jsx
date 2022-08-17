@@ -49,31 +49,28 @@ function StudyRoomCard({ roomData }) {
   return (
     <>
       {isModal && <PasswordModal roomId={roomData.id} onClose={closeModal} />}
-      <li className={styles.card} onClick={onStudyRoomClick}>
-        <div className={styles.thumbnail_box}>
-          <Thumbnail />
+      <li className={styles.wrapper} onClick={onStudyRoomClick}>
+        <Thumbnail>
           {!(bookmark && roomData.id === bookmark.id) ? (
-            <button type="button" className={styles.bookmark_icon} onClick={onBookmarkAddBtnClick}>
+            <button type="button" className={styles.bookmark_btn} onClick={onBookmarkAddBtnClick}>
               <BookMark />
             </button>
           ) : (
-            <button type="button" className={styles.bookmark_icon} onClick={onBookmarkDeleteBtnClick}>
+            <button type="button" className={styles.bookmark_btn} onClick={onBookmarkDeleteBtnClick}>
               <BookMarkHeart />
             </button>
           )}
-          <div className={styles.user_count}>
-            <div className={styles.count_icon}>
-              <UserCount number={roomData.currentUsers} />
-            </div>
+          <div className={styles.user_icon}>
+            <UserCount number={roomData.currentUsers} />
             <span>/ {roomData.limitUsers}</span>
           </div>
-        </div>
-        <div className={styles.content_box}>
-          <div className={styles.content_head}>
-            <span className={styles.title}>{roomData.name}</span>
-            <div className={styles.lock_icon}>{roomData.isPublic ? <Unlock /> : <Lock />}</div>
+        </Thumbnail>
+        <div className={styles.description}>
+          <div className={styles.title}>
+            <span className={styles.ellipsis}>{roomData.name}</span>
+            {roomData.isPublic ? <Unlock /> : <Lock />}
           </div>
-          <div>
+          <div className={styles.ellipsis}>
             {roomData.hashtags.map((hashtag) => (
               <span key={hashtag}>#{hashtag} </span>
             ))}

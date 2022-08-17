@@ -1,17 +1,11 @@
-.card {
+.wrapper {
   display: flex;
   flex-direction: column;
   gap: 16px;
   cursor: pointer;
 }
 
-.thumbnail_box {
-  background-color: var(--gray900);
-  position: relative;
-  padding: 10px 30px;
-}
-
-.bookmark_icon {
+.bookmark_btn {
   position: absolute;
   top: 16px;
   left: 16px;
@@ -20,52 +14,49 @@
   z-index: 100px;
 }
 
-.user_count {
-  position: absolute;
+.user_icon {
   display: flex;
   align-items: baseline;
+  position: absolute;
   bottom: 20px;
   right: 20px;
   height: 11%;
+  gap: 5px;
 }
 
-.count_icon {
-  height: 100%;
-  gap: 6px;
-}
-
-.user_count span {
+.user_icon > span {
   font-size: 0.8rem;
   color: var(--gray300);
-  margin-left: 6px;
+  margin-left: 3px;
 }
 
-.content_box {
+.description {
   display: flex;
   flex-direction: column;
+  gap: 4px;
   font-size: 0.875rem;
 }
 
-.content_box div {
+.title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.title > span {
+  max-width: calc(100% - (1rem + 6px));
+}
+
+.title > svg {
+  width: 1rem;
+  height: 1rem;
+  color: var(--gray700);
+}
+
+.ellipsis {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.content_head {
-  display: flex;
-  align-items: center;
-  margin-bottom: 4px;
-}
-
-.content_box .title {
-  font-size: 1.125rem;
-  font-weight: 600;
-  margin-right: 10px;
-}
-
-.lock_icon {
-  color: var(--gray700);
-  height: 18px;
-  min-width: 18px;
 }
