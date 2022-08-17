@@ -41,16 +41,6 @@ function StudyRoomList({ tagFilter }) {
     });
   };
 
-  const isFiltered = (hashtags) => {
-    // eslint-disable-next-line no-restricted-syntax
-    for (const e of [...tagFilter]) {
-      if (!hashtags.includes(e)) {
-        return false;
-      }
-    }
-    return true;
-  };
-
   return (
     <div className={styles.container}>
       <div className={styles.studyroom_head}>
@@ -76,7 +66,11 @@ function StudyRoomList({ tagFilter }) {
       <div className={styles.studyroom_list}>
         <FeedGrid
           isLoading={loading}
-          rooms={tagFilter?.size > 0 ? loadedStudyRooms.filter((room) => isFiltered(room.hashtags)) : loadedStudyRooms}
+          rooms={
+            tagFilter?.size > 0
+              ? loadedStudyRooms.filter(({ hashtags }) => hashtags.some((e) => [...tagFilter].includes(e)))
+              : loadedStudyRooms
+          }
         />
       </div>
       {loadedStudyRooms.length > 0 && !isLastPage && (
