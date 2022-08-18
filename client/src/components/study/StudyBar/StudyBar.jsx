@@ -11,12 +11,12 @@ function StudyBar({ toggleVideo, toggleAudio, videoActive, audioActive, clickSid
   return (
     <section className={styles.bar}>
       <div className={styles.info}>
-        <button type="button">
-          <Setting onClick={() => clickSideBarBtn("SETTING")} />
+        <button type="button" onClick={() => clickSideBarBtn("SETTING")}>
+          <Setting />
         </button>
         <span>{roomInfo.name}</span>
         <div className={styles.music}>
-          <i className={styles.music_icon}>
+          <i>
             <Music />
           </i>
           <span>소녀시대 - 힘내!</span>

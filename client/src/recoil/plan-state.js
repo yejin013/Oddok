@@ -7,5 +7,5 @@ export const planState = atom({
 
 export const selectedPlanState = atom({
   key: "selectedPlanState",
-  default: {},
+  default: null,
 });

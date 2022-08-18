@@ -30,7 +30,7 @@ function SubjectTime({ onClickplanBtn }) {
   const timeInfo = {
     startTime,
     endTime,
-    subject: selectedPlan.name,
+    subject: selectedPlan?.name,
   };
 
   useEffect(() => {
@@ -99,7 +99,7 @@ function SubjectTime({ onClickplanBtn }) {
       )}
       <div className={styles.plan}>
         <div>
-          <span>{selectedPlan.name || "목표를 입력해주세요"}</span>
+          <span>{selectedPlan?.name ?? "목표를 입력해주세요"}</span>
           <button type="button" onClick={onClickplanBtn}>
             <GoalOpen />
           </button>

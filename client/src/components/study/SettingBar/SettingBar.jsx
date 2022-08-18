@@ -17,7 +17,7 @@ function SettingBar({ goToStudyRoom, toggleVideo, toggleAudio, clickSideBarBtn, 
         <button type="button" onClick={() => clickSideBarBtn("SETTING")}>
           <Setting />
         </button>
-        <span>{roomTitle || "방정보를 입력해주세요"}</span>
+        <span>{roomTitle ?? "방정보를 입력해주세요"}</span>
         <div className={styles.music}>
           <i>
             <Music />
@@ -26,7 +26,7 @@ function SettingBar({ goToStudyRoom, toggleVideo, toggleAudio, clickSideBarBtn, 
         </div>
       </div>
       <div className={styles.goal}>
-        <span>{selectedPlan.name || "목표를 입력해주세요"}</span>
+        <span>{selectedPlan?.name ?? "목표를 입력해주세요"}</span>
         <button type="button" onClick={() => clickSideBarBtn("PLAN")}>
           <GoalOpen />
         </button>
