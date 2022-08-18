@@ -11,7 +11,6 @@ function InputForm() {
   const searchTitleHandler = () => {
     addHistory(titleRef.current.value);
     setSearchParams("title", titleRef.current.value, "/search/studyroom");
-    titleRef.current.value = "";
   };
 
   const { pressEnter } = useInput(titleRef, () => {

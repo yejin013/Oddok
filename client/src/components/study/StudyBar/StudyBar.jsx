@@ -23,7 +23,7 @@ function StudyBar({ toggleVideo, toggleAudio, videoActive, audioActive, clickSid
         </div>
       </div>
       <div className={styles.time}>
-        <SubjectTime onClickplanBtn={() => clickSideBarBtn("PLAN")} />
+        <SubjectTime onPlanBtnClick={() => clickSideBarBtn("PLAN")} />
       </div>
       <ul className={styles.buttons}>
         <li className={styles.video_button}>

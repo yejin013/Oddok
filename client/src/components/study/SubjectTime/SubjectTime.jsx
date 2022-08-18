@@ -8,34 +8,32 @@ import {
   totalHourState,
   totalMinuteState,
   totalSecondState,
-  startTimeState,
-  endTimeState,
+  studyTimeState,
 } from "@recoil/timer-state";
 import { saveTime } from "@api/time-record-api";
 import { Play, Pause, GoalOpen } from "@icons";
 import styles from "./SubjectTime.module.css";
 
-function SubjectTime({ onClickplanBtn }) {
-  const [isRecorded, setIsRecorded] = useState(false);
+function SubjectTime({ onPlanBtnClick }) {
+  const [isRecording, setIsRecording] = useState(false);
   const selectedPlan = useRecoilValue(selectedPlanState);
-  const [startTime, setStartTime] = useRecoilState(startTimeState);
-  const [endTime, setEndTime] = useRecoilState(endTimeState);
   const [hour, setHour] = useRecoilState(hourState);
   const [minute, setMinute] = useRecoilState(minuteState);
   const [second, setSecond] = useRecoilState(secondState);
   const [totalHour, setTotalHour] = useRecoilState(totalHourState);
   const [totalMinute, setTotalMinute] = useRecoilState(totalMinuteState);
   const [totalSecond, setTotalSecond] = useRecoilState(totalSecondState);
+  const [studyTime, setStudyTime] = useRecoilState(studyTimeState);
 
   const timeInfo = {
-    startTime,
-    endTime,
+    startTime: studyTime.start,
+    endTime: studyTime.end,
     subject: selectedPlan?.name,
   };
 
   useEffect(() => {
     let timer;
-    if (isRecorded) {
+    if (isRecording) {
       timer = setInterval(() => {
         /* *목표별 공부시간* */
         if (minute > 59) {
@@ -69,38 +67,44 @@ function SubjectTime({ onClickplanBtn }) {
   });
 
   useEffect(() => {
-    if (endTime != null) {
-      saveTime(timeInfo)
-        .then(() => console.log("시간저장 완료⏱️"))
-        .catch((error) => console.log(`post time-record error!: ${error}`));
+    if (studyTime.end !== null) {
+      saveTime(timeInfo).catch((error) => console.log(error));
     }
-  }, [endTime]);
+  }, [studyTime.end]);
 
-  const getStartTime = () => {
-    setStartTime(new Date());
-    setIsRecorded((prev) => !prev);
+  // 선택한 목표의 시간 기록 중, 다른 목표를 선택하면 기록 중지
+  useEffect(() => {
+    if (!isRecording) {
+      return;
+    }
+    setIsRecording(false);
+  }, [selectedPlan]);
+
+  const saveStartTime = () => {
+    setStudyTime({ ...studyTime, start: new Date() });
+    setIsRecording(true);
   };
 
-  const getEndTime = () => {
-    setEndTime(new Date());
-    setIsRecorded((prev) => !prev);
+  const saveEndTime = () => {
+    setStudyTime({ ...studyTime, end: new Date() });
+    setIsRecording(false);
   };
 
   return (
     <section className={styles.subject_time}>
-      {!isRecorded ? (
-        <button type="button" className={styles.play_button} onClick={getStartTime}>
+      {!isRecording ? (
+        <button type="button" className={styles.play_button} onClick={saveStartTime}>
           <Play />
         </button>
       ) : (
-        <button type="button" className={styles.pause_button} onClick={getEndTime}>
+        <button type="button" className={styles.pause_button} onClick={saveEndTime}>
           <Pause />
         </button>
       )}
       <div className={styles.plan}>
         <div>
           <span>{selectedPlan?.name ?? "목표를 입력해주세요"}</span>
-          <button type="button" onClick={onClickplanBtn}>
+          <button type="button" onClick={onPlanBtnClick}>
             <GoalOpen />
           </button>
         </div>

@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useResetRecoilState } from "recoil";
 import { planState, selectedPlanState } from "@recoil/plan-state";
-import { hourState, minuteState, secondState, startTimeState, endTimeState } from "@recoil/timer-state";
+import { hourState, minuteState, secondState } from "@recoil/timer-state";
 import { Input } from "@components/commons";
 import { useInput } from "@hooks";
 import { SendButton } from "@icons";
@@ -11,20 +11,16 @@ import styles from "./PlanSidebar.module.css";
 function PlanSidebar() {
   const [plans, setPlans] = useRecoilState(planState);
   const [selectedPlan, setSelectedplan] = useRecoilState(selectedPlanState);
-  const setHour = useSetRecoilState(hourState);
-  const setMinute = useSetRecoilState(minuteState);
-  const setSecond = useSetRecoilState(secondState);
-  const setStartTime = useSetRecoilState(startTimeState);
-  const setEndTime = useSetRecoilState(endTimeState);
+  const resetHour = useResetRecoilState(hourState);
+  const resetMinute = useResetRecoilState(minuteState);
+  const resetSecond = useResetRecoilState(secondState);
   const inputRef = useRef();
 
   const selectPlan = (plan) => {
     setSelectedplan(plan);
-    setHour(0);
-    setMinute(0);
-    setSecond(0);
-    setStartTime(null);
-    setEndTime(null);
+    resetHour();
+    resetMinute();
+    resetSecond();
   };
 
   const addPlan = (plan) => {
