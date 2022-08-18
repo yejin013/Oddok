@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useRecoilValue } from "recoil";
 import { userState } from "@recoil/user-state";
 import { Input } from "@components/commons";
+import { useInput } from "@hooks";
 import ChatList from "./ChatList/ChatList";
 import styles from "./ChatSideBar.module.css";
 
@@ -20,8 +21,7 @@ function ChatSideBar({ session, display }) {
     }
   }, [session]);
 
-  const submitChatHandler = (e) => {
-    e.preventDefault();
+  const submitChatHandler = () => {
     if (inputRef.current.value === "") return;
     const content = inputRef.current.value;
     const time = new Date().toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" });
@@ -37,12 +37,12 @@ function ChatSideBar({ session, display }) {
     inputRef.current.value = "";
   };
 
+  const { pressEnter } = useInput(inputRef, submitChatHandler);
+
   return (
     <aside className={`${styles.side} ${!display && styles.hide}`}>
       {display && <ChatList chats={chats} user={user} />}
-      <form onSubmit={submitChatHandler}>
-        <Input placeholder="메시지를 입력하세요" ref={inputRef} isChatBar={isChatBar} />
-      </form>
+      <Input placeholder="메시지를 입력하세요" ref={inputRef} isChatBar={isChatBar} onKeyPress={pressEnter} />
     </aside>
   );
 }

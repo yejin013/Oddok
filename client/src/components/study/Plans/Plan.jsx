@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Dots, Circle, CheckedCircle } from "@icons";
 import { Input } from "@components/commons";
-import useOutSideClick from "@hooks/useOutSideClick";
+import { useOutSideClick, useInput } from "@hooks";
 import styles from "./Plan.module.css";
 
 function Plan({ plan, onPlanClick, onDelete, onEdit, isStudyRoom }) {
@@ -9,10 +9,11 @@ function Plan({ plan, onPlanClick, onDelete, onEdit, isStudyRoom }) {
   const [isEdited, setIsEdited] = useState(false);
   const displayType = isEdited ? styles.hide : "";
   const checkDisplayType = isStudyRoom ? styles.show : styles.hide;
-  const formRef = useRef();
+  const inputRef = useRef();
   const dropdownRef = useRef();
 
   useOutSideClick(dropdownRef, () => setIsClickedBtn(false));
+  const { pressEnter } = useInput(inputRef, () => setIsEdited(false));
 
   // dots button
   const clickBtn = () => {
@@ -45,11 +46,6 @@ function Plan({ plan, onPlanClick, onDelete, onEdit, isStudyRoom }) {
     });
   };
 
-  const submitHandler = (event) => {
-    event.preventDefault();
-    setIsEdited((prev) => !prev);
-  };
-
   return (
     <li className={styles.list}>
       {!plan.isDone ? (
@@ -64,11 +60,7 @@ function Plan({ plan, onPlanClick, onDelete, onEdit, isStudyRoom }) {
       <span type="button" className={`${styles.name} ${displayType}`} onClick={() => onPlanClick(plan)}>
         {plan.name}
       </span>
-      {isEdited && (
-        <form ref={formRef} className={styles.form} onSubmit={submitHandler}>
-          <Input value={plan.name} onChange={changeHandler} />
-        </form>
-      )}
+      {isEdited && <Input value={plan.name} onChange={changeHandler} onKeyPress={pressEnter} />}
       <ul ref={dropdownRef}>
         <li>
           <button type="button" className={styles.dots} onClick={clickBtn}>
