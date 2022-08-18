@@ -2,31 +2,31 @@ import React, { useState } from "react";
 import TabMenuItem from "./TabMenuItem";
 import styles from "./TabMenu.module.css";
 
-const items = [
-  { value: undefined, name: "전체" },
-  { value: "OFFICIAL", name: "공무원" },
-  { value: "SCHOOL", name: "수능/내신" },
-  { value: "CERTIFICATE", name: "자격증" },
-  { value: "EMPLOYEE", name: "취업" },
-  { value: "ETC", name: "개인" },
-];
+const items = {
+  ALL: "전체",
+  OFFICIAL: "공무원",
+  SCHOOL: "수능/내신",
+  CERTIFICATE: "자격증",
+  EMPLOYEE: "취업",
+  ETC: "개인",
+};
 
-function TabMenu({ setCurrentCategory }) {
-  const [current, setCurrent] = useState("전체");
+function TabMenu({ setCurrentCategory, defaultValue }) {
+  const [current, setCurrent] = useState(defaultValue ?? "ALL");
 
-  const filterCategoryHandler = (item) => {
-    setCurrent(item.name);
-    setCurrentCategory(item.value);
+  const filterCategoryHandler = (key) => {
+    setCurrent(key);
+    setCurrentCategory(key === "ALL" ? null : key);
   };
 
   return (
     <nav className={styles.tab_menu}>
-      {items.map((item) => (
+      {Object.entries(items).map(([key, value]) => (
         <TabMenuItem
-          key={item.name}
-          title={item.name}
-          onClick={() => filterCategoryHandler(item)}
-          status={current === item.name ? "active" : ""}
+          key={key}
+          title={value}
+          onClick={() => filterCategoryHandler(key)}
+          status={current === key ? "active" : ""}
         />
       ))}
     </nav>

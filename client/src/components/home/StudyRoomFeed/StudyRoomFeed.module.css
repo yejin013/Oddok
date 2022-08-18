@@ -1,10 +1,9 @@
 .container {
-  color: white;
   display: flex;
   flex-direction: column;
 }
 
-.studyroom_head {
+.head {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -12,34 +11,32 @@
   font-size: 0.75rem;
 }
 
-.studyroom_head .filter {
+.filters {
   display: flex;
 }
 
-.studyroom_head .filter > div:nth-child(1) {
+.filters > div:nth-child(1) {
   width: 150px;
   margin-right: 12px;
 }
 
-.studyroom_head .filter > div:nth-child(2) {
+.filters > div:nth-child(2) {
   width: 110px;
 }
 
-.tab_menu {
+.footer {
+  display: flex;
+  justify-content: center;
+  padding: 40px;
 }
 
-.content {
-  margin-bottom: 53px;
-}
-
-.more_btn {
+.footer button {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 4px;
   color: var(--gray600);
   font-size: 1.125rem;
-  margin: 40px;
 }
 
 .icon {

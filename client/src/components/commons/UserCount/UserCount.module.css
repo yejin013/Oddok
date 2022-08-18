@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   gap: inherit;
-  height: inherit;
+  height: 100%;
   color: var(--primary);
 }
 

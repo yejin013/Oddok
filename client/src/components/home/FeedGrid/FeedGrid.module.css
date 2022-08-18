@@ -5,24 +5,10 @@
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 }
 
-.content a,
-a:visited {
-  text-decoration: none;
-  color: white;
-}
-
 .empty {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 130px 0;
-  color: var(--gray300);
-}
-
-.empty svg {
-  width: 70px;
-}
-
-.empty path {
-  fill: var(--gray300);
+  color: var(--gray600);
 }

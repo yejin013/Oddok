@@ -64,9 +64,16 @@ export const getStudyRoom = async (roomId) => {
   return response;
 };
 
-export const getStudyRoomList = async (page, sort, isPublic, category, name, hashtag) => {
+export const getStudyRoomList = async (searchParams, page) => {
   const response = await axios.get("/study-room", {
-    params: { page, sort, isPublic, category, name, hashtag },
+    params: {
+      sort: searchParams.get("sort"),
+      isPublic: searchParams.get("isPublic"),
+      category: searchParams.get("category"),
+      name: searchParams.get("title"),
+      hashtag: searchParams.get("hashtag"),
+      page,
+    },
   });
   return response.data;
 };

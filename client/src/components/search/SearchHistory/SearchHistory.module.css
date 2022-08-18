@@ -1,0 +1,37 @@
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+}
+
+.head > h3 {
+  margin: 12px 0;
+  font-size: 1rem;
+}
+
+.head > button {
+  padding: 0;
+  font-size: 0.875rem;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 0.875rem;
+}
+
+.item > button {
+  padding: 0;
+  font-size: 1.25rem;
+  line-height: 1.25rem;
+}
+
+.head > button:hover,
+.item > button:hover,
+.item > span:hover {
+  color: rgba(150, 150, 150);
+  cursor: pointer;
+}
