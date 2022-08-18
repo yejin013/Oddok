@@ -4,10 +4,11 @@ import { planState, selectedPlanState } from "@recoil/plan-state";
 import { hourState, minuteState, secondState, startTimeState, endTimeState } from "@recoil/timer-state";
 import { Input } from "@components/commons";
 import { useInput } from "@hooks";
+import { SendButton } from "@icons";
 import Plans from "../Plans/Plans";
 import styles from "./PlanSidebar.module.css";
 
-function PlanSidebar({ isStudyRoom }) {
+function PlanSidebar() {
   const [plans, setPlans] = useRecoilState(planState);
   const [selectedPlan, setSelectedplan] = useRecoilState(selectedPlanState);
   const setHour = useSetRecoilState(hourState);
@@ -15,8 +16,6 @@ function PlanSidebar({ isStudyRoom }) {
   const setSecond = useSetRecoilState(secondState);
   const setStartTime = useSetRecoilState(startTimeState);
   const setEndTime = useSetRecoilState(endTimeState);
-  const isPlanBar = true; // UI위한 변수
-
   const inputRef = useRef();
 
   const selectPlan = (plan) => {
@@ -44,11 +43,9 @@ function PlanSidebar({ isStudyRoom }) {
   const editPlan = (plan) => {
     const updated = [...plans];
     const index = updated.findIndex((item) => item.id === plan.id);
-    if (index !== -1) {
-      updated[index] = plan;
-    }
+    updated[index] = plan;
     setPlans(updated);
-    if (selectedPlan.id === plan.id) {
+    if (selectedPlan?.id === plan.id) {
       setSelectedplan(plan);
     }
   };
@@ -71,15 +68,19 @@ function PlanSidebar({ isStudyRoom }) {
   return (
     <aside className={styles.plan_bar}>
       <div className={styles.plans}>
-        <Plans
+        <Plans //
           plans={plans}
           onPlanClick={selectPlan}
           onDelete={deletePlan}
           onEdit={editPlan}
-          isStudyRoom={isStudyRoom}
         />
       </div>
-      <Input ref={inputRef} isPlanBar={isPlanBar} placeholder="목표를 입력하세요" onKeyPress={pressEnter} />
+      <div className={styles.input_container}>
+        <Input ref={inputRef} placeholder="목표를 입력하세요" onKeyPress={pressEnter} />
+        <button type="submit" className={styles.button} onClick={submitPlan}>
+          <SendButton />
+        </button>
+      </div>
     </aside>
   );
 }

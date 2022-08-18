@@ -20,7 +20,6 @@ function StudyRoom() {
     useManageRemoteUsers();
   const participants = localUser ? [localUser, ...remoteUsers] : [];
   const [deviceStatus, setDeviceStatus] = useRecoilState(deviceState);
-  const isStudyRoom = true; // studyroom에 입장했을 때만 생기는 UI를 위한 변수
   const setRoomInfo = useSetRecoilState(roomInfoState);
   const resetRoomInfo = useResetRecoilState(roomInfoState);
   const { sideBarType, toggleSideBar } = useToggleSideBar();
@@ -91,7 +90,7 @@ function StudyRoom() {
             <UserVideo count={participants.length} user={remoteUser} />
           ))}
         </ul>
-        {sideBarType === "PLAN" && <PlanSidebar isStudyRoom={isStudyRoom} />}
+        {sideBarType === "PLAN" && <PlanSidebar />}
         {sideBarType === "PARTICIPANT" && <ParticipantSideBar participants={participants} />}
         <ChatSideBar session={session} display={sideBarType === "CHATTING"} />
       </section>

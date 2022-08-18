@@ -3,6 +3,7 @@ import { useRecoilValue } from "recoil";
 import { userState } from "@recoil/user-state";
 import { Input } from "@components/commons";
 import { useInput } from "@hooks";
+import { SendButton } from "@icons";
 import ChatList from "./ChatList/ChatList";
 import styles from "./ChatSideBar.module.css";
 
@@ -10,7 +11,6 @@ function ChatSideBar({ session, display }) {
   const user = useRecoilValue(userState);
   const [chats, setChats] = useState([]);
   const inputRef = useRef();
-  const isChatBar = true; // UI위한 변수
 
   useEffect(() => {
     if (session) {
@@ -42,7 +42,12 @@ function ChatSideBar({ session, display }) {
   return (
     <aside className={`${styles.side} ${!display && styles.hide}`}>
       {display && <ChatList chats={chats} user={user} />}
-      <Input placeholder="메시지를 입력하세요" ref={inputRef} isChatBar={isChatBar} onKeyPress={pressEnter} />
+      <div className={styles.input_container}>
+        <Input placeholder="메시지를 입력하세요" ref={inputRef} onKeyPress={pressEnter} />
+        <button type="submit" className={styles.button} onClick={submitChatHandler}>
+          <SendButton />
+        </button>
+      </div>
     </aside>
   );
 }
