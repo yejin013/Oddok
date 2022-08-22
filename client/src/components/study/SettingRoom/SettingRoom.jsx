@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { useSetRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useSetRecoilState, useRecoilValue } from "recoil";
 import { userState } from "@recoil/user-state";
 import { deviceState } from "@recoil/studyroom-state";
+import { planState, selectedPlanState } from "@recoil/plan-state";
 import { SettingBar, SettingForm, SettingSideBar, PlanSidebar, UserVideo } from "@components/study";
 import { useToggleSideBar, useMyStream } from "@hooks";
 import styles from "./SettingRoom.module.css";
@@ -14,6 +15,17 @@ function SettingRoom({ goToStudyRoom }) {
   const { sideBarType, toggleSideBar } = useToggleSideBar();
   const { nickname, updateAllowed } = useRecoilValue(userState);
   const setDeviceStatus = useSetRecoilState(deviceState);
+  const [plans, setPlans] = useRecoilState(planState);
+  const [selectedPlan, setSelectedplan] = useRecoilState(selectedPlanState);
+
+  useEffect(() => {
+    if (plans.length <= 0) return;
+
+    setPlans([]);
+    if (selectedPlan) {
+      setSelectedplan(null);
+    }
+  }, []);
 
   return (
     <div className={styles.layout}>

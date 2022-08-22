@@ -3,6 +3,16 @@ import { useHistory, useParams } from "react-router-dom";
 import { useRecoilState, useSetRecoilState, useResetRecoilState } from "recoil";
 import { roomInfoState, deviceState } from "@recoil/studyroom-state";
 import { errorState } from "@recoil/error-state";
+import { planState, selectedPlanState } from "@recoil/plan-state";
+import {
+  hourState,
+  minuteState,
+  secondState,
+  totalHourState,
+  totalMinuteState,
+  totalSecondState,
+  studyTimeState,
+} from "@recoil/timer-state";
 import { leaveStudyRoom } from "@api/study-room-api";
 import { initSession, connectToSession, connectDevice, initPublisher } from "@api/openvidu-api";
 import { StudyBar, UserVideo, SettingSideBar, ChatSideBar, PlanSidebar, ParticipantSideBar } from "@components/study";
@@ -20,17 +30,38 @@ function StudyRoom() {
     useManageRemoteUsers();
   const participants = localUser ? [localUser, ...remoteUsers] : [];
   const [deviceStatus, setDeviceStatus] = useRecoilState(deviceState);
-  const isStudyRoom = true; // studyroom에 입장했을 때만 생기는 UI를 위한 변수
   const setRoomInfo = useSetRecoilState(roomInfoState);
   const resetRoomInfo = useResetRecoilState(roomInfoState);
+  const resetHour = useResetRecoilState(hourState);
+  const resetMinute = useResetRecoilState(minuteState);
+  const resetSecond = useResetRecoilState(secondState);
+  const resetTotalHour = useResetRecoilState(totalHourState);
+  const resetTotalMinute = useResetRecoilState(totalMinuteState);
+  const resetTotalSecond = useResetRecoilState(totalSecondState);
+  const resetStudyTime = useResetRecoilState(studyTimeState);
+  const resetPlan = useResetRecoilState(planState);
+  const resetSelectedPlan = useResetRecoilState(selectedPlanState);
   const { sideBarType, toggleSideBar } = useToggleSideBar();
   const { isModal: isLeaveModal, openModal: openLeaveModal, closeModal } = useModal();
   const setError = useSetRecoilState(errorState);
 
+  const resetState = () => {
+    resetRoomInfo();
+    resetHour();
+    resetMinute();
+    resetSecond();
+    resetTotalHour();
+    resetTotalMinute();
+    resetTotalSecond();
+    resetStudyTime();
+    resetPlan();
+    resetSelectedPlan();
+  };
+
   const leaveRoom = async () => {
     await leaveStudyRoom(roomId);
     session.disconnect();
-    resetRoomInfo();
+    resetState();
     history.push({
       pathname: "/",
     });
@@ -91,7 +122,7 @@ function StudyRoom() {
             <UserVideo count={participants.length} user={remoteUser} />
           ))}
         </ul>
-        {sideBarType === "PLAN" && <PlanSidebar isStudyRoom={isStudyRoom} />}
+        {sideBarType === "PLAN" && <PlanSidebar />}
         {sideBarType === "PARTICIPANT" && <ParticipantSideBar participants={participants} />}
         <ChatSideBar session={session} display={sideBarType === "CHATTING"} />
       </section>

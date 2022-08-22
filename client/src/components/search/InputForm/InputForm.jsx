@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { Input } from "@components/commons";
-import { useSearchParams, useSearchHistory } from "@hooks";
+import { useSearchParams, useSearchHistory, useInput } from "@hooks";
 import styles from "./InputForm.module.css";
 
 function InputForm() {
@@ -8,18 +8,19 @@ function InputForm() {
   const { setSearchParams } = useSearchParams();
   const { addHistory } = useSearchHistory();
 
-  const searchTitleHandler = (e) => {
-    e.preventDefault();
+  const searchTitleHandler = () => {
     addHistory(titleRef.current.value);
     setSearchParams("title", titleRef.current.value, "/search/studyroom");
-    titleRef.current.value = "";
   };
+
+  const { pressEnter } = useInput(titleRef, () => {
+    searchTitleHandler();
+    titleRef.current.blur();
+  });
 
   return (
     <div className={styles.wrapper}>
-      <form onSubmit={searchTitleHandler}>
-        <Input ref={titleRef} />
-      </form>
+      <Input ref={titleRef} onKeyPress={pressEnter} />
     </div>
   );
 }

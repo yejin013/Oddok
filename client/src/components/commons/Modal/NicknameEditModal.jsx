@@ -1,8 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { Modal, Input } from "@components/commons";
 import { editNickname } from "@api/user-api";
 import { useRecoilState } from "recoil";
 import { userState } from "@recoil/user-state";
+import { useInput } from "@hooks";
 import styles from "./NicknameEditModal.module.css";
 
 function NicknameEditModal({ onClose }) {
@@ -10,12 +11,6 @@ function NicknameEditModal({ onClose }) {
   const [nickname, setNickname] = useState(user.nickname);
   const inputRef = useRef();
   const [isDisabled, setIsDisabled] = useState(false);
-
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, []);
 
   const onChange = (event) => {
     event.preventDefault();
@@ -32,20 +27,19 @@ function NicknameEditModal({ onClose }) {
     setUserState((prev) => ({ ...prev, nickname: response.nickname }));
   };
 
-  const onKeyPress = (event) => {
-    if (isDisabled) {
-      return;
-    }
-    if (event.key === "Enter") {
+  const { pressEnter } = useInput(
+    inputRef,
+    () => {
       changeNickname(nickname);
       onClose();
-    }
-  };
+    },
+    isDisabled,
+  );
 
   const content = (
     <label htmlFor="nickname">
       <p className={styles.content}>닉네임</p>
-      <Input ref={inputRef} value={nickname} maxLength="8" onChange={onChange} onKeyPress={onKeyPress} />
+      <Input ref={inputRef} value={nickname} maxLength="8" onChange={onChange} onKeyPress={pressEnter} />
     </label>
   );
 

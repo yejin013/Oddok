@@ -1,27 +1,25 @@
 import React, { useRef, useState } from "react";
 import { Dots, Circle, CheckedCircle } from "@icons";
 import { Input } from "@components/commons";
-import useOutSideClick from "@hooks/useOutSideClick";
+import { useOutSideClick, useInput } from "@hooks";
 import styles from "./Plan.module.css";
 
-function Plan({ plan, onPlanClick, onDelete, onEdit, isStudyRoom }) {
-  const [isClickedBtn, setIsClickedBtn] = useState(false);
-  const [isEdited, setIsEdited] = useState(false);
-  const displayType = isEdited ? styles.hide : "";
-  const checkDisplayType = isStudyRoom ? styles.show : styles.hide;
-  const formRef = useRef();
+function Plan({ plan, onPlanClick, onDelete, onEdit }) {
+  const { name, isDone } = plan;
+  const [isDropdown, setIsDropdown] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const inputRef = useRef();
   const dropdownRef = useRef();
 
-  useOutSideClick(dropdownRef, () => setIsClickedBtn(false));
+  useOutSideClick(dropdownRef, () => setIsDropdown(false));
+  const { pressEnter } = useInput(inputRef, () => setIsEditing(false));
 
-  // dots button
-  const clickBtn = () => {
-    setIsClickedBtn((prev) => !prev);
+  const clickDotsBtn = () => {
+    setIsDropdown((prev) => !prev);
   };
 
-  const clickCheckBtn = async () => {
-    const isDone = !plan.isDone;
-    onEdit({ ...plan, isDone });
+  const clickCheckBtn = () => {
+    onEdit({ ...plan, isDone: !isDone });
   };
 
   const clickDeleteBtn = () => {
@@ -29,11 +27,11 @@ function Plan({ plan, onPlanClick, onDelete, onEdit, isStudyRoom }) {
   };
 
   const clickEditBtn = () => {
-    setIsEdited((prev) => !prev);
-    setIsClickedBtn((prev) => !prev); // edit input 나오면 옵션버튼 자동으로 사라짐
+    setIsEditing((prev) => !prev);
+    setIsDropdown(false);
   };
 
-  const changeHandler = (event) => {
+  const onChange = (event) => {
     if (event.currentTarget == null) {
       // undifined를 구분하기 위해 == 사용
       return;
@@ -45,41 +43,35 @@ function Plan({ plan, onPlanClick, onDelete, onEdit, isStudyRoom }) {
     });
   };
 
-  const submitHandler = (event) => {
-    event.preventDefault();
-    setIsEdited((prev) => !prev);
-  };
-
   return (
     <li className={styles.list}>
-      {!plan.isDone ? (
-        <button type="button" onClick={clickCheckBtn} className={`${styles.check} ${checkDisplayType}`}>
+      {!isDone ? (
+        <button type="button" onClick={clickCheckBtn} className={styles.check}>
           <Circle />
         </button>
       ) : (
-        <button type="button" onClick={clickCheckBtn} className={`${styles.check} ${checkDisplayType}`}>
+        <button type="button" onClick={clickCheckBtn} className={styles.check}>
           <CheckedCircle />
         </button>
       )}
-      <span type="button" className={`${styles.name} ${displayType}`} onClick={() => onPlanClick(plan)}>
-        {plan.name}
-      </span>
-      {isEdited && (
-        <form ref={formRef} className={styles.form} onSubmit={submitHandler}>
-          <Input value={plan.name} onChange={changeHandler} />
-        </form>
+      {!isEditing ? (
+        <span type="button" className={styles.name} onClick={() => onPlanClick(plan)}>
+          {name}
+        </span>
+      ) : (
+        <Input ref={inputRef} value={name} onChange={onChange} onKeyPress={pressEnter} />
       )}
       <ul ref={dropdownRef}>
         <li>
-          <button type="button" className={styles.dots} onClick={clickBtn}>
+          <button type="button" className={styles.dots} onClick={clickDotsBtn}>
             <Dots />
           </button>
         </li>
-        {isClickedBtn && (
+        {isDropdown && (
           <ul className={styles.buttons}>
             <li>
               <button type="button" className={styles.edit_button} onClick={clickEditBtn}>
-                수정
+                {!isEditing ? "수정" : "수정 완료"}
               </button>
             </li>
             <li>
