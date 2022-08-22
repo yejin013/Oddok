@@ -1,6 +1,5 @@
 .study_history {
   width: 100%;
-  margin-bottom: 2rem;
   color: white;
 }
 
@@ -22,6 +21,7 @@
 
 .contents {
   display: flex;
+  margin-bottom: 60px;
 }
 
 .box {

@@ -14,14 +14,23 @@
 }
 
 .contents {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
   margin-bottom: 60px;
 }
 
-.no_content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100px;
+.nickname {
+  margin: 28px 16px;
+  font-size: var(--text-xl);
+  font-weight: var(--font-medium);
+}
+
+.delete_btn {
+  margin: 22px 53px;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  background-color: var(--gray900);
   color: var(--gray600);
-  font-size: var(--text-xs);
 }

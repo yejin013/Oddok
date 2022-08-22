@@ -3,8 +3,7 @@ import { updateStudyRoom } from "@api/study-room-api";
 import { deleteStudyRoom } from "@api/mypage-api";
 import { Modal } from "@components/commons";
 import { SettingForm } from "@components/study";
-import { MyRoom } from "@components/mypage";
-import EditButton from "../EditButton/EditButton";
+import { Room, EditButton } from "@components/mypage";
 import styles from "./MyRoomEditModal.module.css";
 
 function MyRoomEditModal({ roomData, onClose, refetch }) {
@@ -41,7 +40,7 @@ function MyRoomEditModal({ roomData, onClose, refetch }) {
       <p>생성 스터디룸</p>
       <div className={styles.item}>
         <div>
-          <MyRoom roomData={inputData} />
+          <Room roomData={inputData} />
         </div>
         <div className={styles.buttons}>
           <EditButton onClick={editHandler} />
