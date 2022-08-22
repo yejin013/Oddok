@@ -1,0 +1,66 @@
+.study_history {
+  width: 100%;
+  margin-bottom: 2rem;
+  color: white;
+}
+
+.study_history.share {
+  width: 70%;
+}
+
+.heading {
+  margin-bottom: 24px;
+  font-weight: var(--font-semibold);
+  font-size: var(--text-2xl);
+}
+
+.sub_heading {
+  margin-bottom: 8px;
+  color: var(--gray600);
+  font-size: var(--text-sm);
+}
+
+.contents {
+  display: flex;
+}
+
+.box {
+  flex: 40%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.box.share {
+  flex: 1;
+}
+
+.date_box .content {
+  margin: 18px 0;
+}
+
+.study_time_box .content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.total_time {
+  font-weight: var(--font-semibold);
+  font-size: var(--text-2xl);
+  line-height: 48px;
+}
+
+.subject_list {
+  width: 100%;
+}
+
+.time_table {
+  flex: 60%;
+  padding: 0 3rem;
+}
+
+.time_table.share {
+  flex: 1;
+}

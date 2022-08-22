@@ -66,39 +66,6 @@
   font-size: var(--text-3xl);
 }
 
-.study_history .contents {
-  display: flex;
-  justify-content: space-around;
-}
-
-.study_history .box {
-  width: 270px;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.date_box .content {
-  margin: 18px 0;
-}
-
-.study_time_box .content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-}
-
-.total_time {
-  font-weight: var(--font-semibold);
-  font-size: var(--text-2xl);
-  line-height: 48px;
-}
-
-.subject_list {
-  width: 100%;
-}
-
 .no_content {
   height: 100px;
   display: flex;

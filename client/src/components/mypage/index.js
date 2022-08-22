@@ -4,6 +4,7 @@ export { default as MyGoalEditModal } from "./EditModal/MyGoalEditModal";
 export { default as MyRoomEditModal } from "./EditModal/MyRoomEditModal";
 export { default as MyRoom } from "./MyRoom/MyRoom";
 export { default as SideNavBar } from "./SideNavBar/SideNavBar";
+export { default as StudyTime } from "./StudyTime/StudyTime";
 export { default as TimeTable } from "./TimeTable/TimeTable";
 export { default as TimeRecordList } from "./TimeRecordList/TimeRecordList";
 export { default as AccountDeleteModal } from "./AccountDeleteModal/AccountDeleteModal";
