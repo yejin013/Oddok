@@ -62,9 +62,14 @@ function StudyRoom() {
     await leaveStudyRoom(roomId);
     session.disconnect();
     resetState();
-    history.push({
-      pathname: "/",
-    });
+    history.replace("/");
+  };
+
+  const goToSharePage = async () => {
+    await leaveStudyRoom(roomId);
+    session.disconnect();
+    resetState();
+    history.replace("/share/study-time");
   };
 
   const startOpenvidu = async () => {
@@ -137,9 +142,10 @@ function StudyRoom() {
       {isLeaveModal && (
         <Modal
           title="스터디 종료"
-          content="정말 나가시겠습니까?"
+          content="정말 스터디방을 나가시겠습니까?"
           onClose={closeModal}
-          onAction={{ text: "나가기", action: leaveRoom }}
+          onSubAction={{ text: "보지 않고 나가기", action: leaveRoom }}
+          onAction={{ text: "시간표 확인", action: goToSharePage }}
         />
       )}
     </div>

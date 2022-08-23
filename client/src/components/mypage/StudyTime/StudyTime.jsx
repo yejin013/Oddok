@@ -39,7 +39,7 @@ function StudyTime() {
   }, [selectedDate]);
 
   return (
-    <section className={`${styles.study_history} ${isSharePage && styles.share}`}>
+    <section className={styles.study_history}>
       <div className={styles.heading}>공부 기록</div>
       <div className={styles.contents}>
         <div className={`${styles.box} ${isSharePage && styles.share}`}>

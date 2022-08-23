@@ -1,6 +1,5 @@
-.share {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: white;
+.share_page {
+  width: 70%;
+  max-width: 1320px;
+  margin: 0 auto;
 }

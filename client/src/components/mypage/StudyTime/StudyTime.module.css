@@ -3,10 +3,6 @@
   color: white;
 }
 
-.study_history.share {
-  width: 70%;
-}
-
 .heading {
   margin-bottom: 24px;
   font-weight: var(--font-semibold);
@@ -58,7 +54,7 @@
 
 .time_table {
   flex: 60%;
-  padding: 0 3rem;
+  padding: 0 2.5rem;
 }
 
 .time_table.share {
