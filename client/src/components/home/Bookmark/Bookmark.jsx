@@ -1,9 +1,8 @@
 /* eslint-disable no-restricted-syntax */
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
 import { PasswordModal, UserCount } from "@components/commons";
 import { Thumbnail } from "@icons";
-import useModal from "@hooks/useModal";
+import { useModal, useGoToPage } from "@hooks";
 import styles from "./Bookmark.module.css";
 
 const initialUsers = [
@@ -16,9 +15,9 @@ const initialUsers = [
 
 function Bookmark({ bookmark }) {
   const { currentUsers, endAt, hashtags, id, isPublic, limitUsers, name, participant, rule } = bookmark;
-  const history = useHistory();
   const [users, setUsers] = useState(initialUsers);
   const { isModal, openModal, closeModal } = useModal();
+  const { goToSetting } = useGoToPage();
 
   // 북마크한 스터디룸의 현재 참여자 리스트
   useEffect(() => {
@@ -41,7 +40,7 @@ function Bookmark({ bookmark }) {
 
   const onStartBtnClick = () => {
     if (isPublic) {
-      history.push(`/studyroom/${id}/setting`);
+      goToSetting(id);
     } else {
       openModal();
     }
