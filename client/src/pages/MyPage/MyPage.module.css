@@ -3,13 +3,6 @@
   gap: 90px;
 }
 
-.side_nav_bar {
-  position: sticky;
-  top: 100px;
-  height: fit-content;
-  width: 170px;
-}
-
 .container {
   flex: 1;
   display: flex;
