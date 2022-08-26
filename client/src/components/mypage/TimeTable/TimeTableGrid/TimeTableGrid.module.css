@@ -1,6 +1,7 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
+  position: relative;
   border-top: 1px solid var(--gray600);
   border-left: 1px solid var(--gray600);
   background-color: var(--gray900);

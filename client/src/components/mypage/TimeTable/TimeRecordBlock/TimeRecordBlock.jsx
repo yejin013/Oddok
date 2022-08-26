@@ -1,43 +1,44 @@
 import React, { useEffect, useState } from "react";
 import styles from "./TimeRecordBlock.module.css";
 
-function TimeRecordBlock({ startH, startM, endH, endM, color }) {
+function TimeRecordBlock({ startTime, endTime, color }) {
   const [blocks, setBlocks] = useState([]); // {style}
 
-  const calculateTop = (hour) => `${1 + hour * 25}px`; // border: 1px, 그리드셀 height: 25px
-  const caculateLeft = (minute) => `${(minute / 60) * 100}%`;
-  const caculateRight = (minute) => `${(1 - minute / 60) * 100}%`;
-  const subBorder = (width) => `calc(${width}% - 1px)`; // substract 1px border
+  const calculateTop = (hour) => `${hour * 25}px`; // border: 1px, height: 25px
+  const calculateLeft = (minute) => `${(minute / 60) * 100}%`;
+  const calculateWidth = (minute) => `calc(${(minute / 60) * 100}% - 1px)`;
 
   useEffect(() => {
-    const diff = endH * 60 + endM - (startH * 60 + startM); // 분
-    const startTop = calculateTop(startH);
-    const endTop = calculateTop(endH);
-    const startLeft = caculateLeft(startM);
-    const endRight = caculateRight(endM);
+    const startHour = startTime.getHours();
+    const startMinute = startTime.getMinutes();
+    const endHour = endTime.getHours();
+    const endMinute = endTime.getMinutes();
+    const diff = (endHour - startHour) * 60 + endMinute - startMinute;
 
-    // 한 줄!!
-    if (diff <= (startH + 1) * 60 - (startH * 60 + startM)) {
-      setBlocks([{ top: startTop, left: startLeft, width: subBorder((diff / 60) * 100) }]);
-    }
-    // 여러 줄!!
-    else {
-      const array = [{ top: startTop, left: startLeft, width: subBorder(((60 - startM) / 60) * 100) }];
-      for (let i = startH + 1; i < endH; i += 1) {
-        array.push({ top: calculateTop(parseInt(i, 10)), left: "1px", width: "calc(100% - 2px)" });
+    const top = calculateTop(startHour);
+    const left = calculateLeft(startMinute);
+
+    if (diff <= 60 - startMinute) {
+      setBlocks([{ top, left, width: calculateWidth(diff) }]);
+    } else {
+      const array = [];
+      array.push({ top, left, width: calculateWidth(60 - startMinute) });
+      array.push({ top: calculateTop(endHour), width: calculateWidth(endMinute) });
+      for (let i = startHour + 1; i < endHour; i += 1) {
+        array.push({ top: calculateTop(i), width: calculateWidth(60) });
       }
-      array.push({ top: endTop, right: endRight, width: subBorder((endM / 60) * 100) });
       setBlocks(array);
     }
-  }, [startH, startM, endH, endM]);
+  }, []);
 
   return (
     <div>
-      {blocks.map((block) => (
-        <div className={styles.block} style={{ ...block, backgroundColor: color }} />
+      {blocks.map((block, i) => (
+        // eslint-disable-next-line react/no-array-index-key
+        <div key={i} className={styles.block} style={{ ...block, backgroundColor: color }} />
       ))}
     </div>
   );
 }
 
-export default TimeRecordBlock;
+export default React.memo(TimeRecordBlock);
