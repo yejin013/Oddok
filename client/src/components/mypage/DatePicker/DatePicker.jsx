@@ -4,6 +4,7 @@ import ko from "date-fns/locale/ko";
 import { addDays, subDays } from "date-fns";
 import { ArrowLeft, ArrowRight } from "@icons";
 import { CalendarHeader } from "@components/commons";
+import { dateFormatting } from "@utils";
 import CustomInput from "./CustomInput";
 import "react-datepicker/dist/react-datepicker.css";
 import "../../../assets/styles/calendar_style.css";
@@ -11,6 +12,7 @@ import styles from "./DatePicker.module.css";
 
 function DatePicker({ onChange }) {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const isMaxDate = dateFormatting(currentDate) >= dateFormatting(new Date());
 
   const changeDate = (date) => {
     setCurrentDate(date);
@@ -18,11 +20,11 @@ function DatePicker({ onChange }) {
   };
 
   return (
-    <div className={styles.box}>
-      <button type="button" className={styles.move_button} onClick={() => changeDate(subDays(currentDate, 1))}>
+    <div className={styles.wrapper}>
+      <button type="button" className={styles.button} onClick={() => changeDate(subDays(currentDate, 1))}>
         <ArrowLeft />
       </button>
-      <div className={styles.date_picker}>
+      <div>
         <Picker
           locale={ko}
           dateFormat="yyyy.MM.dd (E)"
@@ -35,7 +37,14 @@ function DatePicker({ onChange }) {
           renderCustomHeader={CalendarHeader}
         />
       </div>
-      <button type="button" className={styles.move_button} onClick={() => changeDate(addDays(currentDate, 1))}>
+      <button
+        type="button"
+        className={styles.button}
+        onClick={() => {
+          if (isMaxDate) return;
+          changeDate(addDays(currentDate, 1));
+        }}
+      >
         <ArrowRight />
       </button>
     </div>

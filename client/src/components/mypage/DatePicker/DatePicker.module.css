@@ -1,25 +1,20 @@
-.box {
+.wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.move_button {
-  margin: 0 12px;
-  padding: 8px;
+.button {
   display: flex;
   justify-content: center;
+  margin: 0 12px;
+  padding: 8px;
 }
 
-.icon svg {
+.button > svg {
   width: 10px;
 }
 
-.icon path {
-  fill: var(--gray300);
-}
-
-.date_picker {
-  width: 100%;
-  position: relative;
+.button.hide {
+  visibility: hidden;
 }
