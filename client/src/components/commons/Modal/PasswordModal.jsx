@@ -1,18 +1,17 @@
 import React, { useRef, useState } from "react";
-import { useHistory } from "react-router-dom";
 import { Modal, Input } from "@components/commons";
 import { checkPassword } from "@api/study-room-api";
-import { useInput } from "@hooks";
+import { useGoToPage, useInput } from "@hooks";
 import styles from "./PasswordModal.module.css";
 
 function PasswordModal({ roomId, onClose }) {
-  const history = useHistory();
   const inputRef = useRef();
   const [isInvalid, setIsInvalid] = useState(false);
+  const { goToSetting } = useGoToPage();
 
   const onPasswordCheck = () => {
     checkPassword(roomId, inputRef.current.value)
-      .then(() => history.push(`/studyroom/${roomId}/setting`))
+      .then(() => goToSetting(roomId))
       .catch(() => {
         setIsInvalid(true);
         inputRef.current.value = "";

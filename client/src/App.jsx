@@ -10,6 +10,7 @@ import StudyRoom from "@pages/StudyRoom/StudyRoom";
 import NotFoundPage from "@pages/NotFoundPage/NotFoundPage";
 import RedirectPage from "@pages/Login/RedirectPage";
 import LogoutRedirectPage from "@pages/LogoutRedirectPage/LogoutRedirectPage";
+import ShareStudyTime from "@pages/ShareStudyTime/ShareStudyTime";
 import { ErrorModal } from "@components/commons";
 import { PrivateRoute, PublicRoute } from "@components/router";
 import styles from "./App.module.css";
@@ -29,6 +30,7 @@ function App() {
           <PrivateRoute path="/studyroom/create" component={CreateRoom} />
           <PrivateRoute path="/studyroom/:roomId/setting" component={JoinRoom} />
           <PrivateRoute path="/studyroom/:roomId" component={StudyRoom} />
+          <PrivateRoute path="/share/study-time" component={ShareStudyTime} />
           <PublicRoute path="*" component={NotFoundPage} />
         </Switch>
       </BrowserRouter>

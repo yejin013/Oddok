@@ -1,28 +1,27 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React from "react";
-import { useHistory } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { bookmarkState } from "@recoil/bookmark-state";
 import { userState } from "@recoil/user-state";
 import { saveBookmark, removeBookmark } from "@api/bookmark-api";
 import { PasswordModal, Thumbnail, UserCount } from "@components/commons";
 import { Lock, Unlock, BookMark, BookMarkHeart } from "@icons";
-import useModal from "@hooks/useModal";
+import { useModal, useGoToPage } from "@hooks";
 import styles from "./StudyRoomCard.module.css";
 
 function StudyRoomCard({ roomData }) {
-  const history = useHistory();
   const user = useRecoilValue(userState);
   const [bookmark, setBookmark] = useRecoilState(bookmarkState);
   const { isModal, openModal, closeModal } = useModal();
+  const { goToLogin, goToSetting } = useGoToPage();
 
   const onStudyRoomClick = () => {
     if (!user.isLogin) {
-      history.push("/login");
+      goToLogin();
       return;
     }
     if (roomData.isPublic) {
-      history.push(`/studyroom/${roomData.id}/setting`);
+      goToSetting(roomData.id);
     } else {
       openModal();
     }
@@ -31,7 +30,7 @@ function StudyRoomCard({ roomData }) {
   const onBookmarkAddBtnClick = (event) => {
     event.stopPropagation();
     if (!user.isLogin) {
-      history.push("/login");
+      goToLogin();
       return;
     }
     saveBookmark(roomData.id)

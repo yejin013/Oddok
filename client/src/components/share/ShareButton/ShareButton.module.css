@@ -1,0 +1,25 @@
+.share_container {
+  text-align: center;
+  width: 100%;
+  padding-bottom: 5rem;
+}
+
+.share_container p {
+  margin-top: 0;
+  color: var(--gray600);
+  font-size: 1rem;
+}
+
+.share_btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.6rem 0.9rem;
+  border-radius: 4px;
+  background-color: var(--primary);
+  color: var(--gray950);
+  font-weight: var(--font-semibold);
+}
+
+.share_btn span {
+  margin-left: 0.5rem;
+}

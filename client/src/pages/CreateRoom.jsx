@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { useHistory } from "react-router-dom";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { userState } from "@recoil/user-state";
 import { roomInfoState } from "@recoil/studyroom-state";
@@ -7,22 +6,17 @@ import { errorState } from "@recoil/error-state";
 import { startStudyRoom } from "@api/study-room-api";
 import { Loading } from "@components/commons";
 import { SettingRoom } from "@components/study";
-import { useAsync } from "@hooks";
+import { useGoToPage, useAsync } from "@hooks";
 
 function CreateRoom() {
-  const history = useHistory();
   const roomInfo = useRecoilValue(roomInfoState);
   const [userInfo, setUserInfo] = useRecoilState(userState);
   const setError = useSetRecoilState(errorState);
+  const { goToStudy } = useGoToPage();
+
   const { loading, request: startStudy } = useAsync({
     requestFn: () => startStudyRoom(roomInfo),
-    onSuccess: ({ id, token }) =>
-      history.push({
-        pathname: `/studyroom/${id}`,
-        state: {
-          token,
-        },
-      }),
+    onSuccess: ({ id, token }) => goToStudy(id, token),
     onError: (error) => setError(error),
   });
 

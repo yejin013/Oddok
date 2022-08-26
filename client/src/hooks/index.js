@@ -8,3 +8,4 @@ export { default as useManageRemoteUsers } from "./study/useManageRemoteUsers";
 export { default as useMyStream } from "./study/useMyStream";
 export { default as useSearchParams } from "./useSearchParams";
 export { default as useSearchHistory } from "./search/useSearchHistory";
+export { default as useGoToPage } from "./useGoToPage";

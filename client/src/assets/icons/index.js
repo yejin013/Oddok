@@ -31,6 +31,7 @@ import { ReactComponent as ArrowRight } from "./arrow-right.svg";
 import { ReactComponent as Close } from "./x.svg";
 import { ReactComponent as EmojiDizzy } from "./emoji-dizzy.svg";
 import { ReactComponent as Award } from "./award-fill.svg";
+import { ReactComponent as Share } from "./share.svg";
 
 export {
   VideoOn,
@@ -66,4 +67,5 @@ export {
   Close,
   EmojiDizzy,
   Award,
+  Share,
 };

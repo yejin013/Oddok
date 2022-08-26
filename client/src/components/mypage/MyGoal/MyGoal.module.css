@@ -14,14 +14,32 @@
 }
 
 .contents {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
   margin-bottom: 60px;
 }
 
-.no_content {
+.box {
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
-  height: 100px;
-  color: var(--gray600);
-  font-size: var(--text-xs);
+  gap: 16px;
+  margin: 16px;
+  font-size: var(--text-sm);
+}
+
+.bold {
+  font-weight: var(--font-bold);
+  font-size: var(--text-3xl);
+}
+
+.text_box {
+  grid-column: 1/3;
+  font-size: var(--text-sm);
+}
+
+.text_field {
+  height: 90px;
 }

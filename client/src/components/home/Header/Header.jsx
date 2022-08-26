@@ -6,8 +6,7 @@ import { Search, Profile } from "@icons";
 import { getNickname } from "@api/user-api";
 import { NicknameEditModal } from "@components/commons";
 import { KAKAO_LOGOUT_URL } from "@api/auth/kakao";
-import useOutSideClick from "@hooks/useOutSideClick";
-import useModal from "@hooks/useModal";
+import { useModal, useGoToPage, useOutSideClick } from "@hooks";
 import styles from "./Header.module.css";
 
 function Header() {
@@ -15,6 +14,7 @@ function Header() {
   const [user, setUserState] = useRecoilState(userState);
   const [isDropdown, setIsDropdown] = useState(false);
   const { isModal, openModal, closeModal } = useModal();
+  const { goToMain, goToSearch, goToMyPage, goToCreate } = useGoToPage();
   const dropdownRef = useRef();
 
   useOutSideClick(dropdownRef, () => setIsDropdown(false));
@@ -27,21 +27,6 @@ function Header() {
       .then((response) => setUserState((prev) => ({ ...prev, nickname: response.nickname })))
       .catch((error) => console.error(error));
   }, [user.isLogin, user.nickname]);
-
-  const goToPage = (page) => {
-    switch (page) {
-      case "main":
-        return () => history.push("/");
-      case "mypage":
-        return () => history.push("/mypage");
-      case "search":
-        return () => history.push("/search");
-      case "create":
-        return () => history.push("/studyroom/create");
-      default:
-        return () => history.push("*");
-    }
-  };
 
   const onProfileBtnClick = () => {
     setIsDropdown((prev) => !prev);
@@ -64,7 +49,7 @@ function Header() {
             <button
               type="button"
               className={history.location.pathname === "/" ? styles.clicked : ""}
-              onClick={goToPage("main")}
+              onClick={goToMain}
             >
               스터디룸
             </button>
@@ -73,7 +58,7 @@ function Header() {
             <button
               type="button"
               className={history.location.pathname === "/mypage" ? styles.clicked : ""}
-              onClick={goToPage("mypage")}
+              onClick={goToMyPage}
             >
               마이페이지
             </button>
@@ -81,7 +66,7 @@ function Header() {
         </ul>
         <ul className={styles.buttons}>
           <li>
-            <button type="button" className={styles.search} onClick={goToPage("search")}>
+            <button type="button" className={styles.search} onClick={goToSearch}>
               <Search />
             </button>
           </li>
@@ -108,7 +93,7 @@ function Header() {
             )}
           </li>
           <li>
-            <button type="button" className={styles.study_button} onClick={goToPage("create")}>
+            <button type="button" className={styles.study_button} onClick={goToCreate}>
               + 새 스터디 만들기
             </button>
           </li>
