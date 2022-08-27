@@ -1,5 +1,5 @@
 import React from "react";
-import { Thumbnail } from "@components/commons";
+import { Thumbnail } from "@icons";
 import styles from "./Room.module.css";
 
 function Room({ roomData }) {
@@ -9,13 +9,13 @@ function Room({ roomData }) {
         <Thumbnail />
       </div>
       <div className={styles.info_box}>
-        <p className={styles.title}>{roomData.name}</p>
-        <p>
+        <div className={styles.title}>{roomData.name}</div>
+        <div>
           {roomData.hashtags.map((hashtag) => (
             <span>#{hashtag} </span>
           ))}
-        </p>
-        <p>{roomData.endAt} 까지</p>
+        </div>
+        <div>{roomData.endAt} 까지</div>
       </div>
     </div>
   );

@@ -21,14 +21,14 @@ function MyPage() {
 
   return (
     <Layout>
-      <div className={styles.mypage}>
+      <div className={styles.container}>
         <SideNavBar indexRef={indexRef} />
-        <div ref={targetRef} className={styles.container}>
+        <main ref={targetRef}>
           <MyGoal />
           <StudyTime />
           <MyRoom />
           <MyAccount />
-        </div>
+        </main>
       </div>
     </Layout>
   );

@@ -7,7 +7,7 @@
 .thumbnail_box {
   background-color: #212529;
   width: 140px;
-  padding: 3px 10px;
+  padding: 3px 12px;
   flex-shrink: 0;
 }
 
@@ -18,7 +18,7 @@
   font-size: var(--text-sm);
 }
 
-.info_box > p {
+.info_box > div {
   margin: 0;
   color: var(--gray300);
   min-width: 240px;

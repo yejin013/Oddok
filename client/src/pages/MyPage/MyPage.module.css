@@ -1,12 +1,12 @@
-.mypage {
+.container {
   display: flex;
   gap: 90px;
 }
 
-.container {
+.container > main {
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 2rem;
+  gap: 5.5rem;
 }

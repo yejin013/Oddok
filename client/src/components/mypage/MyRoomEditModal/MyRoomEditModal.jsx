@@ -37,11 +37,9 @@ function MyRoomEditModal({ roomData, onClose, refetch }) {
 
   const content = (
     <div className={styles.box}>
-      <p>생성 스터디룸</p>
+      <h3>생성 스터디룸</h3>
       <div className={styles.item}>
-        <div>
-          <Room roomData={inputData} />
-        </div>
+        <Room roomData={inputData} />
         <div className={styles.buttons}>
           <EditButton onClick={editHandler} />
           <EditButton onClick={deleteHandler} deleteBtn />

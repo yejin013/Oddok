@@ -15,9 +15,9 @@ function MyAccount() {
     <>
       {(isModal === "edit-nickname" && <NicknameEditModal onClose={closeModal} />) ||
         (isModal === "delete-account" && <AccountDeleteModal onClose={closeModal} />)}
-      <section className={styles.account}>
+      <section>
         <div className={styles.heading}>
-          <div>계정</div>
+          <h2>계정</h2>
           <EditButton onClick={() => renderModal("edit-nickname")} />
         </div>
         <div className={styles.contents}>

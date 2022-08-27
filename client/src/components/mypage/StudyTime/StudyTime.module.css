@@ -1,9 +1,10 @@
-.study_history {
-  width: 100%;
-  color: white;
+.container {
+  display: flex;
+  gap: 60px;
 }
 
 .heading {
+  margin: 0;
   margin-bottom: 24px;
   font-weight: var(--font-semibold);
   font-size: var(--text-2xl);
@@ -15,13 +16,7 @@
   font-size: var(--text-sm);
 }
 
-.contents {
-  display: flex;
-  margin-bottom: 60px;
-}
-
 .box {
-  flex: 40%;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -31,11 +26,7 @@
   flex: 1;
 }
 
-.date_box .content {
-  margin: 18px 0;
-}
-
-.study_time_box .content {
+.study_time_box {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -48,13 +39,8 @@
   line-height: 48px;
 }
 
-.subject_list {
-  width: 100%;
-}
-
 .time_table {
-  flex: 60%;
-  padding: 0 2.5rem;
+  width: 100%;
 }
 
 .time_table.share {

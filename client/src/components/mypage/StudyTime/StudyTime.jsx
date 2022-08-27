@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { getTimeRecordList } from "@api/mypage-api";
 import { DatePicker, TimeRecordList, TimeTable } from "@components/mypage";
-import { getColor, getTimeDiff, dateFormatting } from "@utils";
+import { getColor, dateFormatting } from "@utils";
 import styles from "./StudyTime.module.css";
 
 function StudyTime() {
@@ -23,7 +23,7 @@ function StudyTime() {
         startTime: new Date(data.startTime),
         endTime: new Date(data.endTime),
         color: getColor(i),
-        studyTime: getTimeDiff(new Date(data.startTime), new Date(data.endTime)),
+        studyTime: new Date(diff).toISOString().slice(11, 19),
       };
     });
     setTimeRecordData(array);
@@ -39,33 +39,29 @@ function StudyTime() {
   }, [selectedDate]);
 
   return (
-    <section className={styles.study_history}>
-      <div className={styles.heading}>공부 기록</div>
-      <div className={styles.contents}>
-        <div className={`${styles.box} ${isSharePage && styles.share}`}>
+    <section>
+      <h2 className={styles.heading}>공부 기록</h2>
+      <div className={styles.container}>
+        <div className={`${styles.box} ${isSharePage ? styles.share : ""}`}>
           {!isSharePage && (
-            <div className={styles.date_box}>
+            <div>
               <div className={styles.sub_heading}>날짜</div>
-              <div className={styles.content}>
-                <DatePicker onChange={(date) => setSelectedDate(dateFormatting(date))} />
-              </div>
+              <DatePicker onChange={(date) => setSelectedDate(dateFormatting(date))} />
             </div>
           )}
-          <div className={styles.study_time_box}>
+          <div>
             <div className={styles.sub_heading}>과목</div>
-            <div className={styles.content}>
+            <div className={styles.study_time_box}>
               <div className={styles.total_time}>
                 {`${Math.floor(totalStudyTime / 1000 / 60 / 60)}시간 
                   ${Math.floor((totalStudyTime / 1000 / 60) % 60)}분 
                   ${Math.floor(totalStudyTime / 1000) % 60}초`}
               </div>
-              <div className={styles.subject_list}>
-                <TimeRecordList list={timeRecordData} />
-              </div>
+              <TimeRecordList list={timeRecordData} />
             </div>
           </div>
         </div>
-        <div className={`${styles.time_table} ${isSharePage && styles.share}`}>
+        <div className={`${styles.time_table} ${isSharePage ? styles.share : ""}`}>
           <div className={styles.sub_heading}>시간표</div>
           <TimeTable timeRecordList={timeRecordData} />
         </div>

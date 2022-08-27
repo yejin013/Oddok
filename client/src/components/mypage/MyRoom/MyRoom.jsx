@@ -13,13 +13,11 @@ function MyRoom() {
       {isModal && <MyRoomEditModal roomData={myRoomData} onClose={closeModal} refetch={refetchMyRoom} />}
       <section>
         <div className={styles.heading}>
-          <div>생성 스터디룸</div>
+          <h2>생성 스터디룸</h2>
           {myRoomData && <EditButton onClick={openModal} />}
         </div>
         <div className={styles.sub_heading}>생성한 스터디룸</div>
-        <div className={styles.contents}>
-          {myRoomData ? <Room roomData={myRoomData} /> : <div className={styles.no_content}>없습니다.</div>}
-        </div>
+        {myRoomData ? <Room roomData={myRoomData} /> : <div className={styles.no_content}>없습니다.</div>}
       </section>
     </>
   );
