@@ -7,6 +7,7 @@ import styles from "./MyGoalEditModal.module.css";
 
 function MyGoalEditModal({ profileData, onClose, refetch }) {
   const [inputData, setInputData] = useState(profileData);
+  const isValid = inputData?.dday && inputData?.ddayInfo;
 
   const selectDate = (date) => {
     setInputData((prev) => ({ ...prev, dday: dateFormatting(date) }));
@@ -73,6 +74,7 @@ function MyGoalEditModal({ profileData, onClose, refetch }) {
           onClose();
         },
       }}
+      disabled={!isValid}
     />
   );
 }
