@@ -12,7 +12,7 @@ function Room({ roomData }) {
         <div className={styles.title}>{roomData.name}</div>
         <div>
           {roomData.hashtags.map((hashtag) => (
-            <span>#{hashtag} </span>
+            <span key={hashtag}>#{hashtag} </span>
           ))}
         </div>
         <div>{roomData.endAt} 까지</div>
