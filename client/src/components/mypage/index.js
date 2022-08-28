@@ -1,7 +1,7 @@
 export { default as DatePicker } from "./DatePicker/DatePicker";
 export { default as EditButton } from "./EditButton/EditButton";
-export { default as MyGoalEditModal } from "./EditModal/MyGoalEditModal";
-export { default as MyRoomEditModal } from "./EditModal/MyRoomEditModal";
+export { default as MyGoalEditModal } from "./MyGoalEditModal/MyGoalEditModal";
+export { default as MyRoomEditModal } from "./MyRoomEditModal/MyRoomEditModal";
 export { default as MyAccount } from "./MyAccount/MyAccount";
 export { default as MyGoal } from "./MyGoal/MyGoal";
 export { default as MyRoom } from "./MyRoom/MyRoom";

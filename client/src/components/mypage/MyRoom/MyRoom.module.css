@@ -3,6 +3,10 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 24px;
+}
+
+.heading > h2 {
+  margin: 0;
   font-weight: var(--font-semibold);
   font-size: var(--text-2xl);
 }
@@ -11,10 +15,6 @@
   margin-bottom: 8px;
   color: var(--gray600);
   font-size: var(--text-sm);
-}
-
-.contents {
-  margin-bottom: 60px;
 }
 
 .no_content {

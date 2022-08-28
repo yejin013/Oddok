@@ -1,13 +1,13 @@
-.box > p {
+.box > h3 {
   margin: 0;
   margin-bottom: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
 }
 
 .item {
   display: flex;
   align-items: center;
-  color: var(--gray100);
-  font-weight: var(--font-normal);
 }
 
 .buttons {

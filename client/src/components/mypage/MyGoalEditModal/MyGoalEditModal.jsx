@@ -7,6 +7,7 @@ import styles from "./MyGoalEditModal.module.css";
 
 function MyGoalEditModal({ profileData, onClose, refetch }) {
   const [inputData, setInputData] = useState(profileData);
+  const isValid = inputData?.dday && inputData?.ddayInfo;
 
   const selectDate = (date) => {
     setInputData((prev) => ({ ...prev, dday: dateFormatting(date) }));
@@ -37,14 +38,14 @@ function MyGoalEditModal({ profileData, onClose, refetch }) {
   const content = (
     <div className={styles.box}>
       <div className={styles.item}>
-        <p>디데이</p>
+        <h3>디데이</h3>
         <div className={styles.dday}>
           <Calendar onChange={selectDate} defaultDate={inputData?.dday && dateParsing(inputData.dday)} />
           <Input onChange={inputDdayInfo} value={inputData?.ddayInfo || ""} />
         </div>
       </div>
       <div className={styles.item}>
-        <p>공부시간</p>
+        <h3>공부시간</h3>
         <div>
           <Dropdown
             options={TARGET_TIME_OPTIONS}
@@ -54,7 +55,7 @@ function MyGoalEditModal({ profileData, onClose, refetch }) {
         </div>
       </div>
       <div className={styles.item}>
-        <p>목표</p>
+        <h3>목표</h3>
         <div className={styles.textarea}>
           <Textarea onChange={inputGoal} value={inputData?.goal || ""} />
         </div>
@@ -73,6 +74,7 @@ function MyGoalEditModal({ profileData, onClose, refetch }) {
           onClose();
         },
       }}
+      disabled={!isValid}
     />
   );
 }

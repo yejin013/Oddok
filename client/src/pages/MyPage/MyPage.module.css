@@ -1,19 +1,12 @@
-.mypage {
+.container {
   display: flex;
   gap: 90px;
 }
 
-.side_nav_bar {
-  position: sticky;
-  top: 100px;
-  height: fit-content;
-  width: 170px;
-}
-
-.container {
+.container > main {
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 2rem;
+  gap: 5.5rem;
 }

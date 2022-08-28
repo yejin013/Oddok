@@ -1,23 +1,27 @@
-.side_nav_bar ul {
+.side_nav_bar {
   display: flex;
   flex-direction: column;
+  gap: 10px;
+  position: sticky;
+  top: 100px;
+  width: 170px;
+  height: fit-content;
   color: var(--gray500);
 }
 
-.nav_item {
-  gap: 10px;
+.side_nav_bar > li {
+  font-weight: 600;
+  cursor: pointer;
 }
 
-.nav_item > li {
-  font-weight: var(--font-semibold);
-}
-
-.nav_sub_item {
-  margin: 10px 12px;
+.sub {
+  display: flex;
+  flex-direction: column;
   gap: 8px;
+  margin: 10px 12px;
 }
 
-.nav_sub_item li {
-  font-size: var(--text-sm);
-  font-weight: var(--font-medium);
+.sub > li {
+  font-size: 0.875rem;
+  font-weight: 500;
 }

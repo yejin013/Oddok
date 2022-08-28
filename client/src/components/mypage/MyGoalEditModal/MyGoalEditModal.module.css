@@ -4,13 +4,11 @@
   gap: 24px;
 }
 
-.item > p {
+.item > h3 {
   margin: 0;
   margin-bottom: 8px;
-}
-
-.item div {
-  font-weight: var(--font-normal);
+  font-size: 0.875rem;
+  font-weight: 500;
 }
 
 .dday {
