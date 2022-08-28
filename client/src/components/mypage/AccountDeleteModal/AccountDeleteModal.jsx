@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal } from "@components/commons";
+import { Modal, Loading } from "@components/commons";
 import { deleteAccount } from "@api/auth/auth-api";
 import useAsync from "@hooks/useAsync";
 import { useRecoilState, useSetRecoilState } from "recoil";
@@ -21,13 +21,15 @@ function AccountDeleteModal({ onClose }) {
   });
 
   return (
-    <Modal
-      title="계정 삭제"
-      content="ODDOK 계정을 삭제하시겠습니까?"
-      onClose={onClose}
-      onAction={{ text: "삭제하기", action: onDeleteAccount }}
-      isLoading={isLoading}
-    />
+    <>
+      <Modal
+        title="계정 삭제"
+        content="ODDOK 계정을 삭제하시겠습니까?"
+        onClose={onClose}
+        onAction={{ text: "삭제하기", action: onDeleteAccount }}
+      />
+      {isLoading && <Loading />}
+    </>
   );
 }
 

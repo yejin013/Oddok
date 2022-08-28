@@ -2,10 +2,9 @@ import React, { useRef } from "react";
 import { createPortal } from "react-dom";
 import { Close } from "@icons";
 import useOutSideClick from "@hooks/useOutSideClick";
-import { Loading } from "@components/commons";
 import styles from "./Modal.module.css";
 
-function Modal({ title, content, onClose, onAction, onSubAction, disabled, isLoading }) {
+function Modal({ title, content, onClose, onAction, onSubAction, disabled }) {
   const modalRef = useRef();
 
   useOutSideClick(modalRef, onClose);
@@ -15,7 +14,6 @@ function Modal({ title, content, onClose, onAction, onSubAction, disabled, isLoa
       {createPortal(<div className={styles.backdrop} />, document.getElementById("backdrop-root"))}
       {createPortal(
         <div className={styles.overlay} ref={modalRef}>
-          {isLoading && <Loading />}
           <header>
             <div>{title}</div>
             <div className={styles.icon} onClick={onClose}>
