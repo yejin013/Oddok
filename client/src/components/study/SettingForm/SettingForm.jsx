@@ -67,6 +67,7 @@ function SettingForm({ roomData, onClose, onUpdate }) {
   };
 
   const onChangeRoomName = (e) => {
+    if (e.target.value.length > 20) return;
     setRoomName(e.target.value);
   };
 
@@ -75,6 +76,7 @@ function SettingForm({ roomData, onClose, onUpdate }) {
   };
 
   const onChangeRule = (e) => {
+    if (e.target.value > 300) return;
     setRule(e.target.value);
   };
 
@@ -94,10 +96,12 @@ function SettingForm({ roomData, onClose, onUpdate }) {
               {isInvalidRoomName && <span className={styles.invalid_message}>이모티콘이 포함될 수 없습니다.</span>}
             </h3>
             <Input
-              placeholder={roomName ?? "목표를 설정하거나, 직접 입력해주세요"}
+              placeholder={roomName || "목표를 설정하거나, 직접 입력해주세요"}
               value={roomName}
               onChange={onChangeRoomName}
               isInvalid={isInvalidRoomName}
+              maxLength="20"
+              textLength={roomName.length}
             />
           </div>
           <div className={styles.roominfo_item}>
@@ -180,6 +184,8 @@ function SettingForm({ roomData, onClose, onUpdate }) {
                   value={rule}
                   onChange={onChangeRule}
                   isInvalid={isInvalidRule}
+                  maxLength="300"
+                  textLength={rule.length}
                 />
               </div>
             </div>
