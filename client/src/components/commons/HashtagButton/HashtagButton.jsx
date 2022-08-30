@@ -21,4 +21,4 @@ function HashtagButton({ label, onToggle, onDelete, checked }) {
   );
 }
 
-export default HashtagButton;
+export default React.memo(HashtagButton);

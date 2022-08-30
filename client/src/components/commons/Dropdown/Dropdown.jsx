@@ -40,4 +40,4 @@ function Dropdown({ options, onSelect, defaultValue }) {
   );
 }
 
-export default Dropdown;
+export default React.memo(Dropdown);

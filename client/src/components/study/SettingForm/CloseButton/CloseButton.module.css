@@ -1,0 +1,17 @@
+.btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 36px;
+  color: var(--gray800);
+}
+
+.btn > span {
+  color: var(--gray500);
+  font-size: 0.75rem;
+}
+
+.btn:hover {
+  color: var(--gray700);
+}

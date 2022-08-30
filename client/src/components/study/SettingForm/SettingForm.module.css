@@ -9,13 +9,12 @@
   z-index: 100;
 }
 
-.container section {
+.inner {
   width: 75%;
   max-width: 1320px;
-  padding: 70px 100px;
+  padding: 20px 80px;
   margin: 0 auto;
   color: var(--gray100);
-  font-weight: 500;
 }
 
 .close_btn {
@@ -23,42 +22,10 @@
   justify-content: end;
 }
 
-.close_btn button {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  width: 36px;
-  color: var(--gray800);
-}
-
-.close_btn button:hover {
-  color: var(--gray700);
-}
-
-.close_btn span {
-  color: var(--gray500);
-  font-size: 0.75rem;
-}
-
-.heading {
-  margin: 0;
-  margin-bottom: 4px;
-  font-size: 1.75em;
-  font-weight: 600;
-}
-
-.sub_heading {
-  margin: 0;
-  margin-bottom: 1.5em;
-  color: var(--gray600);
-  font-size: 1.25em;
-}
-
 .label {
   margin: 0;
-  margin-bottom: 0.5em;
-  font-size: 1.25em;
+  margin-bottom: 8px;
+  font-size: 1rem;
   font-weight: 600;
 }
 
@@ -66,23 +33,9 @@
   display: flex;
   flex-direction: column;
   margin-bottom: 2rem;
-  font-size: 0.875rem;
+  font-size: 0.85rem;
 }
 
-.category {
-  display: flex;
-  justify-content: space-between;
-  gap: 24px;
-  padding-bottom: 3em;
-  margin-bottom: 1em;
-  border-bottom: 1px solid var(--gray900);
-}
-
-.category_item {
-  flex: 1;
-}
-
-.hashtag_item,
 .device_item {
   display: flex;
   flex-wrap: wrap;
@@ -92,17 +45,18 @@
 .detail_button,
 .save_button {
   display: flex;
+  margin: 35px 0;
 }
 
 .detail_button button {
-  margin: 3em auto;
+  margin: 0 auto;
   color: var(--gray600);
   font-size: 0.875rem;
   font-weight: 700;
 }
 
 .default_box {
-  margin-bottom: -2em;
+  gap: 8px;
 }
 
 .save_button button {
@@ -111,8 +65,7 @@
   color: var(--gray950);
   font-size: 0.875rem;
   font-weight: 600;
-  margin-bottom: 100px;
-  padding: 16px;
+  padding: 12px;
   width: 100%;
 }
 
@@ -121,31 +74,24 @@
   color: var(--gray600);
 }
 
-.detail {
-  display: none;
-}
-
-.detail_clicked {
-  display: block;
-  margin-bottom: 3rem;
-}
-
-.detail_box {
+.items {
   display: flex;
   flex-direction: row;
+  gap: 24px;
   margin-bottom: 2rem;
   font-size: 0.875rem;
 }
 
-.detail_box > div:nth-child(1) {
+.items > div:nth-child(1) {
   flex: 1 1 50%;
 }
 
-.detail_box > div:nth-child(2) {
+.items > div:nth-child(2) {
   flex: 1 1 50%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  gap: 12px;
 }
 
 .invalid_message {
@@ -161,7 +107,6 @@
 
 .image_box {
   height: 320px;
-  margin-right: 24px;
   background-color: var(--gray900);
   border-radius: 4px;
   padding: 20px;
@@ -169,20 +114,4 @@
 
 .textarea {
   height: 120px;
-}
-
-@media screen and (max-width: 1600px) {
-  .container {
-    padding: 30px auto;
-  }
-  .save_button button {
-    margin-bottom: 40px;
-    padding: 0.75em;
-  }
-  .roominfo_item {
-    font-size: 0.75rem;
-  }
-  .detail_box {
-    font-size: 0.75rem;
-  }
 }
