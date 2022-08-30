@@ -29,8 +29,10 @@ function SettingForm({ roomData, onClose, onUpdate }) {
   const [bgmlink, setBgmlink] = useState(initialData.bgmlink);
   const [rule, setRule] = useState(initialData.rule);
 
-  const isInvalid = password?.length > 0 && !/^[0-9]+$/.test(password);
-  const disabled = !(category && limitUsers && !isInvalid);
+  const isInvalidRoomName = /[\u{1F004}-\u{1F9E6}]|[\u{1F600}-\u{1F9D0}]/gu.test(roomName);
+  const isInvalidPassword = password?.length > 0 && !/^[0-9]+$/.test(password);
+  const isInvalidRule = /[\u{1F004}-\u{1F9E6}]|[\u{1F600}-\u{1F9D0}]/gu.test(rule);
+  const disabled = !category || !limitUsers || isInvalidRoomName || isInvalidPassword || isInvalidRule;
 
   const [isClickedDetail, setIsClickedDetail] = useState(false);
 
@@ -41,12 +43,12 @@ function SettingForm({ roomData, onClose, onUpdate }) {
   const clickSaveBtn = () => {
     const data = {
       ...initialData,
-      name: roomName.replace(/[\u{1F004}-\u{1F9E6}]|[\u{1F600}-\u{1F9D0}]/gu, ""),
+      name: roomName,
       hashtags,
       isPublic: !password,
       password,
       bgmlink,
-      rule: rule.replace(/[\u{1F004}-\u{1F9E6}]|[\u{1F600}-\u{1F9D0}]/gu, ""),
+      rule,
     };
     // 방 정보 수정
     if (onUpdate) {
@@ -82,16 +84,20 @@ function SettingForm({ roomData, onClose, onUpdate }) {
         <div className={styles.close_btn}>
           <CloseButton onClose={onClose} />
         </div>
-        <div className={styles.default_box}>
+        <div className={styles.wrapper}>
           <div className={styles.roominfo_item}>
             <CategoryForm category={category} setCategory={setCategory} />
           </div>
           <div className={styles.roominfo_item}>
-            <h3 className={styles.label}>스터디 명 *</h3>
+            <h3 className={styles.label}>
+              스터디 명 *
+              {isInvalidRoomName && <span className={styles.invalid_message}>이모티콘이 포함될 수 없습니다.</span>}
+            </h3>
             <Input
               placeholder={roomName ?? "목표를 설정하거나, 직접 입력해주세요"}
               value={roomName}
               onChange={onChangeRoomName}
+              isInvalid={isInvalidRoomName}
             />
           </div>
           <div className={styles.roominfo_item}>
@@ -108,7 +114,7 @@ function SettingForm({ roomData, onClose, onUpdate }) {
           </button>
         </div>
         {isClickedDetail && (
-          <>
+          <div className={styles.wrapper}>
             <div className={styles.items}>
               <div>
                 <h3 className={styles.label}>스터디 이미지</h3>
@@ -126,17 +132,17 @@ function SettingForm({ roomData, onClose, onUpdate }) {
                   <Calendar onChange={setEndAt} defaultDate={dateParsing(endAt)} />
                 </div>
                 <div>
-                  <h3 className={styles.label}>비밀번호</h3>
+                  <h3 className={styles.label}>
+                    비밀번호
+                    {isInvalidPassword && <span className={styles.invalid_message}>비밀번호는 숫자 4자리 입니다.</span>}
+                  </h3>
                   <Input
                     placeholder="숫자 4자리 비밀번호를 설정하세요"
                     maxLength="4"
                     value={password}
                     onChange={onChangePassword}
-                    isInvalid={isInvalid}
+                    isInvalid={isInvalidPassword}
                   />
-                  <p className={`${styles.invalid_message} ${!isInvalid ? styles.hide : ""}`}>
-                    비밀번호는 숫자 4자리 입니다.
-                  </p>
                 </div>
                 <div>
                   <h3 className={styles.label}>장치 규칙</h3>
@@ -164,12 +170,20 @@ function SettingForm({ roomData, onClose, onUpdate }) {
               <Input placeholder="유튜브 링크를 입력해주세요." />
             </div>
             <div className={styles.roominfo_item}>
-              <h3 className={styles.label}>스터디 규칙</h3>
+              <h3 className={styles.label}>
+                스터디 규칙
+                {isInvalidRule && <span className={styles.invalid_message}>이모티콘이 포함될 수 없습니다.</span>}
+              </h3>
               <div className={styles.textarea}>
-                <Textarea placeholder="스터디 규칙은 여기에 작성해주세요." value={rule} onChange={onChangeRule} />
+                <Textarea
+                  placeholder="스터디 규칙은 여기에 작성해주세요."
+                  value={rule}
+                  onChange={onChangeRule}
+                  isInvalid={isInvalidRule}
+                />
               </div>
             </div>
-          </>
+          </div>
         )}
         <div className={styles.save_button}>
           <button type="button" onClick={clickSaveBtn} disabled={disabled}>

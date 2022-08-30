@@ -12,3 +12,7 @@
 .box:focus {
   outline: none;
 }
+
+.invalid {
+  border: 1px solid var(--red);
+}

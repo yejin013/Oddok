@@ -1,13 +1,4 @@
-.container {
-  display: flex;
-}
-
-.container input,
-.container div {
-  display: block;
-}
-
-.container input {
+.input {
   border: 1px solid #ffffff1a;
   border-radius: 4px;
   background-color: var(--gray900);
@@ -17,11 +8,10 @@
   width: 100%;
 }
 
-.container input:focus {
+.input:focus {
   outline: none;
-  border: 1px solid #ffffff1a;
 }
 
-.container.invalid input {
-  border: 1px solid #dc3545;
+.invalid {
+  border: 1px solid var(--red);
 }
