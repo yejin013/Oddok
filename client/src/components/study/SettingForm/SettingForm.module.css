@@ -12,7 +12,8 @@
 .inner {
   width: 75%;
   max-width: 1320px;
-  padding: 20px 80px;
+  padding: 20px 100px;
+  padding-bottom: 0;
   margin: 0 auto;
   color: var(--gray100);
 }
@@ -29,10 +30,15 @@
   font-weight: 600;
 }
 
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
 .roominfo_item {
   display: flex;
   flex-direction: column;
-  margin-bottom: 2rem;
   font-size: 0.85rem;
 }
 
@@ -45,7 +51,7 @@
 .detail_button,
 .save_button {
   display: flex;
-  margin: 35px 0;
+  margin: 36px 0;
 }
 
 .detail_button button {
@@ -55,18 +61,14 @@
   font-weight: 700;
 }
 
-.default_box {
-  gap: 8px;
-}
-
 .save_button button {
+  width: 100%;
+  padding: 12px;
   background-color: var(--primary);
   border-radius: 4px;
   color: var(--gray950);
   font-size: 0.875rem;
   font-weight: 600;
-  padding: 12px;
-  width: 100%;
 }
 
 .save_button button:disabled {
@@ -95,21 +97,10 @@
 }
 
 .invalid_message {
-  margin: 0;
+  margin-left: 12px;
   color: var(--red);
   font-weight: 400;
-  font-size: 0.875rem;
-}
-
-.invalid_message.hide {
-  visibility: hidden;
-}
-
-.image_box {
-  height: 320px;
-  background-color: var(--gray900);
-  border-radius: 4px;
-  padding: 20px;
+  font-size: 0.85rem;
 }
 
 .textarea {

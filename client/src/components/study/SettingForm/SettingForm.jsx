@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import { useRecoilState } from "recoil";
 import { roomInfoState } from "@recoil/studyroom-state";
 import { ToggleButton, Dropdown, Input, Textarea, Calendar } from "@components/commons";
-import { VideoOn, VideoOff, MicOn, MicOff, Thumbnail } from "@icons";
+import { VideoOn, VideoOff, MicOn, MicOff } from "@icons";
 import { TARGET_TIME_OPTIONS, USERLIMIT_OPTIONS } from "@utils/constants/options";
 import { dateParsing } from "@utils";
 import CloseButton from "./CloseButton/CloseButton";
 import CategoryForm from "./CategoryForm/CategoryForm";
 import HashtagForm from "./HashtagForm/HashtagForm";
+import ImageForm from "./ImageForm/ImageForm";
 
 import styles from "./SettingForm.module.css";
 
@@ -120,12 +121,7 @@ function SettingForm({ roomData, onClose, onUpdate }) {
         {isClickedDetail && (
           <div className={styles.wrapper}>
             <div className={styles.items}>
-              <div>
-                <h3 className={styles.label}>스터디 이미지</h3>
-                <div className={styles.image_box}>
-                  <Thumbnail />
-                </div>
-              </div>
+              <ImageForm />
               <div>
                 <div>
                   <h3 className={styles.label}>목표시간</h3>
