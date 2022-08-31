@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useLayoutEffect } from "react";
 import { useRecoilState } from "recoil";
 import { roomInfoState } from "@recoil/studyroom-state";
 import { ToggleButton, Dropdown, Input, Textarea, Calendar } from "@components/commons";
@@ -9,7 +9,6 @@ import CloseButton from "./CloseButton/CloseButton";
 import CategoryForm from "./CategoryForm/CategoryForm";
 import HashtagForm from "./HashtagForm/HashtagForm";
 import ImageForm from "./ImageForm/ImageForm";
-
 import styles from "./SettingForm.module.css";
 
 function SettingForm({ roomData, onClose, onUpdate }) {
@@ -80,6 +79,13 @@ function SettingForm({ roomData, onClose, onUpdate }) {
     if (e.target.value > 300) return;
     setRule(e.target.value);
   };
+
+  useLayoutEffect(() => {
+    document.body.style = `overflow: hidden`;
+    return () => {
+      document.body.style = `overflow: auto`;
+    };
+  }, []);
 
   return (
     <section className={styles.container}>
