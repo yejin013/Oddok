@@ -1,0 +1,14 @@
+.content ul {
+  display: grid;
+  gap: 40px 20px;
+  width: 100%;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 130px 0;
+  color: var(--gray600);
+}

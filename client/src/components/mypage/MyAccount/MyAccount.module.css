@@ -1,0 +1,38 @@
+.heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.heading > h2 {
+  margin: 0;
+  font-weight: var(--font-semibold);
+  font-size: var(--text-2xl);
+}
+
+.sub_heading {
+  color: var(--gray600);
+  font-size: var(--text-sm);
+}
+
+.contents {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.nickname {
+  margin: 28px 16px;
+  font-size: var(--text-xl);
+  font-weight: var(--font-medium);
+}
+
+.delete_btn {
+  margin: 22px 53px;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  background-color: var(--gray900);
+  color: var(--gray600);
+}

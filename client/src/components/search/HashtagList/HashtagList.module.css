@@ -1,0 +1,7 @@
+.hashtag_list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 0.75rem;
+}

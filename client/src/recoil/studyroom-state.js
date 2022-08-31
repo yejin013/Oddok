@@ -1,18 +1,11 @@
 import { atom, selector } from "recoil";
 
-export const videoState = atom({
-  key: "videoState",
-  default: true,
-});
-
-export const audioState = atom({
-  key: "audioState",
-  default: false,
-});
-
-export const roomIdState = atom({
-  key: "roomId",
-  default: 0,
+export const deviceState = atom({
+  key: "deviceState",
+  default: {
+    video: true,
+    audio: false,
+  },
 });
 
 export const roomInfoState = atom({
@@ -29,7 +22,7 @@ export const roomInfoState = atom({
     isMicOn: false,
     isCamOn: false,
     bgmlink: "",
-    endAt: new Date(new Date(2022, 11, 32) + 3240 * 10000).toISOString().split("T")[0],
+    endAt: "2022-12-31",
   },
 });
 

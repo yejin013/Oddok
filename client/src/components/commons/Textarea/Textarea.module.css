@@ -11,5 +11,4 @@
 
 .box:focus {
   outline: none;
-  border: 1px solid var(--primary);
 }

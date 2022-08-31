@@ -8,6 +8,7 @@
 body {
   margin: 0;
   background-color: var(--gray950);
+  color: white;
 }
 
 button {
@@ -22,4 +23,15 @@ ul {
   list-style: none;
   padding: 0;
   margin: 0;
+}
+
+::-webkit-scrollbar {
+  width: 15px;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 4px solid transparent;
+  border-radius: 100px;
+  background-color: rgba(52, 58, 64, 0.5);
+  background-clip: padding-box;
 }

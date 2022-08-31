@@ -10,6 +10,7 @@ import com.oddok.server.domain.participant.entity.Participant;
 import com.oddok.server.domain.studyroom.entity.StudyRoom;
 import com.oddok.server.domain.studyroom.mapper.StudyRoomMapper;
 
+import com.oddok.server.domain.user.dao.UserRepository;
 import com.oddok.server.domain.user.entity.User;
 
 import java.time.LocalDate;
@@ -31,13 +32,15 @@ public class StudyRoomService {
     private final SessionManager sessionManager;
 
     private final StudyRoomRepository studyRoomRepository;
+    private final UserRepository userRepository;
     private final ParticipantRepository participantRepository;
     private final HashtagRepository hashtagRepository;
 
     private final StudyRoomMapper studyRoomMapper = Mappers.getMapper(StudyRoomMapper.class);
 
     @Transactional
-    public StudyRoomDto createStudyRoom(User user, StudyRoomDto studyRoomDto) {
+    public StudyRoomDto createStudyRoom(User auth, StudyRoomDto studyRoomDto) {
+        User user = findUser(auth.getId());
         checkUserIsAlreadyPublisher(user);
         StudyRoom studyRoom = studyRoomMapper.toEntity(studyRoomDto, user);
         studyRoom = studyRoomRepository.save(studyRoom);
@@ -52,8 +55,9 @@ public class StudyRoomService {
      * @return token
      */
     @Transactional
-    public String userJoinStudyRoom(Long id, User user) {
+    public String userJoinStudyRoom(Long id, User auth) {
         StudyRoom studyRoom = findStudyRoom(id);
+        User user = findUser(auth.getId());
         checkStudyRoomEnd(id, studyRoom);
         checkUserAlreadyJoined(user);
         checkStudyRoomFull(id, studyRoom);
@@ -81,7 +85,8 @@ public class StudyRoomService {
     }
 
     // 사용자가 기존에 참여중인 스터디룸이 있으면 퇴장시킨다.
-    private void checkUserAlreadyJoined(User user) {
+    private void checkUserAlreadyJoined(User auth) {
+        User user = findUser(auth.getId());
         participantRepository.findByUser(user)
                 .ifPresent(participant -> userLeaveStudyRoom(participant.getStudyRoom().getId(), user));
     }
@@ -130,7 +135,8 @@ public class StudyRoomService {
      * 사용자가 스터디룸을 나가는 과정 1. 참여자 테이블에서 삭제 2. 스터디룸의 참여자 수 1 감소 3. 참여자수가 0일 경우 세션 삭제
      */
     @Transactional
-    public void userLeaveStudyRoom(Long studyRoomId, User user) {
+    public void userLeaveStudyRoom(Long studyRoomId, User auth) {
+        User user = findUser(auth.getId());
         StudyRoom studyRoom = findStudyRoom(studyRoomId);
         deleteUserFromParticipant(user, studyRoom);
         studyRoom.decreaseCurrentUsers();
@@ -148,14 +154,16 @@ public class StudyRoomService {
         }
     }
 
-    public void checkPublisher(Long studyRoomId, User user) {
+    public void checkPublisher(Long studyRoomId, User auth) {
         User publisher = findStudyRoom(studyRoomId).getUser();
+        User user = findUser(auth.getId());
         if (!publisher.equals(user)) {
             throw new UserNotPublisherException(user.getId());
         }
     }
 
-    private void deleteUserFromParticipant(User user, StudyRoom studyRoom) {
+    private void deleteUserFromParticipant(User auth, StudyRoom studyRoom) {
+        User user = findUser(auth.getId());
         Participant participant = participantRepository.findByUser(user)
                 .orElseThrow(() -> new UserNotParticipatingException(user.getId(), studyRoom.getId()));
         if (!participant.getStudyRoom().equals(studyRoom)) {
@@ -178,13 +186,15 @@ public class StudyRoomService {
     }
 
     // 사용자는 하나의 스터디룸만 개설할 수 있습니다.
-    private void checkUserIsAlreadyPublisher(User user) {
+    private void checkUserIsAlreadyPublisher(User auth) {
+        User user = findUser(auth.getId());
         if (studyRoomRepository.existsByUser(user)) {
             throw new UserAlreadyPublishStudyRoomException(user.getId());
         }
     }
 
-    private void createParticipant(StudyRoom studyRoom, User user) {
+    private void createParticipant(StudyRoom studyRoom, User auth) {
+        User user = findUser(auth.getId());
         // 참가자 정보 저장
         Participant participant = Participant.builder()
                 .studyRoom(studyRoom)
@@ -209,5 +219,9 @@ public class StudyRoomService {
     private StudyRoom findStudyRoom(Long id) {
         return studyRoomRepository.findById(id)
                 .orElseThrow(() -> new StudyRoomNotFoundException(id));
+    }
+
+    private User findUser(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 }

@@ -1,0 +1,17 @@
+.box > h3 {
+  margin: 0;
+  margin-bottom: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+}
+
+.buttons {
+  padding: 12px 0;
+  display: flex;
+  gap: 12px;
+}

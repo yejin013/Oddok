@@ -1,74 +1,82 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { bookmarkState } from "@recoil/bookmark-state";
-import { addBookmark, deleteBookmark } from "@api/bookmark-api";
-import { Thumbnail, UserCount } from "@components/commons";
+import { userState } from "@recoil/user-state";
+import { saveBookmark, removeBookmark } from "@api/bookmark-api";
+import { PasswordModal, Thumbnail, UserCount } from "@components/commons";
 import { Lock, Unlock, BookMark, BookMarkHeart } from "@icons";
+import { useModal, useGoToPage } from "@hooks";
 import styles from "./StudyRoomCard.module.css";
 
-function StudyRoomCard({ roomData, showBookmark }) {
+function StudyRoomCard({ roomData }) {
+  const user = useRecoilValue(userState);
   const [bookmark, setBookmark] = useRecoilState(bookmarkState);
+  const { isModal, openModal, closeModal } = useModal();
+  const { goToLogin, goToSetting } = useGoToPage();
 
-  const selectBookmark = async (roomId) => {
-    await addBookmark(roomId)
-      .then(() => console.log("add bookmark"))
-      .catch((error) => console.log("add bookmark error", error));
+  const onStudyRoomClick = () => {
+    if (!user.isLogin) {
+      goToLogin();
+      return;
+    }
+    if (roomData.isPublic) {
+      goToSetting(roomData.id);
+    } else {
+      openModal();
+    }
   };
 
-  const cancelBookmark = async (event) => {
-    event.preventDefault();
-    await deleteBookmark()
+  const onBookmarkAddBtnClick = (event) => {
+    event.stopPropagation();
+    if (!user.isLogin) {
+      goToLogin();
+      return;
+    }
+    saveBookmark(roomData.id)
+      .then((response) => setBookmark(response))
+      .catch((error) => console.error(error));
+  };
+
+  const onBookmarkDeleteBtnClick = (event) => {
+    event.stopPropagation();
+    removeBookmark()
       .then(setBookmark(null))
-      .catch((error) => console.log("delete bookmark error", error));
-  };
-
-  // 북마크 버튼 누르면 새로고침 없이 바로 북마크 정보 보여줌
-  const clickAddBtn = async () => {
-    await selectBookmark(roomData.id);
-    await showBookmark();
+      .catch((error) => console.error(error));
   };
 
   return (
-    <li key={roomData.id} className={styles.container}>
-      <div className={styles.wrapper}>
-        <div className={styles.thumbnail_box}>
-          <Thumbnail />
-          {!(bookmark && roomData.id === bookmark.id) ? (
-            <button
-              type="button"
-              className={styles.bookmark_icon}
-              onClick={(event) => {
-                event.preventDefault();
-                clickAddBtn();
-              }}
-            >
+    <>
+      {isModal && <PasswordModal roomId={roomData.id} onClose={closeModal} />}
+      <li className={styles.wrapper} onClick={onStudyRoomClick}>
+        <Thumbnail>
+          {bookmark?.id !== roomData.id ? (
+            <button type="button" className={styles.bookmark_btn} onClick={onBookmarkAddBtnClick}>
               <BookMark />
             </button>
           ) : (
-            <button type="button" className={styles.bookmark_icon} onClick={cancelBookmark}>
+            <button type="button" className={styles.bookmark_btn} onClick={onBookmarkDeleteBtnClick}>
               <BookMarkHeart />
             </button>
           )}
-          <div className={styles.user_count}>
-            <div className={styles.count_icon}>
-              <UserCount number={roomData.currentUsers} />
-            </div>
+          <div className={styles.user_icon}>
+            <UserCount number={roomData.currentUsers} />
             <span>/ {roomData.limitUsers}</span>
           </div>
-        </div>
-        <div className={styles.content_box}>
-          <div className={styles.content_head}>
-            <div className={styles.title}>{roomData.name}</div>
-            <div className={styles.lock_icon}>{roomData.isPublic ? <Unlock /> : <Lock />}</div>
+        </Thumbnail>
+        <div className={styles.description}>
+          <div className={styles.title}>
+            <span className={styles.ellipsis}>{roomData.name}</span>
+            {roomData.isPublic ? <Unlock /> : <Lock />}
           </div>
-          <div>
+          <div className={styles.ellipsis}>
             {roomData.hashtags.map((hashtag) => (
               <span key={hashtag}>#{hashtag} </span>
             ))}
           </div>
         </div>
-      </div>
-    </li>
+      </li>
+    </>
   );
 }
 

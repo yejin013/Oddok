@@ -1,49 +1,10 @@
 .container {
   display: flex;
   flex-direction: column;
+  gap: 50px;
 }
 
 .container h3 {
+  margin: 12px 0;
   font-size: 1rem;
-}
-
-.hashtag_input {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 8px;
-  font-size: 0.75rem;
-  margin-bottom: 50px;
-}
-
-.search_history {
-  display: flex;
-  flex-direction: column;
-}
-
-.head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-weight: 600;
-}
-
-.search_history button {
-  font-size: 0.875rem;
-  padding: 0;
-}
-
-.search_history button:hover {
-  color: rgba(200, 200, 200);
-}
-
-.content li {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.875rem;
-  margin-bottom: 10px;
-}
-
-.content span:hover {
-  color: rgba(200, 200, 200);
 }

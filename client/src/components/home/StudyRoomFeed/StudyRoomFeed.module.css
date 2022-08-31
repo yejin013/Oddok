@@ -1,0 +1,55 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  font-size: 0.75rem;
+}
+
+.filters {
+  display: flex;
+}
+
+.filters > div:nth-child(1) {
+  width: 150px;
+  margin-right: 12px;
+}
+
+.filters > div:nth-child(2) {
+  width: 110px;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+}
+
+.footer button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  color: var(--gray600);
+  font-size: 1.125rem;
+}
+
+.icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.icon path {
+  stroke-width: 1;
+}

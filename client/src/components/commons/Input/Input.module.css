@@ -1,6 +1,5 @@
 .container {
   display: flex;
-  position: relative;
 }
 
 .container input,
@@ -22,17 +21,7 @@
   outline: none;
   border: 1px solid #ffffff1a;
 }
+
 .container.invalid input {
   border: 1px solid #dc3545;
-}
-
-/*
-.container input::placeholder {
-}
-*/
-
-.button {
-  position: absolute;
-  top: 33%;
-  left: 85%;
 }

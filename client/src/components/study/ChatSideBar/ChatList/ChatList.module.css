@@ -1,0 +1,9 @@
+.box {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-bottom: 12px;
+  padding-right: 5px;
+  gap: 16px;
+  overflow-y: scroll;
+}

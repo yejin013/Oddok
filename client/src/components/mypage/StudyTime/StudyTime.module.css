@@ -1,0 +1,48 @@
+.container {
+  display: flex;
+  gap: 60px;
+}
+
+.heading {
+  margin: 0;
+  margin-bottom: 24px;
+  font-weight: var(--font-semibold);
+  font-size: var(--text-2xl);
+}
+
+.sub_heading {
+  margin-bottom: 8px;
+  color: var(--gray600);
+  font-size: var(--text-sm);
+}
+
+.box {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.box.share {
+  flex: 1;
+}
+
+.study_time_box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.total_time {
+  font-weight: var(--font-semibold);
+  font-size: var(--text-2xl);
+  line-height: 48px;
+}
+
+.time_table {
+  width: 100%;
+}
+
+.time_table.share {
+  flex: 1;
+}

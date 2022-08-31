@@ -5,12 +5,12 @@ export const getBookmark = async () => {
   return response;
 };
 
-export const addBookmark = async (roomId) => {
+export const saveBookmark = async (roomId) => {
   const response = await axiosInstance.post(`/bookmark/${roomId}`);
   return response;
 };
 
-export const deleteBookmark = async () => {
+export const removeBookmark = async () => {
   const response = await axiosInstance.delete("/bookmark");
   return response;
 };

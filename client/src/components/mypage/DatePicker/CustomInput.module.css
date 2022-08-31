@@ -1,12 +1,8 @@
 .date_input {
-  font-size: var(--text-sm);
-  background-color: var(--gray900, #212529);
+  width: 230px;
+  padding: 10px 32px;
+  background-color: var(--gray900);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 4px;
-  padding: 10px 32px;
-  width: inherit;
-}
-
-.date_input:hover {
-  background-color: var(--gray800, #343a40);
+  font-size: 0.875rem;
 }

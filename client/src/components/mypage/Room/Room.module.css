@@ -1,0 +1,35 @@
+.box {
+  display: flex;
+  padding: 12px;
+  gap: 12px;
+}
+
+.thumbnail_box {
+  background-color: #212529;
+  width: 140px;
+  padding: 3px 12px;
+  flex-shrink: 0;
+}
+
+.info_box {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  font-size: var(--text-sm);
+}
+
+.info_box > div {
+  margin: 0;
+  color: var(--gray300);
+  min-width: 240px;
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.title {
+  color: var(--gray100);
+  font-weight: var(--font-medium);
+  font-size: var(--text-xl);
+}

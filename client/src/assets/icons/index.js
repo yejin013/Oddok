@@ -29,6 +29,9 @@ import { ReactComponent as SendButton } from "./send-button.svg";
 import { ReactComponent as ArrowLeft } from "./arrow-left.svg";
 import { ReactComponent as ArrowRight } from "./arrow-right.svg";
 import { ReactComponent as Close } from "./x.svg";
+import { ReactComponent as EmojiDizzy } from "./emoji-dizzy.svg";
+import { ReactComponent as Award } from "./award-fill.svg";
+import { ReactComponent as Share } from "./share.svg";
 
 export {
   VideoOn,
@@ -62,4 +65,7 @@ export {
   ArrowLeft,
   ArrowRight,
   Close,
+  EmojiDizzy,
+  Award,
+  Share,
 };

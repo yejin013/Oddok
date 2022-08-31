@@ -30,12 +30,10 @@ export const totalSecondState = atom({
   default: 0,
 });
 
-export const startTimeState = atom({
-  key: "startTimeState",
-  default: null,
-});
-
-export const endTimeState = atom({
-  key: "endTimeState",
-  default: null,
+export const studyTimeState = atom({
+  key: "studyTimeState",
+  default: {
+    start: null,
+    end: null,
+  },
 });

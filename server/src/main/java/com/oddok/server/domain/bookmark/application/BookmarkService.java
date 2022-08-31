@@ -29,37 +29,49 @@ public class BookmarkService {
 
     private final BookmarkRepository bookmarkRepository;
     private final StudyRoomRepository studyRoomRepository;
+    private final UserRepository userRepository;
     private final ParticipantRepository participantRepository;
+
+    private final BookmarkMapper bookmarkMapper = Mappers.getMapper(BookmarkMapper.class);
+    private final ParticipantMapper participantMapper = Mappers.getMapper(ParticipantMapper.class);
 
     /**
      * 북마크 생성
      */
     @Transactional
-    public void create(User user, Long studyRoomId) {
+    public BookmarkDto create(User auth, Long studyRoomId) {
         StudyRoom studyRoom = findStudyRoom(studyRoomId);
+        User user = findUser(auth.getId());
 
-        Optional<Bookmark> bookmark = bookmarkRepository.findByUser(user);
-        if(bookmark.isPresent()) {
-           bookmark.get().changeStudyRoom(studyRoom);
+        Bookmark bookmark = bookmarkRepository.findByUser(user);
+        if(bookmark != null) {
+           bookmark.changeStudyRoom(studyRoom);
         } else {
-            bookmarkRepository.save(Bookmark.builder()
+            bookmark = bookmarkRepository.save(Bookmark.builder()
                     .user(user)
                     .studyRoom(studyRoom)
                     .build());
         }
+
+        List<ParticipantDto> participants = participantMapper.toDto(
+                participantRepository.findTop5ByStudyRoomOrderByJoinTimeAsc(studyRoom)
+        );
+
+        return bookmarkMapper.toDto(bookmark.getStudyRoom(), participants);
     }
 
     /**
      * 북마크 조회
      * @return
      */
-    public Optional<BookmarkDto> get(User user) {
-        Optional<Bookmark> bookmark = bookmarkRepository.findByUser(user);
+    public Optional<BookmarkDto> get(User auth) {
+        User user = findUser(auth.getId());
+        Bookmark bookmark = bookmarkRepository.findByUser(user);
 
-        if(bookmark.isEmpty())
+        if(bookmark == null)
             return Optional.empty();
 
-        StudyRoom studyRoom = bookmark.get().getStudyRoom();
+        StudyRoom studyRoom = bookmark.getStudyRoom();
 
         ParticipantMapper participantMapper = Mappers.getMapper(ParticipantMapper.class);
         List<ParticipantDto> participants = participantMapper.toDto(
@@ -74,7 +86,8 @@ public class BookmarkService {
      * 북마크 삭제
      */
     @Transactional
-    public void delete(User user) {
+    public void delete(User auth) {
+        User user = findUser(auth.getId());
         bookmarkRepository.deleteByUser(user);
     }
 
@@ -84,5 +97,12 @@ public class BookmarkService {
     private StudyRoom findStudyRoom(Long studyRoomId) {
         return studyRoomRepository.findByIdAndEndAtIsGreaterThanEqual(studyRoomId, LocalDate.now())
                 .orElseThrow(() -> new StudyRoomNotFoundException(studyRoomId));
+    }
+
+    /**
+     * 유저 정보 확인
+     */
+    private User findUser(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 }

@@ -2,42 +2,40 @@
   color: white;
 }
 
-.count,
-.detail_box,
+.detail,
 .rule {
   margin: 0;
 }
 
 .count_info {
   display: flex;
-  background-color: var(--gray950);
-}
-
-.count_box {
-  flex: 1 1 70%;
-  padding-left: 1em;
+  flex-direction: column;
+  padding: 0 1em;
+  padding-bottom: 1.3em;
 }
 
 .count_icon {
-  height: 44px;
-  gap: 12px;
+  height: 2.6em;
+  gap: 0.7em;
+  display: flex;
+  margin-bottom: 0.7em;
+  padding: 0 0.3em;
 }
 
-.count {
-  margin-top: 0.5em;
+.count_box {
+  display: flex;
+  align-items: flex-end;
+}
+
+.text {
+  flex: 1 1 70%;
   font-size: 1.8rem;
   font-weight: 600;
 }
 
-.button_box {
-  flex: 1 1 30%;
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
-}
-
 .button {
-  padding: 1em 6em;
+  flex: 1 1 30%;
+  padding: 0.8em 0;
   font-weight: 700;
   border-radius: 4px;
   color: var(--gray950);
@@ -46,39 +44,37 @@
 
 .info {
   display: flex;
+  justify-content: space-between;
   background-color: black;
   padding: 2em 1em;
-  margin: 1em 0;
 }
 
-.detail {
-  flex: 1 1 75%;
-  display: flex;
-  gap: 1em;
+.thumbnail {
+  width: 90%;
+  height: 15em;
+  padding: 0.5em;
+  background-color: var(--gray900);
 }
 
-.user_list {
-  flex: 1 1 25%;
+.detail_box {
+  width: 100%;
+  padding: 0 1em;
+}
+
+.users {
+  width: 90%;
   display: flex;
   flex-direction: column;
 }
 
-.thumbnail {
-  background-color: var(--gray900);
-}
-
-.room_info {
-  width: 60%;
-}
-
 .name {
   margin: 0;
-  margin-bottom: 0.5em;
+  margin-bottom: 0.7em;
   font-size: 1.2rem;
   font-weight: 500;
 }
 
-.detail_box {
+.detail {
   margin-bottom: 0.3em;
 }
 
@@ -99,20 +95,48 @@
 }
 
 .rule_title {
-  flex: 1 1 15%;
+  flex: 1 1 20%;
   font-weight: 500;
   font-size: 0.9rem;
   color: var(--gray300);
 }
 
 .rule_content {
-  flex: 1 1 85%;
+  flex: 1 1 80%;
   display: -webkit-box;
-  height: 85px;
   overflow: hidden;
-  text-overflow: ellipsis;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
+  white-space: pre-wrap;
   font-size: 0.9rem;
+  color: var(--gray500);
+}
+
+.list {
+  display: flex;
+  align-items: center;
+  margin: 0.2em 0;
+  padding: 0.6em;
+  border-radius: 4px;
+  background-color: var(--gray950);
+}
+
+.nickname {
+  flex: 1 1 60%;
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--gray700);
+}
+
+.time {
+  font-size: 0.7rem;
+  color: var(--gray700);
+}
+
+.list.active .nickname {
+  color: var(--primary);
+}
+
+.list.active .time {
   color: var(--gray500);
 }

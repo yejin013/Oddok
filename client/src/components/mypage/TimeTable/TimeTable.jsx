@@ -1,23 +1,20 @@
 import React from "react";
 import TimeTableGrid from "./TimeTableGrid/TimeTableGrid";
 import TimeRecordBlock from "./TimeRecordBlock/TimeRecordBlock";
-import styles from "./TimeTable.module.css";
 
-// {startTime, endTime, subject, color} 리스트
 function TimeTable({ timeRecordList }) {
   return (
-    <div className={styles.container}>
-      <TimeTableGrid />
-      {timeRecordList?.map((record) => (
+    <TimeTableGrid>
+      {timeRecordList?.map((record, i) => (
         <TimeRecordBlock
-          startH={record.startTime.getHours()}
-          startM={record.startTime.getMinutes()}
-          endH={record.endTime.getHours()}
-          endM={record.endTime.getMinutes()}
+          // eslint-disable-next-line react/no-array-index-key
+          key={i}
+          startTime={record.startTime}
+          endTime={record.endTime}
           color={record.color}
         />
       ))}
-    </div>
+    </TimeTableGrid>
   );
 }
 

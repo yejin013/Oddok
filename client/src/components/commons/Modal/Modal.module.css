@@ -22,6 +22,7 @@
   background-color: var(--gray900);
   border-radius: 6px;
   box-shadow: 0px 10px 20px rgba(32, 37, 38, 0.1), 0px 20px 50px rgba(32, 37, 38, 0.1);
+  white-space: pre-wrap;
 }
 
 .overlay header {
@@ -78,6 +79,13 @@
 
 .main_btn:hover {
   background-color: #e9b636;
+}
+
+.main_btn:disabled {
+  border: 1px solid var(--gray900);
+  background-color: var(--gray800);
+  color: var(--gray500);
+  cursor: default;
 }
 
 .sub_btn {
