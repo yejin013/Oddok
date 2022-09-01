@@ -6,8 +6,8 @@ import CalendarHeader from "./CalendarHeader";
 import "react-datepicker/dist/react-datepicker.css";
 import "../../../assets/styles/calendar_style.css";
 
-function Calendar({ onChange, defaultDate }) {
-  const [currentDate, setCurrentDate] = useState(defaultDate || new Date());
+function Calendar({ onChange, placeholderText, defaultDate }) {
+  const [currentDate, setCurrentDate] = useState(defaultDate);
 
   const changeDate = (date) => {
     setCurrentDate(date);
@@ -23,7 +23,7 @@ function Calendar({ onChange, defaultDate }) {
       minDate={new Date()}
       showPopperArrow={false}
       popperPlacement="bottom"
-      customInput={<DateInput />}
+      customInput={<DateInput placeholderText={placeholderText} />}
       renderCustomHeader={CalendarHeader}
     />
   );
