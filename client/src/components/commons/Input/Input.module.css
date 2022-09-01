@@ -1,27 +1,35 @@
-.container {
+.text_field {
   display: flex;
-}
-
-.container input,
-.container div {
-  display: block;
-}
-
-.container input {
+  align-items: center;
   border: 1px solid #ffffff1a;
   border-radius: 4px;
   background-color: var(--gray900);
   color: #ffffff;
   font-size: inherit;
-  padding: 0.8125em 1em;
+  padding: 0.75em 1em;
   width: 100%;
 }
 
-.container input:focus {
-  outline: none;
-  border: 1px solid #ffffff1a;
+.input {
+  width: 100%;
+  border: none;
+  background-color: transparent;
+  color: white;
 }
 
-.container.invalid input {
-  border: 1px solid #dc3545;
+.input:focus {
+  outline: none;
+}
+
+.input::placeholder {
+  color: var(--gray600);
+}
+
+.invalid {
+  border: 1px solid var(--red);
+}
+
+.text_length {
+  padding-left: 8px;
+  color: var(--gray600);
 }

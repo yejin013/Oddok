@@ -1,14 +1,42 @@
-.box {
+.text_field {
+  display: flex;
   border: 1px solid #ffffff1a;
   border-radius: 4px;
   background-color: var(--gray900);
-  color: #ffffff;
-  padding: 1em;
+  padding: 0.6rem 1rem;
   width: 100%;
   height: 100%;
   font-size: inherit;
 }
 
-.box:focus {
+.textarea {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background-color: transparent;
+  color: #ffffff;
+  resize: none;
+}
+
+.textarea:focus {
   outline: none;
+}
+
+.textarea::placeholder {
+  color: var(--gray600);
+}
+
+.textarea::-webkit-scrollbar {
+  display: none;
+}
+
+.invalid {
+  border: 1px solid var(--red);
+}
+
+.text_length {
+  display: flex;
+  align-items: flex-end;
+  padding-left: 8px;
+  color: var(--gray600);
 }

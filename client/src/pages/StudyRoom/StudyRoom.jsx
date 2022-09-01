@@ -31,7 +31,6 @@ function StudyRoom() {
   const participants = localUser ? [localUser, ...remoteUsers] : [];
   const [deviceStatus, setDeviceStatus] = useRecoilState(deviceState);
   const setRoomInfo = useSetRecoilState(roomInfoState);
-  const resetRoomInfo = useResetRecoilState(roomInfoState);
   const resetHour = useResetRecoilState(hourState);
   const resetMinute = useResetRecoilState(minuteState);
   const resetSecond = useResetRecoilState(secondState);
@@ -46,7 +45,6 @@ function StudyRoom() {
   const setError = useSetRecoilState(errorState);
 
   const resetState = () => {
-    resetRoomInfo();
     resetHour();
     resetMinute();
     resetSecond();

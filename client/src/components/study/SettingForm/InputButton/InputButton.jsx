@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/no-autofocus */
-import React, { useRef, useState, useEffect, forwardRef, useImperativeHandle } from "react";
+import React, { useRef, useState, useEffect, forwardRef } from "react";
 import { Hashtag, Cancel } from "@icons";
 import styles from "./InputButton.module.css";
 
-const InputButton = forwardRef(({ onSubmit, onDelete }, ref) => {
+function InputButton({ onSubmit, onDelete }) {
   const valueRef = useRef();
   const [value, setValue] = useState("사용자입력");
   const [width, setWidth] = useState();
@@ -42,6 +42,6 @@ const InputButton = forwardRef(({ onSubmit, onDelete }, ref) => {
       </label>
     </form>
   );
-});
+}
 
 export default InputButton;

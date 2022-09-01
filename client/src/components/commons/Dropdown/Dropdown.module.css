@@ -15,7 +15,7 @@
   border: 1px solid #ffffff1a;
   border-radius: 4px;
   width: 100%;
-  padding: 0.8125em 1em;
+  padding: 0.75em 1em;
 }
 
 .icon {
@@ -46,7 +46,7 @@
 
 .container ul li {
   list-style: none;
-  padding: 0.8125em 1em;
+  padding: 0.75em 1em;
 }
 
 .container ul li:hover {

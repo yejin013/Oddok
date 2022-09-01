@@ -1,0 +1,35 @@
+.label {
+  margin: 0;
+  margin-bottom: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.hashtag_item {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 0.85rem;
+}
+
+.add_button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin: 0.5rem;
+  border: 1px solid var(--gray700);
+  border-radius: 50%;
+}
+
+.add_button > svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.add_button line {
+  stroke: var(--gray700);
+  stroke-width: 1px;
+}

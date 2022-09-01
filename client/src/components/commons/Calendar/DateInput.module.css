@@ -3,12 +3,8 @@
   background-color: var(--gray900, #212529);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 4px;
-  padding: 0.8125em 1em;
+  padding: 0.75em 1em;
   text-align: left;
   width: inherit;
   font-size: 1em;
-}
-
-.date_input:hover {
-  background-color: var(--gray800, #343a40);
 }

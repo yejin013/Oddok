@@ -1,0 +1,26 @@
+.heading {
+  margin: 0;
+  margin-bottom: 4px;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.sub_heading {
+  margin: 0;
+  margin-bottom: 1.5rem;
+  color: var(--gray600);
+  font-size: 1rem;
+}
+
+.category {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  padding-bottom: 38px;
+  border-bottom: 1px solid var(--gray900);
+  font-size: 0.85rem;
+}
+
+.item {
+  flex: 1;
+}
