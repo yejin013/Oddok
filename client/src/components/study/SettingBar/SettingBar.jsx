@@ -35,26 +35,14 @@ function SettingBar({ goToStudyRoom, toggleVideo, toggleAudio, clickSideBarBtn, 
       </div>
       <ul className={styles.buttons}>
         <li className={styles.video_button}>
-          {videoActive ? (
-            <button type="button" onClick={toggleVideo}>
-              <VideoOn />
-            </button>
-          ) : (
-            <button type="button" className={styles.off} onClick={toggleVideo}>
-              <VideoOff />
-            </button>
-          )}
+          <button type="button" className={videoActive ? "" : styles.off} onClick={toggleVideo}>
+            {videoActive ? <VideoOn /> : <VideoOff />}
+          </button>
         </li>
         <li className={styles.audio_button}>
-          {audioActive ? (
-            <button type="button" onClick={toggleAudio}>
-              <MicOn />
-            </button>
-          ) : (
-            <button type="button" className={styles.off} onClick={toggleAudio}>
-              <MicOff />
-            </button>
-          )}
+          <button type="button" className={audioActive ? "" : styles.off} onClick={toggleAudio}>
+            {audioActive ? <MicOn /> : <MicOff />}
+          </button>
         </li>
         <li>
           <button type="button" className={styles.start_button} onClick={goToStudyRoom} disabled={!roomInfo.name}>
