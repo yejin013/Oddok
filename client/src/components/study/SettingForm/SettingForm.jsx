@@ -29,9 +29,10 @@ function SettingForm({ roomData, onClose, onUpdate }) {
   const [bgmlink, setBgmlink] = useState(initialData.bgmlink);
   const [rule, setRule] = useState(initialData.rule);
 
-  const isInvalidRoomName = /[\u{1F004}-\u{1F9E6}]|[\u{1F600}-\u{1F9D0}]/gu.test(roomName);
+  const validateInput = (input) => /[\u{1F004}-\u{1F9E6}]|[\u{1F600}-\u{1F9D0}]/gu.test(input);
+  const isInvalidRoomName = validateInput(roomName);
+  const isInvalidRule = validateInput(rule);
   const isInvalidPassword = password?.length > 0 && !/^[0-9]+$/.test(password);
-  const isInvalidRule = /[\u{1F004}-\u{1F9E6}]|[\u{1F600}-\u{1F9D0}]/gu.test(rule);
   const disabled = !category || !roomName || !limitUsers || isInvalidRoomName || isInvalidPassword || isInvalidRule;
 
   const [isClickedDetail, setIsClickedDetail] = useState(false);
