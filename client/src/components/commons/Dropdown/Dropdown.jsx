@@ -5,7 +5,7 @@ import styles from "./Dropdown.module.css";
 
 function Dropdown({ options, onSelect, defaultValue }) {
   const [isActive, setIsActive] = useState(false);
-  const [selectedOpt, setSelectedOpt] = useState(defaultValue);
+  const [current, setCurrent] = useState(options.find(({ value }) => value === defaultValue)?.label);
   const dropdownRef = useRef();
 
   useOutSideClick(dropdownRef, () => setIsActive(false));
@@ -14,24 +14,25 @@ function Dropdown({ options, onSelect, defaultValue }) {
     setIsActive((prev) => !prev);
   };
 
-  const clickOption = (label, value) => {
-    setSelectedOpt(label);
+  const clickOption = (option) => {
+    const { value, label } = option;
     onSelect(value);
+    setCurrent(label);
     setIsActive(false);
   };
 
   return (
     <div ref={dropdownRef} className={styles.container}>
       <div className={styles.select} onClick={toggleMenu}>
-        <p className={styles.selected_opt}>{selectedOpt || options[0].label}</p>
+        <div className={styles.selected_opt}>{current}</div>
         <div className={styles.icon}>
           <ArrowDown />
         </div>
       </div>
-      <ul className={`${isActive ? styles.active : ""}`}>
+      <ul className={isActive ? styles.active : ""}>
         {options.map((option) => (
           // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
-          <li key={option.value} className={styles.opt} onClick={() => clickOption(option.label, option.value)}>
+          <li key={option.value} className={styles.opt} onClick={() => clickOption(option)}>
             {option.label}
           </li>
         ))}

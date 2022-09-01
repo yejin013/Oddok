@@ -17,8 +17,8 @@ function SettingForm({ roomData, onClose, onUpdate }) {
   const [category, setCategory] = useState(initialData.category);
   const [roomName, setRoomName] = useState(initialData.name);
   const [limitUsers, setLimitUsers] = useState(initialData.limitUsers);
-  const [targetTime, setTargetTime] = useState(initialData.targetTime);
   const [hashtags, setHashtags] = useState(initialData.hashtags);
+  const [targetTime, setTargetTime] = useState(initialData.targetTime);
   const [endAt, setEndAt] = useState(initialData.endAt);
   const [password, setPassword] = useState(initialData.password ?? "");
   const [deviceRule, setDeviceRule] = useState({
@@ -43,6 +43,7 @@ function SettingForm({ roomData, onClose, onUpdate }) {
   const clickSaveBtn = () => {
     const data = {
       ...initialData,
+      category,
       name: roomName,
       hashtags,
       isPublic: !password,
@@ -113,7 +114,7 @@ function SettingForm({ roomData, onClose, onUpdate }) {
           </div>
           <div className={styles.roominfo_item}>
             <h3 className={styles.label}>인원 수 *</h3>
-            <Dropdown options={USERLIMIT_OPTIONS} onSelect={setLimitUsers} defaultValue={`${limitUsers}명`} />
+            <Dropdown options={USERLIMIT_OPTIONS} onSelect={setLimitUsers} defaultValue={limitUsers} />
           </div>
           <div className={styles.roominfo_item}>
             <HashtagForm hashtags={hashtags} setHashtags={setHashtags} />
@@ -131,7 +132,7 @@ function SettingForm({ roomData, onClose, onUpdate }) {
               <div>
                 <div>
                   <h3 className={styles.label}>목표시간</h3>
-                  <Dropdown options={TARGET_TIME_OPTIONS} onSelect={setTargetTime} defaultValue={`${targetTime}시간`} />
+                  <Dropdown options={TARGET_TIME_OPTIONS} onSelect={setTargetTime} defaultValue={targetTime} />
                 </div>
                 <div>
                   <h3 className={styles.label}> 스터디 기간</h3>
