@@ -11,27 +11,30 @@ import { useGoToPage, useAsync } from "@hooks";
 
 function JoinRoom() {
   const { roomId } = useParams();
-  const [userInfo, setUserInfo] = useRecoilState(userState);
+  const [user, setUser] = useRecoilState(userState);
   const setRoomInfo = useSetRecoilState(roomInfoState);
   const setError = useSetRecoilState(errorState);
   const { goToStudy } = useGoToPage();
-
-  const { loading, request: joinStudy } = useAsync({
+  const { loading: joinReqLoading, request: joinStudy } = useAsync({
     requestFn: () => joinStudyRoom(roomId),
     onSuccess: ({ token }) => goToStudy(roomId, token),
     onError: (error) => setError(error),
   });
 
   useEffect(() => {
-    setUserInfo({ ...userInfo, updateAllowed: false }); // @TODO 방장 권한 부여
     getStudyRoom(roomId)
-      .then((data) => setRoomInfo(data))
+      .then((data) => {
+        setRoomInfo(data);
+        if (data.userId === user.id) {
+          setUser((prev) => ({ ...prev, updateAllowed: true }));
+        }
+      })
       .catch((e) => console.error(e));
   }, []);
 
   return (
     <>
-      {loading && <Loading />}
+      {joinReqLoading && <Loading />}
       <SettingRoom goToStudyRoom={joinStudy} />
     </>
   );

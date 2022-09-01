@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useLayoutEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { useRecoilState, useSetRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useSetRecoilState, useResetRecoilState } from "recoil";
 import { userState } from "@recoil/user-state";
-import { deviceState } from "@recoil/studyroom-state";
+import { roomInfoState, deviceState } from "@recoil/studyroom-state";
 import { planState, selectedPlanState } from "@recoil/plan-state";
 import { SettingBar, SettingForm, SettingSideBar, PlanSidebar, UserVideo } from "@components/study";
 import { useToggleSideBar, useMyStream } from "@hooks";
@@ -13,18 +13,19 @@ function SettingRoom({ goToStudyRoom }) {
   const path = location.pathname === "/studyroom/create";
   const { videoRef, videoActive, audioActive, toggleVideo, toggleAudio } = useMyStream();
   const { sideBarType, toggleSideBar } = useToggleSideBar();
-  const { nickname, updateAllowed } = useRecoilValue(userState);
+  const [user, setUser] = useRecoilState(userState);
+  const { nickname, updateAllowed } = user;
+  const resetRoomInfo = useResetRecoilState(roomInfoState);
   const setDeviceStatus = useSetRecoilState(deviceState);
-  const [plans, setPlans] = useRecoilState(planState);
-  const [selectedPlan, setSelectedplan] = useRecoilState(selectedPlanState);
+  const setPlans = useSetRecoilState(planState);
+  const setSelectedplan = useSetRecoilState(selectedPlanState);
 
-  useEffect(() => {
-    if (plans.length <= 0) return;
-
+  useLayoutEffect(() => {
+    if (path) setUser({ ...user, updateAllowed: true });
+    else setUser({ ...user, updateAllowed: false });
+    resetRoomInfo();
     setPlans([]);
-    if (selectedPlan) {
-      setSelectedplan(null);
-    }
+    setSelectedplan(null);
   }, []);
 
   return (
