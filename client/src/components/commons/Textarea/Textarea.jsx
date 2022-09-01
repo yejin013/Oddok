@@ -20,7 +20,7 @@ const Textarea = forwardRef(
         </textarea>
         {textLength !== undefined && (
           <span className={styles.text_length}>
-            {textLength}/{maxLength}
+            {textLength ?? 0}/{maxLength}
           </span>
         )}
       </div>

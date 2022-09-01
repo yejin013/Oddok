@@ -32,7 +32,7 @@ function SettingForm({ roomData, onClose, onUpdate }) {
   const isInvalidRoomName = /[\u{1F004}-\u{1F9E6}]|[\u{1F600}-\u{1F9D0}]/gu.test(roomName);
   const isInvalidPassword = password?.length > 0 && !/^[0-9]+$/.test(password);
   const isInvalidRule = /[\u{1F004}-\u{1F9E6}]|[\u{1F600}-\u{1F9D0}]/gu.test(rule);
-  const disabled = !category || !limitUsers || isInvalidRoomName || isInvalidPassword || isInvalidRule;
+  const disabled = !category || !roomName || !limitUsers || isInvalidRoomName || isInvalidPassword || isInvalidRule;
 
   const [isClickedDetail, setIsClickedDetail] = useState(false);
 
@@ -108,7 +108,7 @@ function SettingForm({ roomData, onClose, onUpdate }) {
               onChange={onChangeRoomName}
               isInvalid={isInvalidRoomName}
               maxLength="20"
-              textLength={roomName.length}
+              textLength={roomName ? roomName.length : 0}
             />
           </div>
           <div className={styles.roominfo_item}>
@@ -187,7 +187,7 @@ function SettingForm({ roomData, onClose, onUpdate }) {
                   onChange={onChangeRule}
                   isInvalid={isInvalidRule}
                   maxLength="300"
-                  textLength={rule.length}
+                  textLength={rule ? rule.length : 0}
                 />
               </div>
             </div>
