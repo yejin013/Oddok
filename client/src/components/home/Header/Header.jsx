@@ -3,7 +3,7 @@ import { useRecoilState } from "recoil";
 import { useHistory } from "react-router-dom";
 import { userState } from "@recoil/user-state";
 import { Search, Profile } from "@icons";
-import { getNickname, getUserInfo } from "@api/user-api";
+import { getUserInfo } from "@api/user-api";
 import { NicknameEditModal } from "@components/commons";
 import { KAKAO_LOGOUT_URL } from "@api/auth/kakao";
 import { useModal, useGoToPage, useOutSideClick } from "@hooks";
