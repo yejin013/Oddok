@@ -2,20 +2,30 @@
 import React, { forwardRef } from "react";
 import styles from "./Textarea.module.css";
 
-const Textarea = forwardRef(({ placeholder, content, disabled, onChange, value }, ref) => {
-  return (
-    <textarea
-      className={styles.box}
-      ref={ref}
-      placeholder={placeholder}
-      disabled={disabled}
-      onChange={onChange}
-      value={value}
-      spellCheck="false"
-    >
-      {content}
-    </textarea>
-  );
-});
+const Textarea = forwardRef(
+  ({ placeholder, content, disabled, onChange, value, isInvalid, maxLength, textLength }, ref) => {
+    return (
+      <div className={`${styles.text_field} ${isInvalid ? styles.invalid : ""}`}>
+        <textarea
+          className={styles.textarea}
+          ref={ref}
+          placeholder={placeholder}
+          disabled={disabled}
+          onChange={onChange}
+          value={value}
+          spellCheck="false"
+          maxLength={maxLength}
+        >
+          {content}
+        </textarea>
+        {textLength !== undefined && (
+          <span className={styles.text_length}>
+            {textLength ?? 0}/{maxLength}
+          </span>
+        )}
+      </div>
+    );
+  },
+);
 
 export default Textarea;

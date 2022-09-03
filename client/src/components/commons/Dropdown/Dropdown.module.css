@@ -2,11 +2,6 @@
   position: relative;
   color: var(--gray100);
   cursor: pointer;
-  font-size: inherit;
-}
-
-.container p {
-  margin: 0;
 }
 
 .select {
@@ -15,7 +10,7 @@
   border: 1px solid #ffffff1a;
   border-radius: 4px;
   width: 100%;
-  padding: 0.8125em 1em;
+  padding: 0.75em 1em;
 }
 
 .icon {
@@ -25,11 +20,11 @@
   margin-left: auto;
 }
 
-.container ul {
+.container > ul {
   display: none;
 }
 
-.container ul.active {
+.container > ul.active {
   display: block;
   position: absolute;
   width: 100%;
@@ -41,14 +36,13 @@
   z-index: 1;
   max-height: 140px;
   overflow: auto;
-  scrollbar-color: #d4aa70 #e4e4e4;
 }
 
-.container ul li {
+.container li {
   list-style: none;
-  padding: 0.8125em 1em;
+  padding: 0.75em 1em;
 }
 
-.container ul li:hover {
+.container li:hover {
   background-color: rgba(52, 58, 64, 0.5);
 }

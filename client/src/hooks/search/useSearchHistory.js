@@ -7,7 +7,11 @@ const useSearchHistory = () => {
 
   const addHistory = (text) => {
     const newItem = { key: new Date(), text };
-    const updatedHistory = [...getHistory(), newItem];
+    const prevHistory = getHistory();
+    const updatedHistory = [
+      ...prevHistory.filter((e, i) => i > prevHistory.length - 10 && e.text !== newItem.text),
+      newItem,
+    ];
     localStorage.setItem("keywords", JSON.stringify(updatedHistory));
     setHistory(updatedHistory);
   };

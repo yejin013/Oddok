@@ -40,18 +40,18 @@ function MyGoalEditModal({ profileData, onClose, refetch }) {
       <div className={styles.item}>
         <h3>디데이</h3>
         <div className={styles.dday}>
-          <Calendar onChange={selectDate} defaultDate={inputData?.dday && dateParsing(inputData.dday)} />
-          <Input onChange={inputDdayInfo} value={inputData?.ddayInfo || ""} />
+          <Calendar
+            onChange={selectDate}
+            placeholderText="날짜를 선택해주세요"
+            defaultDate={inputData?.dday && dateParsing(inputData.dday)}
+          />
+          <Input onChange={inputDdayInfo} placeholder="디데이 제목을 입력해주세요" value={inputData?.ddayInfo || ""} />
         </div>
       </div>
       <div className={styles.item}>
         <h3>공부시간</h3>
         <div>
-          <Dropdown
-            options={TARGET_TIME_OPTIONS}
-            onSelect={selectTargetTime}
-            defaultValue={inputData?.targetTime && `${inputData.targetTime}시간`}
-          />
+          <Dropdown options={TARGET_TIME_OPTIONS} onSelect={selectTargetTime} defaultValue={inputData?.targetTime} />
         </div>
       </div>
       <div className={styles.item}>

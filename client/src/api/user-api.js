@@ -11,3 +11,8 @@ export const editNickname = async (nickname) => {
   });
   return response;
 };
+
+export const getUserInfo = async () => {
+  const response = await axiosInstance.get("/user/info");
+  return response;
+};
