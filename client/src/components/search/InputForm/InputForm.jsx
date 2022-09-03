@@ -9,6 +9,7 @@ function InputForm() {
   const { addHistory } = useSearchHistory();
 
   const searchTitleHandler = () => {
+    if (titleRef.current.value === "") return;
     addHistory(titleRef.current.value);
     setSearchParams("title", titleRef.current.value, "/search/studyroom");
   };
