@@ -12,6 +12,7 @@ import {
 } from "@recoil/timer-state";
 import { saveTime } from "@api/time-record-api";
 import { Play, Pause, GoalOpen } from "@icons";
+import { stringifyDate } from "@utils";
 import styles from "./SubjectTime.module.css";
 
 function SubjectTime({ onPlanBtnClick }) {
@@ -81,12 +82,12 @@ function SubjectTime({ onPlanBtnClick }) {
   }, [selectedPlan]);
 
   const saveStartTime = () => {
-    setStudyTime({ ...studyTime, start: new Date() });
+    setStudyTime({ ...studyTime, start: stringifyDate(new Date()) });
     setIsRecording(true);
   };
 
   const saveEndTime = () => {
-    setStudyTime({ ...studyTime, end: new Date() });
+    setStudyTime({ ...studyTime, end: stringifyDate(new Date()) });
     setIsRecording(false);
   };
 
