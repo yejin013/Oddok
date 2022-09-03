@@ -2,7 +2,6 @@
   position: relative;
   color: var(--gray100);
   cursor: pointer;
-  font-size: inherit;
 }
 
 .select {
@@ -37,7 +36,6 @@
   z-index: 1;
   max-height: 140px;
   overflow: auto;
-  scrollbar-color: #d4aa70 #e4e4e4;
 }
 
 .container li {
