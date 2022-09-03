@@ -17,8 +17,8 @@ function SettingForm({ roomData, onClose, onUpdate }) {
   const [category, setCategory] = useState(initialData.category);
   const [roomName, setRoomName] = useState(initialData.name);
   const [limitUsers, setLimitUsers] = useState(initialData.limitUsers);
-  const [targetTime, setTargetTime] = useState(initialData.targetTime);
   const [hashtags, setHashtags] = useState(initialData.hashtags);
+  const [targetTime, setTargetTime] = useState(initialData.targetTime);
   const [endAt, setEndAt] = useState(initialData.endAt);
   const [password, setPassword] = useState(initialData.password ?? "");
   const [deviceRule, setDeviceRule] = useState({
@@ -29,10 +29,11 @@ function SettingForm({ roomData, onClose, onUpdate }) {
   const [bgmlink, setBgmlink] = useState(initialData.bgmlink);
   const [rule, setRule] = useState(initialData.rule);
 
-  const isInvalidRoomName = /[\u{1F004}-\u{1F9E6}]|[\u{1F600}-\u{1F9D0}]/gu.test(roomName);
+  const validateInput = (input) => /[\u{1F004}-\u{1F9E6}]|[\u{1F600}-\u{1F9D0}]/gu.test(input);
+  const isInvalidRoomName = validateInput(roomName);
+  const isInvalidRule = validateInput(rule);
   const isInvalidPassword = password?.length > 0 && !/^[0-9]+$/.test(password);
-  const isInvalidRule = /[\u{1F004}-\u{1F9E6}]|[\u{1F600}-\u{1F9D0}]/gu.test(rule);
-  const disabled = !category || !limitUsers || isInvalidRoomName || isInvalidPassword || isInvalidRule;
+  const disabled = !category || !roomName || !limitUsers || isInvalidRoomName || isInvalidPassword || isInvalidRule;
 
   const [isClickedDetail, setIsClickedDetail] = useState(false);
 
@@ -43,6 +44,7 @@ function SettingForm({ roomData, onClose, onUpdate }) {
   const clickSaveBtn = () => {
     const data = {
       ...initialData,
+      category,
       name: roomName,
       hashtags,
       isPublic: !password,
@@ -108,12 +110,12 @@ function SettingForm({ roomData, onClose, onUpdate }) {
               onChange={onChangeRoomName}
               isInvalid={isInvalidRoomName}
               maxLength="20"
-              textLength={roomName.length}
+              textLength={roomName ? roomName.length : 0}
             />
           </div>
           <div className={styles.roominfo_item}>
             <h3 className={styles.label}>인원 수 *</h3>
-            <Dropdown options={USERLIMIT_OPTIONS} onSelect={setLimitUsers} defaultValue={`${limitUsers}명`} />
+            <Dropdown options={USERLIMIT_OPTIONS} onSelect={setLimitUsers} defaultValue={limitUsers} />
           </div>
           <div className={styles.roominfo_item}>
             <HashtagForm hashtags={hashtags} setHashtags={setHashtags} />
@@ -131,7 +133,7 @@ function SettingForm({ roomData, onClose, onUpdate }) {
               <div>
                 <div>
                   <h3 className={styles.label}>목표시간</h3>
-                  <Dropdown options={TARGET_TIME_OPTIONS} onSelect={setTargetTime} defaultValue={`${targetTime}시간`} />
+                  <Dropdown options={TARGET_TIME_OPTIONS} onSelect={setTargetTime} defaultValue={targetTime} />
                 </div>
                 <div>
                   <h3 className={styles.label}> 스터디 기간</h3>
@@ -187,7 +189,7 @@ function SettingForm({ roomData, onClose, onUpdate }) {
                   onChange={onChangeRule}
                   isInvalid={isInvalidRule}
                   maxLength="300"
-                  textLength={rule.length}
+                  textLength={rule ? rule.length : 0}
                 />
               </div>
             </div>

@@ -8,3 +8,7 @@
   width: inherit;
   font-size: 1em;
 }
+
+.placeholder {
+  color: var(--gray600);
+}

@@ -3,7 +3,7 @@ import { useRecoilState } from "recoil";
 import { useHistory } from "react-router-dom";
 import { userState } from "@recoil/user-state";
 import { Search, Profile } from "@icons";
-import { getNickname } from "@api/user-api";
+import { getUserInfo } from "@api/user-api";
 import { NicknameEditModal } from "@components/commons";
 import { KAKAO_LOGOUT_URL } from "@api/auth/kakao";
 import { useModal, useGoToPage, useOutSideClick } from "@hooks";
@@ -23,8 +23,8 @@ function Header() {
     if (!user.isLogin || user.nickname !== null) {
       return;
     }
-    getNickname()
-      .then((response) => setUserState((prev) => ({ ...prev, nickname: response.nickname })))
+    getUserInfo()
+      .then((response) => setUserState((prev) => ({ ...prev, id: response.id, nickname: response.nickname })))
       .catch((error) => console.error(error));
   }, [user.isLogin, user.nickname]);
 

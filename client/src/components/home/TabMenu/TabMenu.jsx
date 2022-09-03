@@ -22,12 +22,7 @@ function TabMenu({ setCurrentCategory, defaultValue }) {
   return (
     <nav className={styles.tab_menu}>
       {Object.entries(items).map(([key, value]) => (
-        <TabMenuItem
-          key={key}
-          title={value}
-          onClick={() => filterCategoryHandler(key)}
-          status={current === key ? "active" : ""}
-        />
+        <TabMenuItem key={key} value={value} onClick={() => filterCategoryHandler(key)} status={current === key} />
       ))}
     </nav>
   );

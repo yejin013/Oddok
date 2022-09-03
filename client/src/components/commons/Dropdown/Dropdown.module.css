@@ -5,10 +5,6 @@
   font-size: inherit;
 }
 
-.container p {
-  margin: 0;
-}
-
 .select {
   display: flex;
   background-color: var(--gray900);
@@ -25,11 +21,11 @@
   margin-left: auto;
 }
 
-.container ul {
+.container > ul {
   display: none;
 }
 
-.container ul.active {
+.container > ul.active {
   display: block;
   position: absolute;
   width: 100%;
@@ -44,11 +40,11 @@
   scrollbar-color: #d4aa70 #e4e4e4;
 }
 
-.container ul li {
+.container li {
   list-style: none;
   padding: 0.75em 1em;
 }
 
-.container ul li:hover {
+.container li:hover {
   background-color: rgba(52, 58, 64, 0.5);
 }

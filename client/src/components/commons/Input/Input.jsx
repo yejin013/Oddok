@@ -5,9 +5,9 @@ import styles from "./Input.module.css";
 const Input = forwardRef(
   ({ type, placeholder, maxLength, onChange, isInvalid, value, onKeyPress, textLength }, inputRef) => {
     return (
-      <div className={styles.text_field}>
+      <div className={`${styles.text_field} ${isInvalid ? styles.invalid : ""}`}>
         <input
-          className={`${styles.input} ${isInvalid ? styles.invalid : ""}`}
+          className={styles.input}
           type={type ?? "text"}
           ref={inputRef}
           placeholder={placeholder}
