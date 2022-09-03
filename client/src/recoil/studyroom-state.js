@@ -12,10 +12,10 @@ export const roomInfoState = atom({
   key: "roomInfoState",
   default: {
     name: "",
-    category: "",
+    category: null,
     hashtags: [],
     targetTime: 10,
-    limitUsers: 4,
+    limitUsers: null,
     isPublic: true,
     password: "",
     rule: "",

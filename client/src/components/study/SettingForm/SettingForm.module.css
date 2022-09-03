@@ -16,6 +16,7 @@
   padding-bottom: 0;
   margin: 0 auto;
   color: var(--gray100);
+  font-size: 0.85rem;
 }
 
 .close_btn {
@@ -39,7 +40,6 @@
 .roominfo_item {
   display: flex;
   flex-direction: column;
-  font-size: 0.85rem;
 }
 
 .device_item {
@@ -81,7 +81,6 @@
   flex-direction: row;
   gap: 24px;
   margin-bottom: 2rem;
-  font-size: 0.875rem;
 }
 
 .items > div:nth-child(1) {
