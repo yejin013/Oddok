@@ -1,10 +1,10 @@
-import React, { useState, useLayoutEffect } from "react";
+import React, { useState, useLayoutEffect, useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { roomInfoState } from "@recoil/studyroom-state";
 import { ToggleButton, Dropdown, Input, Textarea, Calendar } from "@components/commons";
 import { VideoOn, VideoOff, MicOn, MicOff } from "@icons";
 import { TARGET_TIME_OPTIONS, USERLIMIT_OPTIONS } from "@utils/constants/options";
-import { dateParsing } from "@utils";
+import { dateParsing, dateFormatting } from "@utils";
 import CloseButton from "./CloseButton/CloseButton";
 import CategoryForm from "./CategoryForm/CategoryForm";
 import HashtagForm from "./HashtagForm/HashtagForm";
@@ -32,7 +32,7 @@ function SettingForm({ roomData, onClose, onUpdate }) {
   const validateInput = (input) => /[\u{1F004}-\u{1F9E6}]|[\u{1F600}-\u{1F9D0}]/gu.test(input);
   const isInvalidRoomName = validateInput(roomName);
   const isInvalidRule = validateInput(rule);
-  const isInvalidPassword = password?.length > 0 && !/^[0-9]+$/.test(password);
+  const isInvalidPassword = password?.length > 0 && !(/^[0-9]+$/.test(password) && password.length === 4);
   const disabled = !category || !roomName || !limitUsers || isInvalidRoomName || isInvalidPassword || isInvalidRule;
 
   const [isClickedDetail, setIsClickedDetail] = useState(false);
@@ -46,9 +46,14 @@ function SettingForm({ roomData, onClose, onUpdate }) {
       ...initialData,
       category,
       name: roomName,
+      limitUsers,
       hashtags,
-      isPublic: !password,
+      targetTime,
+      endAt,
       password,
+      isPublic: !password,
+      isCamOn,
+      isMicOn,
       bgmlink,
       rule,
     };
@@ -66,6 +71,10 @@ function SettingForm({ roomData, onClose, onUpdate }) {
   const toggleDeviceRule = (e) => {
     const { name, checked } = e.target;
     setDeviceRule((prev) => ({ ...prev, [name]: checked }));
+  };
+
+  const onChangeEndAt = (date) => {
+    setEndAt(dateFormatting(date));
   };
 
   const onChangeRoomName = (e) => {
@@ -137,7 +146,7 @@ function SettingForm({ roomData, onClose, onUpdate }) {
                 </div>
                 <div>
                   <h3 className={styles.label}> 스터디 기간</h3>
-                  <Calendar onChange={setEndAt} defaultDate={dateParsing(endAt)} />
+                  <Calendar onChange={onChangeEndAt} defaultDate={dateParsing(endAt)} />
                 </div>
                 <div>
                   <h3 className={styles.label}>
@@ -173,10 +182,10 @@ function SettingForm({ roomData, onClose, onUpdate }) {
                 </div>
               </div>
             </div>
-            <div className={styles.roominfo_item}>
+            {/* <div className={styles.roominfo_item}>
               <h3 className={styles.label}>노래</h3>
               <Input placeholder="유튜브 링크를 입력해주세요." />
-            </div>
+            </div> */}
             <div className={styles.roominfo_item}>
               <h3 className={styles.label}>
                 스터디 규칙

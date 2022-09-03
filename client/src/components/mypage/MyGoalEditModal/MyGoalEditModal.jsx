@@ -45,7 +45,7 @@ function MyGoalEditModal({ profileData, onClose, refetch }) {
             placeholderText="날짜를 선택해주세요"
             defaultDate={inputData?.dday && dateParsing(inputData.dday)}
           />
-          <Input onChange={inputDdayInfo} value={inputData?.ddayInfo || ""} />
+          <Input onChange={inputDdayInfo} placeholder="디데이 제목을 입력해주세요" value={inputData?.ddayInfo || ""} />
         </div>
       </div>
       <div className={styles.item}>

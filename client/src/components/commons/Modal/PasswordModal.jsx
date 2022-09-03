@@ -31,7 +31,14 @@ function PasswordModal({ roomId, onClose }) {
     <>
       <label htmlFor="password">
         <p className={styles.content}>비공개 스터디입니다. 비밀번호를 입력해주세요.</p>
-        <Input ref={inputRef} isInvalid={isInvalid} maxLength="4" onChange={onChange} onKeyPress={pressEnter} />
+        <Input
+          ref={inputRef}
+          isInvalid={isInvalid}
+          type="password"
+          maxLength="4"
+          onChange={onChange}
+          onKeyPress={pressEnter}
+        />
       </label>
       {isInvalid && <p className={styles.error}>비밀번호를 잘못 입력했습니다. 다시 입력해주세요.</p>}
     </>
