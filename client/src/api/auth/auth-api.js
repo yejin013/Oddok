@@ -50,7 +50,9 @@ export const login = async (code) => {
 
 export const getNewToken = async () => {
   try {
-    const response = await axios.get("/auth/refresh");
+    const response = await axios.get("/auth/refresh", {
+      withCredentials: true,
+    });
     onLoginSuccess(response);
   } catch (error) {
     throw new AuthError(error);
