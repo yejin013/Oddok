@@ -29,7 +29,7 @@ public class ClientKakao {
                 .headers(h -> h.setBearerAuth(kakaoAccessToken))
                 .retrieve()
                 .bodyToMono(KakaoUserDto.class)
-                .block();
+                .build();
 
         return User.builder()
                 .userId(userData.getId().toString())
@@ -50,7 +50,7 @@ public class ClientKakao {
                 .body(BodyInserters.fromFormData(formData))
                 .retrieve()
                 .bodyToMono(KakaoUserDto.class)
-                .block();
+                .build();
     }
 
 }
