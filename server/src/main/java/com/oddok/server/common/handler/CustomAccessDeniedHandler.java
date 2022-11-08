@@ -26,7 +26,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
                        HttpServletResponse httpServletResponse,
                        AccessDeniedException e) throws IOException {
 
-        log.error("로그인이 되어 있지 않습니다.");
+        log.error("접근 권한이 없습니다.");
 
         httpServletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
         httpServletResponse.setStatus(HttpStatus.FORBIDDEN.value());
